@@ -9,7 +9,7 @@ import { PricingPlanType } from 'src/@core/components/plan-details/types'
 
 interface Props {
   plan: string
-  data: PricingPlanType[] | null
+  data: any[] | null
 }
 
 const PricingPlans = (props: Props) => {

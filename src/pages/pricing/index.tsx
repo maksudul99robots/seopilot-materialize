@@ -54,17 +54,13 @@ const Pricing = () => {
         totalAnnual: 0
       },
       planBenefits: [
-        "Get on-page SEO",
-
-        "Contact and Social Info Scraper (Email & Phone)",
-
-        "Download Data Points to .CSV",
-
-        "Broken Link Checker",
-
-        "Get all headings",
-
-        "Free subscription to SEO & PR Newsletter"
+        { text: "Get on-page SEO", show: true },
+        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
+        { text: "Download Data Points to .CSV", show: true },
+        { text: "Broken Link Checker", show: true },
+        { text: "Get all headings", show: true },
+        { text: "Free subscription to SEO & PR Newsletter", show: true },
+        { text: "Generate AI article writer", show: false }
       ]
 
     },
@@ -79,19 +75,13 @@ const Pricing = () => {
       imgSrc: '/images/pages/pricing-illustration-2.png',
       yearlyPlan: { perMonth: 9, totalAnnual: 108 },
       planBenefits: [
-        "Get on-page SEO",
-
-        "Contact and Social Info Scraper (Email & Phone)",
-
-        "Download Data Points to .CSV",
-
-        "Broken Link Checker",
-
-        "Get all headings",
-
-        "Free subscription to SEO & PR Newsletter",
-
-        "Generate AI article writer"
+        { text: "Get on-page SEO", show: true },
+        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
+        { text: "Download Data Points to .CSV", show: true },
+        { text: "Broken Link Checker", show: true },
+        { text: "Get all headings", show: true },
+        { text: "Free subscription to SEO & PR Newsletter", show: true },
+        { text: "Generate AI article writer", show: true }
       ]
     }
   ]

@@ -37,12 +37,16 @@ const PlanDetails = (props: PricingPlanProps) => {
   const { plan, data, index } = props
 
   const renderFeatures = () => {
-    return data?.planBenefits.map((item: string, index: number) => (
+    return data?.planBenefits.map((item: any, index: number) => (
       <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
         <Box component='span' sx={{ display: 'inline-flex', color: 'text.secondary', mr: 2 }}>
-          <Icon icon='mdi:circle-outline' fontSize='0.75rem' />
+          {item.show ?
+            <Icon icon='gg:check-o' fontSize='0.95rem' color='green' />
+            : <Icon icon='carbon:close-outline' fontSize='0.95rem' color='red' />
+          }
+
         </Box>
-        <Typography variant='body2'>{item}</Typography>
+        <Typography variant='body2'>{item.text}</Typography>
       </Box>
     ))
   }

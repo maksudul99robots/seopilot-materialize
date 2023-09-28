@@ -17,6 +17,7 @@ import Icon from 'src/@core/components/icon'
 import { LoginRegistrationAPI } from "src/services/API";
 import { LoadingButton } from '@mui/lab';
 import { useAuth } from "src/hooks/useAuth";
+import LTDPlan from "src/views/pages/pricing/LTDplan";
 
 interface State {
     password: string
@@ -42,6 +43,24 @@ const RedeemCoupon = () => {
         password: '',
         showPassword: false
     })
+
+    // useEffect(() => {
+    //     let user = auth.user;
+    //     if (user?.plan == 'ltd') {
+    //         Swal.fire({
+    //             title: 'Ops!',
+    //             text: 'You\'re already in Rockethub\n LTD- Captain Plan',
+    //             icon: 'success',
+    //             confirmButtonText: 'Ok',
+    //             allowOutsideClick: false,
+    //             allowEscapeKey: false,
+
+    //         }).then(() => {
+
+    //             // router.push("/")
+    //         })
+    //     }
+    // }, [])
     useEffect(() => {
         // if (window.location.hostname.includes("app.seopilot.io")) {
         //     setExtensionId(process.env.NEXT_PUBLIC_EXT_ID)
@@ -148,38 +167,44 @@ const RedeemCoupon = () => {
         //         </Box>
         //     </DashboardCard>
         // </Box>
-        <Card>
-            <CardHeader title='Redeem Coupon code for LTD plan' />
-            <CardContent>
-                <form >
+        <>
+            <LTDPlan plan={auth?.user?.plan} />
+            <Card>
 
-                    <Grid container spacing={5}>
-                        <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10 }}>
-                            Enter your coupon code to redeem Life Time Deal (LTD).
-                        </Typography>
-                        <Grid item xs={12}>
-                            <TextField fullWidth label='Coupon code' placeholder='Leonard Carter' onChange={e => setCoupon(e.target.value)} />
+                <CardHeader title='Redeem Coupon code for LTD plan' />
+                <CardContent>
+
+                    <form >
+
+                        <Grid container spacing={5}>
+                            <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10 }}>
+                                Enter your coupon code to redeem Life Time Deal (LTD).
+                            </Typography>
+                            <Grid item xs={12}>
+                                <TextField fullWidth label='Coupon code' placeholder='Leonard Carter' onChange={e => setCoupon(e.target.value)} />
+                            </Grid>
+
                         </Grid>
+                        <LoadingButton
+                            color="primary"
+                            variant="contained"
+                            size="large"
+                            type="submit"
+                            style={{ color: disable ? "#595959" : "white", marginTop: "30px", padding: "10px 35px 10px 35px" }}
+                            onClick={() => submit()}
+                            disabled={disable}
+                            loading={loading}
+                            loadingPosition="end"
 
-                    </Grid>
-                    <LoadingButton
-                        color="primary"
-                        variant="contained"
-                        size="large"
-                        type="submit"
-                        style={{ color: disable ? "#595959" : "white", marginTop: "30px", padding: "10px 35px 10px 35px" }}
-                        onClick={() => submit()}
-                        disabled={disable}
-                        loading={loading}
-                        loadingPosition="end"
+                        >
+                            Submit
+                        </LoadingButton>
+                    </form>
 
-                    >
-                        Submit
-                    </LoadingButton>
-                </form>
+                </CardContent>
+            </Card>
+        </>
 
-            </CardContent>
-        </Card>
     );
 };
 export default RedeemCoupon;

@@ -146,10 +146,10 @@ const TabAccount = () => {
         <Card>
           <CardHeader title='Account Details' />
           <form>
-            <CardContent sx={{ pt: 0 }}>
+            {/* <CardContent sx={{ pt: 0 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ImgStyled src={imgSrc} alt='Profile Pic' />
-                {/* <div>
+                <div>
                   <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
                     Upload New Photo
                     <input
@@ -165,11 +165,11 @@ const TabAccount = () => {
                     Reset
                   </ResetButtonStyled>
                   <Typography sx={{ mt: 5, color: 'text.disabled' }}>Allowed PNG or JPEG. Max size of 800K.</Typography>
-                </div> */}
+                </div>
               </Box>
-            </CardContent>
+            </CardContent> */}
             <Divider />
-            <CardContent>
+            <CardContent sx={{ mt: 5 }}>
               <Grid container spacing={6}>
                 <Grid item xs={12} sm={6}>
                   <TextField

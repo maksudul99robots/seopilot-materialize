@@ -1,6 +1,3 @@
-import { LoginRegistrationAPI } from "./API"
-import { sendTokenToExtension } from "./SendTokenToExtension"
-import Swal from "sweetalert2"
 export const RedeemCouponCode = (coupon: string, auth: any) => {
 
 

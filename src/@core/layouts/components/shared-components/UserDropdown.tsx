@@ -204,7 +204,7 @@ const UserDropdown = (props: Props) => {
           </Box>
         </MenuItem>
         {
-          window.location.origin != "app.seopilot.io" &&
+          window.location.origin != "https://app.seopilot.io" &&
           <MenuItem sx={{ p: 0 }} onClick={() => setExtensionModal()}>
             <Box sx={styles}>
               <Icon icon='ic:outline-extension' />

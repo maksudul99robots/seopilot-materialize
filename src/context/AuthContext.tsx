@@ -48,7 +48,7 @@ const AuthProvider = ({ children }: Props) => {
     const initAuth = async (): Promise<void> => {
       let settings = { themeColor: "primary", mode: "semi-dark", skin: "default", direction: "ltr", appBarBlur: true, navCollapsed: false, contentWidth: "boxed", verticalNavToggleType: "accordion" }
       window.localStorage.setItem("settings", JSON.stringify(settings))
-      if (window.location.origin == "app.seopilot.io") {
+      if (window.location.origin == "https://app.seopilot.io") {
         setExtensionId(process.env.NEXT_PUBLIC_EXT_ID)
       } else {
         let extensionIdLocalstorage = window.localStorage.getItem('extensionId')
@@ -274,6 +274,9 @@ const AuthProvider = ({ children }: Props) => {
               text: 'Registration completed',
               icon: 'success',
               confirmButtonText: 'Ok',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+
             }).then(() => {
 
               localStorage.setItem("seo-pilot-token", res.data.accessToken);

@@ -23,34 +23,6 @@ export const Login = (extensionId: string, email: string, password: string, setL
                     })
                 })
 
-
-                // setLoading(true)
-                // LoginRegistrationAPI.login({ email, password }).then((res) => {
-                //     console.log("res:", res.data)
-                //     if (res.status == 200) {
-                //         setLoading(false)
-                //         sendTokenToExtension(res.data.accessToken, extensionId);
-                //         localStorage.setItem("seo-pilot-token", res.data.accessToken);
-                //         // res.data.userData.role = 'admin'
-                //         // res.data.userData.username = 'admin'
-                //         // res.data.userData.fullName = 'admin'
-                //         // res.data.userData.avatar = 'admin'
-                //         localStorage.setItem("userData", JSON.stringify(res.data.userData));
-                //         // setUserValue(res.data.accessToken)
-                //         router.push('/')
-                //     }
-                // }).catch((error) => {
-                //     console.log("error:", error)
-                //     setLoading(false)
-                //     // dispatch(setAlert({ title: "Error", icon: 'error', text: error?.response?.data }))
-                //     Swal.fire({
-                //         title: 'Error',
-                //         text: error?.response?.data,
-                //         icon: 'error',
-                //         confirmButtonText: 'Close',
-                //     })
-                // })
-
             }
         }
     }
