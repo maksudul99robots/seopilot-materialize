@@ -20,12 +20,19 @@ const data: PricingDataType = {
         totalAnnual: 0
       },
       planBenefits: [
-        '100 responses a month',
-        'Unlimited forms and surveys',
-        'Unlimited fields',
-        'Basic form creation tools',
-        'Up to 2 subdomains'
+        "Get on-page SEO",
+
+        "Contact and Social Info Scraper (Email & Phone)",
+
+        "Download Data Points to .CSV",
+
+        "Broken Link Checker",
+
+        "Get all headings",
+
+        "Free subscription to SEO & PR Newsletter"
       ]
+
     },
     {
       imgWidth: 100,
@@ -41,11 +48,19 @@ const data: PricingDataType = {
         totalAnnual: 480
       },
       planBenefits: [
-        'Unlimited responses',
-        'Unlimited forms and surveys',
-        'Instagram profile page',
-        'Google Docs integration',
-        'Custom “Thank you” page'
+        "Get on-page SEO",
+
+        "Contact and Social Info Scraper (Email & Phone)",
+
+        "Download Data Points to .CSV",
+
+        "Broken Link Checker",
+
+        "Get all headings",
+
+        "Free subscription to SEO & PR Newsletter",
+
+        "Generate AI article writer"
       ]
     },
     {
@@ -173,3 +188,4 @@ const data: PricingDataType = {
 }
 
 mock.onGet('/pages/pricing').reply(() => [200, data])
+mock.onGet('/pricing').reply(() => [200, data])

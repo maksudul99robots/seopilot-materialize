@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useEffect } from 'react'
 
 // ** Next Imports
 import { GetStaticProps, InferGetStaticPropsType } from 'next/types'
@@ -35,59 +35,67 @@ const CardContent = styled(MuiCardContent)<CardContentProps>(({ theme }) => ({
   }
 }))
 
-const Pricing = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Pricing = () => {
 
   const auth = useAuth()
 
-  let pricings = apiData.pricingPlans;
-  if (pricings.length > 0) {
-    pricings[0].planBenefits = [
-      "Get on-page SEO",
+  let pricings = [
+    {
+      imgWidth: 100,
+      title: 'Passenger',
+      imgHeight: 100,
+      monthlyPrice: 0,
+      currentPlan: auth?.user?.plan && auth?.user?.plan == 'free' ? true : auth?.user?.plan && auth?.user?.plan == 'regular' ? false : false,
+      popularPlan: false,
+      subtitle: 'A simple start for everyone',
+      imgSrc: '/images/pages/pricing-illustration-1.png',
+      yearlyPlan: {
+        perMonth: 0,
+        totalAnnual: 0
+      },
+      planBenefits: [
+        "Get on-page SEO",
 
-      "Contact and Social Info Scraper (Email & Phone)",
+        "Contact and Social Info Scraper (Email & Phone)",
 
-      "Download Data Points to .CSV",
+        "Download Data Points to .CSV",
 
-      "Broken Link Checker",
+        "Broken Link Checker",
 
-      "Get all headings",
+        "Get all headings",
 
-      "Free subscription to SEO & PR Newsletter"
-    ]
-    pricings[1].planBenefits = [
-      "Get on-page SEO",
+        "Free subscription to SEO & PR Newsletter"
+      ]
 
-      "Contact and Social Info Scraper (Email & Phone)",
+    },
+    {
+      imgWidth: 100,
+      imgHeight: 100,
+      monthlyPrice: 49,
+      title: 'Captain',
+      popularPlan: true,
+      currentPlan: auth?.user?.plan && auth?.user?.plan == 'free' ? false : auth?.user?.plan && auth?.user?.plan == 'regular' ? true : false,
+      subtitle: 'Get full access to the extension and upcomming features.',
+      imgSrc: '/images/pages/pricing-illustration-2.png',
+      yearlyPlan: { perMonth: 9, totalAnnual: 108 },
+      planBenefits: [
+        "Get on-page SEO",
 
-      "Download Data Points to .CSV",
+        "Contact and Social Info Scraper (Email & Phone)",
 
-      "Broken Link Checker",
+        "Download Data Points to .CSV",
 
-      "Get all headings",
+        "Broken Link Checker",
 
-      "Free subscription to SEO & PR Newsletter",
+        "Get all headings",
 
-      "Generate AI article writer"
-    ]
+        "Free subscription to SEO & PR Newsletter",
 
-    pricings[1].yearlyPlan =
-      { perMonth: 9, totalAnnual: 108 }
-    pricings[0].title = "Passenger"
-    pricings[1].title = "Captain"
-    pricings[1].subtitle = "Get full access to the extension and upcomming features."
-    pricings.splice(pricings.length - 1, 1)
-
-    if (auth?.user?.plan && auth?.user?.plan == 'free') {
-      pricings[0].currentPlan = true;
-      pricings[1].currentPlan = false;
-    } else if (auth?.user?.plan && auth?.user?.plan == 'regular') {
-      pricings[0].currentPlan = false;
-      pricings[1].currentPlan = true;
-    } else {
-      pricings[0].currentPlan = false;
-      pricings[1].currentPlan = false;
+        "Generate AI article writer"
+      ]
     }
-  }
+  ]
+
 
 
 
@@ -120,15 +128,15 @@ const Pricing = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) =>
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await axios.get('/pages/pricing')
-  const apiData: PricingDataType = res.data
+// export const getStaticProps: GetStaticProps = async () => {
+//   const res = await axios.get('/pages/pricing')
+//   const apiData: PricingDataType = res.data
 
-  return {
-    props: {
-      apiData
-    }
-  }
-}
+//   return {
+//     props: {
+//       apiData
+//     }
+//   }
+// }
 
 export default Pricing
