@@ -131,9 +131,9 @@ const AuthProvider = ({ children }: Props) => {
         // console.log({ ...response.data })
         params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
         sendTokenToExtension(response.data.accessToken, extensionId);
-        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
-        router.replace(redirectURL as string)
+        window.location.href = window.location.origin;
       })
 
       .catch(err => {
@@ -181,8 +181,8 @@ const AuthProvider = ({ children }: Props) => {
         sendTokenToExtension(params.token, extensionId);
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
-        router.replace(redirectURL as string)
-
+        // router.replace(redirectURL as string)
+        window.location.href = window.location.origin;
 
       } catch (e: any) {
         if (errorCallback) errorCallback(e)
