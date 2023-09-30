@@ -17,8 +17,8 @@ const Button = () => {
           lineHeight: 1.715,
           ...(ownerState.size === 'medium' &&
             ownerState.variant === 'text' && {
-              padding: `${theme.spacing(1.75, 3)}`
-            }),
+            padding: `${theme.spacing(1.75, 3)}`
+          }),
           '&.MuiButton-textPrimary:hover': {
             backgroundColor: hexToRGBA(theme.palette.primary.main, 0.08)
           },
