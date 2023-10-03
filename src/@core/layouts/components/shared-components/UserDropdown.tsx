@@ -203,6 +203,12 @@ const UserDropdown = (props: Props) => {
             Pricing
           </Box>
         </MenuItem>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/add-apikey')}>
+          <Box sx={styles}>
+            <Icon icon='material-symbols:key-outline' />
+            OpenAI API Key
+          </Box>
+        </MenuItem>
         {
           window.location.origin != "https://app.seopilot.io" &&
           <MenuItem sx={{ p: 0 }} onClick={() => setExtensionModal()}>

@@ -27,7 +27,8 @@ const defaultProvider: AuthValuesType = {
   register: () => Promise.resolve(),
   redeemCoupon: () => Promise.resolve(),
   verifyEmail: () => Promise.resolve(),
-  updateUser: () => Promise.resolve()
+  updateUser: () => Promise.resolve(),
+  resetToken: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -333,6 +334,18 @@ const AuthProvider = ({ children }: Props) => {
     router.push('/login')
   }
 
+  const handleResetToken = () => {
+    LoginRegistrationAPI.reloadToken().then((res) => {
+      localStorage.setItem("seo-pilot-token", res.data.accessToken);
+      // window.localStorage.setItem('userData', JSON.stringify(res.data.userData))
+      // setUser({ ...res.data.userData })
+      sendTokenToExtension(res.data.accessToken, extensionId);
+      window.location.href = window.location.origin
+    }).catch((e) => {
+      console.log("error:", e)
+    })
+  }
+
   const values = {
     user,
     loading,
@@ -343,7 +356,8 @@ const AuthProvider = ({ children }: Props) => {
     register: handleRegister,
     redeemCoupon: handleRedeemCoupon,
     verifyEmail: handleVerifyEmail,
-    updateUser: handleUpdateUser
+    updateUser: handleUpdateUser,
+    resetToken: handleResetToken
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

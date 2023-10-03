@@ -51,4 +51,5 @@ export type AuthValuesType = {
   redeemCoupon: (params: RedeemCouponParams, errorCallback?: ErrCallbackType) => void
   verifyEmail: (params: VerifyEmailParams, errorCallback?: ErrCallbackType) => void
   updateUser: (params: UpdateUserParams, errorCallback?: ErrCallbackType) => void
+  resetToken: (params: {}, errorCallback?: ErrCallbackType) => void
 }

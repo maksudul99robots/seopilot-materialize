@@ -13,6 +13,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/user-profile/account'
     },
     {
+      title: 'OpenAI API Key',
+      icon: 'material-symbols:key-outline',
+      path: '/add-apikey'
+    },
+    {
       title: 'Pricing',
       icon: 'mdi:currency-usd',
       path: '/pricing'

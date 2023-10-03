@@ -26,7 +26,7 @@ const FooterContent = () => {
         </Box>
         {` by `}
         <LinkStyled target='_blank' href='https://99robots.com/'>
-          99robots
+          99Robots
         </LinkStyled>
       </Typography>
       {/* {hidden ? null : (

@@ -44,30 +44,25 @@ export const LoginRegistrationAPI = {
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
     async updateUser(data: any, url = "/update-user", source = undefined) {
-        console.log(data);
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
-
-
-};
-export const PublicationsApi = {
-    async getPublications(url = "/publications") {
-        return axios.get(`${API_ROOT}${url}`, header).then((response) => response?.data).catch(error => {
-            if (error.response) {
-                // console.log(error.response)
-                if (error.response.status === 401) {
-                    localStorage.removeItem('token');
-                    window.location.reload();
-
-                } else {
-                    return error.response;
-                }
-            }
-        })
-
+    async addOpenAIApiKey(data: any, url = "/add-openai-apikey", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async getOpenAIAPIKey(url = "/get-openai-apikey", source = undefined) {
+        return await axios.get(`${API_ROOT}${url}`, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async reloadToken(url = "/reload-token", source = undefined) {
+        return await axios.get(`${API_ROOT}${url}`, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    }
 
 
 };
