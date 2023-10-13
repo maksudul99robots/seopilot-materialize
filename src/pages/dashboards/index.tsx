@@ -45,8 +45,8 @@ const Dashboard = () => {
             <Card sx={{ mb: 10, mt: 25, display: "flex", justifyContent: "center", }}>
 
                 {/* <CardContent> */}
-                <Alert variant='filled' severity='info' sx={{ fontSize: "24px", display: "flex", alignItems: "center", width: "100%", justifyContent: "center", padding: "20px" }}>
-                    Close the extension and re-open it to get logged in.
+                <Alert variant='filled' severity='info' sx={{ fontSize: "24px", display: "flex", alignItems: "center", width: "100%", justifyContent: "center", padding: "20px", textAlign: "center" }}>
+                    <span style={{ fontSize: "26px", fontWeight: "600" }}>Thanks for registering and logging into our app.</span>  <br></br><br></br>If you don't see the features included in your plan enabled inside the extension, you may need to close any existing extension windows and reopen them to enable those features on the selected page.
                 </Alert>
                 {/* </CardContent> */}
                 {/* <CardActions className='card-action-dense'>

@@ -126,7 +126,7 @@ const UserDropdown = (props: Props) => {
 
   return (
     <Fragment>
-      <Badge
+      {/* <Badge
         overlap='circular'
         onClick={handleDropdownOpen}
         sx={{ ml: 2, cursor: 'pointer' }}
@@ -135,14 +135,14 @@ const UserDropdown = (props: Props) => {
           vertical: 'bottom',
           horizontal: 'right'
         }}
-      >
-        <Avatar
-          alt={user.first_name + ' ' + user.last_name}
-          onClick={handleDropdownOpen}
-          sx={{ width: 40, height: 40 }}
-          src='/images/avatars/9.jpg'
-        />
-      </Badge>
+      > */}
+      <Avatar
+        alt={user.first_name + ' ' + user.last_name}
+        onClick={handleDropdownOpen}
+        sx={{ width: 40, height: 40, ml: 2, cursor: 'pointer' }}
+        src='/images/avatars/9.jpg'
+      />
+      {/* </Badge> */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -153,16 +153,16 @@ const UserDropdown = (props: Props) => {
       >
         <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Badge
+            {/* <Badge
               overlap='circular'
               badgeContent={<BadgeContentSpan />}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'right'
               }}
-            >
-              <Avatar alt={user.first_name + ' ' + user.last_name} src='/images/avatars/9.jpg' sx={{ width: '2.5rem', height: '2.5rem' }} />
-            </Badge>
+            > */}
+            <Avatar alt={user.first_name + ' ' + user.last_name} src='/images/avatars/9.jpg' sx={{ width: '2.5rem', height: '2.5rem' }} />
+            {/* </Badge> */}
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.first_name + ' ' + user.last_name}</Typography>
               {/* <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>

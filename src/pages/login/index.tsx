@@ -154,7 +154,7 @@ const LoginPage = () => {
                     onBlur={onBlur}
                     onChange={onChange}
                     error={Boolean(errors.email)}
-                    placeholder='admin@materialize.com'
+                    placeholder='Email'
                   />
                 )}
               />
@@ -217,7 +217,7 @@ const LoginPage = () => {
               Login
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography sx={{ mr: 2, color: 'text.secondary' }}>New on our platform?</Typography>
+              <Typography sx={{ mr: 2, color: 'text.secondary' }}>New Here?</Typography>
               <Typography href='/register' component={Link} sx={{ color: 'primary.main', textDecoration: 'none' }}>
                 Create an account
               </Typography>
