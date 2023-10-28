@@ -31,6 +31,7 @@ import { useForm, Controller } from 'react-hook-form'
 import Icon from 'src/@core/components/icon'
 import { useAuth } from 'src/hooks/useAuth'
 import { LoginRegistrationAPI } from 'src/services/API'
+import Swal from 'sweetalert2'
 
 interface Data {
   email: string
@@ -136,7 +137,27 @@ const TabAccount = () => {
 
   const submit = () => {
     // console.log(formData);
-    auth.updateUser(formData)
+
+    Swal.fire(
+
+      {
+        icon: 'question',
+        title: 'Confirm!',
+        text: 'Are you sure you want to save changes?',
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "Confirm",
+        confirmButtonColor: "#2979FF"
+      }
+
+    ).then(() => {
+      auth.updateUser(formData)
+
+    }).catch(e => {
+
+    })
+
+
   }
 
   return (

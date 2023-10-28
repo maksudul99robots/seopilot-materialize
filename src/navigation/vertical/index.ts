@@ -18,6 +18,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/add-apikey'
     },
     {
+      title: 'AI Articles',
+      icon: 'ic:outline-article',
+      path: '/articles'
+    },
+    {
       title: 'Pricing',
       icon: 'mdi:currency-usd',
       path: '/pricing'

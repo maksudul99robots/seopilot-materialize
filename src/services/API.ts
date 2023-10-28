@@ -58,8 +58,23 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async getAIArticleHistory(data: any, url = "/get-ai-history", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async getAIArticleSingle(data: any, url = "/get-single-ai-history", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async reloadToken(url = "/reload-token", source = undefined) {
         return await axios.get(`${API_ROOT}${url}`, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async updateAIArticle(data: any, url = "/update-ai-article", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     }

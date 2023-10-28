@@ -1,8 +1,6 @@
-export const sendTokenToExtension = (token: string ,extensionId:any) => {
+export const sendTokenToExtension = (token: string, extensionId: any) => {
     if (extensionId && extensionId.length > 1) {
-        // console.log("sending!!")
         chrome.runtime.sendMessage(
-            // localStorage.getItem("extension_id"), // Extension ID
             extensionId,
             { action: "storeToken", token: token },
             (response) => {
