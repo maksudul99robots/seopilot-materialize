@@ -94,12 +94,19 @@ export default function Page() {
                 <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
-                            <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
-                            <Typography variant='body1'>Back</Typography>
-                        </Link>
+                        <div>
+                            {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
+                                <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
+                                <Typography variant='body1'>Back</Typography>
+                            </Link> */}
+                            <Typography variant='h5'>
+                                Edit Article
+                            </Typography>
+                        </div>
+
+
                         <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
-                            <CopyToClipboard text={html.replace(/<\/?[^>]+(>|$)/g, "")}
+                            <CopyToClipboard text={html}
                                 onCopy={() => {
                                     setCopied(true)
                                     setTimeout(() => {

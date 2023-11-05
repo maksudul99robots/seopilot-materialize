@@ -22,7 +22,14 @@ const EditorControlled = (props: any) => {
     props.setHtml(convertToHTML(value.getCurrentContent()));
   }, [value])
 
-  return <ReactDraftWysiwyg editorState={value} onEditorStateChange={data => setValue(data)} />
+  return <ReactDraftWysiwyg editorState={value} onEditorStateChange={data => setValue(data)} toolbar={{
+    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'image', 'embedded', 'history'],
+    inline: { inDropdown: false, options: ['bold', 'italic', 'underline', 'strikethrough'] },
+    list: { inDropdown: true },
+    textAlign: { inDropdown: true },
+    link: { inDropdown: true },
+    history: { inDropdown: false },
+  }} />
 }
 
 export default EditorControlled

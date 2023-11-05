@@ -231,35 +231,40 @@ const TableServerSide = () => {
     }
 
     return (
-        <Card>
+        <Box >
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
+                <Button variant='contained' href='/create-article'>+ Create Article</Button>
+            </Box>
+            <Card>
+                <DataGrid
+                    autoHeight
+                    pagination
+                    rows={rows}
+                    rowCount={total}
+                    columns={columns}
+                    // checkboxSelection
+                    sortingMode='server'
+                    paginationMode='server'
+                    pageSizeOptions={[50]}
+                    paginationModel={paginationModel}
+                    onSortModelChange={handleSortModel}
+                    slots={{ toolbar: ServerSideToolbar }}
+                    onPaginationModelChange={setPaginationModel}
+                    slotProps={{
+                        baseButton: {
+                            variant: 'outlined'
+                        },
+                        toolbar: {
+                            title: "Articles",
+                            value: searchValue,
+                            clearSearch: () => handleSearch(''),
+                            onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
+                        }
+                    }}
+                />
+            </Card>
+        </Box>
 
-            <DataGrid
-                autoHeight
-                pagination
-                rows={rows}
-                rowCount={total}
-                columns={columns}
-                // checkboxSelection
-                sortingMode='server'
-                paginationMode='server'
-                pageSizeOptions={[50]}
-                paginationModel={paginationModel}
-                onSortModelChange={handleSortModel}
-                slots={{ toolbar: ServerSideToolbar }}
-                onPaginationModelChange={setPaginationModel}
-                slotProps={{
-                    baseButton: {
-                        variant: 'outlined'
-                    },
-                    toolbar: {
-                        title: "Articles",
-                        value: searchValue,
-                        clearSearch: () => handleSearch(''),
-                        onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                    }
-                }}
-            />
-        </Card>
     )
 }
 
