@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -17,6 +17,7 @@ import { LoginRegistrationAPI } from "src/services/API";
 import { LoadingButton } from '@mui/lab';
 import APIKeyInstructions from "src/views/pages/pricing/APIKeyInstructions";
 import { useAuth } from "src/hooks/useAuth";
+import Icon from "src/@core/components/icon";
 
 interface State {
     password: string
@@ -29,15 +30,19 @@ interface State {
 
 const AddApiKey = () => {
     const [apikey, setApikey] = useState('');
+    const [apikeyToShow, setApikeyToShow] = useState('');
     const [disable, setDisable] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [isEditable, setIsEditable] = useState(false);
     const auth = useAuth();
 
+    // const formattedString = originalString.substring(0, 10) + "*".repeat(originalString.length - 15) + originalString.slice(-5);
     useEffect(() => {
         LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
-            console.log(res);
+            // console.log(res);
             if (res.status == 200)
                 setApikey(res.data.apikey)
+            setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
         }).catch(e => {
             console.log(e);
         })
@@ -85,6 +90,7 @@ const AddApiKey = () => {
 
 
     }
+    const [iconColor, setIconColor] = useState('#999999')
 
     return (
         <>
@@ -95,13 +101,39 @@ const AddApiKey = () => {
                     <APIKeyInstructions />
                     <form >
 
-                        <Grid container spacing={5}>
+                        <Grid container spacing={5} >
+
+
                             <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10 }}>
                                 Please Enter your API Key:
                             </Typography>
-                            <Grid item xs={12}>
-                                <TextField fullWidth label='Open-AI API Key' value={apikey} placeholder='Open-AI API Key' onChange={e => setApikey(e.target.value)} />
-                            </Grid>
+                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
+                                <Grid item xs={11} sx={{ paddingLeft: "20px" }}>
+                                    <TextField fullWidth label='Open-AI API Key' value={apikeyToShow} placeholder='Open-AI API Key' onChange={e => { setApikey(e.target.value); setApikeyToShow(e.target.value) }} disabled={!isEditable} />
+                                </Grid>
+                                <Grid item xs={1} sx={{ paddingLeft: "20px" }} >
+                                    <Tooltip title={<p style={{ color: "white", fontSize: "15px" }}>Edit API Key</p>} placement="top-start">
+                                        {/* <Button>top</Button> */}
+                                        <div>
+                                            <Icon icon="akar-icons:edit" color={iconColor} onMouseOver={e => setIconColor("#2979FF")} onMouseOut={e => setIconColor("#999999")} cursor="pointer" fontSize={40} xlinkTitle="Edit"
+                                                onClick={e => {
+                                                    if (!isEditable) {
+                                                        setApikeyToShow(apikey)
+                                                        setIsEditable(true)
+                                                    } else {
+                                                        setIsEditable(false)
+                                                        setApikeyToShow(apikey.substring(0, 10) + "*".repeat(apikey.length - 15) + apikey.slice(-5))
+                                                    }
+                                                }} />
+                                        </div>
+
+                                    </Tooltip>
+
+                                </Grid>
+
+                            </Box>
+
+
 
                         </Grid>
                         <LoadingButton

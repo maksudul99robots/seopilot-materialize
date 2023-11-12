@@ -95,6 +95,7 @@
     "@types/payment": "2.1.4",
     "@types/prismjs": "1.26.0",
     "@types/react": "18.0.28",
+    "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/react-credit-cards": "0.8.1",
     "@types/react-datepicker": "4.10.0",
     "@types/react-draft-wysiwyg": "1.13.4",

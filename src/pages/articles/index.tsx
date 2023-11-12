@@ -84,7 +84,7 @@ const columns: GridColDef[] = [
                     {/* {renderClient(params)} */}
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                            {row.output.replace(/<\/?[^>]+(>|$)/g, "")}
+                            {row.output?.replace(/<\/?[^>]+(>|$)/g, "")}
                         </Typography>
                         <Typography noWrap variant='caption'>
                             {row.source}
@@ -196,9 +196,9 @@ const TableServerSide = () => {
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
-                    item.output.toLowerCase().includes(queryLowered) ||
+                    item.output?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.source.toLowerCase().includes(queryLowered) ||
+                    item.source?.toLowerCase().includes(queryLowered) ||
                     // item.user_id.toLowerCase().includes(queryLowered) ||
                     item.createdAt.toString().toLowerCase().includes(queryLowered) //||
                 // item.updatedAt.toLowerCase().includes(queryLowered)

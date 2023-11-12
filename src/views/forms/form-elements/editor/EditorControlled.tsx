@@ -23,13 +23,13 @@ const EditorControlled = (props: any) => {
   }, [value])
 
   return <ReactDraftWysiwyg editorState={value} onEditorStateChange={data => setValue(data)} toolbar={{
-    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'image', 'embedded', 'history'],
+    options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'history'],
     inline: { inDropdown: false, options: ['bold', 'italic', 'underline', 'strikethrough'] },
     list: { inDropdown: true },
     textAlign: { inDropdown: true },
     link: { inDropdown: true },
     history: { inDropdown: false },
-  }} />
+  }} readOnly={props.readOnly ? props.readOnly : false} toolbarHidden={props.toolbarHidden ? props.toolbarHidden : false} />
 }
 
 export default EditorControlled

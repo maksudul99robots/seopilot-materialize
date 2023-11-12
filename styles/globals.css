@@ -22,3 +22,18 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
+.button-class{
+  border: 2px solid #2979FF;
+}
+.button-class:hover{
+  border: 2px solid #2979FF;
+  background-color: #2979FF;
+}
+
+.close-icon-style{
+  color: #A5A6B1;
+  cursor: pointer;
+}
+.close-icon-style:hover{
+  color: #D53343;
+}
