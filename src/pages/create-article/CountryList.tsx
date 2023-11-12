@@ -1,6 +1,6 @@
 import { MenuItem, Select } from "@mui/material"
 
-export const GetCountryList = (props: any) => {
+export default function GetCountryList(props: any) {
 
 
     return (

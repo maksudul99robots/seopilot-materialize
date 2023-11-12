@@ -7,7 +7,7 @@ import { Ref, useState, forwardRef, ReactElement, useEffect } from 'react'
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
 import Fade, { FadeProps } from '@mui/material/Fade'
-import { GetCountryList } from './CountryList'
+import GetCountryList from './CountryList'
 import { LoginRegistrationAPI } from 'src/services/API'
 import { useRouter } from 'next/router'
 const Transition = forwardRef(function Transition(
