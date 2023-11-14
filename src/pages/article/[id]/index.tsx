@@ -61,7 +61,7 @@ export default function Page() {
             if (res.status == 200) {
                 Swal.fire(
                     'Success',
-                    'A verification email is sent.',
+                    'Saved',
                     'success'
                 )
             } else {

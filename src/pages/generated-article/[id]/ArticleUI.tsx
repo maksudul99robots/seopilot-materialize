@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
 import EditorControlled from 'src/views/forms/form-elements/editor/EditorControlled';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+import CustomizedMenus from 'src/services/EditorExportOptions';
 // ** Third Party Importss
 import { Icon } from '@iconify/react';
 // ** Styles
@@ -29,7 +32,7 @@ export default function ArticleIU(props: any) {
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
     const [outlines, setOutlines] = useState<string>(props.outlines);
-    const [html, setHtml] = useState<string>('');
+
     const [copied, setCopied] = useState(false);
     const auth = useAuth()
 
@@ -44,7 +47,7 @@ export default function ArticleIU(props: any) {
     }, [auth?.user?.plan])
     // console.log("articleObj", articleObj?.prompt)
     const download = () => {
-        exportHtml(html)
+        exportHtml(props.html)
     }
     // const save = () => {
     //     LoginRegistrationAPI.updateAIArticle({ id: articleObj?.id, output: html }).then((res) => {
@@ -78,12 +81,36 @@ export default function ArticleIU(props: any) {
         link.href = url;
         link.click();
     }
+
+    useEffect(() => {
+        // console.log(props.html)
+
+        let text = props.html.replace(/<[^>]*>/g, '');
+        let words = text.split(/\s+/g)
+        if (words?.length) {
+            props.setWordCount(words?.length)
+        }
+    }, [props.html])
+
     return (
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
             <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
                 <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
                         <div>
                             {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
                                 <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
@@ -96,18 +123,10 @@ export default function ArticleIU(props: any) {
 
 
                         <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
-                            <CopyToClipboard text={html}
-                                onCopy={() => {
-                                    setCopied(true)
-                                    setTimeout(() => {
-                                        setCopied(false)
-                                    }, 5000)
-                                }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}> <Icon icon="icon-park-outline:copy" style={{ color: "#2979FF", cursor: "pointer", marginRight: "20px" }} />{copied && <span style={{ fontSize: "16px", fontWeight: "700", color: "#2979FF", paddingLeft: "5px", paddingRight: "5px" }}>Copied!</span>}</div>
 
-                            </CopyToClipboard>
-                            {/* <Button variant='outlined' onClick={e => save()} sx={{ marginRight: "5px" }}>Save Changes</Button> */}
-                            <Button variant='contained' onClick={e => download()}>Download HTML</Button>
+                            <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
+                            <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                            {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
                         </Box>
 
                     </div>
@@ -116,18 +135,21 @@ export default function ArticleIU(props: any) {
                     sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                 >
 
-
+                    <Typography variant='h6' sx={{ marginBottom: "20px" }}>
+                        Total Word Count: {props.wordCount} words
+                    </Typography>
                     {
                         article &&
-                        <EditorControlled data={article} setHtml={setHtml} />
+                        <EditorControlled data={article} setHtml={props.setHtml} />
                     }
+
 
                 </Card>
             </Grid>
             <Card
                 sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
             >
-                {/* <Typography variant='h5'>Input Headings:</Typography> */}
+                <Typography variant='h5' sx={{ paddingTop: "20px" }}>Article Outline</Typography>
 
                 <Outlines outlines={outlines} />
 

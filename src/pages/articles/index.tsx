@@ -67,89 +67,29 @@ const renderClient = (params: GridRenderCellParams) => {
 
 const statusObj: StatusObj = {
     1: { title: 'Success', color: 'success' },
-    2: { title: 'Error', color: 'error' }
+    2: { title: 'Processing', color: 'info' },
+    3: { title: 'Error', color: 'error' }
 }
 
-const columns: GridColDef[] = [
-    {
-        flex: 0.25,
-        minWidth: 290,
-        field: 'output',
-        headerName: 'AI Article',
-        renderCell: (params: GridRenderCellParams) => {
-            const { row } = params
 
-            return (
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {/* {renderClient(params)} */}
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                            {row.output?.replace(/<\/?[^>]+(>|$)/g, "")}
-                        </Typography>
-                        <Typography noWrap variant='caption'>
-                            {row.source}
-                        </Typography>
-                    </Box>
-                </Box>
-            )
-        }
-    },
-    {
-        flex: 0.175,
-        type: 'date',
-        minWidth: 120,
-        headerName: 'Created',
-        field: 'createdAt',
-        valueGetter: params => new Date(params.value),
-        renderCell: (params: GridRenderCellParams) => (
-            <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                {params.row.createdAt}
-            </Typography>
-        )
-    },
-    {
-        flex: 0.175,
-        minWidth: 140,
-        field: 'is_error',
-        headerName: 'Status',
-        renderCell: (params: GridRenderCellParams) => {
-            const status = statusObj[params.row.is_error ? 2 : 1]
-            return (
-                <CustomChip
-                    size='small'
-                    skin='light'
-                    color={status.color}
-                    label={status.title}
-                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                />
-            )
-        }
-    },
-    {
-        flex: 0.175,
-        minWidth: 110,
-        field: 'action',
-        sortable: false,
-        headerName: 'Action',
-        renderCell: (params: GridRenderCellParams) => {
-            const { row } = params;
-
-            return (
-                <Button variant='outlined' href={`/article/${row.id}`} >
-                    View
-                </Button >
-            )
-
-        }
-
-
-    }
-]
 import { LoginRegistrationAPI } from '../../services/API'
 import { Button } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
 
 const TableServerSide = () => {
     // ** States
@@ -167,10 +107,150 @@ const TableServerSide = () => {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
 
+    const columns: GridColDef[] = [
+        {
+            flex: 0.25,
+            minWidth: 290,
+            field: 'output',
+            headerName: 'AI Article',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+
+                return (
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {/* {renderClient(params)} */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                                {row.output ? row.output?.replace(/<\/?[^>]+(>|$)/g, "") : row.topic}
+                            </Typography>
+                            <Typography noWrap variant='caption'>
+                                {row.source ? row.source : 'https://app.seopilot.io'}
+                            </Typography>
+                        </Box>
+                    </Box>
+                )
+            }
+        },
+        {
+            flex: 0.175,
+            type: 'date',
+            minWidth: 120,
+            headerName: 'Created',
+            field: 'createdAt',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {params.row.createdAt}
+                </Typography>
+            )
+        },
+        {
+            flex: 0.175,
+            minWidth: 140,
+            field: 'is_error',
+            headerName: 'Status',
+            renderCell: (params: GridRenderCellParams) => {
+                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' ? 2 : 1]
+                return (
+
+                    <>
+                        {
+                            status.title == 'Error' ?
+
+                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+                                    <div>
+                                        <CustomChip
+                                            size='small'
+                                            skin='light'
+                                            color={status.color}
+                                            label={status.title}
+                                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
+                                        />
+                                    </div>
+                                </LightTooltip >
+                                :
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    color={status.color}
+                                    label={status.title}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
+                        }
+                    </>
+
+
+
+                )
+            }
+        },
+        {
+            flex: 0.175,
+            minWidth: 110,
+            field: 'action',
+            sortable: false,
+            headerName: 'Action',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params;
+
+                return (
+                    <>
+                        {
+                            row.status == 'error' ?
+                                <Button variant='outlined' onClick={e => {
+                                    regenerateArticle(row.id)
+                                }} >
+                                    Retry
+                                </Button >
+                                :
+                                row.status == 'outlined' ?
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${row.id}` : `/article/${row.id}`}>
+                                        View
+                                    </Button >
+                                    :
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${row.id}` : `/article/${row.id}`} >
+                                        View
+                                    </Button >
+                        }
+                    </>
+
+                )
+
+            }
+
+
+        }
+    ]
+    const regenerateArticle = (id: number | string) => {
+        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
+            setTimeout(() => {
+                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+                    loadServerRows
+                    setMainData(res.data);
+                    // console.log("data:", res.data)
+                    // setTotal(res.data.total)
+                    // setRows(loadServerRows(paginationModel.page, res.data.data))
+                })
+            }, 3000)
+
+            Swal.fire(
+                'Success',
+                'Article is Being Re-generated',
+                'success'
+            )
+        }).catch(e => {
+            Swal.fire(
+                'Error',
+                'Unable to Re-generate.',
+                'error'
+            )
+        })
+    }
     useEffect(() => {
         LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
             loadServerRows
             setMainData(res.data);
+            console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
@@ -229,6 +309,8 @@ const TableServerSide = () => {
         setSearchValue(value)
         fetchTableData(sort, value, sortColumn)
     }
+
+
 
     return (
         <Box >

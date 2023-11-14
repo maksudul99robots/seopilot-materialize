@@ -21,7 +21,6 @@ const Transition = forwardRef(function Transition(
 //   }
 
 export default function CreateArticle(props: any) {
-    console.log(props.heading)
     // ** States
     const [show, setShow] = useState<boolean>(false)
 
@@ -43,14 +42,6 @@ export default function CreateArticle(props: any) {
     const bgColors = useBgColor()
 
     const sumbit = () => {
-        console.log(articleType)
-        console.log(topic)
-        console.log(keywords)
-        console.log(articleLength)
-        console.log(language)
-        console.log(country)
-        console.log(links)
-
         LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
             then(res => {
                 console.log("res:", res);

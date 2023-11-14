@@ -5,7 +5,17 @@ const navigation = (): VerticalNavItemsType => {
   return [
 
     {
-      sectionTitle: 'Profile & Settings'
+      sectionTitle: 'Menu & Profile Settings'
+    },
+    {
+      title: 'AI Articles',
+      icon: 'ic:outline-article',
+      path: '/articles'
+    },
+    {
+      title: 'Generate AI Articles',
+      icon: 'streamline:ai-edit-spark',
+      path: '/create-article'
     },
     {
       title: 'Profile Settings',
@@ -17,11 +27,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'material-symbols:key-outline',
       path: '/add-apikey'
     },
-    {
-      title: 'AI Articles',
-      icon: 'ic:outline-article',
-      path: '/articles'
-    },
+
     {
       title: 'Pricing',
       icon: 'mdi:currency-usd',

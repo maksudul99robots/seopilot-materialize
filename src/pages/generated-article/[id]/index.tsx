@@ -21,10 +21,12 @@ export default function Page() {
     const [currentStep, setCurrentStep] = useState(0);
     const [showArticleEditor, setShowArticleEditor] = useState(false);
     const [article, setArticle] = useState('');
+    const [articleTopic, setArticleTopic] = useState('');
     const [outlines, setOutlines] = useState('');
     const [callTracker, setCallTracker] = useState(false);
     const [showOutlines, setShowOutlines] = useState(false);
-
+    const [html, setHtml] = useState<string>('');
+    const [wordCount, setWordCount] = useState<number>(0);
     const router = useRouter()
 
     useEffect(() => {
@@ -32,22 +34,71 @@ export default function Page() {
             setCallTracker(true)
     }, [router.query.id])
     useEffect(() => {
+        // console.log("outlines:", outlines)
+    }, [outlines])
+    useEffect(() => {
         if (router.query.id) {
             LoginRegistrationAPI.getSaasArticle({ id: router.query.id }).then(async (res) => {
+                // console.log("res:", res.data)
                 if (res.status == 210) {
                     setCurrentStep(2);
                 } else if (res.status == 211) {
-                    // setCurrentStep(3);
-                    setOutlines(res?.data.outline ? res.data.outline : '')
+
+                    setTimeout(() => {
+                        setCurrentStep(3);;
+                    }, 1000)
+
+                    // setOutlines(res?.data.outline ? res.data.outline : '')
+                    if (res.data.article_length == "long") {
+                        let outlineFromResp = res?.data.outline;
+                        try {
+                            outlineFromResp = outlineFromResp.replace(/,(?=\s*[\]}])/, '');
+                            outlineFromResp = JSON.parse(outlineFromResp);
+                            let x = '';
+                            outlineFromResp((o: any, i: any) => {
+                                x = x + o;
+                                if (i == outlineFromResp.length - 1) {
+                                    setOutlines(x);
+                                }
+                            })
+                        } catch (e) {
+                            console.log("e:", e)
+                        }
+                    } else {
+                        setOutlines(res?.data.outline ? res.data.outline : '')
+                    }
                     setShowOutlines(true)
                 } else if (res.status == 212) {
                     setCurrentStep(5);
                     setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                         setShowArticleEditor(true);               //  ..  setTimeout()
-                        console.log("inside interval cancel 212")
+                        // console.log("inside interval cancel 212")
+
+                        /////
+
+                        if (res.data.article_length == "long") {
+                            let outlineFromResp = res?.data.outline;
+                            try {
+                                outlineFromResp = outlineFromResp.replace(/,(?=\s*[\]}])/, '');
+                                outlineFromResp = JSON.parse(outlineFromResp);
+                                let x = '';
+                                outlineFromResp.map((o: any, i: any) => {
+                                    x = x + o;
+                                    if (i == outlineFromResp.length - 1) {
+                                        setOutlines(x);
+                                    }
+                                })
+                            } catch (e) {
+                                console.log("e:", e)
+                            }
+                        } else {
+                            setOutlines(res?.data.outline ? res.data.outline : '')
+                        }
+
+                        /////
 
                         setArticle(res?.data.content ? res.data.content : '')
-                        setOutlines(res?.data.outline ? res.data.outline : '')
+                        // setOutlines(res?.data.outline ? res.data.outline : '')
                     }, 3000)
                 } else {
 
@@ -119,14 +170,38 @@ export default function Page() {
         }
 
     }, [callTracker])
-    const editOutline = () => {
 
+    const save = () => {
+
+        LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html }).then((res) => {
+            if (res.status == 200) {
+                Swal.fire(
+                    'Success',
+                    'Saved!',
+                    'success'
+                )
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Unable to save changes.',
+                    'error'
+                )
+            }
+        }).catch(e => {
+            Swal.fire(
+                'Error',
+                'Unable to save changes.',
+                'error'
+            )
+        })
     }
+
     return (
         <>
             {
                 showArticleEditor ?
-                    <ArticleIU article={article} outlines={outlines} />
+
+                    <ArticleIU article={article} outlines={outlines} setHtml={setHtml} html={html} save={save} wordCount={wordCount} setWordCount={setWordCount} />
                     :
                     <Card sx={{ padding: "20px" }}>
                         <Box sx={{ mb: 9, mt: 10, textAlign: 'center' }}>
@@ -134,6 +209,7 @@ export default function Page() {
                                 Creating Your Article...
                             </Typography>
                             <Typography variant='body2'>It may take 5-10 minutes. You can leave this page anytime. Article generation will continue in background.</Typography>
+                            <Typography variant='body1'> {articleTopic ? 'Topic: ' + articleTopic : ''}</Typography>
                         </Box>
                         <Stepper activeStep={currentStep} alternativeLabel>
                             {steps.map((label) => (
@@ -142,7 +218,10 @@ export default function Page() {
                                 </Step>
                             ))}
                         </Stepper>
-                        {
+                        <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                            <Icon icon="eos-icons:three-dots-loading" fontSize={80} color='#2979FF' />
+                        </Box>
+                        {/* {
                             showOutlines ?
                                 <>
                                     <Outlines outlines={outlines} />
@@ -155,7 +234,7 @@ export default function Page() {
                                 <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                     <Icon icon="eos-icons:three-dots-loading" fontSize={80} color='#2979FF' />
                                 </Box>
-                        }
+                        } */}
 
                     </Card>
             }
