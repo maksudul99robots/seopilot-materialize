@@ -10,6 +10,8 @@ import Fade, { FadeProps } from '@mui/material/Fade'
 import GetCountryList from './CountryList'
 import { LoginRegistrationAPI } from 'src/services/API'
 import { useRouter } from 'next/router'
+import { useAuth } from 'src/hooks/useAuth'
+import Swal from 'sweetalert2'
 const Transition = forwardRef(function Transition(
     props: FadeProps & { children?: ReactElement<any, any> },
     ref: Ref<unknown>
@@ -37,10 +39,22 @@ export default function CreateArticle(props: any) {
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
+    const auth = useAuth();
     const router = useRouter()
     // ** Hooks
     const bgColors = useBgColor()
-
+    useEffect(() => {
+        if (auth?.user?.plan !== 'ltd') {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Subscribe to Higher Plan to Get This Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+            }).then(() => {
+                router.push("/");
+            })
+        }
+    }, [])
     const sumbit = () => {
         LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
             then(res => {
