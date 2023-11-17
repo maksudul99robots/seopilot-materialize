@@ -8,7 +8,7 @@ export default function Headings(props: any) {
             setHeadings(props.headings)
         }
     }, [props.headings])
-    console.log(headings)
+    console.log("headings:", headings)
     return (
         <Box sx={{ border: "1px solid #E6E6EA", borderRadius: "10px" }}>
             {
@@ -18,10 +18,10 @@ export default function Headings(props: any) {
                         return (
                             <Box key={i} sx={{ display: "flex", width: "100%", backgroundColor: i % 2 == 0 ? "#F7F7F9" : "fff", padding: "20px" }}>
                                 {/* <Box sx={{ width: "20%" }}> */}
-                                <Typography variant='body2' sx={{ width: "10%" }}>
+                                <Typography variant='body1' sx={{ width: "10%", fontSize: "13px" }}>
                                     {h?.tagName}
                                 </Typography>
-                                <Typography variant='body2' sx={{ width: "90%" }}>
+                                <Typography variant='body1' sx={{ width: "90%", fontSize: "13px" }}>
                                     {h?.textContent}
                                 </Typography>
                                 {/* </Box> */}

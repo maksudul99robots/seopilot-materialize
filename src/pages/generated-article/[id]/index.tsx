@@ -71,6 +71,7 @@ export default function Page() {
                     }
                     setShowOutlines(true)
                 } else if (res.status == 212) {
+                    console.log("returned value:", res.data)
                     setCurrentStep(5);
                     setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                         setShowArticleEditor(true);               //  ..  setTimeout()
@@ -98,8 +99,9 @@ export default function Page() {
                         }
 
                         /////
-
-                        setArticle(res?.data.content ? res.data.content : '')
+                        var outputString = res?.data?.content.replace('<article>', '');
+                        var outputString1 = outputString.replace('</article>', '');
+                        setArticle(res?.data.content ? outputString1 : '')
                         setArticleTopic(res?.data?.topic)
                         setCreatedAt(res?.data?.createdAt)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
@@ -134,8 +136,13 @@ export default function Page() {
                                 clearInterval(interval)
                                 console.log("inside interval cancel 212")
 
-                                setArticle(res?.data.content ? res.data.content : '')
-                                setOutlines(res?.data.outline ? res.data.outline : '')
+                                // setArticle(res?.data.content ? res.data.content : '')
+                                // setOutlines(res?.data.outline ? res.data.outline : '')
+                                var outputString = res?.data?.content.replace('<article>', '');
+                                var outputString1 = outputString.replace('</article>', '');
+                                setArticle(res?.data.content ? outputString1 : '')
+                                setArticleTopic(res?.data?.topic)
+                                setCreatedAt(res?.data?.createdAt)
                             }, 3000)
                         } else {
                             console.log("inside interval cancel 400")
@@ -236,20 +243,6 @@ export default function Page() {
                         <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                             <Icon icon="eos-icons:three-dots-loading" fontSize={80} color='#2979FF' />
                         </Box>
-                        {/* {
-                            showOutlines ?
-                                <>
-                                    <Outlines outlines={outlines} />
-                                    <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} onClick={() => editOutline()} endIcon={<Icon icon="solar:arrow-right-outline" />
-                                    }>
-                                        Continue
-                                    </Button>
-                                </>
-                                :
-                                <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                    <Icon icon="eos-icons:three-dots-loading" fontSize={80} color='#2979FF' />
-                                </Box>
-                        } */}
 
                     </Card>
             }

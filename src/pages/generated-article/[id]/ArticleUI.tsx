@@ -94,16 +94,34 @@ export default function ArticleIU(props: any) {
             props.setWordCount(words?.length)
         }
         let h = getHeadings(props.html)
-        console.log("headings....:", h)
         setHeadings(h);
 
     }, [props.html])
 
     return (
         <>
-            <Box sx={{ display: "flex", justifyContent: "between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
+            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
-                <Box sx={{ width: "60%", }}>
+                <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
+                <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+
+            </Box >
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+
+                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+
                     <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -131,36 +149,12 @@ export default function ArticleIU(props: any) {
 
                         </div>
                     </Card>
-                    <Typography variant='subtitle2' sx={{ width: "100%" }}>
+                    <Typography variant='subtitle2' sx={{ width: "100%", marginBottom: "10px" }}>
                         Article Created on: {props.createdAt}
                     </Typography>
-                </Box>
-                <Box sx={{ width: "40%", display: "flex", justifyContent: "end" }} >
-                    <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
-                    <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
-                </Box>
-
-                {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
-            </Box >
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
-                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
-
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
-
 
                         {
                             article &&

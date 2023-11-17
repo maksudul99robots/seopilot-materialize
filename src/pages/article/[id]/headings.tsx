@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 // ** MUI Imports
 
 import ListItem from '@mui/material/ListItem'
@@ -15,18 +15,36 @@ export default function Headings(props: any) {
                 props.headings ?
 
                     props?.headings.map((h: string, i: number) => {
-                        return <>
-                            <ListItem>
-                                <ListItemText primary={h} sx={{ fontSize: "14px" }} />
+                        return (
+                            // <>
+                            //     <ListItem>
+                            //         <ListItemText primary={h} sx={{ fontSize: "14px" }} />
 
-                            </ListItem>
-                            {
-                                i == props.headings.length - 1 ?
-                                    null :
-                                    <Divider variant="middle" />
-                            }
+                            //     </ListItem>
+                            //     {
+                            //         i == props.headings.length - 1 ?
+                            //             null :
+                            //             <Divider variant="middle" />
+                            //     }
 
-                        </>
+                            // </>
+
+                            <Box key={i} sx={{ display: "flex", width: "100%", backgroundColor: i % 2 == 0 ? "#F7F7F9" : "fff", padding: "20px" }}>
+                                {/* <Box sx={{ width: "20%" }}> */}
+                                <Typography variant='body1' sx={{ width: "10%", fontSize: "13px" }}>
+                                    {h?.substring(0, 2)}
+                                </Typography>
+                                <Typography variant='body1' sx={{ width: "90%", fontSize: "13px" }}>
+                                    {h?.substring(3, h.length)}
+                                </Typography>
+                                {/* </Box> */}
+                                {
+                                    i == props?.headings.length - 1 ?
+                                        null :
+                                        <Divider variant="middle" />
+                                }
+                            </Box>
+                        )
                     })
                     : null
             }

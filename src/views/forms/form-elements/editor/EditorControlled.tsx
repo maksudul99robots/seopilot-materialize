@@ -19,6 +19,8 @@ const EditorControlled = (props: any) => {
   ))
 
   useEffect(() => {
+    // var outputString = value.getCurrentContent().replace('<article>', '');
+    // var outputString1 = outputString.replace('</article>', '');
     props.setHtml(convertToHTML(value.getCurrentContent()));
   }, [value])
 

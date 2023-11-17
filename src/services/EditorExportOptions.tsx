@@ -92,7 +92,7 @@ export default function CustomizedMenus(props: any) {
             >
                 <CopyToClipboard text={props.html.replace(/<[^>]*>/g, '')}
                     onCopy={() => {
-                        props.setCopied(true)
+                        // props.setCopied(true)
                         toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                     }}>
                     <MenuItem onClick={handleClose} disableRipple>
@@ -104,7 +104,7 @@ export default function CustomizedMenus(props: any) {
                 <Divider sx={{ my: 0.5 }} />
                 <CopyToClipboard text={props.html}
                     onCopy={() => {
-                        props.setCopied(true)
+                        // props.setCopied(true)
                         toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                         // setTimeout(() => {
                         //     props.setCopied(false)

@@ -9,9 +9,13 @@ import { Icon } from '@iconify/react';
 // ** Styles
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import Swal from 'sweetalert2';
-import Headings from './headings';
+import Headings from '../../generated-article/[id]/Headings';
 import { useAuth } from 'src/hooks/useAuth';
-
+import CustomizedMenus from 'src/services/EditorExportOptions';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { getDateTime } from 'src/services/DateTimeFormatter';
+import { getHeadings } from 'src/services/Headings';
 
 type ArticleType = {
     id: number,
@@ -27,8 +31,11 @@ type ArticleType = {
 export default function Page() {
     const router = useRouter()
     const [articleObj, setArticleObj] = useState<ArticleType | null>(null);
+    const [articleData, setArticleData] = useState<string>('');
     const [html, setHtml] = useState<string>('');
+    const [wordCount, setWordCount] = useState<string | number>('');
     const [copied, setCopied] = useState(false);
+    const [headings, setHeadings] = useState([]);
     const auth = useAuth()
 
     useEffect(() => {
@@ -37,6 +44,10 @@ export default function Page() {
         if (router.query.id?.length && router.query.id.length > 0) {
             LoginRegistrationAPI.getAIArticleSingle({ id: router.query.id }).then(res => {
                 setArticleObj(res.data);
+
+                var outputString = res.data.output.replace('<article>', '');
+                var outputString1 = outputString.replace('</article>', '');
+                setArticleData(outputString1)
             }).catch(e => {
 
             })
@@ -88,70 +99,82 @@ export default function Page() {
         link.href = url;
         link.click();
     }
+
+    useEffect(() => {
+        // console.log(props.html)
+
+        let text = html.replace(/<[^>]*>/g, '');
+        let words = text.split(/\s+/g)
+        if (words?.length) {
+            setWordCount(words?.length)
+        }
+        let h = getHeadings(html)
+        // console.log("headings....:", h)
+        setHeadings(h);
+
+    }, [html])
+
+
     return (
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Grid item xs={12} sx={{ width: "70%", marginRight: "10px" }}>
-                <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
+        <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <div>
-                            {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
-                                <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
-                                <Typography variant='body1'>Back</Typography>
-                            </Link> */}
-                            <Typography variant='h5'>
-                                Edit Article
-                            </Typography>
-                        </div>
+                <CustomizedMenus html={html} setCopied={setCopied} copied={copied} save={save} download={download} />
+                <Button variant='contained' onClick={e => save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+
+            </Box >
+
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Grid item xs={12} sx={{ width: "70%", marginRight: "10px" }}>
+
+                    <Card
+                        sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
+                    >
+                        <Typography variant='subtitle2' sx={{ marginBottom: "10px" }}>
+                            Total Word Count: {wordCount} words
+                        </Typography>
 
 
-                        <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
-                            <CopyToClipboard text={html}
-                                onCopy={() => {
-                                    setCopied(true)
-                                    setTimeout(() => {
-                                        setCopied(false)
-                                    }, 5000)
-                                }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", }}> <Icon icon="icon-park-outline:copy" style={{ color: "#2979FF", cursor: "pointer", marginRight: "20px" }} />{copied && <span style={{ fontSize: "16px", fontWeight: "700", color: "#2979FF", paddingLeft: "5px", paddingRight: "5px" }}>Copied!</span>}</div>
+                        {
+                            articleObj?.output &&
+                            <EditorControlled data={articleData} setHtml={setHtml} />
+                        }
 
-                            </CopyToClipboard>
-                            <Button variant='outlined' onClick={e => save()} sx={{ marginRight: "5px" }}>Save Changes</Button>
-                            <Button variant='contained' onClick={e => download()}>Download HTML</Button>
-                        </Box>
-
-                    </div>
-                </Card>
+                    </Card>
+                </Grid>
                 <Card
-                    sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
+                    sx={{ overflow: 'visible', padding: "10px 10px 30px 10px", width: "30%", height: "100%" }}
                 >
+                    <Box sx={{ marginBottom: "20px" }}>
+                        <Typography variant='h5'>Source Website: </Typography>
+                        <Link href={articleObj?.source ? 'https://' + articleObj?.source : ''} target='_blank'> {articleObj?.source}</Link>
+                    </Box>
+                    <Typography variant='h5'>Input Headings:</Typography>
 
+                    {/* <Box >
+                        {
+                            articleObj?.prompt && JSON.parse(articleObj?.prompt) && <Headings headings={JSON.parse(articleObj?.prompt)} />
+                        }
 
-                    {
-                        articleObj?.output &&
-                        <EditorControlled data={articleObj?.output} setHtml={setHtml} />
-                    }
+                    </Box> */}
+                    <Headings headings={headings} />
 
                 </Card>
-            </Grid>
-            <Card
-                sx={{ overflow: 'visible', padding: "10px 10px 30px 10px", width: "30%", height: "100%" }}
-            >
-                <Box sx={{ marginBottom: "20px" }}>
-                    <Typography variant='h5'>Source Website : </Typography>
-                    <Link href={articleObj?.source ? 'https://' + articleObj?.source : ''} target='_blank'> {articleObj?.source}</Link>
-                </Box>
-                <Typography variant='h5'>Input Headings:</Typography>
+            </Box>
+        </>
 
-                <Box >
-                    {
-                        articleObj?.prompt && JSON.parse(articleObj?.prompt) && <Headings headings={JSON.parse(articleObj?.prompt)} />
-                    }
-
-                </Box>
-
-            </Card>
-        </Box>
 
     )
 
