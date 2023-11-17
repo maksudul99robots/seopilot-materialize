@@ -9,24 +9,26 @@ import Divider from '@mui/material/Divider';
 // ** Icon Imports
 
 export default function Headings(props: any) {
-    console.log(props.heading)
     return (
         <Box sx={{ border: "1px solid #EBEBEF", borderRadius: "10px", marginTop: "10px" }}>
             {
-                props.headings.map((h: string, i: number) => {
-                    return <>
-                        <ListItem>
-                            <ListItemText primary={h} sx={{ fontSize: "14px" }} />
+                props.headings ?
 
-                        </ListItem>
-                        {
-                            i == props.headings.length - 1 ?
-                                null :
-                                <Divider variant="middle" />
-                        }
+                    props?.headings.map((h: string, i: number) => {
+                        return <>
+                            <ListItem>
+                                <ListItemText primary={h} sx={{ fontSize: "14px" }} />
 
-                    </>
-                })
+                            </ListItem>
+                            {
+                                i == props.headings.length - 1 ?
+                                    null :
+                                    <Divider variant="middle" />
+                            }
+
+                        </>
+                    })
+                    : null
             }
         </Box>
     )

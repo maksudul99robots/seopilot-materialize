@@ -9,6 +9,7 @@ import { LoginRegistrationAPI } from 'src/services/API';
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2';
 import Outlines from './Outlines';
+import { getDateTime } from 'src/services/DateTimeFormatter';
 const steps = [
     'Researching Keywords',
     'Web Researching',
@@ -22,6 +23,7 @@ export default function Page() {
     const [showArticleEditor, setShowArticleEditor] = useState(false);
     const [article, setArticle] = useState('');
     const [articleTopic, setArticleTopic] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
     const [outlines, setOutlines] = useState('');
     const [callTracker, setCallTracker] = useState(false);
     const [showOutlines, setShowOutlines] = useState(false);
@@ -98,8 +100,10 @@ export default function Page() {
                         /////
 
                         setArticle(res?.data.content ? res.data.content : '')
+                        setArticleTopic(res?.data?.topic)
+                        setCreatedAt(res?.data?.createdAt)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
-                    }, 3000)
+                    }, 1000)
                 } else {
 
                 }
@@ -173,7 +177,7 @@ export default function Page() {
 
     const save = () => {
 
-        LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html }).then((res) => {
+        LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
             if (res.status == 200) {
                 Swal.fire(
                     'Success',
@@ -201,7 +205,18 @@ export default function Page() {
             {
                 showArticleEditor ?
 
-                    <ArticleIU article={article} outlines={outlines} setHtml={setHtml} html={html} save={save} wordCount={wordCount} setWordCount={setWordCount} />
+                    <ArticleIU
+                        article={article}
+                        outlines={outlines}
+                        setHtml={setHtml}
+                        html={html}
+                        save={save}
+                        wordCount={wordCount}
+                        setWordCount={setWordCount}
+                        articleTopic={articleTopic}
+                        setTopic={setArticleTopic}
+                        createdAt={getDateTime(createdAt)}
+                    />
                     :
                     <Card sx={{ padding: "20px" }}>
                         <Box sx={{ mb: 9, mt: 10, textAlign: 'center' }}>

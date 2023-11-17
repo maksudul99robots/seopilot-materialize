@@ -10,6 +10,7 @@ import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import CopyAllIcon from '@mui/icons-material/CopyAll';
 import Icon from 'src/@core/components/icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from "react-toastify";
@@ -89,16 +90,28 @@ export default function CustomizedMenus(props: any) {
                 open={open}
                 onClose={handleClose}
             >
+                <CopyToClipboard text={props.html.replace(/<[^>]*>/g, '')}
+                    onCopy={() => {
+                        props.setCopied(true)
+                        toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                    }}>
+                    <MenuItem onClick={handleClose} disableRipple>
+                        <ContentCopyOutlinedIcon />
+                        Copy Text
+                    </MenuItem>
+
+                </CopyToClipboard>
+                <Divider sx={{ my: 0.5 }} />
                 <CopyToClipboard text={props.html}
                     onCopy={() => {
                         props.setCopied(true)
-                        toast('Copied!', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+                        toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                         // setTimeout(() => {
                         //     props.setCopied(false)
                         // }, 5000)
                     }}>
                     <MenuItem onClick={handleClose} disableRipple>
-                        <ContentCopyOutlinedIcon />
+                        <CopyAllIcon />
                         Copy HTML
                     </MenuItem>
 

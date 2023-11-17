@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, Link, Typography } from '@mui/material'
+import { Box, Button, Card, Grid, InputAdornment, Link, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 // import Headings from './headings';
 import { useAuth } from 'src/hooks/useAuth';
 import Outlines from './Outlines';
+import { getHeadings } from 'src/services/Headings';
+import Headings from './Headings';
 
 
 type ArticleType = {
@@ -32,6 +34,7 @@ export default function ArticleIU(props: any) {
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
     const [outlines, setOutlines] = useState<string>(props.outlines);
+    const [headings, setHeadings] = useState<any>([]);
 
     const [copied, setCopied] = useState(false);
     const auth = useAuth()
@@ -90,71 +93,95 @@ export default function ArticleIU(props: any) {
         if (words?.length) {
             props.setWordCount(words?.length)
         }
+        let h = getHeadings(props.html)
+        console.log("headings....:", h)
+        setHeadings(h);
+
     }, [props.html])
 
     return (
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
-                <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
+        <>
+            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "20px" }}>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
+                <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+                    <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
-                        <div>
-                            {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+                            <div style={{ width: "100%" }}>
+                                {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
                                 <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
                                 <Typography variant='body1'>Back</Typography>
                             </Link> */}
-                            <Typography variant='h5'>
-                                AI Generated Article
-                            </Typography>
+                                <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
+                                    <Typography variant='h6' sx={{ width: "10%" }}>
+                                        Title
+                                    </Typography>
+                                    <TextField fullWidth value={props.articleTopic}
+                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "90%" } }}
+                                        onChange={e => {
+                                            props.setTopic(e.target.value)
+                                        }}
+                                    />
+                                </div>
+
+                                <Typography variant='subtitle2' sx={{ marginLeft: "10%" }}>
+                                    Total Word Count: {props.wordCount} words
+                                </Typography>
+                            </div>
+
+
+
                         </div>
-
-
-                        <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
-
-                            <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
-                            <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
-                            {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
-                        </Box>
-
-                    </div>
-                </Card>
-                <Card
-                    sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
-                >
-
-                    <Typography variant='h6' sx={{ marginBottom: "20px" }}>
-                        Total Word Count: {props.wordCount} words
+                    </Card>
+                    <Typography variant='subtitle2' sx={{ width: "100%", marginBottom: "10px" }}>
+                        Article Created on: {props.createdAt}
                     </Typography>
-                    {
-                        article &&
-                        <EditorControlled data={article} setHtml={props.setHtml} />
-                    }
+                    <Card
+                        sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
+                    >
 
 
+                        {
+                            article &&
+                            <EditorControlled data={article} setHtml={props.setHtml} />
+                        }
+
+
+                    </Card>
+                </Grid>
+                <Card
+                    sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
+                >
+                    <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
+
+                    {/* <Outlines outlines={outlines} /> */}
+                    <Headings headings={headings} />
                 </Card>
-            </Grid>
-            <Card
-                sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
-            >
-                <Typography variant='h5' sx={{ paddingTop: "20px" }}>Article Outline</Typography>
 
-                <Outlines outlines={outlines} />
 
-            </Card>
-        </Box>
+            </Box>
+
+
+        </>
+
 
     )
 

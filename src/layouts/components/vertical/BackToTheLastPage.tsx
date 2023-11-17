@@ -7,14 +7,14 @@ const BackToTheLastPage = () => {
     const router = useRouter();
     console.log(router.pathname)
     const goBack = () => {
-        router.back()
+        router.push('/dashboard')
     }
     return (
         <>
             {
                 router.pathname !== '/dashboard' &&
                 <Box onClick={goBack} sx={{ cursor: "pointer", display: "flex", justifyContent: "center" }}>
-                    <Icon icon='material-symbols-light:arrow-back-ios' /> Back
+                    <Icon icon='material-symbols-light:arrow-back-ios' /> Dashboard
                 </Box>
 
             }
