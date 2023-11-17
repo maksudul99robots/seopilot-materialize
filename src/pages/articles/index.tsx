@@ -205,11 +205,11 @@ const TableServerSide = () => {
                                 </Button >
                                 :
                                 row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) / 3000}` : `/article/${row.id}`}>
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}>
                                         View
                                     </Button >
                                     :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) / 3000}` : `/article/${row.id}`} >
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} >
                                         View
                                     </Button >
                         }
