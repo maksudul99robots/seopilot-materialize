@@ -101,35 +101,15 @@ export default function ArticleIU(props: any) {
 
     return (
         <>
-            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "20px" }}>
+            <Box sx={{ display: "flex", justifyContent: "between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
-                <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
-                <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
-                {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-                />
-                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+                <Box sx={{ width: "60%", }}>
                     <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
                             <div style={{ width: "100%" }}>
-                                {/* <Link sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} href='/articles'>
-                                <Icon icon="ic:round-arrow-back-ios-new" style={{ marginRight: "10px" }} />
-                                <Typography variant='body1'>Back</Typography>
-                            </Link> */}
+
                                 <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
                                     <Typography variant='h6' sx={{ width: "10%" }}>
                                         Title
@@ -151,9 +131,32 @@ export default function ArticleIU(props: any) {
 
                         </div>
                     </Card>
-                    <Typography variant='subtitle2' sx={{ width: "100%", marginBottom: "10px" }}>
+                    <Typography variant='subtitle2' sx={{ width: "100%" }}>
                         Article Created on: {props.createdAt}
                     </Typography>
+                </Box>
+                <Box sx={{ width: "40%", display: "flex", justifyContent: "end" }} >
+                    <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
+                    <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                </Box>
+
+                {/* <Button variant='contained' onClick={e => download()}>Download HTML</Button> */}
+            </Box >
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >

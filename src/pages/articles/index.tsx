@@ -197,18 +197,19 @@ const TableServerSide = () => {
                     <>
                         {
                             row.status == 'error' ?
+
                                 <Button variant='outlined' onClick={e => {
                                     regenerateArticle(row.id)
-                                }} >
+                                }} disabled={!row.article_type}>
                                     Retry
                                 </Button >
                                 :
                                 row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${row.id}` : `/article/${row.id}`}>
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) / 3000}` : `/article/${row.id}`}>
                                         View
                                     </Button >
                                     :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${row.id}` : `/article/${row.id}`} >
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) / 3000}` : `/article/${row.id}`} >
                                         View
                                     </Button >
                         }
