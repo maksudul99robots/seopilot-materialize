@@ -24,10 +24,12 @@ export default function Page() {
     const [article, setArticle] = useState('');
     const [articleTopic, setArticleTopic] = useState('');
     const [createdAt, setCreatedAt] = useState('');
+    const [updatedAt, setUpdatedAt] = useState('');
     const [outlines, setOutlines] = useState('');
     const [callTracker, setCallTracker] = useState(false);
     const [showOutlines, setShowOutlines] = useState(false);
     const [html, setHtml] = useState<string>('');
+    const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
     const router = useRouter()
 
@@ -104,6 +106,7 @@ export default function Page() {
                         setArticle(res?.data.content ? outputString1 : '')
                         setArticleTopic(res?.data?.topic)
                         setCreatedAt(res?.data?.createdAt)
+                        setUpdatedAt(res?.data?.updatedAt)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
                     }, 1000)
                 } else {
@@ -223,6 +226,9 @@ export default function Page() {
                         articleTopic={articleTopic}
                         setTopic={setArticleTopic}
                         createdAt={getDateTime(createdAt)}
+                        updatedAt={getDateTime(updatedAt)}
+                        setPlainText={setPlainText}
+                        plainText={plainText}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

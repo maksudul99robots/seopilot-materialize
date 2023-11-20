@@ -38,6 +38,7 @@ export type UserDataType = {
   avatar?: string | null
   plan?: string | null
   is_active?: string | null
+  approle: any
 }
 
 export type AuthValuesType = {
@@ -52,4 +53,5 @@ export type AuthValuesType = {
   verifyEmail: (params: VerifyEmailParams, errorCallback?: ErrCallbackType) => void
   updateUser: (params: UpdateUserParams, errorCallback?: ErrCallbackType) => void
   resetToken: (params: {}, errorCallback?: ErrCallbackType) => void
+  impersonate: (params: any, errorCallback?: ErrCallbackType) => void
 }

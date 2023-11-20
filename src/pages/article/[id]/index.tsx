@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, Link, Typography } from '@mui/material'
+import { Box, Button, Card, Grid, Link, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
@@ -22,6 +22,7 @@ type ArticleType = {
     user_id: number,
     prompt: string,
     output: string,
+    topic: string,
     is_error: boolean,
     source: string,
     createdAt: string,
@@ -32,7 +33,9 @@ export default function Page() {
     const router = useRouter()
     const [articleObj, setArticleObj] = useState<ArticleType | null>(null);
     const [articleData, setArticleData] = useState<string>('');
+    const [topic, setTopic] = useState<string>('');
     const [html, setHtml] = useState<string>('');
+    const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<string | number>('');
     const [copied, setCopied] = useState(false);
     const [headings, setHeadings] = useState([]);
@@ -44,7 +47,7 @@ export default function Page() {
         if (router.query.id?.length && router.query.id.length > 0) {
             LoginRegistrationAPI.getAIArticleSingle({ id: router.query.id }).then(res => {
                 setArticleObj(res.data);
-
+                setTopic(res.data.topic)
                 var outputString = res.data.output.replace('<article>', '');
                 var outputString1 = outputString.replace('</article>', '');
                 setArticleData(outputString1)
@@ -129,33 +132,63 @@ export default function Page() {
                 pauseOnHover
                 theme="light"
             />
-            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
+                <Box sx={{ width: "50%" }}>
+                    <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
+                        Last Updated: {getDateTime(articleObj?.updatedAt)}
+                    </Typography>
+                    <Typography variant='subtitle2' sx={{}}>
+                        Word Count: {wordCount} words
+                    </Typography>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
-                <CustomizedMenus html={html} setCopied={setCopied} copied={copied} save={save} download={download} />
-                <Button variant='contained' onClick={e => save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                    <CustomizedMenus html={html} setCopied={setCopied} copied={copied} save={save} download={download} plainText={plainText} />
+                    <Button variant='contained' onClick={e => save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
 
+                </Box >
             </Box >
 
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Grid item xs={12} sx={{ width: "70%", marginRight: "10px" }}>
+                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
 
+                    <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
+
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+                            <div style={{ width: "100%" }}>
+
+                                <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
+                                    <TextField fullWidth value={topic}
+                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "100%" } }}
+                                        onChange={e => {
+                                            setTopic(e.target.value)
+                                        }}
+                                    />
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+                    </Card>
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
-                        <Typography variant='subtitle2' sx={{ marginBottom: "10px" }}>
-                            Total Word Count: {wordCount} words
-                        </Typography>
+
 
 
                         {
                             articleObj?.output &&
-                            <EditorControlled data={articleData} setHtml={setHtml} />
+                            <EditorControlled data={articleData} setHtml={setHtml} setPlainText={setPlainText} />
                         }
 
                     </Card>
                 </Grid>
                 <Card
-                    sx={{ overflow: 'visible', padding: "10px 10px 30px 10px", width: "30%", height: "100%" }}
+                    sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
                 >
                     <Box sx={{ marginBottom: "20px" }}>
                         <Typography variant='h5'>Source Website: </Typography>

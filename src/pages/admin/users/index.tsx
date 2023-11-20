@@ -32,12 +32,12 @@ interface StatusObj {
 
 type CustomRowType = {
     id: number,
-    user_id: number,
-    output: string,
-    is_error: boolean,
-    source: string,
+    email: number,
+    plan: string,
+    last_login: string,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+    role_permission: any
 }
 
 type SortType = 'asc' | 'desc' | undefined | null
@@ -72,7 +72,7 @@ const statusObj: StatusObj = {
 }
 
 
-import { LoginRegistrationAPI } from '../../services/API'
+import { LoginRegistrationAPI } from 'src/services/API'
 import { Button } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
@@ -99,7 +99,7 @@ const TableServerSide = () => {
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('full_name')
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
@@ -112,23 +112,36 @@ const TableServerSide = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'output',
-            headerName: 'AI Article',
+            field: 'email',
+            headerName: 'Email',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.output ? row.output?.replace(/<\/?[^>]+(>|$)/g, "") : row.topic}
-                            </Typography>
-                            <Typography noWrap variant='caption'>
-                                {row.source ? row.source : 'https://app.seopilot.io'}
-                            </Typography>
-                        </Box>
+
+                        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                            {row.email ? row.email : ""}
+                        </Typography>
+
                     </Box>
+                )
+            }
+        },
+        {
+            flex: 0.175,
+            minWidth: 140,
+            field: 'plan',
+            headerName: 'Plan',
+            renderCell: (params: GridRenderCellParams) => {
+                return (
+
+                    <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                        {params.row.role_permission.role_id == 1 ? 'Normal User' : 'App Admin'}
+                    </Typography>
+
+
+
                 )
             }
         },
@@ -136,7 +149,7 @@ const TableServerSide = () => {
             flex: 0.175,
             type: 'date',
             minWidth: 120,
-            headerName: 'Created',
+            headerName: 'Account Created',
             field: 'createdAt',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => (
@@ -147,43 +160,16 @@ const TableServerSide = () => {
         },
         {
             flex: 0.175,
-            minWidth: 140,
-            field: 'is_error',
-            headerName: 'Status',
-            renderCell: (params: GridRenderCellParams) => {
-                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' ? 2 : 1]
-                return (
-
-                    <>
-                        {
-                            status.title == 'Error' ?
-
-                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-                                    <div>
-                                        <CustomChip
-                                            size='small'
-                                            skin='light'
-                                            color={status.color}
-                                            label={status.title}
-                                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-                                        />
-                                    </div>
-                                </LightTooltip >
-                                :
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                        }
-                    </>
-
-
-
-                )
-            }
+            type: 'date',
+            minWidth: 120,
+            headerName: 'Last Logged In',
+            field: 'last_login',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {getDateTime(params.row.last_login)}
+                </Typography>
+            )
         },
         {
             flex: 0.175,
@@ -195,26 +181,11 @@ const TableServerSide = () => {
                 const { row } = params;
 
                 return (
-                    <>
-                        {
-                            row.status == 'error' ?
-
-                                <Button variant='outlined' onClick={e => {
-                                    regenerateArticle(row.id)
-                                }} disabled={!row.article_type}>
-                                    Retry
-                                </Button >
-                                :
-                                row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}>
-                                        View
-                                    </Button >
-                                    :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} >
-                                        View
-                                    </Button >
-                        }
-                    </>
+                    <Button variant='outlined' onClick={() => {
+                        impersonate(row.id)
+                    }}>
+                        Impersonate
+                    </Button >
 
                 )
 
@@ -223,33 +194,11 @@ const TableServerSide = () => {
 
         }
     ]
-    const regenerateArticle = (id: number | string) => {
-        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
-            setTimeout(() => {
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                    loadServerRows
-                    setMainData(res.data);
-                    // console.log("data:", res.data)
-                    // setTotal(res.data.total)
-                    // setRows(loadServerRows(paginationModel.page, res.data.data))
-                })
-            }, 3000)
-
-            Swal.fire(
-                'Success',
-                'Article is Being Re-generated',
-                'success'
-            )
-        }).catch(e => {
-            Swal.fire(
-                'Error',
-                'Unable to Re-generate.',
-                'error'
-            )
-        })
+    const impersonate = (id: number | string) => {
+        auth.impersonate({ userId: id })
     }
     useEffect(() => {
-        LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+        LoginRegistrationAPI.getAllUsers({}).then(res => {
             loadServerRows
             setMainData(res.data);
             console.log("data:", res.data)
@@ -258,14 +207,14 @@ const TableServerSide = () => {
         })
     }, [])
     useEffect(() => {
-        if (auth?.user?.plan == 'free') {
+        if (auth?.user?.approle.role.id !== 2) {
             Swal.fire('401',
                 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
                 'error').then(() => {
                     router.push("/")
                 })
         }
-    }, [auth?.user?.plan])
+    }, [auth?.user?.approle.role])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 

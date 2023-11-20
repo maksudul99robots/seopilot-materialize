@@ -28,7 +28,9 @@ const defaultProvider: AuthValuesType = {
   redeemCoupon: () => Promise.resolve(),
   verifyEmail: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
-  resetToken: () => Promise.resolve()
+  resetToken: () => Promise.resolve(),
+  impersonate: () => Promise.resolve()
+
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -91,26 +93,7 @@ const AuthProvider = ({ children }: Props) => {
           setUser({ ...x })
         }
 
-        // await axios
-        //   .get(authConfig.meEndpoint, {
-        //     headers: {
-        //       Authorization: storedToken
-        //     }
-        //   })
-        //   .then(async response => {
-        //     setLoading(false)
-        //     setUser({ ...response.data.userData })
-        //   })
-        //   .catch(() => {
-        //     localStorage.removeItem('userData')
-        //     localStorage.removeItem('refreshToken')
-        //     localStorage.removeItem('accessToken')
-        //     setUser(null)
-        //     setLoading(false)
-        //     if (authConfig.onTokenExpiration === 'logout' && !router.pathname.includes('login')) {
-        //       router.replace('/login')
-        //     }
-        //   })
+
       } else {
         setLoading(false)
       }
@@ -133,6 +116,29 @@ const AuthProvider = ({ children }: Props) => {
         params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
         sendTokenToExtension(response.data.accessToken, extensionId);
         // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+
+        window.location.href = window.location.origin;
+      })
+
+      .catch(err => {
+        if (errorCallback) errorCallback(err)
+      })
+  }
+  const handleImpersonation = (params: any, errorCallback?: ErrCallbackType) => {
+
+    LoginRegistrationAPI.impersonate(params)
+      .then(async response => {
+        window.localStorage.removeItem('userData')
+        window.localStorage.removeItem(authConfig.storageTokenKeyName)
+        console.log("response:", response)
+        response.data.userData.role = "admin"
+        setUser({ ...response.data.userData })
+        window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
+        window.localStorage.setItem("seo-pilot-token", response.data.accessToken);
+        // // console.log({ ...response.data })
+        // params.rememberMe ? window.localStorage.setItem('userData', JSON.stringify(response.data.userData)) : null
+        // sendTokenToExtension(response.data.accessToken, extensionId);
+        // // const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
         window.location.href = window.location.origin;
       })
@@ -357,7 +363,8 @@ const AuthProvider = ({ children }: Props) => {
     redeemCoupon: handleRedeemCoupon,
     verifyEmail: handleVerifyEmail,
     updateUser: handleUpdateUser,
-    resetToken: handleResetToken
+    resetToken: handleResetToken,
+    impersonate: handleImpersonation
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

@@ -125,7 +125,6 @@ const LoginPage = () => {
     // })
   }
 
-  const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
   return (
     <Box className='content-center'>

@@ -22,6 +22,7 @@ const EditorControlled = (props: any) => {
     // var outputString = value.getCurrentContent().replace('<article>', '');
     // var outputString1 = outputString.replace('</article>', '');
     props.setHtml(convertToHTML(value.getCurrentContent()));
+    props.setPlainText(value.getCurrentContent().getPlainText())
   }, [value])
 
   return <ReactDraftWysiwyg editorState={value} onEditorStateChange={data => setValue(data)} toolbar={{

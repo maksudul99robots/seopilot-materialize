@@ -100,10 +100,21 @@ export default function ArticleIU(props: any) {
 
     return (
         <>
-            <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
-                <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} />
-                <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
+                <Box sx={{ width: "50%" }}>
+                    <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
+                        Last Updated: {props.updatedAt}
+                    </Typography>
+                    <Typography variant='subtitle2' sx={{}}>
+                        Word Count: {props.wordCount} words
+                    </Typography>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
+                    <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} />
+                    <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                </Box>
+
 
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -129,36 +140,29 @@ export default function ArticleIU(props: any) {
                             <div style={{ width: "100%" }}>
 
                                 <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-                                    <Typography variant='h6' sx={{ width: "10%" }}>
-                                        Title
-                                    </Typography>
                                     <TextField fullWidth value={props.articleTopic}
-                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "90%" } }}
+                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "100%" } }}
                                         onChange={e => {
                                             props.setTopic(e.target.value)
                                         }}
                                     />
                                 </div>
 
-                                <Typography variant='subtitle2' sx={{ marginLeft: "10%" }}>
-                                    Total Word Count: {props.wordCount} words
-                                </Typography>
+
                             </div>
 
 
 
                         </div>
                     </Card>
-                    <Typography variant='subtitle2' sx={{ width: "100%", marginBottom: "10px" }}>
-                        Article Created on: {props.createdAt}
-                    </Typography>
+
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
 
                         {
                             article &&
-                            <EditorControlled data={article} setHtml={props.setHtml} />
+                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} />
                         }
 
 

@@ -4,7 +4,7 @@ import { useAuth } from 'src/hooks/useAuth';
 
 const navigation = (): VerticalNavItemsType => {
   const auth = useAuth();
-
+  console.log(auth?.user);
   let menus = auth?.user?.plan == 'ltd' ? [
 
     {
@@ -58,7 +58,26 @@ const navigation = (): VerticalNavItemsType => {
         path: '/pricing'
       },
 
-    ]
+    ];
+
+  let adminMenus = [
+    {
+      sectionTitle: 'Admin Options'
+    },
+    {
+      title: 'All Users',
+      icon: 'mdi:account-outline',
+      path: '/admin/users'
+    },
+    // {
+    //   title: 'All Articles',
+    //   icon: 'material-symbols:key-outline',
+    //   path: '/add-apikey'
+    // }
+  ]
+  if (auth?.user?.approle?.role.id == 2) { //if app admin
+    menus = menus.concat(adminMenus);
+  }
 
 
   return menus

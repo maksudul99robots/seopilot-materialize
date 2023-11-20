@@ -66,6 +66,10 @@ export default function CustomizedMenus(props: any) {
         setAnchorEl(null);
     };
 
+    React.useEffect(() => {
+        // console.log("htms:", props.html.innerITML)
+    }, [props.html])
+
     return (
         <div>
             <Button
@@ -90,7 +94,7 @@ export default function CustomizedMenus(props: any) {
                 open={open}
                 onClose={handleClose}
             >
-                <CopyToClipboard text={props.html.replace(/<[^>]*>/g, '')}
+                <CopyToClipboard text={props.plainText}
                     onCopy={() => {
                         // props.setCopied(true)
                         toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
