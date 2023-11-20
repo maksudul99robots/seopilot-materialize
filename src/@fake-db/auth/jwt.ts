@@ -19,6 +19,7 @@ const users: UserDataType[] = [
     username: 'johndoe',
     email: 'admin@materialize.com',
     lastName: "",
+    approle: {}
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const users: UserDataType[] = [
     username: 'janedoe',
     email: 'client@materialize.com',
     lastName: "",
+    approle: {}
   }
 ]
 
@@ -91,7 +93,8 @@ mock.onPost('/jwt/register').reply(request => {
         avatar: null,
         fullName: '',
         role: 'admin',
-        lastName: ''
+        lastName: '',
+        approle: {}
       }
 
       users.push(userData)

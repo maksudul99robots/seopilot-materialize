@@ -38,7 +38,7 @@ export type UserDataType = {
   avatar?: string | null
   plan?: string | null
   is_active?: string | null
-  approle: any
+  approle: any | undefined
 }
 
 export type AuthValuesType = {
