@@ -225,7 +225,7 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-                        {
+                        {/* {
                             numberOfLinks.map((link, index) => {
                                 return (
                                     <>
@@ -258,14 +258,14 @@ export default function CreateArticle(props: any) {
 
                                 )
                             })
-                        }
-                        <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, }} onClick={() => {
+                        } */}
+                        {/* <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, }} onClick={() => {
                             const newArray = [...numberOfLinks];
                             newArray.push(1);
                             setNumberOfLinks(newArray);
                         }} startIcon={<Icon icon="gg:add" />}>
                             Add Another Link
-                        </Button>
+                        </Button> */}
                         {/* </Grid> */}
 
                     </Grid>

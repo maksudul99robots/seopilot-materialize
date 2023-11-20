@@ -39,6 +39,8 @@ export type UserDataType = {
   plan?: string | null
   is_active?: string | null
   approle: any | undefined
+  workspaces: any | undefined
+  workspace_owner_info: any | undefined
 }
 
 export type AuthValuesType = {

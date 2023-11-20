@@ -106,10 +106,14 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     LoginRegistrationAPI.login(params)
       .then(async response => {
+
+        console.log("response:", response.data.userData)
         params.rememberMe
           ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
           : null
         const returnUrl = router.query.returnUrl
+
+
         response.data.userData.role = "admin"
         setUser({ ...response.data.userData })
         // console.log({ ...response.data })

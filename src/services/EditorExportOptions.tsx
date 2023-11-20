@@ -70,6 +70,18 @@ export default function CustomizedMenus(props: any) {
         // console.log("htms:", props.html.innerITML)
     }, [props.html])
 
+    function copyToClip(str: any) {
+        console.log("str:", str)
+        function listener(e: any) {
+            e.clipboardData.setData("text/html", str);
+            e.clipboardData.setData("text/plain", str);
+            e.preventDefault();
+        }
+        document.addEventListener("copy", listener);
+        document.execCommand("copy");
+        document.removeEventListener("copy", listener);
+    };
+
     return (
         <div>
             <Button
@@ -94,17 +106,23 @@ export default function CustomizedMenus(props: any) {
                 open={open}
                 onClose={handleClose}
             >
-                <CopyToClipboard text={props.plainText}
+                {/* <CopyToClipboard text={props.plainText}
                     onCopy={() => {
-                        // props.setCopied(true)
                         toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                    }}>
+                    }}> */}
+                <div onClick={() => {
+                    copyToClip(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML);
+
+                }}>
                     <MenuItem onClick={handleClose} disableRipple>
                         <ContentCopyOutlinedIcon />
-                        Copy Text
+                        Copy Rich Text
                     </MenuItem>
 
-                </CopyToClipboard>
+                </div>
+
+
+                {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
                 <CopyToClipboard text={props.html}
                     onCopy={() => {

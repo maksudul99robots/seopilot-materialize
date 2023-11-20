@@ -71,7 +71,7 @@ export default function Page() {
         exportHtml(html)
     }
     const save = () => {
-        LoginRegistrationAPI.updateAIArticle({ id: articleObj?.id, output: html }).then((res) => {
+        LoginRegistrationAPI.updateAIArticle({ id: articleObj?.id, output: html, topic: topic }).then((res) => {
             if (res.status == 200) {
                 Swal.fire(
                     'Success',
