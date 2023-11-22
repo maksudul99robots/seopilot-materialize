@@ -146,7 +146,7 @@ const SelectConnects = (props: any) => {
         </DialogContent>
 
         {
-          connects.length > 1 ?
+          connects.length > 0 ?
             <Box sx={{
               display: "flex",
               justifyContent: "center"
@@ -207,7 +207,7 @@ const SelectConnects = (props: any) => {
 
 
           {
-            connects.length > 1 ?
+            connects.length > 0 ?
               <div style={{ marginTop: "20px" }}>
                 <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
                 }>
