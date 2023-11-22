@@ -5,7 +5,7 @@ import { useAuth } from 'src/hooks/useAuth';
 const navigation = (): VerticalNavItemsType => {
   const auth = useAuth();
   console.log(auth?.user);
-  let menus = auth?.user?.plan == 'ltd' ? [
+  let menus = auth?.user?.plan?.plan !== 'free' ? [
 
     {
       sectionTitle: 'Menu & Profile Settings'

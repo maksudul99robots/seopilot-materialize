@@ -267,7 +267,7 @@ const TableServerSide = () => {
         })
     }, [])
     useEffect(() => {
-        if (auth?.user?.plan == 'free') {
+        if (auth?.user?.plan?.plan == 'free') {
             Swal.fire('401',
                 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
                 'error').then(() => {

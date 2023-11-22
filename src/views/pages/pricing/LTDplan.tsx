@@ -9,7 +9,7 @@ const LTDPlan = ({ plan }: any) => {
 
     return (
 
-        plan == 'ltd' ?
+        plan.plan == 'extension_only' ?
             <Card sx={{ mb: 10 }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
