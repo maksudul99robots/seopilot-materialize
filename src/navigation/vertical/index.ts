@@ -21,9 +21,9 @@ const navigation = (): VerticalNavItemsType => {
       path: '/create-article'
     },
     {
-      title: 'Connect to WordPress',
+      title: 'Integrations',
       icon: 'ic:round-wordpress',
-      path: '/connect-to-wordpress'
+      path: '/integrations'
     },
     {
       title: 'Profile Settings',
