@@ -189,7 +189,7 @@ const SelectConnects = (props: any) => {
               padding: "20px"
             }}>
               <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                You don't have any website connected.<br></br> <Link href={"/connect-to-wordpress"}>Click here</Link> to connect to WordPress websites.
+                You don't have any website connected.<br></br> <Link href={"/integrations"}>Click here</Link> to connect to WordPress websites.
               </Typography>
 
             </Box>
