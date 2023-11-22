@@ -36,7 +36,7 @@ export type UserDataType = {
   username: string
   password: string
   avatar?: string | null
-  plan?: string | null
+  plan?: any | null
   is_active?: string | null
   approle: any | undefined
   workspaces: any | undefined

@@ -44,40 +44,29 @@ export default function CreateArticle(props: any) {
     // ** Hooks
     const bgColors = useBgColor()
     useEffect(() => {
-        if (auth?.user?.plan !== 'ltd') {
+
+    }, [])
+    const sumbit = () => {
+        if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
             Swal.fire({
                 title: 'Error!',
                 text: 'Please Subscribe to Higher Plan to Get This Feature.',
                 icon: 'error',
                 confirmButtonText: 'Close',
-            }).then(() => {
-                router.push("/");
             })
+        } else {
+            LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
+                then(res => {
+                    // console.log("res:", res);
+                    router.push("/generated-article/" + res.data.id)
+                }).catch(e => {
+                    console.log("error:", e);
+                })
         }
-    }, [])
-    const sumbit = () => {
-        LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
-            then(res => {
-                console.log("res:", res);
-                router.push("/generated-article/" + res.data.id)
-            }).catch(e => {
-                console.log("error:", e);
-            })
+
     }
     return (
         <Card>
-            {/* <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
-                <Icon icon='mdi:home-outline' fontSize='2rem' />
-                <Typography variant='h6' sx={{ mb: 4 }}>
-                    Add New Address
-                </Typography>
-                <Typography sx={{ mb: 3 }}>
-                    Ready to use form to collect user address data with validation and custom input support.
-                </Typography>
-                <Button variant='contained' onClick={() => setShow(true)}>
-                    Show
-                </Button>
-            </CardContent> */}
             <Card>
                 <DialogContent
                     sx={{
@@ -224,49 +213,6 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
-
-                        {/* {
-                            numberOfLinks.map((link, index) => {
-                                return (
-                                    <>
-                                        <Grid item sm={11} xs={12}>
-                                            <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
-                                                // console.log(e.target.value)
-                                                const newArray = [...links];
-                                                newArray[index] = e.target.value
-                                                setLinks(newArray);
-                                            }} InputProps={{
-                                                startAdornment: <InputAdornment position="start"></InputAdornment>,
-                                            }} />
-                                        </Grid>
-                                        <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
-                                            <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
-                                                if (index != 0) {
-                                                    const newArray = [...numberOfLinks];
-                                                    newArray.splice(index, 1);
-                                                    setNumberOfLinks(newArray);
-
-                                                    const newLinks = [...links];
-                                                    newLinks.splice(index, 1);
-                                                    setLinks(newLinks);
-                                                }
-
-                                            }} />
-
-                                        </Grid>
-                                    </>
-
-                                )
-                            })
-                        } */}
-                        {/* <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, }} onClick={() => {
-                            const newArray = [...numberOfLinks];
-                            newArray.push(1);
-                            setNumberOfLinks(newArray);
-                        }} startIcon={<Icon icon="gg:add" />}>
-                            Add Another Link
-                        </Button> */}
-                        {/* </Grid> */}
 
                     </Grid>
                 </DialogContent>

@@ -17,6 +17,7 @@ import { useAuth } from 'src/hooks/useAuth';
 import Outlines from './Outlines';
 import { getHeadings } from 'src/services/Headings';
 import Headings from './Headings';
+import SelectConnects from 'src/services/SelectConnects';
 
 
 type ArticleType = {
@@ -40,7 +41,7 @@ export default function ArticleIU(props: any) {
     const auth = useAuth()
 
     useEffect(() => {
-        if (auth?.user?.plan == 'free') {
+        if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
             Swal.fire('401',
                 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
                 'error').then(() => {
@@ -112,7 +113,8 @@ export default function ArticleIU(props: any) {
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
                     <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} />
-                    <Button variant='contained' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                    <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                    <SelectConnects html={props.html} title={props.articleTopic} />
                 </Box>
 
 

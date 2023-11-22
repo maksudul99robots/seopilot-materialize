@@ -5,7 +5,7 @@ import { useAuth } from 'src/hooks/useAuth';
 const navigation = (): VerticalNavItemsType => {
   const auth = useAuth();
   console.log(auth?.user);
-  let menus = auth?.user?.plan == 'ltd' ? [
+  let menus = auth?.user?.plan?.plan !== 'free' ? [
 
     {
       sectionTitle: 'Menu & Profile Settings'
@@ -19,6 +19,11 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Generate AI Articles',
       icon: 'streamline:ai-edit-spark',
       path: '/create-article'
+    },
+    {
+      title: 'Connect to WordPress',
+      icon: 'ic:round-wordpress',
+      path: '/connect-to-wordpress'
     },
     {
       title: 'Profile Settings',
