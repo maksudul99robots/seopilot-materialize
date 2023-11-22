@@ -221,7 +221,7 @@ const AuthProvider = ({ children }: Props) => {
             Swal.fire({
               html: `<h3>Success!</h3>
                 <h5>You're upgraded to</h5>
-                <h4>Rockethub LTD - Captain</h4> 
+                <h4>Rockethub LTD-EXTENSION-ONLY</h4> 
                 `,
               icon: "success",
               // input: 'text',

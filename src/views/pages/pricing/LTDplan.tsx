@@ -13,7 +13,7 @@ const LTDPlan = ({ plan }: any) => {
             <Card sx={{ mb: 10 }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
-                        Your current plan: Rockethub LTD-Captain
+                        Your current plan: Rockethub LTD-EXTENSION-ONLY
                     </Typography>
                     <Typography variant='body1' sx={{ pl: 5 }}>
                         Features:

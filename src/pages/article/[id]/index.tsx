@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { getDateTime } from 'src/services/DateTimeFormatter';
 import { getHeadings } from 'src/services/Headings';
+import DialogAddCard from 'src/services/DialogAddCard';
+import SelectConnects from 'src/services/SelectConnects';
 
 type ArticleType = {
     id: number,
@@ -144,8 +146,8 @@ export default function Page() {
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "100%" }}>
 
                     <CustomizedMenus html={html} setCopied={setCopied} copied={copied} save={save} download={download} plainText={plainText} />
-                    <Button variant='contained' onClick={e => save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
-
+                    <Button variant='outlined' onClick={e => save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                    <SelectConnects html={html} title={topic} />
                 </Box >
             </Box >
 
@@ -188,7 +190,7 @@ export default function Page() {
                     </Card>
                 </Grid>
                 <Card
-                    sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
+                    sx={{ overflow: 'visible', padding: "20px 20px 30px 20px", width: "40%", height: "100%" }}
                 >
                     <Box sx={{ marginBottom: "20px" }}>
                         <Typography variant='h5'>Source Website: </Typography>

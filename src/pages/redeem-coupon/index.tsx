@@ -181,7 +181,7 @@ const RedeemCoupon = () => {
                                 Enter your coupon code to redeem Life Time Deal (LTD).
                             </Typography>
                             <Grid item xs={12}>
-                                <TextField fullWidth label='Coupon code' placeholder='Leonard Carter' onChange={e => setCoupon(e.target.value)} />
+                                <TextField fullWidth label='Coupon code' placeholder='Coupon code' onChange={e => setCoupon(e.target.value)} />
                             </Grid>
 
                         </Grid>
