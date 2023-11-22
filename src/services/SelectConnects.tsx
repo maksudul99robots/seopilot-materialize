@@ -146,7 +146,7 @@ const SelectConnects = (props: any) => {
         </DialogContent>
 
         {
-          connects.length > 0 ?
+          connects.length > 1 ?
             <Box sx={{
               display: "flex",
               justifyContent: "center"
@@ -189,7 +189,7 @@ const SelectConnects = (props: any) => {
               padding: "20px"
             }}>
               <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                You don't have any website connected.<br></br> <Link href={"http://localhost:3500/connect-to-wordpress/"}>Click here</Link> to connect to WordPress websites.
+                You don't have any website connected.<br></br> <Link href={"/connect-to-wordpress"}>Click here</Link> to connect to WordPress websites.
               </Typography>
 
             </Box>
@@ -207,7 +207,7 @@ const SelectConnects = (props: any) => {
 
 
           {
-            connects.length > 0 ?
+            connects.length > 1 ?
               <div style={{ marginTop: "20px" }}>
                 <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
                 }>
