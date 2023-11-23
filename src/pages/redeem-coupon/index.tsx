@@ -44,23 +44,10 @@ const RedeemCoupon = () => {
         showPassword: false
     })
 
-    // useEffect(() => {
-    //     let user = auth.user;
-    //     if (user?.plan == 'ltd') {
-    //         Swal.fire({
-    //             title: 'Ops!',
-    //             text: 'You\'re already in Rockethub\n LTD- Captain Plan',
-    //             icon: 'success',
-    //             confirmButtonText: 'Ok',
-    //             allowOutsideClick: false,
-    //             allowEscapeKey: false,
-
-    //         }).then(() => {
-
-    //             // router.push("/")
-    //         })
-    //     }
-    // }, [])
+    useEffect(() => {
+        let user = auth.user;
+        console.log("user values:", user);
+    }, [])
     useEffect(() => {
         // if (window.location.hostname.includes("app.seopilot.io")) {
         //     setExtensionId(process.env.NEXT_PUBLIC_EXT_ID)

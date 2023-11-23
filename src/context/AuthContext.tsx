@@ -25,6 +25,7 @@ const defaultProvider: AuthValuesType = {
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  // acceptInvitation: () => Promise.resolve(),
   redeemCoupon: () => Promise.resolve(),
   verifyEmail: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
@@ -343,6 +344,25 @@ const AuthProvider = ({ children }: Props) => {
     );
     router.push('/login')
   }
+  const handleAcceptInvitation = () => {
+    setUser(null)
+    window.localStorage.removeItem('userData')
+    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+
+    chrome?.runtime?.sendMessage(
+      extensionId, // Extension ID
+      { action: "removeToken" },
+      (response) => {
+        console.log(response)
+        if (response && response.success) {
+          console.log("Token stored in extension's local storage.", response);
+        } else {
+          console.error("Failed to store token in extension.");
+        }
+      }
+    );
+    router.push('/login')
+  }
 
   const handleResetToken = () => {
     LoginRegistrationAPI.reloadToken().then((res) => {
@@ -364,6 +384,7 @@ const AuthProvider = ({ children }: Props) => {
     login: handleLogin,
     logout: handleLogout,
     register: handleRegister,
+    acceptInvitation: handleAcceptInvitation,
     redeemCoupon: handleRedeemCoupon,
     verifyEmail: handleVerifyEmail,
     updateUser: handleUpdateUser,

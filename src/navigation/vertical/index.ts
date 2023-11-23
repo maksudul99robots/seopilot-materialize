@@ -4,7 +4,6 @@ import { useAuth } from 'src/hooks/useAuth';
 
 const navigation = (): VerticalNavItemsType => {
   const auth = useAuth();
-  console.log(auth?.user);
   let menus = auth?.user?.plan?.plan !== 'free' ? [
 
     {
