@@ -132,6 +132,36 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async getAllWorkspaces(data: any, url = "/get-all-workspaces", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async createWorkspace(data: any, url = "/create-workspace", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async getTeam(data: any, url = "/get-team", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async inviteToTeam(data: any, url = "/invite-to-team", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async verifyInvitationCode(data: any, url = "/verify-Invitation-code", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async acceptInvitation(data: any, url = "/accept-invitation", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     }
 
 

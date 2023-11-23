@@ -25,6 +25,7 @@ const defaultProvider: AuthValuesType = {
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  acceptInvitation: () => Promise.resolve(),
   redeemCoupon: () => Promise.resolve(),
   verifyEmail: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),

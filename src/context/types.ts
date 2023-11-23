@@ -19,6 +19,12 @@ export type UpdateUserParams = {
   last_name: string,
   email: string
 }
+export type AcceptInvitationParams = {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string
+}
 
 export type RedeemCouponParams = {
   coupon: string
@@ -51,6 +57,7 @@ export type AuthValuesType = {
   setUser: (value: UserDataType | null) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   register: (params: RegisterParams, errorCallback?: ErrCallbackType) => void
+  acceptInvitation: (params: AcceptInvitationParams, errorCallback?: ErrCallbackType) => void
   redeemCoupon: (params: RedeemCouponParams, errorCallback?: ErrCallbackType) => void
   verifyEmail: (params: VerifyEmailParams, errorCallback?: ErrCallbackType) => void
   updateUser: (params: UpdateUserParams, errorCallback?: ErrCallbackType) => void

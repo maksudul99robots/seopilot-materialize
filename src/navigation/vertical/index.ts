@@ -8,7 +8,7 @@ const navigation = (): VerticalNavItemsType => {
   let menus = auth?.user?.plan?.plan !== 'free' ? [
 
     {
-      sectionTitle: 'Menu & Profile Settings'
+      sectionTitle: 'Menu'
     },
     {
       title: 'AI Articles',
@@ -24,6 +24,22 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Integrations',
       icon: 'ic:round-wordpress',
       path: '/integrations'
+    },
+    {
+      sectionTitle: 'Worspaces & Team Management'
+    },
+    {
+      title: 'Workspaces',
+      icon: 'material-symbols:workspaces-outline',
+      path: '/workspaces'
+    },
+    {
+      title: 'Team',
+      icon: 'fluent:people-team-28-regular',
+      path: '/team'
+    },
+    {
+      sectionTitle: 'Profile Settings'
     },
     {
       title: 'Profile Settings',
