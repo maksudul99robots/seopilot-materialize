@@ -131,13 +131,13 @@ const TableServerSide = () => {
         {
             flex: 0.175,
             minWidth: 140,
-            field: 'plan',
-            headerName: 'Plan',
+            field: 'role_permission',
+            headerName: 'Role',
             renderCell: (params: GridRenderCellParams) => {
                 return (
 
                     <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                        {params.row.role_permission.role_id == 1 ? 'Normal User' : 'App Admin'}
+                        {params.row?.role_permission?.role_id == 1 ? 'Normal User' : 'App Admin'}
                     </Typography>
 
 

@@ -107,13 +107,14 @@ const CreateAccountInvite = () => {
 
         if (router.query.token?.length && router.query.token.length > 0) {
             LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
+                console.log(res.data)
                 setEmail(res.data.email)
                 setIsVerified(true)
             }).catch(e => {
                 console.log(e)
             })
         }
-    }, [router.query.toen])
+    }, [router.query.token])
 
     useEffect(() => {
         if (email.length > 1)
@@ -130,27 +131,28 @@ const CreateAccountInvite = () => {
             if (password.length > 6) {
                 if (password == confirmPassword) {
                     setLoading(true);
-                    LoginRegistrationAPI.register({ email, password, confirmPassword, firstName, lastName }).then((res) => {
-                        console.log("res:", res);
-                        setLoading(false);
+                    auth.acceptInvitation({ email: email, first_name: firstName, last_name: lastName, password: password })
+                    // LoginRegistrationAPI.register({ email, password, confirmPassword, firstName, lastName }).then((res) => {
+                    //     console.log("res:", res);
+                    //     setLoading(false);
 
-                        Swal.fire(
-                            'Success',
-                            'A verification email is sent.',
-                            'success'
-                        ).then(() => {
-                            auth.register({ token: res.data.accessToken, userData: res.data.userData })
+                    //     Swal.fire(
+                    //         'Success',
+                    //         'A verification email is sent.',
+                    //         'success'
+                    //     ).then(() => {
+                    //         auth.register({ token: res.data.accessToken, userData: res.data.userData })
 
-                        })
-                    }).catch((e) => {
-                        console.log(e)
-                        setLoading(false);
-                        Swal.fire(
-                            'Error',
-                            e.response.data,
-                            'error'
-                        )
-                    })
+                    //     })
+                    // }).catch((e) => {
+                    //     console.log(e)
+                    //     setLoading(false);
+                    //     Swal.fire(
+                    //         'Error',
+                    //         e.response.data,
+                    //         'error'
+                    //     )
+                    // })
 
                 } else {
                     Swal.fire(
@@ -191,7 +193,7 @@ const CreateAccountInvite = () => {
                                         <TextField autoFocus sx={{ mb: 4 }} label='Last Name' placeholder='Last Name' onChange={e => setLastname(e.target.value)} />
                                     </Box>
 
-                                    <TextField fullWidth label='Email' sx={{ mb: 4 }} placeholder='Email' onChange={e => setEmail(e.target.value)} error={!isEmailValid} />
+                                    <TextField fullWidth label='Email' sx={{ mb: 4 }} disabled placeholder='Email' onChange={e => setEmail(e.target.value)} error={!isEmailValid} defaultValue={email} />
                                     <FormControl fullWidth sx={{ mb: 4 }}>
                                         <InputLabel htmlFor='auth-login-v2-password'>Password</InputLabel>
                                         <OutlinedInput

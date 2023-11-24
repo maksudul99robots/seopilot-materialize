@@ -21,6 +21,9 @@ import ShortcutsDropdown, { ShortcutsType } from 'src/@core/layouts/components/s
 
 // ** Hook Import
 import { useAuth } from 'src/hooks/useAuth'
+import WorkspaceList from '../WorkspaceList'
+import { useEffect, useState } from 'react'
+import { LoginRegistrationAPI } from 'src/services/API'
 
 interface Props {
   hidden: boolean
@@ -128,9 +131,27 @@ const shortcuts: ShortcutsType[] = [
 const AppBarContent = (props: Props) => {
   // ** Props
   const { hidden, settings, saveSettings, toggleNavVisibility } = props
-
+  const [workspaces, setWorkspaces] = useState<any>([])
+  const [cw, setCw] = useState<any>([])
   // ** Hook
   const auth = useAuth()
+
+  useEffect(() => {
+    LoginRegistrationAPI.getAllWorkspaces({}).then(res => {
+      // loadServerRows
+      setWorkspaces(res.data.workspaces);
+      // setCurrentWorkspaceRole(res.data.workspaceRole)
+      // setTotal(res.data.total)
+      // setRows(loadServerRows(paginationModel.page, res.data.data))
+    })
+  }, [])
+  useEffect(() => {
+    workspaces.map((w: any) => {
+      if (auth?.user?.current_workspace == w.id) {
+        setCw(w.name.toUpperCase())
+      }
+    })
+  }, [workspaces])
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -146,6 +167,7 @@ const AppBarContent = (props: Props) => {
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {/* <LanguageDropdown settings={settings} saveSettings={saveSettings} /> */}
+        <WorkspaceList workspaces={workspaces} current_workspace={auth.user?.current_workspace} cw={cw} />
         {/* <ModeToggler settings={settings} saveSettings={saveSettings} /> */}
 
         {auth.user && (

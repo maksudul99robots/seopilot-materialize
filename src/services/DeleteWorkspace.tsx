@@ -22,10 +22,8 @@ import Payment from 'payment'
 import Cards, { Focused } from 'react-credit-cards'
 
 // ** Util Import
-import { formatCVC, formatExpirationDate, formatCreditCardNumber } from 'src/@core/utils/format'
 
 // ** Styled Component Imports
-import CardWrapper from 'src/@core/styles/libs/react-credit-cards'
 
 // ** Styles Import
 import 'react-credit-cards/es/styles-compiled.css'
@@ -42,36 +40,50 @@ const Transition = forwardRef(function Transition(
   return <Fade ref={ref} {...props} />
 })
 
-const CreateWorkspace = (props: any) => {
+const DeleteWordpressConnect = (props: any) => {
   // ** States
-  const [name, setName] = useState<string>('')
-
+  const [address, setAddress] = useState<string>(props.address)
+  const [username, setUsername] = useState<string>(props.username)
+  const [appPassword, setAppPassword] = useState<string>(props.appPassword)
+  // const [cardNumber, setCardNumber] = useState<string>('')
   const [focus, setFocus] = useState<Focused | undefined>()
+  // const [expiry, setExpiry] = useState<string | number>('')
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
 
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.name === 'name') {
+    if (target.name === 'address') {
       // target.value = formatCreditCardNumber(target.value, Payment)
-      setName(target.value)
+      setAddress(target.value)
+    } else if (target.name === 'username') {
+      // target.value = formatExpirationDate(target.value)
+      setUsername(target.value)
+    } else if (target.name === 'appPassword') {
+      setAppPassword(target.value)
     }
   }
 
   const handleClose = () => {
-    setName('')
+    setAddress('')
+    setUsername('')
+    setAppPassword('')
     setShow(false)
   }
   const handleSubmit = () => {
-    LoginRegistrationAPI.createWorkspace({ name }).then(res => {
+    LoginRegistrationAPI.deleteWorkspace({ id: props.id }).then(res => {
       props.setReRender(!props.reRender);
+    }).catch(e => {
+      console.log("error:", e)
     })
     setShow(false)
   }
 
   return (
     <>
-      <Button variant='contained' onClick={() => setShow(true)} disabled={props.disabled}>
-        + Create a Workspace
+      <Button variant='outlined' onClick={e => {
+        setShow(props.showDelete)
+      }} startIcon={<Icon icon="material-symbols-light:delete-outline" />}>
+        delete
       </Button>
 
       <Dialog
@@ -96,31 +108,17 @@ const CreateWorkspace = (props: any) => {
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Create a Workspace
+              Delete Workspace
             </Typography>
+            {/* <Typography variant='body2'>Send Article to WordPress</Typography> */}
           </Box>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sx={{ mt: 7 }}>
-                  <TextField
-                    fullWidth
-                    name='name'
-                    value={name}
-                    autoComplete='off'
-                    label='Workspace Name'
-                    onBlur={handleBlur}
-                    onChange={handleInputChange}
-                    placeholder=''
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-
-                  />
-                </Grid>
-
+          <Grid container spacing={1}>
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important`, }}>
+              <Grid container spacing={1} sx={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+                Are you sure you want to delete this Workspace?
               </Grid>
             </Grid>
+
           </Grid>
         </DialogContent>
         <DialogActions
@@ -131,7 +129,7 @@ const CreateWorkspace = (props: any) => {
           }}
         >
           <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit}>
-            Create
+            Delete
           </Button>
           <Button variant='outlined' color='secondary' onClick={handleClose}>
             Cancel
@@ -142,4 +140,4 @@ const CreateWorkspace = (props: any) => {
   )
 }
 
-export default CreateWorkspace
+export default DeleteWordpressConnect

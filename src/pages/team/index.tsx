@@ -105,6 +105,7 @@ const Team = () => {
     const [reRender, setReRender] = useState<any>([]);
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const auth = useAuth()
     const router = useRouter()
 
@@ -120,6 +121,14 @@ const Team = () => {
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [reRender])
+    useEffect(() => {
+        mainData.map((d: any) => {
+            if (d.user_id == auth?.user?.id) {
+                setCurrentWorkspaceRole(d.role);
+            }
+        })
+    }, [mainData])
+
 
     const columns: GridColDef[] = [
         {
@@ -135,7 +144,7 @@ const Team = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.email}
+                                {row?.user?.email}
 
                             </Typography>
                         </Box>
@@ -208,18 +217,25 @@ const Team = () => {
                 return (
                     <>
 
+                        {
+                            currentWorkspaceRole == 'member' ?
+                                null
+                                :
+                                <>
+                                    <EditWordpressConnect
+                                        showEdit={true}
+                                        id={row.id}
+                                        reRender={reRender}
+                                        setReRender={setReRender}
+                                        address={row.address}
+                                        username={row.username}
+                                        appPassword={row.password}
+                                    />
 
-                        <EditWordpressConnect
-                            showEdit={true}
-                            id={row.id}
-                            reRender={reRender}
-                            setReRender={setReRender}
-                            address={row.address}
-                            username={row.username}
-                            appPassword={row.password}
-                        />
+                                    <DeleteWordpressConnect showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
+                                </>
+                        }
 
-                        <DeleteWordpressConnect showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
 
                     </>
 
@@ -239,15 +255,7 @@ const Team = () => {
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [])
-    useEffect(() => {
-        if (auth?.user?.plan?.plan == 'free') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
-        }
-    }, [auth?.user?.plan])
+
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -299,7 +307,7 @@ const Team = () => {
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <InviteTeamMember reRender={reRender} setReRender={setReRender} />
+                <InviteTeamMember reRender={reRender} setReRender={setReRender} disabled={currentWorkspaceRole == 'member' ? true : false} />
             </Box>
             <Card>
                 <DataGrid

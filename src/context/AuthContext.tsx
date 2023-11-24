@@ -11,7 +11,7 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType, RegisterParams, RedeemCouponParams, VerifyEmailParams, UpdateUserParams } from './types'
+import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType, RegisterParams, RedeemCouponParams, VerifyEmailParams, UpdateUserParams, AcceptInvitationParams } from './types'
 import { LoginRegistrationAPI } from 'src/services/API'
 import { sendTokenToExtension } from 'src/services/SendTokenToExtension'
 import Swal from 'sweetalert2'
@@ -21,6 +21,7 @@ const defaultProvider: AuthValuesType = {
   user: null,
   loading: true,
   setUser: () => null,
+  setUserData: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
@@ -207,22 +208,47 @@ const AuthProvider = ({ children }: Props) => {
     //   if (errorCallback) errorCallback(err)
     // })
   }
+  const handleAcceptInvitation = (params: AcceptInvitationParams, errorCallback?: ErrCallbackType) => {
+    LoginRegistrationAPI.acceptInvitation(params)
+      .then(async response => {
+
+        sendTokenToExtension(response.data.accessToken, extensionId);
+        localStorage.setItem("seo-pilot-token", response.data.accessToken);
+        window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
+        setUser({ ...response.data.userData })
+
+        window.location.href = window.location.origin;
+      })
+
+      .catch(err => {
+        if (errorCallback) errorCallback(err)
+      })
+
+  }
   const handleRedeemCoupon = (params: RedeemCouponParams, errorCallback?: ErrCallbackType) => {
     if (params.coupon) {
       try {
 
         LoginRegistrationAPI.redeemCouponCode({ coupon: params.coupon }).then(response => {
           if (response.status == 200) {
-            console.log(response)
             sendTokenToExtension(response.data.accessToken, extensionId);
             localStorage.setItem("seo-pilot-token", response.data.accessToken);
             window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
             setUser({ ...response.data.userData })
-
+            let planName = '';
+            if (response.data.userData?.plan?.plan == 'extension_only') {
+              planName = 'EXTENSION-ONLY';
+            } else if (response.data.userData?.plan?.plan == 'passenger') {
+              planName = 'PASSENGER';
+            } else if (response.data.userData?.plan?.plan == 'copilot') {
+              planName = 'COPILOT';
+            } else if (response.data.userData?.plan?.plan == 'captain') {
+              planName = 'CAPTAIN';
+            }
             Swal.fire({
               html: `<h3>Success!</h3>
                 <h5>You're upgraded to</h5>
-                <h4>Rockethub LTD-EXTENSION-ONLY</h4> 
+                <h4>Rockethub LTD-${planName}</h4> 
                 `,
               icon: "success",
               // input: 'text',
@@ -345,6 +371,16 @@ const AuthProvider = ({ children }: Props) => {
     router.push('/login')
   }
 
+  const setUserData = (res: any) => {
+    try {
+      window.localStorage.setItem('userData', JSON.stringify(res.data.userData))
+      setUser({ ...res.data.userData })
+      window.location.href = window.location.origin;
+    } catch (e) {
+
+    }
+  }
+
   const handleResetToken = () => {
     LoginRegistrationAPI.reloadToken().then((res) => {
       localStorage.setItem("seo-pilot-token", res.data.accessToken);
@@ -361,10 +397,12 @@ const AuthProvider = ({ children }: Props) => {
     user,
     loading,
     setUser,
+    setUserData,
     setLoading,
     login: handleLogin,
     logout: handleLogout,
     register: handleRegister,
+    acceptInvitation: handleAcceptInvitation,
     redeemCoupon: handleRedeemCoupon,
     verifyEmail: handleVerifyEmail,
     updateUser: handleUpdateUser,

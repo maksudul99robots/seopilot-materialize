@@ -80,6 +80,9 @@ import DeleteWordpressConnect from 'src/services/DeleteWordpressConnect'
 import EditWordpressConnect from 'src/services/EditWordpressConnect'
 import { Chip } from '@mui/material'
 import CreateWorkspace from 'src/services/CreateWorkspace'
+import Badge from 'src/@core/components/mui/badge'
+import EditWorkspace from 'src/services/EditWorkspace'
+import DeleteWorkspace from 'src/services/DeleteWorkspace'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -104,6 +107,7 @@ const Workspaces = () => {
     const [reRender, setReRender] = useState<any>([]);
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const auth = useAuth()
     const router = useRouter()
 
@@ -115,6 +119,7 @@ const Workspaces = () => {
         LoginRegistrationAPI.getAllWorkspaces({}).then(res => {
             loadServerRows
             setMainData(res.data.workspaces);
+            setCurrentWorkspaceRole(res.data.workspaceRole)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
@@ -132,11 +137,26 @@ const Workspaces = () => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: "center", alignItems: "center", }}>
+
+
+
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                                 {row.name.toUpperCase()}
 
                             </Typography>
+                            {
+                                auth.user?.current_workspace == row.id &&
+                                <Box sx={{ height: "10px", width: "10px", backgroundColor: "#72E128", borderRadius: "50%", marginLeft: "10px" }}>
+
+                                </Box>
+
+
+                            }
+
+
+
+
                         </Box>
                     </Box>
                 )
@@ -145,8 +165,8 @@ const Workspaces = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'status',
-            headerName: 'Status',
+            field: 'user',
+            headerName: 'Workspace Owner',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -154,15 +174,10 @@ const Workspaces = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            {/* <Chip label={row.status.toUpperCase()} color={row.status.toUpperCase() == 'ACTIVE' ? 'success' : 'warning'} variant='outlined' /> */}
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                                {row?.user?.email}
 
-                            <CustomChip
-                                size='small'
-                                skin='light'
-                                color={row.status.toUpperCase() == 'ACTIVE' ? 'success' : 'warning'}
-                                label={row.status.toUpperCase()}
-                                sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-                            />
+                            </Typography>
                         </Box>
                     </Box>
                 )
@@ -194,7 +209,7 @@ const Workspaces = () => {
                     <>
 
 
-                        <EditWordpressConnect
+                        <EditWorkspace
                             showEdit={true}
                             id={row.id}
                             reRender={reRender}
@@ -204,7 +219,7 @@ const Workspaces = () => {
                             appPassword={row.password}
                         />
 
-                        <DeleteWordpressConnect showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
+                        <DeleteWorkspace showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
 
                     </>
 
@@ -215,48 +230,25 @@ const Workspaces = () => {
 
         }
     ]
-    const regenerateArticle = (id: number | string) => {
-        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
-            setTimeout(() => {
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                    loadServerRows
-                    setMainData(res.data);
-                    // console.log("data:", res.data)
-                    // setTotal(res.data.total)
-                    // setRows(loadServerRows(paginationModel.page, res.data.data))
-                })
-            }, 3000)
 
-            Swal.fire(
-                'Success',
-                'Article is Being Re-generated',
-                'success'
-            )
-        }).catch(e => {
-            Swal.fire(
-                'Error',
-                'Unable to Re-generate.',
-                'error'
-            )
-        })
-    }
     useEffect(() => {
         LoginRegistrationAPI.getAllWorkspaces({}).then(res => {
             loadServerRows
             setMainData(res.data.workspaces);
+            setCurrentWorkspaceRole(res.data.workspaceRole)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [])
-    useEffect(() => {
-        if (auth?.user?.plan?.plan == 'free') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
-        }
-    }, [auth?.user?.plan])
+    // useEffect(() => {
+    //     if (auth?.user?.plan?.plan == 'free') {
+    //         Swal.fire('401',
+    //             'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //             'error').then(() => {
+    //                 router.push("/")
+    //             })
+    //     }
+    // }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -308,7 +300,7 @@ const Workspaces = () => {
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <CreateWorkspace reRender={reRender} setReRender={setReRender} />
+                <CreateWorkspace reRender={reRender} setReRender={setReRender} disabled={currentWorkspaceRole == 'member' ? true : false} />
             </Box>
             <Card>
                 <DataGrid

@@ -4,8 +4,8 @@ import { useAuth } from 'src/hooks/useAuth';
 
 const navigation = (): VerticalNavItemsType => {
   const auth = useAuth();
-  console.log(auth?.user);
-  let menus = auth?.user?.plan?.plan !== 'free' ? [
+
+  let menus = auth?.user?.workspace_owner_info?.plan?.plan !== 'free' && auth?.user?.workspace_owner_info?.plan?.plan !== 'extension_only' ? [
 
     {
       sectionTitle: 'Menu'
@@ -77,6 +77,19 @@ const navigation = (): VerticalNavItemsType => {
         title: 'Pricing',
         icon: 'mdi:currency-usd',
         path: '/pricing'
+      },
+      {
+        sectionTitle: 'Worspaces & Team Management'
+      },
+      {
+        title: 'Workspaces',
+        icon: 'material-symbols:workspaces-outline',
+        path: '/workspaces'
+      },
+      {
+        title: 'Team',
+        icon: 'fluent:people-team-28-regular',
+        path: '/team'
       },
 
     ];

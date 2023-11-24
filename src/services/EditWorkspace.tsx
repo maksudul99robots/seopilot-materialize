@@ -1,5 +1,5 @@
 // ** React Imports
-import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect } from 'react'
+import { Ref, useState, forwardRef, ReactElement, ChangeEvent } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -32,10 +32,8 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { FormControl, InputAdornment, InputLabel, MenuItem, Select } from '@mui/material'
+import { InputAdornment } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
-import { ValidateEmail } from './emailValidation'
-import Swal from 'sweetalert2'
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -44,78 +42,39 @@ const Transition = forwardRef(function Transition(
   return <Fade ref={ref} {...props} />
 })
 
-const InviteTeamMember = (props: any) => {
+const CreateWorkspace = (props: any) => {
   // ** States
-  const [email, setEmail] = useState<string>('')
-  const [role, setRole] = useState<string>('member')
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [disable, setDisable] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState<string>('')
 
   const [focus, setFocus] = useState<Focused | undefined>()
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
 
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.name === 'email') {
+    if (target.name === 'name') {
       // target.value = formatCreditCardNumber(target.value, Payment)
-      setEmail(target.value)
+      setName(target.value)
     }
   }
 
   const handleClose = () => {
-    setEmail('')
+    setName('')
     setShow(false)
-    setLoading(false)
   }
-
-  useEffect(() => {
-    if (email.length > 1) {
-      if (ValidateEmail(email)) {
-        setIsEmailValid(true)
-        setDisable(false)
-      } else {
-        setIsEmailValid(false)
-        setDisable(true)
-      }
-
-    } else {
-      setIsEmailValid(false)
-    }
-
-
-  }, [email])
-
   const handleSubmit = () => {
-    setLoading(true);
-    LoginRegistrationAPI.inviteToTeam({ role, email }).then(res => {
+    LoginRegistrationAPI.createWorkspace({ name }).then(res => {
       props.setReRender(!props.reRender);
-      setLoading(false);
-
-      Swal.fire({
-        title: 'Success!',
-        text: 'An Invitation Mail is Sent',
-        icon: 'success',
-        confirmButtonText: 'Ok',
-      })
-    }).catch(e => {
-      setLoading(false);
-      console.log(e)
-      Swal.fire({
-        title: 'Error!',
-        text: 'Unable to Send Invitation',
-        icon: 'error',
-        confirmButtonText: 'Ok',
-      })
     })
     setShow(false)
   }
 
   return (
     <>
-      <Button variant='contained' onClick={() => setShow(true)} disabled={props.disabled}>
-        + Invite a Team member
-      </Button>
+      <Button variant='outlined' sx={{ marginRight: "10px" }} onClick={e => {
+        setShow(props.showEdit)
+      }} startIcon={<Icon icon="tabler:edit" />}>
+        Edit
+      </Button >
 
       <Dialog
         fullWidth
@@ -139,7 +98,7 @@ const InviteTeamMember = (props: any) => {
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Invite a Team Member to Your Workspace
+              Create a Workspace
             </Typography>
           </Box>
           <Grid container spacing={6}>
@@ -148,10 +107,10 @@ const InviteTeamMember = (props: any) => {
                 <Grid item xs={12} sx={{ mt: 7 }}>
                   <TextField
                     fullWidth
-                    name='email'
-                    value={email}
+                    name='name'
+                    value={name}
                     autoComplete='off'
-                    label='Email Address'
+                    label='Workspace Name'
                     onBlur={handleBlur}
                     onChange={handleInputChange}
                     placeholder=''
@@ -164,24 +123,6 @@ const InviteTeamMember = (props: any) => {
 
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <FormControl fullWidth>
-                <InputLabel id='role-select'>Select Role</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Select Role'
-                  label='Select Role'
-                  labelId='Select Role'
-                  defaultValue={role}
-                  onChange={e => {
-                    setRole(e.target.value)
-                  }}
-                >
-                  <MenuItem value='member'>Member</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions
@@ -191,11 +132,8 @@ const InviteTeamMember = (props: any) => {
             pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
           }}
         >
-          <Button variant='contained' sx={{ mr: 2 }}
-            onClick={handleSubmit}
-            disabled={loading || !isEmailValid}
-            startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : <Icon icon="bi:send" />}>
-            Send Invitation Email
+          <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit}>
+            Save
           </Button>
           <Button variant='outlined' color='secondary' onClick={handleClose}>
             Cancel
@@ -206,4 +144,4 @@ const InviteTeamMember = (props: any) => {
   )
 }
 
-export default InviteTeamMember
+export default CreateWorkspace

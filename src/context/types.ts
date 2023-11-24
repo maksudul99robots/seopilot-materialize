@@ -47,6 +47,7 @@ export type UserDataType = {
   approle: any | undefined
   workspaces: any | undefined
   workspace_owner_info: any | undefined
+  current_workspace: any | undefined
 }
 
 export type AuthValuesType = {
@@ -55,6 +56,7 @@ export type AuthValuesType = {
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
+  setUserData: (userData: any) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   register: (params: RegisterParams, errorCallback?: ErrCallbackType) => void
   acceptInvitation: (params: AcceptInvitationParams, errorCallback?: ErrCallbackType) => void
