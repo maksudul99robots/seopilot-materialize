@@ -310,6 +310,7 @@ const Team = () => {
                     disabled={
                         currentWorkspaceRole == 'member' ||
                             auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
                             auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
                             (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && teamMEmberCount > 4) ||
                             (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && teamMEmberCount > 24)
