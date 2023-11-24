@@ -21,7 +21,8 @@ const users: UserDataType[] = [
     lastName: "",
     approle: {},
     workspaces: {},
-    workspace_owner_info: {}
+    workspace_owner_info: {},
+    current_workspace: 1
   },
   {
     id: 2,
@@ -33,7 +34,8 @@ const users: UserDataType[] = [
     lastName: "",
     approle: {},
     workspaces: {},
-    workspace_owner_info: {}
+    workspace_owner_info: {},
+    current_workspace: 1
   }
 ]
 
@@ -100,7 +102,8 @@ mock.onPost('/jwt/register').reply(request => {
         lastName: '',
         approle: {},
         workspaces: {},
-        workspace_owner_info: {}
+        workspace_owner_info: {},
+        current_workspace: 1
       }
 
       users.push(userData)
