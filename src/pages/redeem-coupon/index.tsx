@@ -44,6 +44,18 @@ const RedeemCoupon = () => {
         showPassword: false
     })
 
+    useEffect(() => {
+        if (!auth.user?.is_active) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })
+            router.push('/')
+        }
+    }, [])
+
 
     useEffect(() => {
 

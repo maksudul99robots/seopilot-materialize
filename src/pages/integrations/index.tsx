@@ -110,6 +110,7 @@ const TableServerSide = () => {
     const [showDelete, setShowDelete] = useState<boolean>(false);
     const auth = useAuth()
     const router = useRouter()
+    const [integrationCount, setIntegrationCount] = useState<number>(0);
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -258,13 +259,23 @@ const TableServerSide = () => {
         })
     }
     useEffect(() => {
-        LoginRegistrationAPI.getConnections({}).then(res => {
-            loadServerRows
-            setMainData(res.data);
-            console.log("data:", res.data)
-            // setTotal(res.data.total)
-            // setRows(loadServerRows(paginationModel.page, res.data.data))
-        })
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getConnections({}).then(res => {
+                loadServerRows
+                setMainData(res.data);
+                console.log("data:", res.data)
+                // setTotal(res.data.total)
+                // setRows(loadServerRows(paginationModel.page, res.data.data))
+            })
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })
+            router.push('/')
+        }
     }, [])
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -321,12 +332,22 @@ const TableServerSide = () => {
         fetchTableData(sort, value, sortColumn)
     }
 
+    useEffect(() => {
+        setIntegrationCount(mainData.length)
+    }, [mainData])
+
 
 
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <DialogAddCard reRender={reRender} setReRender={setReRender} />
+                <DialogAddCard reRender={reRender} setReRender={setReRender}
+                    disabled={
+                        (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)
+                            ? true : false
+                    }
+                />
             </Box>
             <Card>
                 <DataGrid

@@ -35,17 +35,28 @@ const AddApiKey = () => {
     const [loading, setLoading] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
     const auth = useAuth();
-
+    const router = useRouter()
     // const formattedString = originalString.substring(0, 10) + "*".repeat(originalString.length - 15) + originalString.slice(-5);
     useEffect(() => {
-        LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
-            // console.log(res);
-            if (res.status == 200)
-                setApikey(res.data.apikey)
-            setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
-        }).catch(e => {
-            console.log(e);
-        })
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+                // console.log(res);
+                if (res.status == 200)
+                    setApikey(res.data.apikey)
+                setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                console.log(e);
+            })
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })
+            router.push('/')
+        }
+
     }, [])
     useEffect(() => {
 

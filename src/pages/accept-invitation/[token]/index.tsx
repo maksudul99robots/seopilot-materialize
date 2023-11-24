@@ -183,9 +183,9 @@ const CreateAccountInvite = () => {
                                 </Box>
                                 <Box sx={{ mb: 6 }}>
                                     <Typography variant='h5' sx={{ mb: 1.5, letterSpacing: '0.18px', fontWeight: 600 }}>
-                                        Adventure starts here 🚀
+                                        Join The Team
                                     </Typography>
-                                    <Typography variant='body2'>Make your app management easy and fun!</Typography>
+                                    <Typography variant='body2'>Fillup These Basic to Join The Team</Typography>
                                 </Box>
                                 <form noValidate autoComplete='off' >
                                     <Box sx={{ display: "flex" }}>

@@ -85,6 +85,7 @@ const Team = () => {
     const [reRender, setReRender] = useState<any>([]);
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [teamMEmberCount, setTeamMemberCount] = useState<number>(1);
     const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const auth = useAuth()
     const router = useRouter()
@@ -97,6 +98,7 @@ const Team = () => {
         LoginRegistrationAPI.getTeam({}).then(res => {
             loadServerRows
             setMainData(res.data);
+
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
@@ -107,6 +109,7 @@ const Team = () => {
                 setCurrentWorkspaceRole(d.role);
             }
         })
+        setTeamMemberCount(mainData.length)
     }, [mainData])
 
 
@@ -193,7 +196,6 @@ const Team = () => {
             headerName: 'Action',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
-                console.log("row.user_id == auth?.user?.id:", row.user_id, auth?.user?.id)
                 return (
                     <>
 
@@ -234,12 +236,22 @@ const Team = () => {
     ]
 
     useEffect(() => {
-        LoginRegistrationAPI.getTeam({}).then(res => {
-            loadServerRows
-            setMainData(res.data);
-            // setTotal(res.data.total)
-            // setRows(loadServerRows(paginationModel.page, res.data.data))
-        })
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getTeam({}).then(res => {
+                loadServerRows
+                setMainData(res.data);
+                // setTotal(res.data.total)
+                // setRows(loadServerRows(paginationModel.page, res.data.data))
+            })
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })
+            router.push('/')
+        }
     }, [])
 
     const fetchTableData = (useCallback(
@@ -293,7 +305,18 @@ const Team = () => {
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <InviteTeamMember reRender={reRender} setReRender={setReRender} disabled={currentWorkspaceRole == 'member' ? true : false} />
+                <InviteTeamMember
+                    reRender={reRender} setReRender={setReRender}
+                    disabled={
+                        currentWorkspaceRole == 'member' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && teamMEmberCount > 4) ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && teamMEmberCount > 24)
+                            ? true : false
+                    }
+
+                />
             </Box>
             <Card>
                 <DataGrid

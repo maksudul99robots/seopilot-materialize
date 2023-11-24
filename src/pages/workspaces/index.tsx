@@ -107,6 +107,7 @@ const Workspaces = () => {
     const [reRender, setReRender] = useState<any>([]);
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [workspaceCount, setWorkspaceCount] = useState<number>(1);
     const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const auth = useAuth()
     const router = useRouter()
@@ -124,9 +125,14 @@ const Workspaces = () => {
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [reRender])
+
     useEffect(() => {
-        console.log(currentWorkspaceRole)
-    }, [currentWorkspaceRole])
+        setWorkspaceCount(mainData.length)
+    }, [mainData])
+    useEffect(() => {
+        console.log("workspaces count:", workspaceCount)
+    }, [workspaceCount])
+
 
     const columns: GridColDef[] = [
         {
@@ -236,23 +242,25 @@ const Workspaces = () => {
     ]
 
     useEffect(() => {
-        LoginRegistrationAPI.getAllWorkspaces({}).then(res => {
-            loadServerRows
-            setMainData(res.data.workspaces);
-            setCurrentWorkspaceRole(res.data.workspaceRole)
-            // setTotal(res.data.total)
-            // setRows(loadServerRows(paginationModel.page, res.data.data))
-        })
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getAllWorkspaces({}).then(res => {
+                loadServerRows
+                setMainData(res.data.workspaces);
+                setCurrentWorkspaceRole(res.data.workspaceRole)
+                // setTotal(res.data.total)
+                // setRows(loadServerRows(paginationModel.page, res.data.data))
+            })
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+            })
+            router.push('/')
+        }
     }, [])
-    // useEffect(() => {
-    //     if (auth?.user?.plan?.plan == 'free') {
-    //         Swal.fire('401',
-    //             'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //             'error').then(() => {
-    //                 router.push("/")
-    //             })
-    //     }
-    // }, [auth?.user?.plan])
+
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -304,7 +312,15 @@ const Workspaces = () => {
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <CreateWorkspace reRender={reRender} setReRender={setReRender} disabled={currentWorkspaceRole == 'member' ? true : false} />
+                <CreateWorkspace reRender={reRender} setReRender={setReRender}
+                    disabled={
+                        currentWorkspaceRole == 'member' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && workspaceCount > 4) ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && workspaceCount > 24)
+                            ? true : false} />
             </Box>
             <Card>
                 <DataGrid

@@ -36,7 +36,7 @@ const Dashboard = () => {
         <div style={{ margin: "0 auto" }}>
             {
                 !auth?.user?.is_active &&
-                (<Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", }}>
+                (<Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
                     Please verify your email to get full access! Didn't receive email? <span onClick={e => resendEmail()} style={{ cursor: "pointer", fontWeight: "bold" }}>Click here</span> to resend email.
                 </Alert>)
 

@@ -80,7 +80,7 @@ const DialogAddCard = (props: any) => {
 
   return (
     <>
-      <Button variant='contained' onClick={() => setShow(true)}>
+      <Button variant='contained' onClick={() => setShow(true)} disabled={props.disabled}>
         + Add a connection
       </Button>
 
