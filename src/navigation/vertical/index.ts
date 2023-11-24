@@ -8,7 +8,7 @@ const navigation = (): VerticalNavItemsType => {
   let menus = auth?.user?.workspace_owner_info?.plan?.plan !== 'free' && auth?.user?.workspace_owner_info?.plan?.plan !== 'extension_only' ? [
 
     {
-      sectionTitle: 'Menu'
+      sectionTitle: 'Menu' //leaving  for now. Change later
     },
     {
       title: 'AI Articles',
@@ -26,7 +26,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/integrations'
     },
     {
-      sectionTitle: 'Worspaces & Team Management'
+      sectionTitle: 'Worspaces & Team mgmt'
     },
     {
       title: 'Workspaces',
@@ -61,7 +61,7 @@ const navigation = (): VerticalNavItemsType => {
   ] :
     [
       {
-        sectionTitle: 'Menu & Profile Settings'
+        sectionTitle: 'Profile Settings'
       },
       {
         title: 'Profile Settings',
@@ -69,17 +69,17 @@ const navigation = (): VerticalNavItemsType => {
         path: '/user-profile/account'
       },
       {
-        title: 'OpenAI API Key',
-        icon: 'material-symbols:key-outline',
-        path: '/add-apikey'
-      },
-      {
         title: 'Pricing',
         icon: 'mdi:currency-usd',
         path: '/pricing'
       },
       {
-        sectionTitle: 'Worspaces & Team Management'
+        sectionTitle: 'Account Settings'
+      },
+      {
+        title: 'OpenAI API Key',
+        icon: 'material-symbols:key-outline',
+        path: '/add-apikey'
       },
       {
         title: 'Workspaces',
