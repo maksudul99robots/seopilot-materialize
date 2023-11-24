@@ -1,5 +1,5 @@
 // ** React Imports
-import { Ref, useState, forwardRef, ReactElement, ChangeEvent } from 'react'
+import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -32,8 +32,10 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { InputAdornment } from '@mui/material'
+import { FormControl, InputAdornment, InputLabel, MenuItem, Select } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
+import { ValidateEmail } from './emailValidation'
+import Swal from 'sweetalert2'
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -42,38 +44,44 @@ const Transition = forwardRef(function Transition(
   return <Fade ref={ref} {...props} />
 })
 
-const EditWorkspace = (props: any) => {
+const EditTeamMember = (props: any) => {
   // ** States
-  const [name, setName] = useState<string | null>(props.name)
+  const [email, setEmail] = useState<string>(props.email)
+  const [role, setRole] = useState<string | null>(props.role)
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [focus, setFocus] = useState<Focused | undefined>()
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
 
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.name === 'name') {
+    if (target.name === 'email') {
       // target.value = formatCreditCardNumber(target.value, Payment)
-      setName(target.value)
+      setEmail(target.value)
     }
   }
 
   const handleClose = () => {
-    setName('')
+    setEmail('')
     setShow(false)
+    setLoading(false)
   }
-  const handleSubmit = () => {
 
-    LoginRegistrationAPI.editWorkspace({ name, id: props.id }).then(res => {
-      // props.setReRender(!props.reRender);
-      window.location.href = window.location.href;
+
+  const handleSubmit = () => {
+    LoginRegistrationAPI.editTeamMember({ role, id: props.id }).then(res => {
+      props.setReRender(!props.reRender);
     }).catch(e => {
-      console.log("error:", e)
+      console.log(e)
     })
     setShow(false)
   }
 
   return (
     <>
+
       <Button variant='outlined' sx={{ marginRight: "10px" }} onClick={e => {
         setShow(props.showEdit)
       }} startIcon={<Icon icon="tabler:edit" />} disabled={props.disabled}>
@@ -102,7 +110,7 @@ const EditWorkspace = (props: any) => {
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Edit Workspace Name
+              Edit Team Member's Role
             </Typography>
           </Box>
           <Grid container spacing={6}>
@@ -111,10 +119,10 @@ const EditWorkspace = (props: any) => {
                 <Grid item xs={12} sx={{ mt: 7 }}>
                   <TextField
                     fullWidth
-                    name='name'
-                    value={name}
+                    name='email'
+                    value={email}
                     autoComplete='off'
-                    label='Workspace Name'
+                    label='Email Address'
                     onBlur={handleBlur}
                     onChange={handleInputChange}
                     placeholder=''
@@ -127,6 +135,24 @@ const EditWorkspace = (props: any) => {
 
               </Grid>
             </Grid>
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+              <FormControl fullWidth>
+                <InputLabel id='role-select'>Select Role</InputLabel>
+                <Select
+                  fullWidth
+                  placeholder='Select Role'
+                  label='Select Role'
+                  labelId='Select Role'
+                  defaultValue={role}
+                  onChange={e => {
+                    setRole(e.target.value)
+                  }}
+                >
+                  <MenuItem value='member'>Member</MenuItem>
+                  <MenuItem value='admin'>Admin</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions
@@ -136,7 +162,9 @@ const EditWorkspace = (props: any) => {
             pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
           }}
         >
-          <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit}>
+          <Button variant='contained' sx={{ mr: 2 }}
+            onClick={handleSubmit}
+          >
             Save
           </Button>
           <Button variant='outlined' color='secondary' onClick={handleClose}>
@@ -148,4 +176,4 @@ const EditWorkspace = (props: any) => {
   )
 }
 
-export default EditWorkspace
+export default EditTeamMember

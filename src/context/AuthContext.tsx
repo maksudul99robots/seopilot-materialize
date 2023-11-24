@@ -355,19 +355,23 @@ const AuthProvider = ({ children }: Props) => {
     setUser(null)
     window.localStorage.removeItem('userData')
     window.localStorage.removeItem(authConfig.storageTokenKeyName)
-
-    chrome?.runtime?.sendMessage(
-      extensionId, // Extension ID
-      { action: "removeToken" },
-      (response) => {
-        console.log(response)
-        if (response && response.success) {
-          console.log("Token stored in extension's local storage.", response);
-        } else {
-          console.error("Failed to store token in extension.");
+    try {
+      chrome?.runtime?.sendMessage(
+        extensionId, // Extension ID
+        { action: "removeToken" },
+        (response) => {
+          console.log(response)
+          if (response && response.success) {
+            console.log("Token stored in extension's local storage.", response);
+          } else {
+            console.error("Failed to store token in extension.");
+          }
         }
-      }
-    );
+      );
+    } catch (e) {
+      console.log(e);
+    }
+
     router.push('/login')
   }
 

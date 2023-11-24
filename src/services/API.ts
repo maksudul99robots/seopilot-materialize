@@ -177,6 +177,16 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async editTeamMember(data: any, url = "/edit-team-member", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async deleteTeamMember(data: any, url = "/delete-team-member", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     }
 
 

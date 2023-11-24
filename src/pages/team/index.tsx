@@ -38,28 +38,6 @@ type CustomRowType = {
 
 type SortType = 'asc' | 'desc' | undefined | null
 
-// ** renders client column
-const renderClient = (params: GridRenderCellParams) => {
-    const { row } = params
-    console.log("rows:", row)
-    const stateNum = Math.floor(Math.random() * 6)
-    const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
-    const color = states[stateNum]
-
-    if (row.avatar.length) {
-        return <CustomAvatar src={`/images/avatars/${row.avatar}`} sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }} />
-    } else {
-        return (
-            <CustomAvatar
-                skin='light'
-                color={color as ThemeColor}
-                sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
-            >
-                {getInitials(row.full_name ? row.full_name : 'John Doe')}
-            </CustomAvatar>
-        )
-    }
-}
 
 const statusObj: StatusObj = {
     1: { title: 'Success', color: 'success' },
@@ -81,6 +59,8 @@ import EditWordpressConnect from 'src/services/EditWordpressConnect'
 import { Chip } from '@mui/material'
 import CreateWorkspace from 'src/services/CreateWorkspace'
 import InviteTeamMember from 'src/services/InviteTeamMember'
+import EditTeamMember from 'src/services/EditTeamMember'
+import DeleteTeamMember from 'src/services/DeleteTeamMember'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -213,7 +193,7 @@ const Team = () => {
             headerName: 'Action',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
-
+                console.log("row.user_id == auth?.user?.id:", row.user_id, auth?.user?.id)
                 return (
                     <>
 
@@ -222,17 +202,23 @@ const Team = () => {
                                 null
                                 :
                                 <>
-                                    <EditWordpressConnect
+                                    <EditTeamMember
                                         showEdit={true}
                                         id={row.id}
                                         reRender={reRender}
                                         setReRender={setReRender}
-                                        address={row.address}
-                                        username={row.username}
-                                        appPassword={row.password}
+                                        email={row?.user?.email}
+                                        role={row?.role}
+                                        disabled={row.role.toUpperCase() == "OWNER" || row.user_id == auth?.user?.id ? true : false}
                                     />
 
-                                    <DeleteWordpressConnect showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
+                                    <DeleteTeamMember
+                                        showDelete={true}
+                                        id={row.id}
+                                        reRender={reRender}
+                                        setReRender={setReRender}
+                                        disabled={row.role.toUpperCase() == "OWNER" || row.user_id == auth?.user?.id ? true : false}
+                                    />
                                 </>
                         }
 

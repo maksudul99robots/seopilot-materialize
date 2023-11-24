@@ -64,6 +64,9 @@ const CreateWorkspace = (props: any) => {
   const handleSubmit = () => {
     LoginRegistrationAPI.createWorkspace({ name }).then(res => {
       props.setReRender(!props.reRender);
+      window.location.href = window.location.href;
+    }).catch(e => {
+      console.log("error:", e)
     })
     setShow(false)
   }

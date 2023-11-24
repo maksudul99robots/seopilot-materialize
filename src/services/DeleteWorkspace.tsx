@@ -32,6 +32,7 @@ import 'react-credit-cards/es/styles-compiled.css'
 import Icon from 'src/@core/components/icon'
 import { InputAdornment } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
+import Swal from 'sweetalert2'
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -40,7 +41,7 @@ const Transition = forwardRef(function Transition(
   return <Fade ref={ref} {...props} />
 })
 
-const DeleteWordpressConnect = (props: any) => {
+const DeleteWorkspace = (props: any) => {
   // ** States
   const [address, setAddress] = useState<string>(props.address)
   const [username, setUsername] = useState<string>(props.username)
@@ -71,9 +72,16 @@ const DeleteWordpressConnect = (props: any) => {
   }
   const handleSubmit = () => {
     LoginRegistrationAPI.deleteWorkspace({ id: props.id }).then(res => {
-      props.setReRender(!props.reRender);
+      // props.setReRender(!props.reRender);
+      window.location.href = window.location.href;
     }).catch(e => {
       console.log("error:", e)
+      Swal.fire({
+        title: 'Error!',
+        text: 'Cannot Delete! There Must be at Least One Workspace on the Owner\'s Account.',
+        icon: 'error',
+        confirmButtonText: 'Close',
+      })
     })
     setShow(false)
   }
@@ -82,7 +90,7 @@ const DeleteWordpressConnect = (props: any) => {
     <>
       <Button variant='outlined' onClick={e => {
         setShow(props.showDelete)
-      }} startIcon={<Icon icon="material-symbols-light:delete-outline" />}>
+      }} startIcon={<Icon icon="material-symbols-light:delete-outline" />} disabled={props.disabled}>
         delete
       </Button>
 
@@ -140,4 +148,4 @@ const DeleteWordpressConnect = (props: any) => {
   )
 }
 
-export default DeleteWordpressConnect
+export default DeleteWorkspace

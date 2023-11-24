@@ -9,11 +9,11 @@ const LTDPlan = ({ plan }: any) => {
 
     return (
 
-        plan.plan == 'extension_only' ?
+        plan.plan == 'extension_only' || plan.plan == 'passenger' || plan.plan == 'copilot' || plan.plan == 'captain' ?
             <Card sx={{ mb: 10 }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
-                        Your current plan: Rockethub LTD-EXTENSION-ONLY
+                        Your current plan: Rockethub LTD- {plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan == 'passenger' ? 'PASSENGER' : plan.plan == 'copilot' ? 'COPILOT' : plan.plan == 'captain' ? 'CAPTAIN' : ''}
                     </Typography>
                     <Typography variant='body1' sx={{ pl: 5 }}>
                         Features:
@@ -43,6 +43,8 @@ const LTDPlan = ({ plan }: any) => {
             </CardActions> */}
             </Card>
             :
+
+
             <></>
 
 

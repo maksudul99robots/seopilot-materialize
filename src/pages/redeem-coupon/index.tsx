@@ -44,55 +44,19 @@ const RedeemCoupon = () => {
         showPassword: false
     })
 
-    // useEffect(() => {
-    //     let user = auth.user;
-    //     if (user?.plan == 'ltd') {
-    //         Swal.fire({
-    //             title: 'Ops!',
-    //             text: 'You\'re already in Rockethub\n LTD- Captain Plan',
-    //             icon: 'success',
-    //             confirmButtonText: 'Ok',
-    //             allowOutsideClick: false,
-    //             allowEscapeKey: false,
 
-    //         }).then(() => {
-
-    //             // router.push("/")
-    //         })
-    //     }
-    // }, [])
     useEffect(() => {
-        // if (window.location.hostname.includes("app.seopilot.io")) {
-        //     setExtensionId(process.env.NEXT_PUBLIC_EXT_ID)
-        // } else {
-        //     setExtensionId(localStorage.getItem("extension_id"));
-        // }
-        // let token = localStorage.getItem("seo-pilot-token");
-        // if (token) {
-        //     let decoded: any = jwt_decode(token);
-        //     console.log("decoded:", decoded);
-        //     if (decoded.plan && parseInt(decoded.plan) > 0) {
-        //         Swal.fire({
-        //             html: `<h3>You're Already In LTD PLan!</h3>
-        //             <h4>Plan: Rockethub LTD - Captain</h4> 
-        //             `,
-        //             // icon: "info",
-        //             // input: 'text',
-        //             // inputLabel: 'Close and reopen your extension to get premium features',
-        //             // inputValue: "",
-        //             // showCancelButton: true,
-        //             // allowOutsideClick: false,
-        //             // allowEscapeKey: false,
-        //         }).then(() => {
-        //             router.push("/")
-        //         })
-        //     }
-        // }
+
         if (coupon.length > 5) {
             setDisable(false)
         }
 
     }, [coupon])
+    // useEffect(() => {
+
+    //     console.log("auth?.user?.plan:", auth?.user?.plan)
+
+    // }, [auth?.user])
 
     const submit = async () => {
         if (coupon.length > 5) {

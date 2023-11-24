@@ -124,6 +124,9 @@ const Workspaces = () => {
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [reRender])
+    useEffect(() => {
+        console.log(currentWorkspaceRole)
+    }, [currentWorkspaceRole])
 
     const columns: GridColDef[] = [
         {
@@ -215,11 +218,12 @@ const Workspaces = () => {
                             reRender={reRender}
                             setReRender={setReRender}
                             address={row.address}
-                            username={row.username}
+                            name={row.name}
                             appPassword={row.password}
+                            disabled={currentWorkspaceRole !== 'member' ? false : true}
                         />
 
-                        <DeleteWorkspace showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
+                        <DeleteWorkspace showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} disabled={currentWorkspaceRole !== 'member' ? false : true} />
 
                     </>
 

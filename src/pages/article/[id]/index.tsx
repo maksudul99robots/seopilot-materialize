@@ -60,7 +60,8 @@ export default function Page() {
     }, [router.query.id])
 
     useEffect(() => {
-        if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
+        //auth?.user?.plan?.plan
+        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire('401',
                 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
                 'error').then(() => {
