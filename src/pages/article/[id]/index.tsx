@@ -62,11 +62,16 @@ export default function Page() {
     useEffect(() => {
         //auth?.user?.plan?.plan
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.plan])
     // console.log("articleObj", articleObj?.prompt)
@@ -76,24 +81,45 @@ export default function Page() {
     const save = () => {
         LoginRegistrationAPI.updateAIArticle({ id: articleObj?.id, output: html, topic: topic }).then((res) => {
             if (res.status == 200) {
-                Swal.fire(
-                    'Success',
-                    'Saved',
-                    'success'
-                )
+                // Swal.fire(
+                //     'Success',
+                //     'Saved',
+                //     'success'
+                // )
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Saved.',
+                    icon: 'success',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF",
+                })
             } else {
-                Swal.fire(
-                    'Error',
-                    'Unable to save changes.',
-                    'error'
-                )
+                // Swal.fire(
+                //     'Error',
+                //     'Unable to save changes.',
+                //     'error'
+                // )
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Unable to save changes.',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF",
+                })
             }
         }).catch(e => {
-            Swal.fire(
-                'Error',
-                'Unable to save changes.',
-                'error'
-            )
+            // Swal.fire(
+            //     'Error',
+            //     'Unable to save changes.',
+            //     'error'
+            // )
+            Swal.fire({
+                title: 'Error',
+                text: 'Unable to save changes.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            })
         })
     }
 

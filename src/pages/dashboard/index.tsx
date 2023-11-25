@@ -19,6 +19,7 @@ const Dashboard = () => {
                         text: 'A Verification email is sent',
                         icon: 'success',
                         confirmButtonText: 'Ok',
+                        confirmButtonColor: "#2979FF"
                     })
                 }
             }).catch(e => {
@@ -27,6 +28,7 @@ const Dashboard = () => {
                     text: 'Something went wrong',
                     icon: 'error',
                     confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF"
                 })
             })
         }

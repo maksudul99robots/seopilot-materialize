@@ -106,11 +106,21 @@ const TableServerSide = () => {
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to Higher Plan to SEE, EDIT and, PUBLISH your articles.',
-                'error').then(() => {
-                    router.push("/")
-                })
+            // Swal.fire('401',
+            //     'You don\'t have access to this page. Please Upgrade to Higher Plan to SEE, EDIT and, PUBLISH your articles.',
+            //     'error').then(() => {
+            //         router.push("/")
+            //     })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.plan])
 
@@ -245,17 +255,28 @@ const TableServerSide = () => {
                 })
             }, 3000)
 
-            Swal.fire(
-                'Success',
-                'Article is Being Re-generated',
-                'success'
-            )
+            // Swal.fire(
+            //     'Success',
+            //     'Article is Being Re-generated',
+            //     'success'
+            // )
+
+            Swal.fire({
+                title: 'Success',
+                text: 'Article is Being Re-generated.',
+                icon: 'success',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            })
         }).catch(e => {
-            Swal.fire(
-                'Error',
-                'Unable to Re-generate.',
-                'error'
-            )
+
+            Swal.fire({
+                title: 'Error',
+                text: 'Unable to Re-generate.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            })
         })
     }
     useEffect(() => {
@@ -270,11 +291,21 @@ const TableServerSide = () => {
     }, [])
     useEffect(() => {
         if (auth?.user?.plan == 'free') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
+            // Swal.fire('401',
+            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+            //     'error').then(() => {
+            //         router.push("/")
+            //     })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.plan])
     const fetchTableData = (useCallback(

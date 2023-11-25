@@ -53,6 +53,7 @@ export default function CreateArticle(props: any) {
                 text: 'Please Subscribe to Higher Plan to Get This Feature.',
                 icon: 'error',
                 confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
             })
         } else {
             LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
