@@ -69,6 +69,7 @@ const AuthProvider = ({ children }: Props) => {
             // showCancelButton: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
+            confirmButtonColor: "#2979FF",
             inputValidator: (value) => {
               if (!value) {
                 return 'Enter your Extension ID!'
@@ -170,6 +171,7 @@ const AuthProvider = ({ children }: Props) => {
           text: 'Account info updated.',
           icon: 'success',
           confirmButtonText: 'Ok',
+          confirmButtonColor: "#2979FF"
         })
 
       })
@@ -251,7 +253,8 @@ const AuthProvider = ({ children }: Props) => {
                 <h4>Rockethub LTD-${planName}</h4> 
                 `,
               icon: "success",
-              // input: 'text',
+              // input: 'text'
+              confirmButtonColor: "#2979FF",
               inputLabel: 'Close and reopen your extension to get premium features',
               // inputValue: "",
               // showCancelButton: true,
@@ -276,6 +279,7 @@ const AuthProvider = ({ children }: Props) => {
               `,
             icon: "error",
             // input: 'text',
+            confirmButtonColor: "#2979FF",
             inputLabel: 'Please try again later.',
             // inputValue: "",
             // showCancelButton: true,
@@ -312,6 +316,7 @@ const AuthProvider = ({ children }: Props) => {
               text: 'Registration completed',
               icon: 'success',
               confirmButtonText: 'Ok',
+              confirmButtonColor: "#2979FF",
               allowOutsideClick: false,
               allowEscapeKey: false,
 
@@ -332,6 +337,7 @@ const AuthProvider = ({ children }: Props) => {
             text: 'Registration failed',
             icon: 'error',
             confirmButtonText: 'Close',
+            confirmButtonColor: "#2979FF",
           }).then(res => {
             // router.push('/login')
           })

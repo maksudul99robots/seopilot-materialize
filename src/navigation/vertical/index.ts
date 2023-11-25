@@ -60,19 +60,7 @@ const navigation = (): VerticalNavItemsType => {
 
   ] :
     [
-      {
-        sectionTitle: 'Profile Settings'
-      },
-      {
-        title: 'Profile Settings',
-        icon: 'mdi:account-outline',
-        path: '/user-profile/account'
-      },
-      {
-        title: 'Pricing',
-        icon: 'mdi:currency-usd',
-        path: '/pricing'
-      },
+
       {
         sectionTitle: 'Account Settings'
       },
@@ -90,6 +78,19 @@ const navigation = (): VerticalNavItemsType => {
         title: 'Team',
         icon: 'fluent:people-team-28-regular',
         path: '/team'
+      },
+      {
+        sectionTitle: 'Profile Settings'
+      },
+      {
+        title: 'Profile Settings',
+        icon: 'mdi:account-outline',
+        path: '/user-profile/account'
+      },
+      {
+        title: 'Pricing',
+        icon: 'mdi:currency-usd',
+        path: '/pricing'
       },
 
     ];

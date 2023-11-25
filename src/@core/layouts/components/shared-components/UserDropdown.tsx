@@ -111,6 +111,7 @@ const UserDropdown = (props: Props) => {
       showCancelButton: true,
       allowOutsideClick: false,
       allowEscapeKey: false,
+      confirmButtonColor: "#2979FF",
       inputValidator: (value) => {
         if (!value) {
           return 'Enter your Extension ID!'

@@ -155,19 +155,24 @@ const CreateAccountInvite = () => {
                     // })
 
                 } else {
-                    Swal.fire(
-                        'Error',
-                        'Password must be at least 7 characters long.',
-                        'error'
-                    )
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Password must be at least 7 characters long.',
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF",
+                    })
                 }
             }
         } else {
-            Swal.fire(
-                'Error',
-                'Email is not valid',
-                'error'
-            )
+
+            Swal.fire({
+                title: 'Error',
+                text: 'Email is not valid',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            })
         }
     }
     return (
