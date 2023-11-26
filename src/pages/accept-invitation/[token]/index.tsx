@@ -105,15 +105,31 @@ const CreateAccountInvite = () => {
     useEffect(() => {
         // console.log(router.query.token)
 
-        if (router.query.token?.length && router.query.token.length > 0) {
-            LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
-                // console.log(res.data)
-                setEmail(res.data.email)
-                setIsVerified(true)
-            }).catch(e => {
-                console.log(e)
-            })
+        if (auth.user) {
+            // console.log("removing.....")
+            auth.removeStorageAndReload()
+        } else {
+            if (router.query.token?.length && router.query.token.length > 0) {
+                LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
+                    // console.log(res.data)
+                    setEmail(res.data.email)
+                    setIsVerified(true)
+                }).catch(e => {
+                    console.log(e)
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Invalid Invitation Code',
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push('/')
+                    })
+                })
+            }
         }
+
+
     }, [router.query.token])
 
     useEffect(() => {
@@ -275,6 +291,8 @@ const CreateAccountInvite = () => {
 
 CreateAccountInvite.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
-CreateAccountInvite.guestGuard = true
+CreateAccountInvite.authGuard = false
+// CreateAccountInvite.guestGuard = true
+
 
 export default CreateAccountInvite

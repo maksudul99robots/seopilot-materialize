@@ -53,6 +53,7 @@ export type UserDataType = {
 export type AuthValuesType = {
   loading: boolean
   logout: () => void
+  removeStorageAndReload: () => void
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
