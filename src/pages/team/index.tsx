@@ -249,6 +249,7 @@ const Team = () => {
                 text: 'Please Verify Your Account To get Full Access!',
                 icon: 'error',
                 confirmButtonText: 'Ok',
+                confirmButtonColor: "#2979FF"
             })
             router.push('/')
         }

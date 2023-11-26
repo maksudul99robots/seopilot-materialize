@@ -104,15 +104,23 @@ const ResetPassword = () => {
                 console.log(decoded)
                 setEmail(decoded.email)
             } catch (e) {
+                // Swal.fire({
+                //     title: 'Error!',
+                //     text: 'Invalid Token',
+                //     icon: 'error',
+                //     confirmButtonText: 'Close',
+                // }).then(res => {
+                //     router.push('/')
+                // })
                 Swal.fire({
-                    title: 'Error!',
+                    title: 'Error',
                     text: 'Invalid Token',
                     icon: 'error',
                     confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF",
                 }).then(res => {
                     router.push('/')
                 })
-
             }
 
         }
@@ -136,6 +144,7 @@ const ResetPassword = () => {
                                     text: 'Password changed successfully',
                                     icon: 'success',
                                     confirmButtonText: 'Ok',
+                                    confirmButtonColor: "#2979FF"
                                 }).then(res => {
                                     router.push('/login')
                                 })
@@ -146,6 +155,7 @@ const ResetPassword = () => {
                                     text: 'Error occured',
                                     icon: 'error',
                                     confirmButtonText: 'Close',
+                                    confirmButtonColor: "#2979FF"
                                 })
                             }
                             setDisable(false);
@@ -157,6 +167,7 @@ const ResetPassword = () => {
                                 text: 'Error occured',
                                 icon: 'error',
                                 confirmButtonText: 'Close',
+                                confirmButtonColor: "#2979FF"
                             })
                             setDisable(false);
                             setLoading(false);
@@ -168,6 +179,7 @@ const ResetPassword = () => {
                             text: 'Password should match',
                             icon: 'error',
                             confirmButtonText: 'Close',
+                            confirmButtonColor: "#2979FF"
                         })
                     }
                 } else {
@@ -177,6 +189,7 @@ const ResetPassword = () => {
                         text: 'Password should be longer than 6.',
                         icon: 'error',
                         confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
                     })
                 }
 

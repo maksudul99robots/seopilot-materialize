@@ -86,6 +86,7 @@ const ForgotPassword = () => {
               // showCancelButton: true,
               // allowOutsideClick: false,
               // allowEscapeKey: false,
+              confirmButtonColor: "#2979FF"
             }).then(() => {
               setDisable(false);
               setLoading(false);
@@ -104,6 +105,7 @@ const ForgotPassword = () => {
               // showCancelButton: true,
               // allowOutsideClick: false,
               // allowEscapeKey: false,
+              confirmButtonColor: "#2979FF"
             }).then(() => {
               setDisable(false);
               setLoading(false);
@@ -127,6 +129,7 @@ const ForgotPassword = () => {
             // showCancelButton: true,
             // allowOutsideClick: false,
             // allowEscapeKey: false,
+            confirmButtonColor: "#2979FF"
           }).then(() => {
             setDisable(false);
             setLoading(false);

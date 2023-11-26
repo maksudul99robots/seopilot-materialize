@@ -208,11 +208,21 @@ const TableServerSide = () => {
     }, [])
     useEffect(() => {
         if (auth?.user?.approle.role.id !== 2) {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
+            // Swal.fire('401',
+            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+            //     'error').then(() => {
+            //         router.push("/")
+            //     })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.approle.role])
     const fetchTableData = (useCallback(

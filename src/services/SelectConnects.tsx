@@ -79,6 +79,7 @@ const SelectConnects = (props: any) => {
         text: 'The article is posted successfully',
         icon: 'success',
         confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
       })
     }).catch(e => {
       setShow(false)
@@ -89,6 +90,7 @@ const SelectConnects = (props: any) => {
         text: 'Unable to publish article to WordPress',
         icon: 'error',
         confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
       })
     })
 

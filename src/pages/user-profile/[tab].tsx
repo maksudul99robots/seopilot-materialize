@@ -9,6 +9,10 @@ import { PricingDataType } from 'src/@core/components/plan-details/types'
 
 // ** Demo Components Imports
 import AccountSettings from 'src/views/pages/account-settings/AccountSettings'
+import { useEffect } from 'react'
+import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
+import { useAuth } from 'src/hooks/useAuth'
 
 const AccountSettingsTab = ({ tab, apiPricingPlanData }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return <AccountSettings tab={tab} apiPricingPlanData={apiPricingPlanData} />
@@ -28,6 +32,9 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }: GetStaticPropsContext) => {
+  // const router = useRouter()
+  // const auth = useAuth()
+
   const res = await axios.get('/pages/pricing')
   const data: PricingDataType = res.data
 

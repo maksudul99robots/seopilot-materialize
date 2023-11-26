@@ -256,8 +256,22 @@ const Workspaces = () => {
                 text: 'Please Verify Your Account To get Full Access!',
                 icon: 'error',
                 confirmButtonText: 'Ok',
+                confirmButtonColor: "#2979FF"
+            }).then(e => {
+                router.push('/')
             })
-            router.push('/')
+
+        }
+        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+            Swal.fire({
+                title: 'Error!',
+                text: 'You don\'t have access to this page. Please Upgrade to enable Teams & Workspaces!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: "#2979FF"
+            }).then(e => {
+                router.push('/')
+            })
         }
     }, [])
 

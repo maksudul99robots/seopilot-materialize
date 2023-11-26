@@ -81,6 +81,7 @@ const DeleteWorkspace = (props: any) => {
         text: 'Cannot Delete! There Must be at Least One Workspace on the Owner\'s Account.',
         icon: 'error',
         confirmButtonText: 'Close',
+        confirmButtonColor: "#2979FF"
       })
     })
     setShow(false)

@@ -42,11 +42,21 @@ export default function ArticleIU(props: any) {
 
     useEffect(() => {
         if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
+            // Swal.fire('401',
+            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+            //     'error').then(() => {
+            //         router.push("/")
+            //     })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.plan])
     // console.log("articleObj", articleObj?.prompt)

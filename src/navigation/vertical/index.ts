@@ -26,7 +26,7 @@ const navigation = (): VerticalNavItemsType => {
       path: '/integrations'
     },
     {
-      sectionTitle: 'Worspaces & Team mgmt'
+      sectionTitle: 'Workspaces & Team mgmt'
     },
     {
       title: 'Workspaces',
@@ -39,6 +39,14 @@ const navigation = (): VerticalNavItemsType => {
       path: '/team'
     },
     {
+      sectionTitle: 'Account Settings'
+    },
+    {
+      title: 'OpenAI API Key',
+      icon: 'material-symbols:key-outline',
+      path: '/add-apikey'
+    },
+    {
       sectionTitle: 'Profile Settings'
     },
     {
@@ -46,12 +54,6 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'mdi:account-outline',
       path: '/user-profile/account'
     },
-    {
-      title: 'OpenAI API Key',
-      icon: 'material-symbols:key-outline',
-      path: '/add-apikey'
-    },
-
     {
       title: 'Pricing',
       icon: 'mdi:currency-usd',
@@ -69,16 +71,16 @@ const navigation = (): VerticalNavItemsType => {
         icon: 'material-symbols:key-outline',
         path: '/add-apikey'
       },
-      {
-        title: 'Workspaces',
-        icon: 'material-symbols:workspaces-outline',
-        path: '/workspaces'
-      },
-      {
-        title: 'Team',
-        icon: 'fluent:people-team-28-regular',
-        path: '/team'
-      },
+      // {
+      //   title: 'Workspaces',
+      //   icon: 'material-symbols:workspaces-outline',
+      //   path: '/workspaces'
+      // },
+      // {
+      //   title: 'Team',
+      //   icon: 'fluent:people-team-28-regular',
+      //   path: '/team'
+      // },
       {
         sectionTitle: 'Profile Settings'
       },

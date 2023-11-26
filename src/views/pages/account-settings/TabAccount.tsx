@@ -32,6 +32,7 @@ import Icon from 'src/@core/components/icon'
 import { useAuth } from 'src/hooks/useAuth'
 import { LoginRegistrationAPI } from 'src/services/API'
 import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
 
 interface Data {
   email: string
@@ -78,9 +79,23 @@ const TabAccount = () => {
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/9.jpg')
   const [secondDialogOpen, setSecondDialogOpen] = useState<boolean>(false)
   const auth = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
     resetValue()
+
+    if (!auth.user?.is_active) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please Verify Your Account To get Full Access!',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
+      }).then(e => {
+        router.push('/')
+      })
+    }
+
   }, [])
 
   const resetValue = () => {
@@ -159,6 +174,8 @@ const TabAccount = () => {
 
 
   }
+
+
 
   return (
     <Grid container spacing={6} sx={{}}>

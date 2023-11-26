@@ -97,15 +97,17 @@ const InviteTeamMember = (props: any) => {
         text: 'An Invitation Mail is Sent',
         icon: 'success',
         confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
       })
     }).catch(e => {
       setLoading(false);
       console.log(e)
       Swal.fire({
         title: 'Error!',
-        text: 'Unable to Send Invitation',
+        text: e.response.data,
         icon: 'error',
         confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
       })
     })
     setShow(false)

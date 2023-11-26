@@ -154,6 +154,7 @@ export default function Page() {
                                 icon: "error",
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
+                                confirmButtonColor: "#2979FF"
                             }).then((res) => {
                                 clearInterval(interval)
                                 router.push("/create-article")
@@ -175,6 +176,7 @@ export default function Page() {
                     icon: "error",
                     allowOutsideClick: false,
                     allowEscapeKey: false,
+                    confirmButtonColor: "#2979FF"
                 }).then((res) => {
                     router.push("/create-article")
                 })
@@ -189,11 +191,18 @@ export default function Page() {
 
         LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
             if (res.status == 200) {
-                Swal.fire(
-                    'Success',
-                    'Saved!',
-                    'success'
-                )
+                // Swal.fire(
+                //     'Success',
+                //     'Saved!',
+                //     'success'
+                // )
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Saved!',
+                    icon: 'success',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF",
+                })
             } else {
                 Swal.fire(
                     'Error',

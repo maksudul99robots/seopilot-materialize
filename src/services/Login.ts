@@ -12,6 +12,7 @@ export const Login = (extensionId: string, email: string, password: string, setL
                     text: 'Password should be at least 7 characters long.',
                     icon: 'error',
                     confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF"
                 })
             }
             else {

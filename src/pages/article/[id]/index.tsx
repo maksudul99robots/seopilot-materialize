@@ -221,7 +221,20 @@ export default function Page() {
                 >
                     <Box sx={{ marginBottom: "20px" }}>
                         <Typography variant='h5'>Source Website: </Typography>
-                        <Link href={articleObj?.source ? 'https://' + articleObj?.source : ''} target='_blank'> {articleObj?.source}</Link>
+                        <Link
+                            href={articleObj?.source ? 'https://' + articleObj?.source : ''}
+                            target='_blank'
+                            sx={{
+                                width: "100%",
+                                overflow: "hidden",
+                                display: "block",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                textAlign: "start",
+                            }}
+                        >
+                            {articleObj?.source}
+                        </Link>
                     </Box>
                     <Typography variant='h5'>Input Headings:</Typography>
 

@@ -233,31 +233,7 @@ const TableServerSide = () => {
 
         }
     ]
-    const regenerateArticle = (id: number | string) => {
-        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
-            setTimeout(() => {
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                    loadServerRows
-                    setMainData(res.data);
-                    // console.log("data:", res.data)
-                    // setTotal(res.data.total)
-                    // setRows(loadServerRows(paginationModel.page, res.data.data))
-                })
-            }, 3000)
 
-            Swal.fire(
-                'Success',
-                'Article is Being Re-generated',
-                'success'
-            )
-        }).catch(e => {
-            Swal.fire(
-                'Error',
-                'Unable to Re-generate.',
-                'error'
-            )
-        })
-    }
     useEffect(() => {
         if (auth.user?.is_active) {
             LoginRegistrationAPI.getConnections({}).then(res => {
@@ -273,17 +249,28 @@ const TableServerSide = () => {
                 text: 'Please Verify Your Account To get Full Access!',
                 icon: 'error',
                 confirmButtonText: 'Ok',
+                confirmButtonColor: "#2979FF"
             })
             router.push('/')
         }
     }, [])
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            Swal.fire('401',
-                'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                'error').then(() => {
-                    router.push("/")
-                })
+            // Swal.fire('401',
+            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+            //     'error').then(() => {
+            //         router.push("/")
+            //     })
+
+            Swal.fire({
+                title: '401',
+                text: 'You don\'t have access to this page. Please Upgrade to enable Integrations Feature.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            }).then(() => {
+                router.push("/")
+            })
         }
     }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
@@ -343,7 +330,10 @@ const TableServerSide = () => {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 <DialogAddCard reRender={reRender} setReRender={setReRender}
                     disabled={
-                        (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+                        auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
+                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
                             (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)
                             ? true : false
                     }

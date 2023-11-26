@@ -78,6 +78,7 @@ const AddApiKey = () => {
                         text: 'OpenAI API Key is added Successfully!',
                         icon: 'success',
                         confirmButtonText: 'Ok',
+                        confirmButtonColor: "#2979FF"
                     })
                     auth.resetToken({});
 
@@ -95,6 +96,7 @@ const AddApiKey = () => {
                     icon: "error",
                     // input: 'text',
                     inputLabel: 'Please try again later.',
+                    confirmButtonColor: "#2979FF"
                 })
             })
 
