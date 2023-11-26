@@ -6,9 +6,9 @@ import Swal from "sweetalert2"
 import CreateArticle from "../create-article";
 
 const Dashboard = () => {
-    const auth = useAuth()
+    const auth = useAuth();
+    const [userData, setUserData] = useState<any>(auth.user)
     const [email, setEmail] = useState(auth?.user?.email ? auth?.user?.email : '');
-
 
     const resendEmail = () => {
         if (email.length > 4) {
@@ -33,6 +33,14 @@ const Dashboard = () => {
             })
         }
     }
+
+    useEffect(() => {
+        // console.log(new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z'), userData?.last_login, new Date(userData?.last_login), new Date('2023-11-26T11:11:18.360Z'))
+        if (new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z')) {
+            auth.logout()
+        }
+
+    })
 
     return (
         <div style={{ margin: "0 auto" }}>

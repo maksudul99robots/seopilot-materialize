@@ -66,9 +66,7 @@ export default function CustomizedMenus(props: any) {
         setAnchorEl(null);
     };
 
-    React.useEffect(() => {
-        // console.log("htms:", props.html.innerITML)
-    }, [props.html])
+
 
     function copyToClip(str: any) {
         console.log("str:", str)

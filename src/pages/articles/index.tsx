@@ -213,7 +213,6 @@ const TableServerSide = () => {
             headerName: 'Action',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
-
                 return (
                     <>
                         {
@@ -226,11 +225,16 @@ const TableServerSide = () => {
                                 </Button >
                                 :
                                 row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}>
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}
+                                        disabled={
+                                            row.is_error ? row.is_error : false
+                                        }>
                                         View
                                     </Button >
                                     :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} >
+                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} disabled={
+                                        row.is_error ? row.is_error : false
+                                    }>
                                         View
                                     </Button >
                         }
@@ -284,13 +288,13 @@ const TableServerSide = () => {
         LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            console.log("data:", res.data)
+            // console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [])
     useEffect(() => {
-        if (auth?.user?.plan == 'free') {
+        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             // Swal.fire('401',
             //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
             //     'error').then(() => {

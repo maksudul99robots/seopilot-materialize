@@ -103,11 +103,11 @@ const CreateAccountInvite = () => {
     const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
 
     useEffect(() => {
-        console.log(router.query.token)
+        // console.log(router.query.token)
 
         if (router.query.token?.length && router.query.token.length > 0) {
             LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 setEmail(res.data.email)
                 setIsVerified(true)
             }).catch(e => {

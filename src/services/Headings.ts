@@ -20,6 +20,5 @@ export function getHeadings(htmlString: string) {
         }
         finalHeadings.push(obj)
     })
-    console.log("sdfksadfksadkfjksadfsadf:", finalHeadings)
     return finalHeadings;
 }

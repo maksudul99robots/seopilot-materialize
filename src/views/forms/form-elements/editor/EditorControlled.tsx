@@ -18,6 +18,7 @@ const EditorControlled = (props: any) => {
   ))
 
   useEffect(() => {
+    // console.log("convertToHTML(value.getCurrentContent():", convertToHTML(value.getCurrentContent()))
     props.setHtml(convertToHTML(value.getCurrentContent()));
     // console.log(window.document.getElementsByClassName('DraftEditor-editorContainer'))
 

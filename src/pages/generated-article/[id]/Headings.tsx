@@ -8,7 +8,7 @@ export default function Headings(props: any) {
             setHeadings(props.headings)
         }
     }, [props.headings])
-    console.log("headings:", headings)
+    // console.log("headings:", headings)
     return (
         <Box sx={{ border: "1px solid #E6E6EA", borderRadius: "10px" }}>
             {

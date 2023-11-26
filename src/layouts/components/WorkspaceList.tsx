@@ -18,12 +18,10 @@ const WorkspaceList = (props: any) => {
         setAnchorEl(event.currentTarget)
     }
 
-    useEffect(() => {
-        console.log(props)
-    }, [props])
+
 
     const handleClose = (id: any) => {
-        console.log("id:", id)
+        // console.log("id:", id)
         if (props.current_workspace !== id) {
             LoginRegistrationAPI.checkoutWorkspace({ workspace_id: id }).then(res => {
                 auth.setUserData(res);

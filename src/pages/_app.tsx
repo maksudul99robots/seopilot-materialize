@@ -117,6 +117,7 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
+
   return (
     <Provider store={store}>
       <CacheProvider value={emotionCache}>

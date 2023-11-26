@@ -73,7 +73,7 @@ export default function Page() {
                     }
                     setShowOutlines(true)
                 } else if (res.status == 212) {
-                    console.log("returned value:", res.data)
+                    // console.log("returned value:", res.data)
                     setCurrentStep(5);
                     setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                         setShowArticleEditor(true);               //  ..  setTimeout()
@@ -146,6 +146,7 @@ export default function Page() {
                                 setArticle(res?.data.content ? outputString1 : '')
                                 setArticleTopic(res?.data?.topic)
                                 setCreatedAt(res?.data?.createdAt)
+                                setUpdatedAt(res?.data?.updatedAt)
                             }, 3000)
                         } else {
                             console.log("inside interval cancel 400")
@@ -162,6 +163,17 @@ export default function Page() {
                         }
                     }).catch(e => {
                         console.log(e);
+                        clearInterval(interval)
+                        Swal.fire({
+                            html: e.response.data?.message ? e.response.data?.message : 'Error from ChatGPT API. Please Try again later.',
+                            icon: "error",
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonColor: "#2979FF"
+                        }).then((res) => {
+
+                            router.push("/create-article")
+                        })
                     })
                 }
 

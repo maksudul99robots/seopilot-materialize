@@ -137,7 +137,7 @@ const AuthProvider = ({ children }: Props) => {
       .then(async response => {
         window.localStorage.removeItem('userData')
         window.localStorage.removeItem(authConfig.storageTokenKeyName)
-        console.log("response:", response)
+        // console.log("response:", response)
         response.data.userData.role = "admin"
         setUser({ ...response.data.userData })
         window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
@@ -306,7 +306,7 @@ const AuthProvider = ({ children }: Props) => {
     if (params.token) {
       try {
         LoginRegistrationAPI.checkVerification({ token: params.token }).then(res => {
-          console.log(res.data.userData)
+          // console.log(res.data.userData)
           if (res.status == 200) {
             // sendTokenToExtension(res.data.accessToken, process.env.NEXT_PUBLIC_EXT_ID);
 

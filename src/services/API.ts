@@ -38,7 +38,7 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, source);
     },
     async redeemCouponCode(data: any, url = "/redeem-coupon", source = undefined) {
-        console.log(data);
+        // console.log(data);
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);

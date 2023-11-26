@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 const BackToTheLastPage = () => {
     const router = useRouter();
-    console.log(router.pathname)
+    // console.log(router.pathname)
     const goBack = () => {
         router.push('/dashboard')
     }

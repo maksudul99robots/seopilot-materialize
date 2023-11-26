@@ -118,7 +118,7 @@ const Register = () => {
         if (password == confirmPassword) {
           setLoading(true);
           LoginRegistrationAPI.register({ email, password, confirmPassword, firstName, lastName }).then((res) => {
-            console.log("res:", res);
+            // console.log("res:", res);
             setLoading(false);
 
             // Swal.fire(

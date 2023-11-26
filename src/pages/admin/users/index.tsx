@@ -201,7 +201,7 @@ const TableServerSide = () => {
         LoginRegistrationAPI.getAllUsers({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            console.log("data:", res.data)
+            // console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })

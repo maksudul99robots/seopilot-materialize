@@ -47,7 +47,7 @@ export default function CreateArticle(props: any) {
 
     }, [])
     const sumbit = () => {
-        if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
+        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
                 title: 'Error!',
                 text: 'Please Subscribe to Higher Plan to Get This Feature.',

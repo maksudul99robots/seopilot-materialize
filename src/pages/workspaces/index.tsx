@@ -129,9 +129,9 @@ const Workspaces = () => {
     useEffect(() => {
         setWorkspaceCount(mainData.length)
     }, [mainData])
-    useEffect(() => {
-        console.log("workspaces count:", workspaceCount)
-    }, [workspaceCount])
+    // useEffect(() => {
+    //     console.log("workspaces count:", workspaceCount)
+    // }, [workspaceCount])
 
 
     const columns: GridColDef[] = [
