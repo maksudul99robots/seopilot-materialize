@@ -214,16 +214,18 @@ const AuthProvider = ({ children }: Props) => {
   const handleAcceptInvitation = (params: AcceptInvitationParams, errorCallback?: ErrCallbackType) => {
     LoginRegistrationAPI.acceptInvitation(params)
       .then(async response => {
-
-        sendTokenToExtension(response.data.accessToken, extensionId);
         localStorage.setItem("seo-pilot-token", response.data.accessToken);
         window.localStorage.setItem('userData', JSON.stringify(response.data.userData))
         setUser({ ...response.data.userData })
+
+        sendTokenToExtension(response.data.accessToken, extensionId)
+
 
         window.location.href = window.location.origin;
       })
 
       .catch(err => {
+        console.log("error:", err)
         if (errorCallback) errorCallback(err)
       })
 

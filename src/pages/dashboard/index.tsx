@@ -35,10 +35,15 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        // console.log(new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z'), userData?.last_login, new Date(userData?.last_login), new Date('2023-11-26T11:11:18.360Z'))
-        if (new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z')) {
-            auth.logout()
+        if (userData?.last_login) {
+            console.log(new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z'), userData?.last_login, new Date(userData?.last_login), new Date('2023-11-26T11:11:18.360Z'))
+            if (new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z')) {
+                auth.logout()
+            }
+        } else {
+            console.log("else!!!!!!!")
         }
+
 
     })
 

@@ -291,8 +291,8 @@ const CreateAccountInvite = () => {
 
 CreateAccountInvite.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
-CreateAccountInvite.authGuard = false
-// CreateAccountInvite.guestGuard = true
+// CreateAccountInvite.authGuard = false
+CreateAccountInvite.guestGuard = true
 
 
 export default CreateAccountInvite
