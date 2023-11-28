@@ -39,13 +39,43 @@ export default function CreateArticle(props: any) {
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
+    const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
     const auth = useAuth();
     const router = useRouter()
     // ** Hooks
     const bgColors = useBgColor()
+
+    const [existingArticle, setExistingArticle] = useState<any>(null);
+
+    useEffect(() => {
+        console.log("router:", router.query)
+        const { id } = router.query;
+
+        if (id) {
+            setExistingArticle(id)
+            setGetArticleFromParams(getArticleFromParams + 1);
+        }
+    }, [router.query])
     useEffect(() => {
 
-    }, [])
+        if (getArticleFromParams > 0) {
+            LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
+                if (res.status == 212) {
+                    setArticleType(res.data.article_type)
+                    setArticleLength(res.data.article_length)
+                    setCountry(res.data.country)
+                    setLanguage(res.data.language)
+                    setTone(res.data.tone)
+                    setKeywords(res.data.keywords)
+                    setTopic(res.data.topic)
+
+                }
+            }).catch(e => {
+                console.log(e);
+            })
+        }
+
+    }, [getArticleFromParams])
     const sumbit = () => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({

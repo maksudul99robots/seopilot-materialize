@@ -238,6 +238,7 @@ export default function Page() {
 
                     <ArticleIU
                         article={article}
+                        id={router.query.id}
                         outlines={outlines}
                         setHtml={setHtml}
                         html={html}

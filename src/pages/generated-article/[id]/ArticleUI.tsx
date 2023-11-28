@@ -184,6 +184,11 @@ export default function ArticleIU(props: any) {
                 <Card
                     sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
                 >
+                    <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
+                        <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px", marginRight: "10px" }}>Your Given Input</Typography>
+                        <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show</Button>
+                    </Box>
+
                     <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
 
                     {/* <Outlines outlines={outlines} /> */}
