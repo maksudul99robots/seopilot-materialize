@@ -92,6 +92,37 @@ export default function CreateArticle(props: any) {
                     router.push("/generated-article/" + res.data.id)
                 }).catch(e => {
                     console.log("error:", e);
+                    if (e) {
+                        Swal.fire({
+                            html: `<h3>Error</h3>
+                          <h5>${e.response.data}</h5>
+                          `,
+                            icon: "error",
+                            // input: 'text',
+                            // inputLabel: 'Please try again later.',
+                            confirmButtonColor: "#2979FF"
+                        }).then(() => {
+                            router.push('/add-apikey')
+                        })
+                    } else {
+                        Swal.fire({
+                            html: `<h3>Error</h3>
+                          <h5>Unable to Generate Article</h5>
+                          `,
+                            icon: "error",
+                            // input: 'text',
+                            inputLabel: 'Please try again later.',
+                            confirmButtonColor: "#2979FF"
+                        })
+                    }
+                    // Swal.fire({
+                    //     title: 'Error!',
+                    //     text: 'Please Subscribe to Higher Plan to Get This Feature.',
+                    //     icon: 'error',
+                    //     confirmButtonText: 'Close',
+                    //     confirmButtonColor: "#2979FF"
+                    // })
+
                 })
         }
 
