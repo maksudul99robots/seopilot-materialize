@@ -284,10 +284,10 @@ const ForgotPassword = () => {
             <img src='/images/logos/SEOPilotLogo256.png' height={54} />
           </Box>
           <Box sx={{ mb: 6.5 }}>
-            <Typography variant='h5' sx={{ mb: 1.5, letterSpacing: '0.18px', fontWeight: 600 }}>
-              Forgot Password? 🔒
+            <Typography variant='h5' sx={{ mb: 1.5, letterSpacing: '0.18px', fontWeight: 600, textAlign: "center" }}>
+              Forgot Password?
             </Typography>
-            <Typography variant='body2'>
+            <Typography variant='body2' sx={{ textAlign: "center" }}>
               Enter your email and we&prime;ll send you instructions to reset your password
             </Typography>
           </Box>
@@ -336,7 +336,7 @@ const ForgotPassword = () => {
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 image={`/images/pages/auth-v1-forgot-password-mask-${theme.palette.mode}.png`} />
+      <FooterIllustrationsV1 image={`/images/pages/login3.png`} />
     </Box>
   )
 }

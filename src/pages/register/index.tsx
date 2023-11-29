@@ -199,11 +199,11 @@ const Register = () => {
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <img src='/images/logos/SEOPilotLogo256.png' height={54} />
           </Box>
-          <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{ mb: 1.5, letterSpacing: '0.18px', fontWeight: 600 }}>
-              Adventure starts here 🚀
+          <Box sx={{ mb: 6, }}>
+            <Typography variant='h5' sx={{ mb: 1.5, letterSpacing: '0.18px', fontWeight: 600, textAlign: "center" }}>
+              Register on SEOPilot
             </Typography>
-            <Typography variant='body2'>Make your app management easy and fun!</Typography>
+            <Typography variant='body2' sx={{ textAlign: "center" }}>Take off with SEOPilot to have a great SEO Journey!</Typography>
           </Box>
           <form noValidate autoComplete='off' >
             <Box sx={{ display: "flex" }}>
@@ -269,7 +269,7 @@ const Register = () => {
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 image={`/images/pages/auth-v1-register-mask-${theme.palette.mode}.png`} />
+      <FooterIllustrationsV1 image={`/images/pages/login3.png`} />
     </Box>
   )
 }

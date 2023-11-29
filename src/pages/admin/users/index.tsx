@@ -133,6 +133,7 @@ const TableServerSide = () => {
             minWidth: 140,
             field: 'role_permission',
             headerName: 'Role',
+            sortable: false,
             renderCell: (params: GridRenderCellParams) => {
                 return (
 
@@ -164,6 +165,7 @@ const TableServerSide = () => {
             minWidth: 120,
             headerName: 'Last Logged In',
             field: 'last_login',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => (
                 <Typography variant='body2' sx={{ color: 'text.primary' }}>
@@ -201,7 +203,7 @@ const TableServerSide = () => {
         LoginRegistrationAPI.getAllUsers({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            // console.log("data:", res.data)
+            console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
@@ -236,13 +238,10 @@ const TableServerSide = () => {
             // console.log("dataAsc", dataAsc)
             const filteredData = dataToFilter.filter(
                 (item: any) =>
-                    // item.id.toString().toLowerCase().includes(queryLowered) ||
-                    item.output?.toLowerCase().includes(queryLowered) ||
-                    // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.source?.toLowerCase().includes(queryLowered) ||
-                    // item.user_id.toLowerCase().includes(queryLowered) ||
-                    item.createdAt.toString().toLowerCase().includes(queryLowered) //||
-                // item.updatedAt.toLowerCase().includes(queryLowered)
+                    item.email?.toLowerCase().includes(queryLowered) ||
+                    item.role?.toLowerCase().includes(queryLowered) ||
+                    item.createdAt.toString().toLowerCase().includes(queryLowered) ||
+                    item.updatedAt.toString().toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
             setRows(loadServerRows(paginationModel.page, filteredData))
@@ -275,9 +274,6 @@ const TableServerSide = () => {
 
     return (
         <Box >
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <Button variant='contained' href='/create-article'>+ Create Article</Button>
-            </Box>
             <Card>
                 <DataGrid
                     autoHeight
@@ -298,7 +294,7 @@ const TableServerSide = () => {
                             variant: 'outlined'
                         },
                         toolbar: {
-                            title: "Articles",
+                            title: "Users",
                             value: searchValue,
                             clearSearch: () => handleSearch(''),
                             onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)

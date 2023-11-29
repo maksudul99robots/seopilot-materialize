@@ -134,10 +134,10 @@ const LoginPage = () => {
             <img src='/images/logos/SEOPilotLogo256.png' height={54} />
           </Box>
           <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>
-              {`Welcome to ${themeConfig.templateName}! 👋🏻`}
+            <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px', textAlign: "center" }}>
+              {`Welcome to ${themeConfig.templateName}!`}
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2' sx={{ textAlign: "center" }}>Please sign-in to your account and start the adventure</Typography>
           </Box>
           <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <FormControl fullWidth sx={{ mb: 4 }}>
@@ -224,7 +224,7 @@ const LoginPage = () => {
           </form>
         </CardContent>
       </Card>
-      <FooterIllustrationsV1 />
+      <FooterIllustrationsV1 image='/images/pages/login3.png' />
     </Box>
   )
 }

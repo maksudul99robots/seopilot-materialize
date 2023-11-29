@@ -9,12 +9,11 @@ interface FooterIllustrationsProp {
 // Styled Components
 const MaskImg = styled('img')(({ theme }) => ({
   zIndex: -1,
-  bottom: '7%',
+  // bottom: '7%',
   width: '100%',
-  position: 'absolute',
-  [theme.breakpoints.down('lg')]: {
-    bottom: '10%'
-  }
+  height: "100vh",
+  position: 'fixed',
+  objectFit: "cover"
 }))
 
 const FooterIllustrationsV1 = (props: FooterIllustrationsProp) => {

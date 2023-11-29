@@ -19,7 +19,7 @@ const PricingPlans = (props: Props) => {
   return (
     <Grid container spacing={15}>
       {data?.map((item: PricingPlanType, index: number) => (
-        <Grid item xs={12} md={6} key={item.title.toLowerCase()}>
+        <Grid item xs={12} md={4} key={item.title.toLowerCase()}>
           <PlanDetails plan={plan} data={item} index={index} />
         </Grid>
       ))}

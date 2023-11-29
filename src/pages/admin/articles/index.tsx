@@ -99,18 +99,14 @@ const TableServerSide = () => {
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('full_name')
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 })
     const [mainData, setMainData] = useState<any>([]);
+
     const auth = useAuth()
     const router = useRouter()
 
     useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to Higher Plan to SEE, EDIT and, PUBLISH your articles.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
+        if (auth?.user?.approle.role.id !== 2) {
 
             Swal.fire({
                 title: '401',
@@ -122,7 +118,7 @@ const TableServerSide = () => {
                 router.push("/")
             })
         }
-    }, [auth?.user?.plan])
+    }, [auth?.user])
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -250,7 +246,7 @@ const TableServerSide = () => {
     const regenerateArticle = (id: number | string) => {
         LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
             setTimeout(() => {
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+                LoginRegistrationAPI.getAllAIArticleHistory({}).then(res => {
                     loadServerRows
                     setMainData(res.data);
                     // console.log("data:", res.data)
@@ -285,33 +281,13 @@ const TableServerSide = () => {
     }
     useEffect(() => {
 
-        LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+        LoginRegistrationAPI.getAllAIArticleHistory({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            // console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })
     }, [])
-    useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
-
-            Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
-            })
-        }
-    }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -325,6 +301,7 @@ const TableServerSide = () => {
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     item.output?.toLowerCase().includes(queryLowered) ||
+                    item.topic?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
                     item.source?.toLowerCase().includes(queryLowered) ||
                     // item.user_id.toLowerCase().includes(queryLowered) ||
@@ -362,9 +339,6 @@ const TableServerSide = () => {
 
     return (
         <Box >
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <Button variant='contained' href='/create-article'>+ Create Article</Button>
-            </Box>
             <Card>
                 <DataGrid
                     autoHeight

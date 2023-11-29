@@ -11,12 +11,12 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle: 'Menu' //leaving  for now. Change later
     },
     {
-      title: 'AI Articles',
+      title: 'My Articles',
       icon: 'ic:outline-article',
       path: '/articles'
     },
     {
-      title: 'Generate AI Articles',
+      title: 'Create Article',
       icon: 'streamline:ai-edit-spark',
       path: '/create-article'
     },
@@ -100,6 +100,11 @@ const navigation = (): VerticalNavItemsType => {
   let adminMenus = [
     {
       sectionTitle: 'Admin Options'
+    },
+    {
+      title: 'All Articles',
+      icon: 'ooui:articles-rtl',
+      path: '/admin/articles'
     },
     {
       title: 'All Users',

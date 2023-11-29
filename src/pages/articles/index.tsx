@@ -142,7 +142,7 @@ const TableServerSide = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.output ? row.output?.replace(/<\/?[^>]+(>|$)/g, "") : row.topic}
+                                {row.topic}
                             </Typography>
                             <Typography noWrap variant='caption'>
                                 {row.source ? row.source : 'https://app.seopilot.io'}
@@ -178,7 +178,7 @@ const TableServerSide = () => {
                         {
                             status.title == 'Error' ?
 
-                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
                                     <div>
                                         <CustomChip
                                             size='small'
@@ -325,6 +325,7 @@ const TableServerSide = () => {
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     item.output?.toLowerCase().includes(queryLowered) ||
+                    item.topic?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
                     item.source?.toLowerCase().includes(queryLowered) ||
                     // item.user_id.toLowerCase().includes(queryLowered) ||

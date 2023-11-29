@@ -7,7 +7,7 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
-
+import Alert from '@mui/material/Alert'
 // ** ThirdParty Components
 import axios from 'axios'
 
@@ -106,7 +106,7 @@ const TableServerSide = () => {
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
     const [reRender, setReRender] = useState<any>([]);
-    const [showEdit, setShowEdit] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState<boolean>(true);
     const [showDelete, setShowDelete] = useState<boolean>(false);
     const auth = useAuth()
     const router = useRouter()
@@ -327,6 +327,14 @@ const TableServerSide = () => {
 
     return (
         <Box >
+            {
+                showAlert &&
+                <Alert severity='info' variant='standard' onClose={e => {
+                    e.preventDefault();
+                    setShowAlert(false)
+                }} sx={{ marginBottom: "20px", fontSize: "16px" }}><a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "none", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Here's</a> a Step By Step Guide to Connect a WordPress Website and Publish an Article on Your Website.</Alert>
+            }
+
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 <DialogAddCard reRender={reRender} setReRender={setReRender}
                     disabled={

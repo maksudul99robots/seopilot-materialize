@@ -44,13 +44,13 @@ const Pricing = () => {
       imgWidth: 100,
       title: 'Passenger',
       imgHeight: 100,
-      monthlyPrice: 0,
+      monthlyPrice: 19,
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       popularPlan: false,
-      subtitle: 'A simple start for everyone',
-      imgSrc: '/images/pages/pricing-illustration-1.png',
+      subtitle: 'Full access to the extension and upcomming features',
+      imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
-        perMonth: 0,
+        perMonth: 19,
         totalAnnual: 0
       },
       planBenefits: [
@@ -59,8 +59,11 @@ const Pricing = () => {
         { text: "Download Data Points to .CSV", show: true },
         { text: "Broken Link Checker", show: true },
         { text: "Get all headings", show: true },
+        { text: "1 WordPress Site Connection", show: true },
+        { text: "1 User/Team Member(s)", show: true },
+        { text: "1 Workspace", show: true },
         { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article writer", show: false }
+        { text: "Generate AI article writer", show: true }
       ]
 
     },
@@ -68,18 +71,44 @@ const Pricing = () => {
       imgWidth: 100,
       imgHeight: 100,
       monthlyPrice: 49,
-      title: 'Captain',
+      title: 'Co-Pilot',
       popularPlan: true,
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
-      subtitle: 'Get full access to the extension and upcomming features.',
-      imgSrc: '/images/pages/pricing-illustration-2.png',
-      yearlyPlan: { perMonth: 9, totalAnnual: 108 },
+      subtitle: 'Full access to the extension and upcomming features.',
+      imgSrc: '/images/pages/copilot.svg',
+      yearlyPlan: { perMonth: 49, totalAnnual: 108 },
       planBenefits: [
         { text: "Get on-page SEO", show: true },
         { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
         { text: "Download Data Points to .CSV", show: true },
         { text: "Broken Link Checker", show: true },
         { text: "Get all headings", show: true },
+        { text: "5 WordPress Site Connections", show: true },
+        { text: "5 Users/Team Members", show: true },
+        { text: "5 Workspaces", show: true },
+        { text: "Free subscription to SEO & PR Newsletter", show: true },
+        { text: "Generate AI article writer", show: true }
+      ]
+    },
+    {
+      imgWidth: 100,
+      imgHeight: 100,
+      monthlyPrice: 99,
+      title: 'Captain',
+      popularPlan: true,
+      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
+      subtitle: 'Full access to the extension and upcomming features.',
+      imgSrc: '/images/pages/captain.svg',
+      yearlyPlan: { perMonth: 99, totalAnnual: 108 },
+      planBenefits: [
+        { text: "Get on-page SEO", show: true },
+        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
+        { text: "Download Data Points to .CSV", show: true },
+        { text: "Broken Link Checker", show: true },
+        { text: "Get all headings", show: true },
+        { text: "25 WordPress Site Connections", show: true },
+        { text: "25 Users/Team Members", show: true },
+        { text: "25 Workspaces", show: true },
         { text: "Free subscription to SEO & PR Newsletter", show: true },
         { text: "Generate AI article writer", show: true }
       ]

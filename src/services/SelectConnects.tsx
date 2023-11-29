@@ -32,7 +32,7 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { Divider, InputAdornment, MenuItem, Select } from '@mui/material'
+import { Divider, FormControl, InputAdornment, InputLabel, MenuItem, Select } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
 
 const Transition = forwardRef(function Transition(
@@ -58,6 +58,7 @@ const SelectConnects = (props: any) => {
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
   const [connects, setConnects] = useState<any>([]);
+  const [status, setStatus] = useState<string>('publish');
 
   const handleClose = () => {
     setShow(false)
@@ -70,7 +71,7 @@ const SelectConnects = (props: any) => {
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ title: props.title, content: props.html, status: "publish" })
+      body: JSON.stringify({ title: props.title, content: props.html, status: status })
     }).then(res => {
       setShow(false)
       setLoading(false)
@@ -151,35 +152,67 @@ const SelectConnects = (props: any) => {
           connects.length > 0 ?
             <Box sx={{
               display: "flex",
-              justifyContent: "center"
+              justifyContent: "center",
+              // flexDirection: "column",
+              // flexDirection: "row",
+              width: "100%"
             }}>
-              <Select
-                fullWidth
-                placeholder='WordPress Address'
-                // label='WordPress Address'
-                labelId={connectSelected.id}
-                defaultValue={connectSelected.id}
-                onChange={e => {
-                  setSelectedId(e.target.value)
-                  setConnectSelected(e.target.value);
-                  connects.map((c: any) => {
-                    if (c.id == e.target.value)
-                      setConnectSelected(c);
-                  })
 
-                }}
+              <div>
+                <FormControl fullWidth sx={{
+                  width: "100%", marginBottom: "20px"
+                }}>
+                  <InputLabel id='address-select'>WordPress Address</InputLabel>
+                  <Select
+                    fullWidth
+                    placeholder='WordPress Address'
+                    label='WordPress Address'
+                    labelId={connectSelected.id}
+                    defaultValue={connectSelected.id}
+                    onChange={e => {
+                      setSelectedId(e.target.value)
+                      setConnectSelected(e.target.value);
+                      connects.map((c: any) => {
+                        if (c.id == e.target.value)
+                          setConnectSelected(c);
+                      })
 
-                sx={{ width: "90%" }}
-              >
-                {
-                  connects.map((c: any, i: any) => {
-                    return (
-                      <MenuItem key={i} value={c.id}>{c.address}</MenuItem>
-                    )
-                  })
+                    }}
 
-                }
-              </Select>
+
+                  >
+                    {
+                      connects.map((c: any, i: any) => {
+                        return (
+                          <MenuItem key={i} value={c.id}>{c.address}</MenuItem>
+                        )
+                      })
+
+                    }
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ width: "100%" }}>
+                  <InputLabel id='Status-select'>Post Status</InputLabel>
+                  <Select
+                    fullWidth
+                    placeholder='Post Status'
+                    label='Post Status'
+                    labelId='Status-select'
+                    defaultValue={status}
+                    onChange={e => {
+                      setStatus(e.target.value);
+                    }}
+                  >
+                    <MenuItem value='publish'>Publish</MenuItem>
+                    <MenuItem value='draft'>Draft</MenuItem>
+                  </Select>
+                </FormControl>
+
+              </div>
+
+
+
 
             </Box>
 
@@ -203,14 +236,16 @@ const SelectConnects = (props: any) => {
           sx={{
 
             px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
-            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+            display: "flex",
+            justifyContent: "center",
           }}
         >
 
 
           {
             connects.length > 0 ?
-              <div style={{ marginTop: "20px" }}>
+              <div style={{ marginTop: "10px" }}>
                 <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
                 }>
                   Send
