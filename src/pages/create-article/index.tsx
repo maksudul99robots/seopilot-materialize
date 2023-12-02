@@ -2,7 +2,7 @@ import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, F
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 import Switch from '@mui/material/Switch'
-import { Ref, useState, forwardRef, ReactElement, useEffect } from 'react'
+import { Ref, useState, forwardRef, ReactElement, useEffect, ChangeEvent } from 'react'
 
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
@@ -12,6 +12,12 @@ import { LoginRegistrationAPI } from 'src/services/API'
 import { useRouter } from 'next/router'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
+import DndList from 'src/services/DND/DndList'
+import { isValidURL } from 'src/services/URLChecker'
+import { object } from 'yup'
+// import CustomRadioIcons from 'src/components/CustomRadioIcons'
+import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
+import { makeid } from 'src/services/makeid'
 const Transition = forwardRef(function Transition(
     props: FadeProps & { children?: ReactElement<any, any> },
     ref: Ref<unknown>
@@ -21,6 +27,57 @@ const Transition = forwardRef(function Transition(
 // interface Links {
 //     links: string[];
 //   }
+// ** Type Import
+import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/components/custom-radio/types'
+
+// ** Demo Components Imports
+
+interface IconType {
+    icon: CustomRadioIconsProps['icon']
+    iconProps: CustomRadioIconsProps['iconProps']
+}
+
+const data: CustomRadioIconsData[] = [
+    {
+        value: 'system',
+        title: 'System Generated Outline',
+        isSelected: true,
+        content: 'Create an automated outline with the help of SEOPilot.'
+    },
+    {
+        value: 'user',
+        title: 'Create Your Own Outline',
+        content: 'Create your article outline by adding Headings and Heading Texts.'
+    },
+    {
+        value: 'url',
+        title: 'Get Outline From a URL',
+        content: 'Extracts outline from an article URL. You can Edit/Remove/Reorder outline.'
+    }
+]
+const articleLengthObj: CustomRadioIconsData[] = [
+    {
+        value: 'short',
+        title: 'Normal Article',
+        isSelected: true,
+        content: 'Approximately 1000-1500 words'
+    },
+    {
+        value: 'long',
+        title: 'Long Article',
+        content: 'Approximately 2000-3000 words'
+    }
+]
+
+const icons: IconType[] = [
+    { icon: 'eos-icons:machine-learning-outlined', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+    { icon: 'tabler:user-edit', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+    { icon: 'bi:link-45deg', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } }
+]
+const articleILngthIcons: IconType[] = [
+    { icon: 'ooui:article-rtl', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+    { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+]
 
 export default function CreateArticle(props: any) {
     // ** States
@@ -35,8 +92,14 @@ export default function CreateArticle(props: any) {
     const [language, setLanguage] = useState('English')
     const [links, setLinks] = useState<Array<string>>([])
     const [country, setCountry] = useState<string>('United States of America (USA)')
-    const [articleLength, setArticleLength] = useState<'short' | 'long'>('short')
-    // const [articleType, setArticleType] = useState('blog')
+    const [articleLength, setArticleLength] = useState<string>('short')
+    const [headings, setHeadings] = useState<any>([]);
+    const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
+    const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
+    const [outlineSource, setOutlineSource] = useState<string>('system');
+    const [outlineURL, setOutlineURL] = useState('');
+    const [showOutline, setShowOutline] = useState(false);
+    const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
@@ -48,7 +111,6 @@ export default function CreateArticle(props: any) {
     const [existingArticle, setExistingArticle] = useState<any>(null);
 
     useEffect(() => {
-        console.log("router:", router.query)
         const { id } = router.query;
 
         if (id) {
@@ -61,6 +123,7 @@ export default function CreateArticle(props: any) {
         if (getArticleFromParams > 0) {
             LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
                 if (res.status == 212) {
+                    console.log("res", res.data)
                     setArticleType(res.data.article_type)
                     setArticleLength(res.data.article_length)
                     setCountry(res.data.country)
@@ -68,7 +131,28 @@ export default function CreateArticle(props: any) {
                     setTone(res.data.tone)
                     setKeywords(res.data.keywords)
                     setTopic(res.data.topic)
+                    setOutlineSource(res.data.outline_source)
+                    if (res.data.outline_url) {
+                        setOutlineURL(res.data.outline_url)
+                        if (res.data.raw_outline) {
+                            let h = JSON.parse(res.data.raw_outline);
+                            if (typeof (h) == 'object') {
+                                setHeadings(h)
+                            }
+                        }
 
+
+                    }
+                    if (res.data.outline_source == 'user') {
+                        if (res.data.raw_outline) {
+                            let h = JSON.parse(res.data.raw_outline);
+                            if (typeof (h) == 'object') {
+                                setHeadings(h)
+                            }
+                            setShowOutline(true)
+                        }
+
+                    }
                 }
             }).catch(e => {
                 console.log(e);
@@ -77,6 +161,23 @@ export default function CreateArticle(props: any) {
 
     }, [getArticleFromParams])
     const sumbit = () => {
+
+        // console.log({
+        //     article_type: articleType,
+        //     topic: topic,
+        //     keywords: keywords,
+        //     article_length: articleLength,
+        //     tone: tone,
+        //     language: language,
+        //     country: country,
+        //     links: JSON.stringify(links),
+        //     outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+        //     outline_source: outlineSource,
+        //     outline_url: outlineURL
+        // })
+
+        // return
+
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
                 title: 'Error!',
@@ -86,13 +187,25 @@ export default function CreateArticle(props: any) {
                 confirmButtonColor: "#2979FF"
             })
         } else {
-            LoginRegistrationAPI.generateSaasArticle({ article_type: articleType, topic: topic, keywords: keywords, article_length: articleLength, tone: tone, language: language, country: country, links: JSON.stringify(links) }).
+            LoginRegistrationAPI.generateSaasArticle({
+                article_type: articleType,
+                topic: topic,
+                keywords: keywords,
+                article_length: articleLength,
+                tone: tone,
+                language: language,
+                country: country,
+                links: JSON.stringify(links),
+                outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                outline_source: outlineSource,
+                outline_url: outlineURL
+            }).
                 then(res => {
                     // console.log("res:", res);
                     router.push("/generated-article/" + res.data.id)
                 }).catch(e => {
                     console.log("error:", e);
-                    if (e) {
+                    if (e.response.status == 400) {
                         Swal.fire({
                             html: `<h3>Error</h3>
                           <h5>${e.response.data}</h5>
@@ -127,6 +240,135 @@ export default function CreateArticle(props: any) {
         }
 
     }
+
+    //DND settings
+    const editHeadingOnChange = (index: number, heading: string) => {
+
+        headings[index] = headings[index].substring(0, 3) + heading;
+        // updateCsvHeadings(index, heading.slice(0))
+
+    }
+    const changeHeadingTag = (index: number, tag: string) => {
+        headings[index] = tag + ":" + headings[index].substring(3, headings[index].length);
+        let newArr = [...headings];
+        let uniqueArr = [...new Set(newArr)];
+        setHeadings(uniqueArr);
+
+    }
+    const removeHeadings = (index: number) => {
+        let newArr = [...headings];
+        setHeadings(newArr);
+        newArr = [...headings]
+        newArr.splice(index, 1);
+
+
+        let uniqueArr = [...new Set(newArr)];
+        setHeadings(uniqueArr);
+
+    }
+
+    const addnewHeading = () => {
+        let newArr = [...headings];
+        setHeadings(newArr);
+        newArr = [...headings];
+        newArr.push('H1:');
+
+        let uniqueArr = [...new Set(newArr)];
+        setHeadings(uniqueArr);
+    }
+
+    const fetchOutline = () => {
+        setFetchOutlineLoading(true)
+        LoginRegistrationAPI.fetchOutline({ url: outlineURL }).then((res: any) => {
+            // console.log("res:", res.data.outlines)
+            setFetchOutlineLoading(false)
+            // setHeadings(res.data.outlines)
+            fotmatAndSetHeadings(res.data.outlines);
+            setShowOutline(true)
+        }).catch((e: any) => {
+            console.log(e);
+            setFetchOutlineLoading(false)
+            Swal.fire({
+                title: 'Error',
+                text: 'Could not fetch outline.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF",
+            })
+        })
+    }
+
+    const fotmatAndSetHeadings = (headingsOutline: any) => {
+        let tempHeading: any = [];
+        headingsOutline.map((h: any, i: number) => {
+            let x = h.tagName + ':';
+            x = x + h.textContent;
+            tempHeading.push(x)
+            if (i == fotmatAndSetHeadings.length - 1) {
+                setHeadings(tempHeading)
+            }
+        })
+    }
+
+    useEffect(() => {
+        // console.log("headings:", headings)
+        if (outlineSource == 'user') {
+            setTempUserHeadings(headings)
+        } else if (outlineSource == 'url') {
+            setTempURLHeadings(headings)
+        }
+    }, [headings])
+
+
+
+    // useEffect(() => {
+    //     console.log("outline source:", outlineSource)
+    //     if (outlineSource == 'system') {
+    //         setShowOutline(false)
+    //         setHeadings([])
+    //     } else if (outlineSource == 'user') {
+    //         setHeadings(tempUserHeadings)
+    //         setShowOutline(true)
+    //     } else if (outlineSource == 'url') {
+    //         setHeadings(tempURLHeadings)
+    //         setShowOutline(false)
+    //     }
+    // }, [outlineSource])
+
+    const handleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
+        if (typeof prop === 'string') {
+            let val = prop;
+            if (val == 'url') {
+                setHeadings(tempURLHeadings)
+                setShowOutline(false)
+
+            } else if (val == 'user') {
+                setHeadings(tempUserHeadings)
+                setShowOutline(true)
+            }
+            setOutlineSource(prop)
+
+        } else {
+            let val = (prop.target as HTMLInputElement).value
+            if (val == 'url') {
+                setHeadings(tempURLHeadings)
+                setShowOutline(false)
+
+            } else if (val == 'user') {
+                setHeadings(tempUserHeadings)
+                setShowOutline(true)
+            }
+            setOutlineSource((prop.target as HTMLInputElement).value)
+        }
+    }
+    const handleArticleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
+        if (typeof prop === 'string') {
+            setArticleLength(prop)
+        } else {
+            setArticleLength((prop.target as HTMLInputElement).value)
+        }
+    }
+
     return (
         <Card>
             <Card>
@@ -170,71 +412,43 @@ export default function CreateArticle(props: any) {
                             }} value={topic} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }}
+                                name='topic'
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' onChange={e => {
+                            <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
                                 setKeywords(e.target.value)
                             }} value={keywords} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }} />
-                            <FormHelperText>Use comma (,) to seperate each keyword</FormHelperText>
+                            <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to seperate each keyword</FormHelperText>
                         </Grid>
-                        <Grid item sm={6} xs={12}>
-                            <Box
-                                onClick={() => setArticleLength('short')}
-                                sx={{
-                                    py: 3,
-                                    px: 4,
-                                    borderRadius: 1,
-                                    cursor: 'pointer',
-                                    ...(articleLength === 'short' ? { ...bgColors.primaryLight } : { backgroundColor: 'action.hover' }),
-                                    border: theme =>
-                                        `1px solid ${articleLength === 'short' ? theme.palette.primary.main : theme.palette.secondary.main}`,
-                                    ...(articleLength === 'short'
-                                        ? { ...bgColors.primaryLight }
-                                        : { backgroundColor: bgColors.secondaryLight.backgroundColor })
-                                }}
-                            >
-                                <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }} >
-                                    {/* <Icon icon='mdi:home-outline' /> */}
-                                    <Typography variant='h6' sx={{ ...(articleLength === 'short' ? { color: 'primary.main' } : {}) }}>
-                                        Normal Article
-                                    </Typography>
-                                </Box>
-                                <Typography variant='body2' sx={{ ...(articleLength === 'short' ? { color: 'primary.main' } : {}) }}>
-                                    Approximately 1000-1500 words
-                                </Typography>
-                            </Box>
+
+
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                            Article Length
+                        </Typography>
+                        <Grid container spacing={6} sx={{ paddingLeft: "25px" }}>
+                            {articleLengthObj.map((item, index) => (
+                                <CustomRadioIcons
+                                    key={index}
+                                    data={articleLengthObj[index]}
+                                    selected={articleLength}
+                                    icon={articleILngthIcons[index].icon}
+                                    name='custom-radios-icons'
+                                    handleChange={handleArticleChange}
+                                    gridProps={{ sm: 6, xs: 12 }}
+                                    iconProps={articleILngthIcons[index].iconProps}
+
+                                />
+                            ))}
                         </Grid>
-                        <Grid item sm={6} xs={12}>
-                            <Box
-                                onClick={() => setArticleLength('long')}
-                                sx={{
-                                    py: 3,
-                                    px: 4,
-                                    borderRadius: 1,
-                                    cursor: 'pointer',
-                                    ...(articleLength === 'long' ? { ...bgColors.primaryLight } : { backgroundColor: 'action.hover' }),
-                                    border: theme =>
-                                        `1px solid ${articleLength === 'long' ? theme.palette.primary.main : theme.palette.secondary.main}`,
-                                    ...(articleLength === 'long'
-                                        ? { ...bgColors.primaryLight }
-                                        : { backgroundColor: bgColors.secondaryLight.backgroundColor })
-                                }}
-                            >
-                                <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-                                    <Typography variant='h6' sx={{ ...(articleLength === 'long' ? { color: 'primary.main' } : {}) }}>
-                                        Long Article
-                                    </Typography>
-                                </Box>
-                                <Typography variant='body2' sx={{ ...(articleLength === 'long' ? { color: 'primary.main' } : {}) }}>
-                                    Approximately 2000-3000 words
-                                </Typography>
-                            </Box>
-                        </Grid>
+
+
+
+
                         <Grid item xs={12}>
-                            <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' onChange={e => {
+                            <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
                                 setTone(e.target.value)
                             }} value={tone} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
@@ -274,6 +488,60 @@ export default function CreateArticle(props: any) {
                                 <GetCountryList country={country} setCountry={setCountry} />
                             </FormControl>
                         </Grid>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                            Outline Source
+                        </Typography>
+                        <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
+                            {data.map((item, index) => (
+                                <CustomRadioIcons
+                                    key={index}
+                                    data={data[index]}
+                                    selected={outlineSource}
+                                    icon={icons[index].icon}
+                                    name='custom-radios-icons'
+                                    handleChange={handleChange}
+                                    gridProps={{ sm: 4, xs: 12 }}
+                                    iconProps={icons[index].iconProps}
+
+                                />
+                            ))}
+                        </Grid>
+
+                        {
+                            outlineSource == 'url' &&
+                            <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
+
+                                <TextField fullWidth label='Insert URL' placeholder='https://example.com' onChange={e => {
+                                    setOutlineURL(e.target.value)
+                                }} value={outlineURL} InputProps={{
+                                    startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                }}
+                                />
+                                <Button variant='outlined' size="medium" sx={{ ml: 3, pt: 3, pb: 3, pl: 4, pr: 4, width: fetchOutlineLoading ? "200px" : '150px' }}
+                                    disabled={isValidURL(outlineURL) ? false : true}
+                                    onClick={() => fetchOutline()}
+                                    startIcon={fetchOutlineLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+                                    }
+                                >
+                                    Get Outline
+                                </Button>
+                            </Grid>
+                        }
+
+                        {
+                            (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
+
+                            <DndList
+                                headings={headings}
+                                setHeadings={setHeadings}
+                                editHeadingOnChange={editHeadingOnChange}
+                                removeHeadings={removeHeadings}
+                                changeHeadingTag={changeHeadingTag}
+                                addnewHeading={addnewHeading}
+                            />
+                        }
+
+
 
 
                     </Grid>
@@ -286,7 +554,7 @@ export default function CreateArticle(props: any) {
                     }}
                 >
                     <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} onClick={() => sumbit()}>
-                        Submit
+                        Create Article
                     </Button>
                     {/* <Button variant='outlined' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} color='secondary' >
                         Cancel

@@ -30,6 +30,14 @@ code[class*='language-'] {
   background-color: #2979FF;
 }
 
+.add-icon-color{
+  color: #8f919b;
+}
+.add-icon-color:hover{
+  color: #2979FF;
+  cursor: pointer;
+}
+
 .close-icon-style{
   color: #A5A6B1;
   cursor: pointer;
@@ -37,3 +45,5 @@ code[class*='language-'] {
 .close-icon-style:hover{
   color: #D53343;
 }
+
+

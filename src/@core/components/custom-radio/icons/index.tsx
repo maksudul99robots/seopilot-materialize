@@ -39,7 +39,7 @@ const CustomRadioIcons = (props: CustomRadioIconsProps) => {
           {icon ? <Icon icon={icon} {...iconProps} /> : null}
           {title ? (
             typeof title === 'string' ? (
-              <Typography sx={{ fontWeight: 500, ...(content ? { mb: 1 } : { my: 'auto' }) }}>{title}</Typography>
+              <Typography variant='h6' sx={{ fontWeight: 500, ...(content ? { mb: 1 } : { my: 'auto' }) }}>{title}</Typography>
             ) : (
               title
             )
