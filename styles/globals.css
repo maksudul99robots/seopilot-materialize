@@ -46,4 +46,15 @@ code[class*='language-'] {
   color: #D53343;
 }
 
+.colorLink{
+  color: #636578;
+  text-decoration: none;
+  font-weight: 600;
+}
+.colorLink:hover{
+  color: #2c2c31;
+  text-decoration: none;
+  font-weight: 600;
+}
+
 

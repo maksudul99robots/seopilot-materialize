@@ -456,11 +456,11 @@ export default function CreateArticle(props: any) {
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <FormControl fullWidth>
-                                <InputLabel id='country-select'>Language</InputLabel>
+                                <InputLabel id='country-select'>Article Language</InputLabel>
                                 <Select
                                     fullWidth
-                                    placeholder='Language'
-                                    label='Language'
+                                    placeholder='Article Language'
+                                    label='Article Language'
                                     labelId='English'
                                     defaultValue={language}
                                     onChange={e => {

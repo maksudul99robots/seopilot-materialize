@@ -14,6 +14,7 @@ import CopyAllIcon from '@mui/icons-material/CopyAll';
 import Icon from 'src/@core/components/icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from "react-toastify";
+import CodeIcon from '@mui/icons-material/Code';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -66,10 +67,39 @@ export default function CustomizedMenus(props: any) {
         setAnchorEl(null);
     };
 
+    function insertImageAfterFirstH1(htmlString: string, imgSrc: string) {
+        // Create a temporary container element
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = htmlString;
 
+        // Find the first h1 element
+        const firstH1: any = tempContainer.querySelector('h1');
+
+        if (firstH1) {
+            // Create an img element
+            const imgElement: any = document.createElement('img');
+            // imgElement.width = "500";
+            // imgElement.height = "400";
+            imgElement.style.width = "100%"
+            imgElement.src = imgSrc;
+
+            // Insert the img element after the first h1
+            firstH1.parentNode.insertBefore(imgElement, firstH1.nextSibling);
+        } else {
+
+        }
+
+        // Return the modified HTML
+        return tempContainer.innerHTML;
+    }
 
     function copyToClip(str: any) {
-        console.log("str:", str)
+        // console.log("str:", str)
+        if (props.fImg) {
+            str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        }
+
+
         function listener(e: any) {
             e.clipboardData.setData("text/html", str);
             e.clipboardData.setData("text/plain", str);
@@ -90,6 +120,7 @@ export default function CustomizedMenus(props: any) {
                 variant="outlined"
                 disableElevation
                 onClick={handleClick}
+                startIcon={<Icon icon="entypo:export" />}
                 endIcon={<KeyboardArrowDownIcon />}
             // startIcon={<Icon icon="icon-park-outline:copy" style={{ color: "#fff", cursor: "pointer", fontSize: "15px" }} />}
             >
@@ -131,7 +162,8 @@ export default function CustomizedMenus(props: any) {
                         // }, 5000)
                     }}>
                     <MenuItem onClick={handleClose} disableRipple>
-                        <CopyAllIcon />
+                        {/* <Icon icon="clarity:code-line" /> */}
+                        <CodeIcon />
                         Copy HTML
                     </MenuItem>
 

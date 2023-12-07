@@ -80,6 +80,7 @@ import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
+import Icon from 'src/@core/components/icon'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -95,12 +96,13 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 const TableServerSide = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
-    const [sort, setSort] = useState<SortType>('asc')
+    const [sort, setSort] = useState<SortType>('desc')
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
-    const [sortColumn, setSortColumn] = useState<string>('full_name')
+    const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([]);
+    const [retryLoading, setRetryLoading] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
 
@@ -220,7 +222,7 @@ const TableServerSide = () => {
 
                                 <Button variant='outlined' onClick={e => {
                                     regenerateArticle(row.id)
-                                }} disabled={!row.article_type}>
+                                }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
                                     Retry
                                 </Button >
                                 :
@@ -247,9 +249,18 @@ const TableServerSide = () => {
 
         }
     ]
-    const regenerateArticle = (id: number | string) => {
+    const regenerateArticle = (id: number) => {
+        let retryID: boolean[] = [];
+        retryID[id] = true;
+
+        setRetryLoading(retryID)
+
         LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
+            retryID[id] = false;
+
+            setRetryLoading(retryID)
             setTimeout(() => {
+
                 LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
                     loadServerRows
                     setMainData(res.data);
@@ -259,11 +270,6 @@ const TableServerSide = () => {
                 })
             }, 3000)
 
-            // Swal.fire(
-            //     'Success',
-            //     'Article is Being Re-generated',
-            //     'success'
-            // )
 
             Swal.fire({
                 title: 'Success',
@@ -273,7 +279,9 @@ const TableServerSide = () => {
                 confirmButtonColor: "#2979FF",
             })
         }).catch(e => {
+            retryID[id] = false;
 
+            setRetryLoading(retryID)
             Swal.fire({
                 title: 'Error',
                 text: 'Unable to Re-generate.',
@@ -288,9 +296,7 @@ const TableServerSide = () => {
         LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            // console.log("data:", res.data)
-            // setTotal(res.data.total)
-            // setRows(loadServerRows(paginationModel.page, res.data.data))
+
         })
     }, [])
     useEffect(() => {
@@ -314,7 +320,6 @@ const TableServerSide = () => {
     }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
-
 
             const queryLowered = q.toLowerCase()
             const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))

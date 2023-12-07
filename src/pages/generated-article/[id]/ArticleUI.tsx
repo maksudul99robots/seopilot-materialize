@@ -18,7 +18,7 @@ import Outlines from './Outlines';
 import { getHeadings } from 'src/services/Headings';
 import Headings from './Headings';
 import SelectConnects from 'src/services/SelectConnects';
-
+import Image from 'next/image'
 
 type ArticleType = {
     id: number,
@@ -36,7 +36,7 @@ export default function ArticleIU(props: any) {
     const [article, setArticle] = useState<string>(props.article);
     const [outlines, setOutlines] = useState<string>(props.outlines);
     const [headings, setHeadings] = useState<any>([]);
-
+    const [fImg, setFimg] = useState<any>(props.fImg);
     const [copied, setCopied] = useState(false);
     const auth = useAuth()
 
@@ -64,29 +64,7 @@ export default function ArticleIU(props: any) {
     const download = () => {
         exportHtml(props.html)
     }
-    // const save = () => {
-    //     LoginRegistrationAPI.updateAIArticle({ id: articleObj?.id, output: html }).then((res) => {
-    //         if (res.status == 200) {
-    //             Swal.fire(
-    //                 'Success',
-    //                 'A verification email is sent.',
-    //                 'success'
-    //             )
-    //         } else {
-    //             Swal.fire(
-    //                 'Error',
-    //                 'Unable to save changes.',
-    //                 'error'
-    //             )
-    //         }
-    //     }).catch(e => {
-    //         Swal.fire(
-    //             'Error',
-    //             'Unable to save changes.',
-    //             'error'
-    //         )
-    //     })
-    // }
+
 
     function exportHtml(str: string) {
         const blob = new Blob([str], { type: "text/plain" });
@@ -123,8 +101,8 @@ export default function ArticleIU(props: any) {
                     </Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
-                    <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} />
-                    <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }}>Save Changes</Button>
+                    <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} fImg={fImg} />
+                    <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
                     <SelectConnects html={props.html} title={props.articleTopic} />
                 </Box>
 
@@ -146,7 +124,7 @@ export default function ArticleIU(props: any) {
 
                 <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
 
-                    <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
+                    {/* <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
@@ -167,15 +145,55 @@ export default function ArticleIU(props: any) {
 
 
                         </div>
-                    </Card>
+                    </Card> */}
 
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+
+                            <div style={{ width: "100%" }}>
+
+                                <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
+                                    <TextField fullWidth value={props.articleTopic}
+                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "100%" } }}
+                                        onChange={e => {
+                                            props.setTopic(e.target.value)
+                                        }}
+                                    />
+                                </div>
+
+
+                            </div>
+
+
+
+
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                            {
+                                fImg &&
+                                <div style={{ width: "600px", height: "400px", marginBottom: "40px", }}>
+                                    <img
+                                        src={fImg.urls.full}
+                                        width={600}
+                                        height={400}
+
+                                        alt="Featured image"
+                                    />
+                                    <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
+                                        Photo by <a href={fImg.user.links.html} target='_blank' className='colorLink'>{fImg.user.name}</a> on <a href='https://unsplash.com/' target='_blank' className='colorLink'>Unsplash</a>
+                                    </p>
+                                </div>
+                            }
+
+
+
+                        </div>
 
                         {
                             article &&
-                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} />
+                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} />
                         }
 
 

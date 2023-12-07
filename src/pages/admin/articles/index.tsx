@@ -95,10 +95,10 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 const TableServerSide = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
-    const [sort, setSort] = useState<SortType>('asc')
+    const [sort, setSort] = useState<SortType>('desc')
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
-    const [sortColumn, setSortColumn] = useState<string>('full_name')
+    const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 })
     const [mainData, setMainData] = useState<any>([]);
 

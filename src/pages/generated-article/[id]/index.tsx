@@ -26,6 +26,7 @@ export default function Page() {
     const [createdAt, setCreatedAt] = useState('');
     const [updatedAt, setUpdatedAt] = useState('');
     const [outlines, setOutlines] = useState('');
+    const [fImg, setFImg] = useState<any>(null);
     const [callTracker, setCallTracker] = useState(false);
     const [showOutlines, setShowOutlines] = useState(false);
     const [html, setHtml] = useState<string>('');
@@ -108,6 +109,11 @@ export default function Page() {
                         setCreatedAt(res?.data?.createdAt)
                         setUpdatedAt(res?.data?.updatedAt)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
+                        if (res?.data?.featured_img) {
+                            setFImg(JSON.parse(res?.data?.featured_img))
+                        } else {
+                            setFImg(res?.data?.featured_img)
+                        }
                     }, 1000)
                 } else {
 
@@ -137,7 +143,7 @@ export default function Page() {
                             setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                                 setShowArticleEditor(true);               //  ..  setTimeout()
                                 clearInterval(interval)
-                                console.log("inside interval cancel 212")
+                                console.log("inside interval cancel 212", res?.data)
 
                                 // setArticle(res?.data.content ? res.data.content : '')
                                 // setOutlines(res?.data.outline ? res.data.outline : '')
@@ -147,6 +153,12 @@ export default function Page() {
                                 setArticleTopic(res?.data?.topic)
                                 setCreatedAt(res?.data?.createdAt)
                                 setUpdatedAt(res?.data?.updatedAt)
+                                if (res?.data?.featured_img) {
+                                    setFImg(JSON.parse(res?.data?.featured_img))
+                                } else {
+                                    setFImg(res?.data?.featured_img)
+                                }
+
                             }, 3000)
                         } else {
                             console.log("inside interval cancel 400")
@@ -251,6 +263,7 @@ export default function Page() {
                         updatedAt={getDateTime(updatedAt)}
                         setPlainText={setPlainText}
                         plainText={plainText}
+                        fImg={fImg}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
