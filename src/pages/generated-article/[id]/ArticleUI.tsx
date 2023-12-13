@@ -30,6 +30,7 @@ type ArticleType = {
     createdAt: string,
     updatedAt: string
 }
+import axios from 'axios';
 
 export default function ArticleIU(props: any) {
     const router = useRouter()
@@ -37,6 +38,7 @@ export default function ArticleIU(props: any) {
     const [outlines, setOutlines] = useState<string>(props.outlines);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
+    const [imgSrc, setImgSrc] = useState('');
     const [copied, setCopied] = useState(false);
     const auth = useAuth()
 
@@ -65,6 +67,9 @@ export default function ArticleIU(props: any) {
         exportHtml(props.html)
     }
 
+    useEffect(() => {
+        getImgFromLocation(props.fImg?.links?.download_location);
+    }, [props.fImg])
 
     function exportHtml(str: string) {
         const blob = new Blob([str], { type: "text/plain" });
@@ -88,6 +93,12 @@ export default function ArticleIU(props: any) {
 
     }, [props.html])
 
+    const getImgFromLocation = async (url: string) => {
+        if (url && imgSrc == '') {
+            let img = await axios.get(url + '?client_id=' + process.env.NEXT_PUBLIC_UNSPLASH_CLIENT_ID)
+            setImgSrc(img.data.url);
+        }
+    }
     return (
         <>
 
@@ -105,8 +116,6 @@ export default function ArticleIU(props: any) {
                     <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
                     <SelectConnects html={props.html} title={props.articleTopic} />
                 </Box>
-
-
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <ToastContainer
@@ -121,32 +130,7 @@ export default function ArticleIU(props: any) {
                     pauseOnHover
                     theme="light"
                 />
-
                 <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
-
-                    {/* <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
-
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-
-                            <div style={{ width: "100%" }}>
-
-                                <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-                                    <TextField fullWidth value={props.articleTopic}
-                                        inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "100%" } }}
-                                        onChange={e => {
-                                            props.setTopic(e.target.value)
-                                        }}
-                                    />
-                                </div>
-
-
-                            </div>
-
-
-
-                        </div>
-                    </Card> */}
-
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
@@ -166,23 +150,20 @@ export default function ArticleIU(props: any) {
 
                             </div>
 
-
-
-
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                             {
                                 fImg &&
                                 <div style={{ width: "600px", height: "400px", marginBottom: "40px", }}>
                                     <img
-                                        src={fImg.urls.full}
+                                        src={imgSrc}
                                         width={600}
                                         height={400}
-
+                                        style={{ objectFit: "cover" }}
                                         alt="Featured image"
                                     />
                                     <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
-                                        Photo by <a href={fImg.user.links.html} target='_blank' className='colorLink'>{fImg.user.name}</a> on <a href='https://unsplash.com/' target='_blank' className='colorLink'>Unsplash</a>
+                                        Photo by <a href={fImg.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>{fImg.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a>
                                     </p>
                                 </div>
                             }

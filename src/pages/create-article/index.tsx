@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material'
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 import Switch from '@mui/material/Switch'
@@ -29,6 +29,7 @@ const Transition = forwardRef(function Transition(
 //   }
 // ** Type Import
 import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/components/custom-radio/types'
+
 
 // ** Demo Components Imports
 
@@ -99,7 +100,10 @@ export default function CreateArticle(props: any) {
     const [outlineSource, setOutlineSource] = useState<string>('system');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
+    const [faq, setFaq] = useState(false);
+    const [toc, setToc] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
+
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
@@ -123,7 +127,6 @@ export default function CreateArticle(props: any) {
         if (getArticleFromParams > 0) {
             LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
                 if (res.status == 212) {
-                    console.log("res", res.data)
                     setArticleType(res.data.article_type)
                     setArticleLength(res.data.article_length)
                     setCountry(res.data.country)
@@ -153,6 +156,8 @@ export default function CreateArticle(props: any) {
                         }
 
                     }
+                    setToc(res.data.toc)
+                    setFaq(res.data.faq)
                 }
             }).catch(e => {
                 console.log(e);
@@ -162,21 +167,6 @@ export default function CreateArticle(props: any) {
     }, [getArticleFromParams])
     const sumbit = () => {
 
-        // console.log({
-        //     article_type: articleType,
-        //     topic: topic,
-        //     keywords: keywords,
-        //     article_length: articleLength,
-        //     tone: tone,
-        //     language: language,
-        //     country: country,
-        //     links: JSON.stringify(links),
-        //     outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-        //     outline_source: outlineSource,
-        //     outline_url: outlineURL
-        // })
-
-        // return
 
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
@@ -198,7 +188,9 @@ export default function CreateArticle(props: any) {
                 links: JSON.stringify(links),
                 outlines: headings.length > 0 ? JSON.stringify(headings) : null,
                 outline_source: outlineSource,
-                outline_url: outlineURL
+                outline_url: outlineURL,
+                faq: faq,
+                toc: toc
             }).
                 then(res => {
                     // console.log("res:", res);
@@ -240,6 +232,8 @@ export default function CreateArticle(props: any) {
         }
 
     }
+
+
 
     //DND settings
     const editHeadingOnChange = (index: number, heading: string) => {
@@ -321,19 +315,7 @@ export default function CreateArticle(props: any) {
 
 
 
-    // useEffect(() => {
-    //     console.log("outline source:", outlineSource)
-    //     if (outlineSource == 'system') {
-    //         setShowOutline(false)
-    //         setHeadings([])
-    //     } else if (outlineSource == 'user') {
-    //         setHeadings(tempUserHeadings)
-    //         setShowOutline(true)
-    //     } else if (outlineSource == 'url') {
-    //         setHeadings(tempURLHeadings)
-    //         setShowOutline(false)
-    //     }
-    // }, [outlineSource])
+
 
     const handleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
         if (typeof prop === 'string') {
@@ -486,6 +468,41 @@ export default function CreateArticle(props: any) {
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Country</InputLabel>
                                 <GetCountryList country={country} setCountry={setCountry} />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <FormControl>
+                                {/* <FormLabel>Address Type</FormLabel> */}
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginTop: "20px", marginBottom: "10px" }}>
+                                    Do you want to include FAQ section in this article?
+                                </Typography>
+                                <RadioGroup
+                                    row
+                                    defaultValue={true}
+                                    aria-label='FAQ'
+                                    name='form-layouts-collapsible-address-radio'
+                                >
+                                    <FormControlLabel value={true} control={<Radio />} label='Yes' checked={faq} onClick={e => setFaq(true)} />
+                                    <FormControlLabel value={false} control={<Radio />} label='No' checked={!faq} onClick={e => setFaq(false)} />
+                                </RadioGroup>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl>
+                                {/* <FormLabel>Address Type</FormLabel> */}
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginBottom: "10px" }}>
+                                    Do you want to include TABLE OF CONTENT section in this article?
+                                </Typography>
+                                <RadioGroup
+                                    row
+                                    defaultValue={true}
+                                    aria-label='Table of content'
+                                    name='form-layouts-collapsible-address-radio'
+                                >
+                                    <FormControlLabel value={true} control={<Radio />} label='Yes' checked={toc} onClick={e => setToc(true)} />
+                                    <FormControlLabel value={false} control={<Radio />} label='No' checked={!toc} onClick={e => setToc(false)} />
+                                </RadioGroup>
                             </FormControl>
                         </Grid>
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>

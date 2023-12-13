@@ -101,7 +101,6 @@ const ResetPassword = () => {
         if (param) {
             try {
                 let decoded: any = jwt_decode(param);
-                console.log(decoded)
                 setEmail(decoded.email)
             } catch (e) {
                 // Swal.fire({

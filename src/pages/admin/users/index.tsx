@@ -45,7 +45,7 @@ type SortType = 'asc' | 'desc' | undefined | null
 // ** renders client column
 const renderClient = (params: GridRenderCellParams) => {
     const { row } = params
-    console.log("rows:", row)
+    // console.log("rows:", row)
     const stateNum = Math.floor(Math.random() * 6)
     const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
     const color = states[stateNum]
@@ -203,7 +203,6 @@ const TableServerSide = () => {
         LoginRegistrationAPI.getAllUsers({}).then(res => {
             loadServerRows
             setMainData(res.data);
-            console.log("data:", res.data)
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         })

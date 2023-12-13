@@ -332,7 +332,7 @@ const TableServerSide = () => {
                 <Alert severity='info' variant='standard' onClose={e => {
                     e.preventDefault();
                     setShowAlert(false)
-                }} sx={{ marginBottom: "20px", fontSize: "16px" }}><a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "none", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Here's</a> a Step By Step Guide to Connect a WordPress Website and Publish an Article on Your Website.</Alert>
+                }} sx={{ marginBottom: "20px", fontSize: "16px" }}><a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Here's</a> a Step By Step Guide to Connect a WordPress Website and Publish an Article on Your Website.</Alert>
             }
 
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>

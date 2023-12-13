@@ -45,7 +45,7 @@ type SortType = 'asc' | 'desc' | undefined | null
 // ** renders client column
 const renderClient = (params: GridRenderCellParams) => {
     const { row } = params
-    console.log("rows:", row)
+    // console.log("rows:", row)
     const stateNum = Math.floor(Math.random() * 6)
     const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
     const color = states[stateNum]

@@ -143,7 +143,6 @@ export default function Page() {
                             setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                                 setShowArticleEditor(true);               //  ..  setTimeout()
                                 clearInterval(interval)
-                                console.log("inside interval cancel 212", res?.data)
 
                                 // setArticle(res?.data.content ? res.data.content : '')
                                 // setOutlines(res?.data.outline ? res.data.outline : '')
@@ -161,7 +160,6 @@ export default function Page() {
 
                             }, 3000)
                         } else {
-                            console.log("inside interval cancel 400")
                             Swal.fire({
                                 html: '<h3>Invalid Article ID</h3>',
                                 icon: "error",

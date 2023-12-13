@@ -111,7 +111,7 @@ const AuthProvider = ({ children }: Props) => {
     LoginRegistrationAPI.login(params)
       .then(async response => {
 
-        console.log("response:", response.data.userData)
+        // console.log("response:", response.data.userData)
         params.rememberMe
           ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.accessToken)
           : null
@@ -369,7 +369,7 @@ const AuthProvider = ({ children }: Props) => {
         extensionId, // Extension ID
         { action: "removeToken" },
         (response) => {
-          console.log(response)
+          // console.log(response)
           if (response && response.success) {
             console.log("Token stored in extension's local storage.", response);
           } else {
@@ -392,9 +392,9 @@ const AuthProvider = ({ children }: Props) => {
         extensionId, // Extension ID
         { action: "removeToken" },
         (response) => {
-          console.log(response)
+          // console.log(response)
           if (response && response.success) {
-            console.log("Token stored in extension's local storage.", response);
+            // console.log("Token stored in extension's local storage.", response);
           } else {
             console.error("Failed to store token in extension.");
           }
