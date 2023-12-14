@@ -158,6 +158,9 @@ export default function CreateArticle(props: any) {
                     }
                     setToc(res.data.toc)
                     setFaq(res.data.faq)
+
+                    const resultArray = separateString(res.data.links);
+                    setLinks(resultArray)
                 }
             }).catch(e => {
                 console.log(e);
@@ -165,6 +168,18 @@ export default function CreateArticle(props: any) {
         }
 
     }, [getArticleFromParams])
+
+    function separateString(str: string) {
+        // Split the string by commas
+        const parts = str.split(',');
+
+        // Trim each part to remove leading and trailing whitespaces
+        const trimmedParts = parts.map((part: any) => part.trim());
+
+        return trimmedParts;
+    }
+
+
     const sumbit = () => {
 
 
