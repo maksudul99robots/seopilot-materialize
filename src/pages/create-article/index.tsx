@@ -407,7 +407,7 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
                             Article Length
                         </Typography>
                         <Grid container spacing={6} sx={{ paddingLeft: "25px" }}>
@@ -492,7 +492,7 @@ export default function CreateArticle(props: any) {
                             <FormControl>
                                 {/* <FormLabel>Address Type</FormLabel> */}
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginBottom: "10px" }}>
-                                    Do you want to include TABLE OF CONTENT section in this article?
+                                    Do you want to include TABLE OF CONTENTS section in this article?
                                 </Typography>
                                 <RadioGroup
                                     row
@@ -505,7 +505,7 @@ export default function CreateArticle(props: any) {
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
                             Outline Source
                         </Typography>
                         <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
@@ -523,6 +523,7 @@ export default function CreateArticle(props: any) {
                                 />
                             ))}
                         </Grid>
+
 
                         {
                             outlineSource == 'url' &&
@@ -557,6 +558,51 @@ export default function CreateArticle(props: any) {
                                 addnewHeading={addnewHeading}
                             />
                         }
+
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px" }}>
+                            External Links
+                        </Typography>
+                        {
+                            numberOfLinks.map((link, index) => {
+                                return (
+                                    <>
+                                        <Grid item sm={11} xs={12}>
+                                            <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
+                                                // console.log(e.target.value)
+                                                const newArray = [...links];
+                                                newArray[index] = e.target.value
+                                                setLinks(newArray);
+                                            }} InputProps={{
+                                                startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                            }} />
+                                        </Grid>
+                                        <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
+                                            <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
+                                                if (index != 0) {
+                                                    const newArray = [...numberOfLinks];
+                                                    newArray.splice(index, 1);
+                                                    setNumberOfLinks(newArray);
+
+                                                    const newLinks = [...links];
+                                                    newLinks.splice(index, 1);
+                                                    setLinks(newLinks);
+                                                }
+
+                                            }} />
+
+                                        </Grid>
+                                    </>
+
+                                )
+                            })
+                        }
+                        <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, }} onClick={() => {
+                            const newArray = [...numberOfLinks];
+                            newArray.push(1);
+                            setNumberOfLinks(newArray);
+                        }} startIcon={<Icon icon="gg:add" />}>
+                            Add Another Link
+                        </Button>
 
 
 
