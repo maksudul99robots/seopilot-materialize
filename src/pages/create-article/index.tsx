@@ -14,7 +14,7 @@ import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import DndList from 'src/services/DND/DndList'
 import { isValidURL } from 'src/services/URLChecker'
-import { object } from 'yup'
+import { number, object } from 'yup'
 // import CustomRadioIcons from 'src/components/CustomRadioIcons'
 import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
 import { makeid } from 'src/services/makeid'
@@ -161,6 +161,15 @@ export default function CreateArticle(props: any) {
 
                     const resultArray = separateString(res.data.links);
                     setLinks(resultArray)
+                    let x: any = [];
+                    resultArray.map((l, i) => {
+                        if (l) {
+
+                            x.push(1)
+                            setNumberOfLinks(x);
+                        }
+
+                    })
                 }
             }).catch(e => {
                 console.log(e);
@@ -178,6 +187,8 @@ export default function CreateArticle(props: any) {
         console.log("trimmedParts:", trimmedParts);
         return trimmedParts;
     }
+
+    console.log("setNumberOfLinks:", numberOfLinks)
 
 
     const sumbit = () => {
