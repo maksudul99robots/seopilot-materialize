@@ -188,8 +188,6 @@ export default function CreateArticle(props: any) {
         return trimmedParts;
     }
 
-    console.log("setNumberOfLinks:", numberOfLinks)
-
 
     const sumbit = () => {
 
