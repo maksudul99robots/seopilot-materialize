@@ -31,6 +31,7 @@ type ArticleType = {
     updatedAt: string
 }
 import axios from 'axios';
+import AiScoreComponent from 'src/components/ArticleScoreComponent';
 
 export default function ArticleIU(props: any) {
     const router = useRouter()
@@ -40,28 +41,63 @@ export default function ArticleIU(props: any) {
     const [fImg, setFimg] = useState<any>(props.fImg);
     const [imgSrc, setImgSrc] = useState('');
     const [copied, setCopied] = useState(false);
+    const [scoreObj, setScoreObj] = useState<any>({
+        words_score: 0,
+        style_score: 0,
+        factual_score: 0,
+        h_structure_score: 0,
+        bulletting_score: 0,
+        keywords_score: 0,
+        links_score: 0,
+        length_score: 0
+    });
     const auth = useAuth()
 
     useEffect(() => {
-        // if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
 
-            Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
+        // if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
+        if (auth?.user?.approle.role.id == 1) {
+            if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+                // Swal.fire('401',
+                //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                //     'error').then(() => {
+                //         router.push("/")
+                //     })
+
+                Swal.fire({
+                    title: '401',
+                    text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF",
+                }).then(() => {
+                    router.push("/")
+                })
+            }
+        }
+
+    }, [auth?.user?.plan])
+
+    useEffect(() => {
+        if (auth?.user?.approle.role.id == 2) {
+            LoginRegistrationAPI.getArticleScore({
+                id: props.id
+            }).then((res: any) => {
+                console.log("response from api:", res.data)
+                let x = {
+                    words_score: res.data.words_score ? res.data.words_score : 0,
+                    style_score: res.data.style_score ? res.data.style_score : 0,
+                    factual_score: res.data.factual_score ? res.data.factual_score : 0,
+                    h_structure_score: res.data.h_structure_score ? res.data.h_structure_score : 0,
+                    bulletting_score: res.data.bulletting_score ? res.data.bulletting_score : 0,
+                    keywords_score: res.data.keywords_score ? res.data.keywords_score : 0,
+                    links_score: res.data.links_score ? res.data.links_score : 0,
+                    length_score: res.data.length_score ? res.data.length_score : 0
+                }
+                setScoreObj(x);
             })
         }
-    }, [auth?.user?.plan])
+    }, [props.id])
     // console.log("articleObj", articleObj?.prompt)
     const download = () => {
         exportHtml(props.html)
@@ -180,19 +216,27 @@ export default function ArticleIU(props: any) {
 
                     </Card>
                 </Grid>
-                <Card
-                    sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", width: "40%", height: "100%" }}
-                >
-                    <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
-                        <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px", marginRight: "10px" }}>Your Input</Typography>
-                        <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show</Button>
-                    </Box>
+                <div style={{ width: "40%", }}>
+                    <Card
+                        sx={{ overflow: 'visible', padding: "10px 20px 30px 20px" }}
+                    >
+                        <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
+                            <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px", marginRight: "10px" }}>Your Input</Typography>
+                            <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show</Button>
+                        </Box>
 
-                    <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
+                        <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
 
-                    {/* <Outlines outlines={outlines} /> */}
-                    <Headings headings={headings} />
-                </Card>
+                        {/* <Outlines outlines={outlines} /> */}
+                        <Headings headings={headings} />
+                    </Card>
+                    {
+                        auth?.user?.approle.role.id == 2 &&
+                        <AiScoreComponent id={props.id} scoreObj={scoreObj} />
+                    }
+
+                </div>
+
 
 
             </Box>

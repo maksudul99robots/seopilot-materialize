@@ -34,12 +34,12 @@ code[class*='language-'] {
   color: #8f919b;
 }
 .add-icon-color:hover{
-  color: #2979FF;
+  color: #2979FF !important;
   cursor: pointer;
 }
 
 .close-icon-style{
-  color: #A5A6B1;
+  color: #b7b8c2;
   cursor: pointer;
 }
 .close-icon-style:hover{

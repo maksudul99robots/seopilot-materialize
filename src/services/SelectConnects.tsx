@@ -151,14 +151,14 @@ const SelectConnects = (props: any) => {
         {
           connects.length > 0 ?
             <Box sx={{
-              display: "flex",
-              justifyContent: "center",
+              display: "block",
+              // justifyContent: "center",
               // flexDirection: "column",
               // flexDirection: "row",
-              width: "100%"
+              // width: "100%"
             }}>
 
-              <div>
+              <div style={{ paddingLeft: "7%", paddingRight: "7%" }}>
                 <FormControl fullWidth sx={{
                   width: "100%", marginBottom: "20px"
                 }}>
