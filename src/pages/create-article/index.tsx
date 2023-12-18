@@ -184,7 +184,7 @@ export default function CreateArticle(props: any) {
 
         // Trim each part to remove leading and trailing whitespaces
         const trimmedParts = parts.map((part: any) => part.trim());
-        console.log("trimmedParts:", trimmedParts);
+        // console.log("trimmedParts:", trimmedParts);
         return trimmedParts;
     }
 

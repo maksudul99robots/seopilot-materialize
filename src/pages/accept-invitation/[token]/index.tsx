@@ -267,7 +267,7 @@ const CreateAccountInvite = () => {
                                 </form>
                             </CardContent>
                         </Card>
-                        <FooterIllustrationsV1 image={`/images/pages/auth-v1-register-mask-${theme.palette.mode}.png`} />
+                        <FooterIllustrationsV1 image={`/images/pages/logn3.png`} />
                     </Box>
                     :
                     <Box sx={{ margin: "0 auto", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>

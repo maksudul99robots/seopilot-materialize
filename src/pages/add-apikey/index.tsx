@@ -30,6 +30,7 @@ interface State {
 
 const AddApiKey = () => {
     const [apikey, setApikey] = useState('');
+    const [apikeyTmp, setApikeyTmp] = useState('');
     const [apikeyToShow, setApikeyToShow] = useState('');
     const [disable, setDisable] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -43,7 +44,7 @@ const AddApiKey = () => {
                 // console.log(res);
                 if (res.status == 200)
                     setApikey(res.data.apikey)
-                setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
             }).catch(e => {
                 console.log(e);
             })
@@ -61,8 +62,10 @@ const AddApiKey = () => {
     }, [])
     useEffect(() => {
 
-        if (apikey.length > 5) {
+        if (apikey.length > 5 && isEditable) {
             setDisable(false)
+        } else {
+            setDisable(true)
         }
 
     }, [apikey])
@@ -123,7 +126,7 @@ const AddApiKey = () => {
                             </Typography>
                             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                                 <Grid item xs={11} sx={{ paddingLeft: "20px" }}>
-                                    <TextField fullWidth label='Open-AI API Key' value={apikeyToShow} placeholder='Open-AI API Key' onChange={e => { setApikey(e.target.value); setApikeyToShow(e.target.value) }} disabled={!isEditable} />
+                                    <TextField fullWidth label='Open-AI API Key' value={apikey} placeholder='Open-AI API Key' onChange={e => { setApikey(e.target.value); }} disabled={!isEditable} />
                                 </Grid>
                                 <Grid item xs={1} sx={{ paddingLeft: "20px" }} >
                                     <Tooltip title={<p style={{ color: "white", fontSize: "15px" }}>Edit API Key</p>} placement="top-start">
@@ -132,11 +135,14 @@ const AddApiKey = () => {
                                             <Icon icon="akar-icons:edit" color={iconColor} onMouseOver={e => setIconColor("#2979FF")} onMouseOut={e => setIconColor("#999999")} cursor="pointer" fontSize={40} xlinkTitle="Edit"
                                                 onClick={e => {
                                                     if (!isEditable) {
-                                                        setApikeyToShow(apikey)
+                                                        // setApikeyToShow(apikey)
                                                         setIsEditable(true)
+                                                        setApikeyTmp(apikey)
+                                                        setApikey('')
                                                     } else {
                                                         setIsEditable(false)
-                                                        setApikeyToShow(apikey.substring(0, 10) + "*".repeat(apikey.length - 15) + apikey.slice(-5))
+                                                        setApikey(apikeyTmp)
+                                                        // setApikeyToShow(apikey.substring(0, 10) + "*".repeat(apikey.length - 15) + apikey.slice(-5))
                                                     }
                                                 }} />
                                         </div>

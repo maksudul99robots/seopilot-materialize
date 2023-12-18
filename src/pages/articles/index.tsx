@@ -133,7 +133,7 @@ const TableServerSide = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'output',
+            field: 'topic',
             headerName: 'AI Article',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -324,11 +324,11 @@ const TableServerSide = () => {
             const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
 
             const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
-            // console.log("dataAsc", dataAsc)
+            // console.log("dataAsc, sort, q, column", dataAsc, sort, q, column)
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
-                    item.output?.toLowerCase().includes(queryLowered) ||
+                    // item.output?.toLowerCase().includes(queryLowered) ||
                     item.topic?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
                     item.source?.toLowerCase().includes(queryLowered) ||
