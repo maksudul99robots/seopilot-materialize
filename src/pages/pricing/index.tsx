@@ -51,7 +51,7 @@ const Pricing = () => {
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
         perMonth: 19,
-        totalAnnual: 0
+        totalAnnual: 288
       },
       planBenefits: [
         { text: "Get on-page SEO", show: true },
@@ -76,7 +76,7 @@ const Pricing = () => {
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
       subtitle: 'Full access to the extension and upcomming features.',
       imgSrc: '/images/pages/copilot.svg',
-      yearlyPlan: { perMonth: 49, totalAnnual: 108 },
+      yearlyPlan: { perMonth: 49, totalAnnual: 588 },
       planBenefits: [
         { text: "Get on-page SEO", show: true },
         { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
@@ -99,7 +99,7 @@ const Pricing = () => {
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
       subtitle: 'Full access to the extension and upcomming features.',
       imgSrc: '/images/pages/captain.svg',
-      yearlyPlan: { perMonth: 99, totalAnnual: 108 },
+      yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
       planBenefits: [
         { text: "Get on-page SEO", show: true },
         { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
