@@ -98,6 +98,7 @@ export default function CreateArticle(props: any) {
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
+    const [model, setModel] = useState<string>('gpt-3.5-turbo-16k');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
@@ -214,7 +215,8 @@ export default function CreateArticle(props: any) {
                 outline_source: outlineSource,
                 outline_url: outlineURL,
                 faq: faq,
-                toc: toc
+                toc: toc,
+                model: model
             }).
                 then(res => {
                     // console.log("res:", res);
@@ -492,6 +494,26 @@ export default function CreateArticle(props: any) {
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Country</InputLabel>
                                 <GetCountryList country={country} setCountry={setCountry} />
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item sm={6} xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>AI Model</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='AI Model'
+                                    label='AI Model'
+                                    labelId='AI Model'
+                                    defaultValue={model}
+                                    onChange={e => {
+                                        setModel(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='gpt-3.5-turbo'>GPT-3.5-TURBO</MenuItem>
+                                    <MenuItem value='gpt-3.5-turbo-16k'>GPT-3.5-TURBO-16k</MenuItem>
+                                    <MenuItem value='gpt-4'>GPT-4</MenuItem>
+                                </Select>
                             </FormControl>
                         </Grid>
 
