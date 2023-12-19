@@ -497,7 +497,7 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
-                        <Grid item sm={6} xs={12}>
+                        <Grid item sm={12} xs={12}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>AI Model</InputLabel>
                                 <Select
