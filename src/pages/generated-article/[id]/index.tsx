@@ -116,11 +116,14 @@ export default function Page() {
                         } else {
                             setFImg(res?.data?.featured_img)
                         }
-                        console.log("res.data.token_used:", res.data.token_used)
-                        console.log("price:", res.data.price)
-                        let tokenUsed = JSON.parse(res.data.token_used)
-                        setTokens(tokenUsed.total_tokens)
-                        setPrice(res.data.price.toFixed(4))
+                        // console.log("res.data.token_used:", res.data.token_used)
+                        // console.log("price:", res.data.price)
+                        if (res.data.token_used) {
+                            let tokenUsed = JSON.parse(res.data.token_used)
+                            setTokens(tokenUsed.total_tokens)
+                            setPrice(res.data?.price?.toFixed(4))
+                        }
+
                     }, 1000)
                 } else {
 
