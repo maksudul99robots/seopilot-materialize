@@ -98,7 +98,7 @@ export default function CreateArticle(props: any) {
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
-    const [model, setModel] = useState<string>('gpt-3.5-turbo-16k');
+    const [model, setModel] = useState<string>('gpt-3.5-turbo-16k-0613');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
@@ -511,7 +511,7 @@ export default function CreateArticle(props: any) {
                                     }}
                                 >
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
-                                    <MenuItem value='gpt-3.5-turbo-16k-1106'>GPT-3.5-TURBO-16k</MenuItem>
+                                    <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem>
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                 </Select>
                             </FormControl>
