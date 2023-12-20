@@ -83,7 +83,7 @@ export default function ArticleIU(props: any) {
             LoginRegistrationAPI.getArticleScore({
                 id: props.id
             }).then((res: any) => {
-                console.log("response from api:", res.data)
+                // console.log("response from api:", res.data)
                 let x = {
                     words_score: res.data.words_score ? res.data.words_score : 0,
                     style_score: res.data.style_score ? res.data.style_score : 0,
@@ -144,8 +144,9 @@ export default function ArticleIU(props: any) {
                         Last Updated: {props.updatedAt}
                     </Typography>
                     <Typography variant='subtitle2' sx={{}}>
-                        Word Count: {props.wordCount} words
+                        Word Count: {props.wordCount} words | Token Used: {props.tokens} | Cost: ${props.price} (Approximately)
                     </Typography>
+
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
                     <CustomizedMenus html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} fImg={fImg} />

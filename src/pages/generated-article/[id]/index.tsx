@@ -32,6 +32,8 @@ export default function Page() {
     const [html, setHtml] = useState<string>('');
     const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
+    const [tokens, setTokens] = useState<number | string>(0);
+    const [price, setPrice] = useState<number | string>(0);
     const router = useRouter()
 
     useEffect(() => {
@@ -74,7 +76,7 @@ export default function Page() {
                     }
                     setShowOutlines(true)
                 } else if (res.status == 212) {
-                    // console.log("returned value:", res.data)
+                    console.log("returned value:", res.data)
                     setCurrentStep(5);
                     setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                         setShowArticleEditor(true);               //  ..  setTimeout()
@@ -114,6 +116,11 @@ export default function Page() {
                         } else {
                             setFImg(res?.data?.featured_img)
                         }
+                        console.log("res.data.token_used:", res.data.token_used)
+                        console.log("price:", res.data.price)
+                        let tokenUsed = JSON.parse(res.data.token_used)
+                        setTokens(tokenUsed.total_tokens)
+                        setPrice(res.data.price.toFixed(4))
                     }, 1000)
                 } else {
 
@@ -157,6 +164,11 @@ export default function Page() {
                                 } else {
                                     setFImg(res?.data?.featured_img)
                                 }
+                                console.log("res.data.token_used:", res.data.token_used)
+                                console.log("price:", res.data.price)
+                                let tokenUsed = JSON.parse(res.data.token_used)
+                                setTokens(tokenUsed.total_tokens)
+                                setPrice(res.data.price.toFixed(4))
 
                             }, 3000)
                         } else {
@@ -262,6 +274,8 @@ export default function Page() {
                         setPlainText={setPlainText}
                         plainText={plainText}
                         fImg={fImg}
+                        price={price}
+                        tokens={tokens}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
