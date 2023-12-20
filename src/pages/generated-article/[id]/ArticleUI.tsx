@@ -34,6 +34,7 @@ import axios from 'axios';
 import AiScoreComponent from 'src/components/ArticleScoreComponent';
 
 export default function ArticleIU(props: any) {
+    console.log("props.token:", props.tokens)
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
     const [outlines, setOutlines] = useState<string>(props.outlines);
@@ -144,7 +145,7 @@ export default function ArticleIU(props: any) {
                         Last Updated: {props.updatedAt}
                     </Typography>
                     <Typography variant='subtitle2' sx={{}}>
-                        Word Count: {props.wordCount} words {props.token != 0 ? `| Token Used: ${props.tokens} | Cost: ${props.price} (Approximately)` : ''}
+                        Word Count: {props.wordCount} words {(props.tokens != 0 && props.tokens != undefined && props.tokens != null) ? `| Token Used: ${props.tokens} | Cost: $${props.price} (Approximately)` : ''}
                     </Typography>
 
                 </Box>
