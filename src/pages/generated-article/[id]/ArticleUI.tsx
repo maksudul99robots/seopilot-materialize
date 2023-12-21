@@ -145,7 +145,7 @@ export default function ArticleIU(props: any) {
                         Last Updated: {props.updatedAt}
                     </Typography>
                     <Typography variant='subtitle2' sx={{}}>
-                        Word Count: {props.wordCount} words {(props.tokens != 0 && props.tokens != undefined && props.tokens != null) ? `| Token Used: ${props.tokens} | Cost: $${props.price} (Approximately)` : ''}
+                        Word Count: {props.wordCount} words {(props.tokens != 0 && props.tokens != undefined && props.tokens != null) ? `| Token Used: ${props.tokens} | Cost: ~$${props.price}` : ''}
                     </Typography>
 
                 </Box>
