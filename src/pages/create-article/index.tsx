@@ -29,6 +29,7 @@ const Transition = forwardRef(function Transition(
 //   }
 // ** Type Import
 import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/components/custom-radio/types'
+import SwitchesCustomized from 'src/components/SwitchesCustomized'
 
 
 // ** Demo Components Imports
@@ -104,6 +105,8 @@ export default function CreateArticle(props: any) {
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
+    const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
+    const [showFeaturedImg, setShowFeaturedImg] = useState(false);
 
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
@@ -192,7 +195,6 @@ export default function CreateArticle(props: any) {
 
     const sumbit = () => {
 
-
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
                 title: 'Error!',
@@ -216,7 +218,8 @@ export default function CreateArticle(props: any) {
                 outline_url: outlineURL,
                 faq: faq,
                 toc: toc,
-                model: model
+                model: model,
+                showFeaturedImg: showFeaturedImg
             }).
                 then(res => {
                     // console.log("res:", res);
@@ -377,6 +380,10 @@ export default function CreateArticle(props: any) {
         }
     }
 
+    // useEffect(() => {
+    //     console.log("faq toc, showFeaturedImg:...", faq, toc, showFeaturedImg)
+    // }, [faq, toc, showFeaturedImg])
+
     return (
         <Card>
             <Card>
@@ -394,6 +401,7 @@ export default function CreateArticle(props: any) {
                         </Typography>
                         <Typography variant='body2'>Enter your topic and target keywords, and watch Seopilot research and generate article for you</Typography>
                     </Box>
+
                     <Grid container spacing={6}>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
@@ -517,9 +525,8 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormControl>
-                                {/* <FormLabel>Address Type</FormLabel> */}
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginTop: "20px", marginBottom: "10px" }}>
                                     Do you want to include FAQ section in this article?
                                 </Typography>
@@ -536,7 +543,6 @@ export default function CreateArticle(props: any) {
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl>
-                                {/* <FormLabel>Address Type</FormLabel> */}
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginBottom: "10px" }}>
                                     Do you want to include TABLE OF CONTENTS section in this article?
                                 </Typography>
@@ -550,7 +556,9 @@ export default function CreateArticle(props: any) {
                                     <FormControlLabel value={false} control={<Radio />} label='No' checked={!toc} onClick={e => setToc(false)} />
                                 </RadioGroup>
                             </FormControl>
-                        </Grid>
+                        </Grid> */}
+
+
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
                             Outline Source
                         </Typography>
@@ -605,14 +613,24 @@ export default function CreateArticle(props: any) {
                             />
                         }
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px" }}>
+
+
+                        <Grid item xs={12} className='add-icon-color'>
+                            <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
+                                <Typography sx={{ marginRight: "10px" }} className='add-icon-color'>Advanced Settings</Typography>
+                                {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
+                            </div>
+
+                        </Grid>
+                        {/* <Box > */}
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "block" : "none" }}>
                             External Links
                         </Typography>
                         {
                             numberOfLinks.map((link, index) => {
                                 return (
                                     <>
-                                        <Grid item sm={11} xs={12}>
+                                        <Grid item sm={11} xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
                                             <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
                                                 // console.log(e.target.value)
                                                 const newArray = [...links];
@@ -622,7 +640,7 @@ export default function CreateArticle(props: any) {
                                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                                             }} />
                                         </Grid>
-                                        <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start" }}>
+                                        <Grid item sm={1} sx={{ display: showAdditionalSettings ? "flex" : "none", alignItems: "center", justifyContent: "start" }}>
                                             <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
                                                 if (index != 0) {
                                                     const newArray = [...numberOfLinks];
@@ -642,7 +660,7 @@ export default function CreateArticle(props: any) {
                                 )
                             })
                         }
-                        <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, }} onClick={() => {
+                        <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
                             const newArray = [...numberOfLinks];
                             newArray.push(1);
                             setNumberOfLinks(newArray);
@@ -650,7 +668,19 @@ export default function CreateArticle(props: any) {
                             Add Another Link
                         </Button>
 
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} />
 
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include TABLE OF CONTENTS" isChecked={toc} onClick={() => setToc(!toc)} />
+
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
+
+                        </Grid>
+                        {/* </Box> */}
 
 
                     </Grid>
