@@ -41,7 +41,7 @@ export default function AdminDetailsComponent(props: any) {
 
             </Box>
             {
-                props.keywordByKeybert.length > 0 ?
+                props.keywordByKeybert?.length > 0 ?
 
                     props.keywordByKeybert.map((h: any, i: any) => {
                         return (
