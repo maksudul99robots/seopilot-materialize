@@ -197,7 +197,7 @@ export default function ArticleIU(props: any) {
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
                             {
-                                fImg &&
+                                fImg?.user?.links &&
                                 <div style={{ width: "600px", height: "400px", marginBottom: "40px", }}>
                                     <img
                                         src={imgSrc}
