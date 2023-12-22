@@ -95,7 +95,7 @@ export default function CustomizedMenus(props: any) {
 
     function copyToClip(str: any) {
         // console.log("str:", str)
-        if (props.fImg) {
+        if (props.fImg?.urls?.full) {
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
         }
 

@@ -19,7 +19,7 @@ const EditorControlled = (props: any) => {
 
   useEffect(() => {
 
-    if (props.fImg) {
+    if (props.fImg?.urls?.full) {
       props.setHtml(insertImageAfterFirstH1(convertToHTML(value.getCurrentContent()), props.fImg.urls.full));
 
     } else {
