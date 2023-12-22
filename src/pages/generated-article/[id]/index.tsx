@@ -32,7 +32,8 @@ export default function Page() {
     const [html, setHtml] = useState<string>('');
     const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
-    const [tokens, setTokens] = useState<number | string>(0);
+    const [tokens, setTokens] = useState<any>(null);
+    const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
     const [price, setPrice] = useState<number | string>(0);
     const router = useRouter()
 
@@ -120,9 +121,11 @@ export default function Page() {
                         // console.log("price:", res.data.price)
                         if (res.data.token_used) {
                             let tokenUsed = JSON.parse(res.data.token_used)
-                            setTokens(tokenUsed.total_tokens)
+                            setTokens(tokenUsed)
                             setPrice(res.data?.price?.toFixed(4))
                         }
+
+                        setKeywordsByKeyBert(res.data.keyword_by_keybert)
 
                     }, 1000)
                 } else {
@@ -170,7 +173,7 @@ export default function Page() {
 
                                 if (res.data.token_used) {
                                     let tokenUsed = JSON.parse(res.data.token_used)
-                                    setTokens(tokenUsed.total_tokens)
+                                    setTokens(tokenUsed)
                                     setPrice(res.data?.price?.toFixed(4))
                                 }
 
@@ -280,6 +283,7 @@ export default function Page() {
                         fImg={fImg}
                         price={price}
                         tokens={tokens}
+                        keywordByKeybert={keywordByKeybert}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

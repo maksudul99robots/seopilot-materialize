@@ -1,9 +1,9 @@
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material'
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 import Switch from '@mui/material/Switch'
 import { Ref, useState, forwardRef, ReactElement, useEffect, ChangeEvent } from 'react'
-
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
 import Fade, { FadeProps } from '@mui/material/Fade'
@@ -30,7 +30,7 @@ const Transition = forwardRef(function Transition(
 // ** Type Import
 import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/components/custom-radio/types'
 import SwitchesCustomized from 'src/components/SwitchesCustomized'
-
+import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Demo Components Imports
 
@@ -81,6 +81,18 @@ const articleILngthIcons: IconType[] = [
     { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
 ]
 
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
+
+
 export default function CreateArticle(props: any) {
     // ** States
     const [show, setShow] = useState<boolean>(false)
@@ -104,6 +116,7 @@ export default function CreateArticle(props: any) {
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
     const [showFeaturedImg, setShowFeaturedImg] = useState(false);
@@ -147,8 +160,6 @@ export default function CreateArticle(props: any) {
                                 setHeadings(h)
                             }
                         }
-
-
                     }
                     if (res.data.outline_source == 'user') {
                         if (res.data.raw_outline) {
@@ -205,6 +216,7 @@ export default function CreateArticle(props: any) {
                 confirmButtonColor: "#2979FF"
             })
         } else {
+            setLoading(true)
             LoginRegistrationAPI.generateSaasArticle({
                 article_type: articleType,
                 topic: topic,
@@ -224,8 +236,10 @@ export default function CreateArticle(props: any) {
             }).
                 then(res => {
                     // console.log("res:", res);
+                    setLoading(false)
                     router.push("/generated-article/" + res.data.id)
                 }).catch(e => {
+                    setLoading(false)
                     console.log("error:", e);
                     if (e.response.status == 400) {
                         Swal.fire({
@@ -438,7 +452,7 @@ export default function CreateArticle(props: any) {
                             }} value={keywords} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }} />
-                            <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to seperate each keyword</FormHelperText>
+                            <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to separate each keyword</FormHelperText>
                         </Grid>
 
 
@@ -560,8 +574,20 @@ export default function CreateArticle(props: any) {
                         </Grid> */}
 
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
                             Outline Source
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
+                                    <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
+                                    <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
+
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                </div>
+                            </LightTooltip >
                         </Typography>
                         <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
                             {data.map((item, index) => (
@@ -618,14 +644,25 @@ export default function CreateArticle(props: any) {
 
                         <Grid item xs={12} className='add-icon-color'>
                             <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
-                                <Typography sx={{ marginRight: "10px" }} className='add-icon-color'>Advanced Settings</Typography>
+                                <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "18px" }} className='add-icon-color'>Advanced Settings</Typography>
                                 {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
                             </div>
 
                         </Grid>
                         {/* <Box > */}
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "block" : "none" }}>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
                             External Links
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    Add external links in the article. You can add multiple external links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as external link in the article.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                </div>
+                            </LightTooltip >
+
+
                         </Typography>
                         {
                             numberOfLinks.map((link, index) => {
@@ -669,8 +706,16 @@ export default function CreateArticle(props: any) {
                             Add Another Link
                         </Button>
 
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} />
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    In the future release, you'll be able to choose between multiple feartured images.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                </div>
+                            </LightTooltip >
 
                         </Grid>
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
@@ -693,7 +738,10 @@ export default function CreateArticle(props: any) {
                         pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(32.5)} !important`]
                     }}
                 >
-                    <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} onClick={() => sumbit()}>
+                    <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
+                        onClick={() => sumbit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
+                        disabled={loading}
+                    >
                         Create Article
                     </Button>
                     {/* <Button variant='outlined' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} color='secondary' >

@@ -32,12 +32,12 @@ type ArticleType = {
 }
 import axios from 'axios';
 import AiScoreComponent from 'src/components/ArticleScoreComponent';
+import AdminDetailsComponent from './AdminDetailsComponent';
 
 export default function ArticleIU(props: any) {
     console.log("props.token:", props.tokens)
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
-    const [outlines, setOutlines] = useState<string>(props.outlines);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
     const [imgSrc, setImgSrc] = useState('');
@@ -145,7 +145,13 @@ export default function ArticleIU(props: any) {
                         Last Updated: {props.updatedAt}
                     </Typography>
                     <Typography variant='subtitle2' sx={{}}>
-                        Word Count: {props.wordCount} words {(props.tokens != 0 && props.tokens != undefined && props.tokens != null) ? `| Token Used: ${props.tokens} | Cost: ~$${props.price}` : ''}
+                        Word Count: {props.wordCount} words
+                        {
+                            (props.tokens != 0 && props.tokens != undefined && props.tokens != null) ?
+                                ` | Tokens Used: ${props.tokens.total_tokens} 
+                                | Cost: ~$${props.price}` : ''
+
+                        }
                     </Typography>
 
                 </Box>
@@ -219,6 +225,13 @@ export default function ArticleIU(props: any) {
                     </Card>
                 </Grid>
                 <div style={{ width: "40%", }}>
+                    {
+                        auth?.user?.approle.role.id == 2 &&
+                        <Card sx={{ marginBottom: "10px" }}>
+                            <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={JSON.parse(props.keywordByKeybert)} />
+                        </Card>
+                    }
+
                     <Card
                         sx={{ overflow: 'visible', padding: "10px 20px 30px 20px" }}
                     >
