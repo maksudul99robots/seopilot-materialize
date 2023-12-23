@@ -31,7 +31,7 @@ const Transition = forwardRef(function Transition(
 import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/components/custom-radio/types'
 import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import CustomChip from 'src/@core/components/mui/chip'
-
+import { TagsInput } from "react-tag-input-component";
 // ** Demo Components Imports
 
 interface IconType {
@@ -101,7 +101,7 @@ export default function CreateArticle(props: any) {
     //Values
     const [articleType, setArticleType] = useState('blog')
     const [topic, setTopic] = useState('')
-    const [keywords, setKeywords] = useState('')
+    const [keywords, setKeywords] = useState<any>([])
     const [tone, setTone] = useState('')
     const [language, setLanguage] = useState('English')
     const [links, setLinks] = useState<Array<string>>([])
@@ -447,11 +447,19 @@ export default function CreateArticle(props: any) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
+                            {/* <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
                                 setKeywords(e.target.value)
                             }} value={keywords} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
-                            }} />
+                            }} /> */}
+
+                            <TagsInput
+                                value={keywords}
+                                onChange={setKeywords}
+                                name="fruits"
+                                placeHolder="enter fruits"
+                            />
+                            {/* <em>press enter to add new tag</em> */}
                             <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to separate each keyword</FormHelperText>
                         </Grid>
 
