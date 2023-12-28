@@ -33,6 +33,7 @@ type ArticleType = {
 import axios from 'axios';
 import AiScoreComponent from 'src/components/ArticleScoreComponent';
 import AdminDetailsComponent from './AdminDetailsComponent';
+import { PromptComponent } from 'src/components/PromptComponent';
 
 export default function ArticleIU(props: any) {
     console.log("props.token:", props.tokens)
@@ -224,13 +225,20 @@ export default function ArticleIU(props: any) {
 
                     </Card>
                 </Grid>
+
                 <div style={{ width: "40%", }}>
                     {
                         auth?.user?.approle.role.id == 2 &&
-                        <Card sx={{ marginBottom: "10px" }}>
-                            <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={JSON.parse(props.keywordByKeybert)} />
-                        </Card>
+                        <>
+                            <PromptComponent id={props.id} />
+                            <Card sx={{ marginBottom: "10px" }}>
+                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={JSON.parse(props.keywordByKeybert)} />
+                            </Card>
+                        </>
+
                     }
+
+
 
                     <Card
                         sx={{ overflow: 'visible', padding: "10px 20px 30px 20px" }}
