@@ -149,7 +149,11 @@ export default function CreateArticle(props: any) {
                     setCountry(res.data.country)
                     setLanguage(res.data.language)
                     setTone(res.data.tone)
-                    setKeywords(res.data.keywords)
+                    if (res.data.keywords) {
+                        const keywordArray = separateString(res.data.keywords);
+                        setKeywords(keywordArray)
+                    }
+
                     setTopic(res.data.topic)
                     setOutlineSource(res.data.outline_source)
                     if (res.data.outline_url) {
@@ -220,7 +224,7 @@ export default function CreateArticle(props: any) {
             LoginRegistrationAPI.generateSaasArticle({
                 article_type: articleType,
                 topic: topic,
-                keywords: keywords,
+                keywords: convertArrayToCsvKeywords(keywords),
                 article_length: articleLength,
                 tone: tone,
                 language: language,
@@ -277,6 +281,21 @@ export default function CreateArticle(props: any) {
 
     }
 
+    const convertArrayToCsvKeywords = (keywordArray: any) => {
+        let csvKeywords = '';
+        if (keywordArray.length > 0) {
+            for (let i = 0; i < keywordArray.length; i++) {
+                if (csvKeywords == '') {
+                    csvKeywords = keywordArray[i];
+                } else {
+                    csvKeywords = csvKeywords + ',' + keywordArray[i];
+                }
+            }
+
+        }
+
+        return csvKeywords;
+    }
 
 
     //DND settings
@@ -445,20 +464,22 @@ export default function CreateArticle(props: any) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
+                            {/* <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
                                 setKeywords(e.target.value)
                             }} value={keywords} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
-                            }} />
+                            }} /> */}
 
-                            {/* <TagsInput
+                            <Typography variant='body1' sx={{ fontSize: "15px", fontWeight: 500, marginBottom: "5px" }}>
+                                Target Keywords
+                            </Typography>
+                            <TagsInput
                                 value={keywords}
                                 onChange={setKeywords}
-                                name="fruits"
-                                placeHolder="enter fruits"
-                            /> */}
+                                name="Keywords"
+                            />
                             {/* <em>press enter to add new tag</em> */}
-                            <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to separate each keyword</FormHelperText>
+                            <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword</FormHelperText>
                         </Grid>
 
 
