@@ -395,9 +395,7 @@ export default function CreateArticle(props: any) {
         }
     }
 
-    // useEffect(() => {
-    //     console.log("faq toc, showFeaturedImg:...", faq, toc, showFeaturedImg)
-    // }, [faq, toc, showFeaturedImg])
+
 
     return (
         <Card>
@@ -447,18 +445,18 @@ export default function CreateArticle(props: any) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            {/* <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
+                            <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
                                 setKeywords(e.target.value)
                             }} value={keywords} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
-                            }} /> */}
+                            }} />
 
-                            <TagsInput
+                            {/* <TagsInput
                                 value={keywords}
                                 onChange={setKeywords}
                                 name="fruits"
                                 placeHolder="enter fruits"
-                            />
+                            /> */}
                             {/* <em>press enter to add new tag</em> */}
                             <FormHelperText sx={{ fontSize: "14px" }}>Use comma (,) to separate each keyword</FormHelperText>
                         </Grid>
