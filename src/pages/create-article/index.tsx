@@ -102,7 +102,7 @@ export default function CreateArticle(props: any) {
     const [articleType, setArticleType] = useState('blog')
     const [topic, setTopic] = useState('')
     const [keywords, setKeywords] = useState<any>([])
-    const [tone, setTone] = useState('')
+    const [tone, setTone] = useState('Clear, Knowledgable, Confident')
     const [language, setLanguage] = useState('English')
     const [links, setLinks] = useState<Array<string>>([])
     const [country, setCountry] = useState<string>('United States of America (USA)')
@@ -208,8 +208,44 @@ export default function CreateArticle(props: any) {
         return trimmedParts;
     }
 
+    const setToneIfMatchesExistingTones = (newTone: string) => {
+        const existingTones = [
+            'Clear, Knowledgeable, Confident',
+            'Professional',
+            'Empathetic',
+            'Informative',
+            'Casual',
+            'Excited',
+            'Formal',
+            'Friendly',
+            'Humorous',
+        ];
+        if (existingTones.includes(newTone)) {
+            setTone(newTone)
+        } else {
+            setTone('Clear, Knowledgeable, Confident')
+        }
+    }
 
     const sumbit = () => {
+        console.log({
+            article_type: articleType,
+            topic: topic,
+            keywords: convertArrayToCsvKeywords(keywords),
+            article_length: articleLength,
+            tone: tone,
+            language: language,
+            country: country,
+            links: JSON.stringify(links),
+            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+            outline_source: outlineSource,
+            outline_url: outlineURL,
+            faq: faq,
+            toc: toc,
+            model: model,
+            showFeaturedImg: showFeaturedImg
+        })
+        return
 
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
@@ -505,12 +541,37 @@ export default function CreateArticle(props: any) {
 
 
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
                                 setTone(e.target.value)
                             }} value={tone} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }} />
+                        </Grid> */}
+                        <Grid item sm={12} xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>Article Tone</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='Article Tone'
+                                    label='Article Tone'
+                                    labelId='Clear, Knowledgable, Confident'
+                                    defaultValue={tone}
+                                    onChange={e => {
+                                        setTone(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='Clear, Knowledgable, Confident'>Clear, Knowledgable, Confident</MenuItem>
+                                    <MenuItem value='Professional'>Professional</MenuItem>
+                                    <MenuItem value='Informative'>Informative</MenuItem>
+                                    <MenuItem value='Empathetic'>Empathetic</MenuItem>
+                                    <MenuItem value='Casual'>Casual</MenuItem>
+                                    <MenuItem value='Excited'>Excited</MenuItem>
+                                    <MenuItem value='Formal'>Formal</MenuItem>
+                                    <MenuItem value='Friendly'>Friendly</MenuItem>
+                                    <MenuItem value='Humorous'>Humorous</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <FormControl fullWidth>
