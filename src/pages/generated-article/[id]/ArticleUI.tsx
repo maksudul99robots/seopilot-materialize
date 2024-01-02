@@ -44,6 +44,7 @@ export default function ArticleIU(props: any) {
     const [imgSrc, setImgSrc] = useState('');
     const [copied, setCopied] = useState(false);
     const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
+    const [isKeybert, setIsKeybert] = useState(true)
     const [scoreObj, setScoreObj] = useState<any>({
         words_score: 0,
         style_score: 0,
@@ -108,7 +109,8 @@ export default function ArticleIU(props: any) {
 
     useEffect(() => {
         if (props.keywords && props.keywords.length > 0) {
-            setKeywords(props.keywords)
+            setKeywords(props.keywords);
+            setIsKeybert(false);
         }
     }, [props.keywords])
 
@@ -239,7 +241,7 @@ export default function ArticleIU(props: any) {
                         <>
                             <PromptComponent id={props.id} />
                             <Card sx={{ marginBottom: "10px" }}>
-                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} />
+                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} isKeybert={isKeybert} />
                             </Card>
                         </>
 
