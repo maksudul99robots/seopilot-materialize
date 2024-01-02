@@ -36,7 +36,7 @@ import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 
 export default function ArticleIU(props: any) {
-    console.log("props.token:", props.tokens)
+    console.log("props.token:", props)
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
