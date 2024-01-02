@@ -561,8 +561,8 @@ export default function CreateArticle(props: any) {
                                     }}
                                 >
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
-                                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem>
-                                    <MenuItem value='gpt-4'>GPT-4</MenuItem> */}
+                                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
+                                    <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
