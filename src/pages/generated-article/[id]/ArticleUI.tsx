@@ -43,6 +43,7 @@ export default function ArticleIU(props: any) {
     const [fImg, setFimg] = useState<any>(props.fImg);
     const [imgSrc, setImgSrc] = useState('');
     const [copied, setCopied] = useState(false);
+    const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
     const [scoreObj, setScoreObj] = useState<any>({
         words_score: 0,
         style_score: 0,
@@ -104,6 +105,12 @@ export default function ArticleIU(props: any) {
     const download = () => {
         exportHtml(props.html)
     }
+
+    useEffect(() => {
+        if (props.keywords && props.keywords.length > 0) {
+            setKeywords(props.keywords)
+        }
+    }, [props.keywords])
 
     useEffect(() => {
         getImgFromLocation(props.fImg?.links?.download_location);
@@ -232,7 +239,7 @@ export default function ArticleIU(props: any) {
                         <>
                             <PromptComponent id={props.id} />
                             <Card sx={{ marginBottom: "10px" }}>
-                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={JSON.parse(props.keywordByKeybert)} />
+                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} />
                             </Card>
                         </>
 

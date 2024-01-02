@@ -1,16 +1,19 @@
 import { Card, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { LoginRegistrationAPI } from "src/services/API"
 
 export const PromptComponent = (props: any) => {
     const [outlinePrompt, setOutlinePrompt] = useState('');
     const [articlePrompt, setArticlePrompt] = useState('');
-    LoginRegistrationAPI.getPrompt({ id: props.id }).then(res => {
-        setOutlinePrompt(res.data.outline_prompt)
-        setArticlePrompt(res.data.article_prompt)
-    }).catch(e => {
-        console.log(e)
-    })
+    useEffect(() => {
+        LoginRegistrationAPI.getPrompt({ id: props.id }).then(res => {
+            setOutlinePrompt(res.data.outline_prompt)
+            setArticlePrompt(res.data.article_prompt)
+        }).catch(e => {
+            console.log(e)
+        })
+    }, [])
+
     return (
         <Card sx={{ padding: "20px", marginBottom: "10px" }}>
             <Typography variant="h5" sx={{ marginBottom: "10px" }}>Outline Prompt</Typography>
