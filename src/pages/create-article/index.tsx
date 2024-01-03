@@ -467,7 +467,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12}>
 
 
-                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", display: "flex" }}>
                                 Target Keywords
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -509,18 +509,7 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
-                            Language And Country
-                            <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    If the country is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                </div>
-                            </LightTooltip >
-                        </Typography>
+
 
                         <Grid item xs={12}>
                             <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
@@ -529,40 +518,57 @@ export default function CreateArticle(props: any) {
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }} />
                         </Grid>
-                        <Grid item sm={6} xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel id='country-select'>Article Language</InputLabel>
-                                <Select
-                                    fullWidth
-                                    placeholder='Article Language'
-                                    label='Article Language'
-                                    labelId='English'
-                                    defaultValue={language}
-                                    onChange={e => {
-                                        setLanguage(e.target.value)
-                                    }}
-                                >
-                                    <MenuItem value='English'>English</MenuItem>
-                                    <MenuItem value='French'>French</MenuItem>
-                                    <MenuItem value='German'>German</MenuItem>
-                                    <MenuItem value='Spanish'>Spanish</MenuItem>
-                                    <MenuItem value='Japanese'>Japanese</MenuItem>
-                                    <MenuItem value='Chinese'>Chinese</MenuItem>
-                                    <MenuItem value='Russian'>Russian</MenuItem>
-                                    <MenuItem value='Italian'>Italian</MenuItem>
-                                    <MenuItem value='Arabic'>Arabic</MenuItem>
-                                    <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                                    <MenuItem value='Swedish'>Swedish</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "15px", display: "flex" }}>
+                            Language & Country
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    If the country ID is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                </div>
+                            </LightTooltip >
+                        </Typography>
+                        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
 
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <InputLabel id='country-select'>Article Country</InputLabel>
-                                <GetCountryList country={country} setCountry={setCountry} />
-                            </FormControl>
-                        </Grid>
+                            <Grid item sm={6} xs={12} sx={{ paddingLeft: "25px", paddingRight: "5px" }}>
+
+                                <FormControl fullWidth>
+                                    <InputLabel id='country-select'>Article Language</InputLabel>
+                                    <Select
+                                        fullWidth
+                                        placeholder='Article Language'
+                                        label='Article Language'
+                                        labelId='English'
+                                        defaultValue={language}
+                                        onChange={e => {
+                                            setLanguage(e.target.value)
+                                        }}
+                                    >
+                                        <MenuItem value='English'>English</MenuItem>
+                                        <MenuItem value='French'>French</MenuItem>
+                                        <MenuItem value='German'>German</MenuItem>
+                                        <MenuItem value='Spanish'>Spanish</MenuItem>
+                                        <MenuItem value='Japanese'>Japanese</MenuItem>
+                                        <MenuItem value='Chinese'>Chinese</MenuItem>
+                                        <MenuItem value='Russian'>Russian</MenuItem>
+                                        <MenuItem value='Italian'>Italian</MenuItem>
+                                        <MenuItem value='Arabic'>Arabic</MenuItem>
+                                        <MenuItem value='Portuguese'>Portuguese</MenuItem>
+                                        <MenuItem value='Swedish'>Swedish</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={12} sm={6} sx={{ paddingLeft: "5px" }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id='country-select'>Article Country</InputLabel>
+                                    <GetCountryList country={country} setCountry={setCountry} />
+                                </FormControl>
+                            </Grid>
+                        </Box>
+
 
 
 
@@ -755,7 +761,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    In the future release, you'll be able to choose between multiple feartured images.
+                                    All the showcased images are now sourced from unsplash.com. In upcoming releases, users will have the option to select from a variety of featured images.
                                 </p>
                             } placement="top">
                                 <div style={{ height: "100%" }}>
