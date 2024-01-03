@@ -12,6 +12,7 @@ export default function GetCountryList(props: any) {
             defaultValue={props.country}
             onChange={e => { props.setCountry(e.target.value) }}
         >
+            <MenuItem value='Default'>Default</MenuItem>
             <MenuItem value='Afghanistan'>Afghanistan</MenuItem>
             <MenuItem value='Albania'>Albania</MenuItem>
             <MenuItem value='Algeria'>Algeria</MenuItem>

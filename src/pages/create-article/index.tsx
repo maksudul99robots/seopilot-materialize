@@ -105,7 +105,8 @@ export default function CreateArticle(props: any) {
     const [tone, setTone] = useState('')
     const [language, setLanguage] = useState('English')
     const [links, setLinks] = useState<Array<string>>([])
-    const [country, setCountry] = useState<string>('United States of America (USA)')
+    // const [country, setCountry] = useState<string>('United States of America (USA)')
+    const [country, setCountry] = useState<string>('Default')
     const [articleLength, setArticleLength] = useState<string>('short')
     const [headings, setHeadings] = useState<any>([]);
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
@@ -464,14 +465,19 @@ export default function CreateArticle(props: any) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            {/* <TextField fullWidth label='Target Keyword(s)*' placeholder='Influencer marketing, affiliate marketing' name='keywords' onChange={e => {
-                                setKeywords(e.target.value)
-                            }} value={keywords} InputProps={{
-                                startAdornment: <InputAdornment position="start"></InputAdornment>,
-                            }} /> */}
 
-                            <Typography variant='body1' sx={{ fontSize: "15px", fontWeight: 500, marginBottom: "5px" }}>
+
+                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
                                 Target Keywords
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                    </div>
+                                </LightTooltip >
                             </Typography>
                             <TagsInput
                                 value={keywords}
@@ -503,7 +509,18 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                            Language And Country
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    If the country is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                </div>
+                            </LightTooltip >
+                        </Typography>
 
                         <Grid item xs={12}>
                             <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
@@ -546,6 +563,8 @@ export default function CreateArticle(props: any) {
                                 <GetCountryList country={country} setCountry={setCountry} />
                             </FormControl>
                         </Grid>
+
+
 
                         <Grid item sm={12} xs={12}>
                             <FormControl fullWidth>
