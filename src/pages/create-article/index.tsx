@@ -102,7 +102,7 @@ export default function CreateArticle(props: any) {
     const [articleType, setArticleType] = useState('blog')
     const [topic, setTopic] = useState('')
     const [keywords, setKeywords] = useState<any>([])
-    const [tone, setTone] = useState('')
+    const [tone, setTone] = useState('Clear, Knowledgeable and Confident')
     const [language, setLanguage] = useState('English')
     const [links, setLinks] = useState<Array<string>>([])
     // const [country, setCountry] = useState<string>('United States of America (USA)')
@@ -113,10 +113,13 @@ export default function CreateArticle(props: any) {
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
     const [model, setModel] = useState<string>('gpt-3.5-turbo-1106');
+    const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
+    const [introduction, setIntroduction] = useState(true);
+    const [conclusion, setConclusion] = useState(true);
     const [loading, setLoading] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
@@ -191,6 +194,7 @@ export default function CreateArticle(props: any) {
 
                     })
                     setShowFeaturedImg(res.data.show_featured_image)
+                    setModel(res.data.model)
                 }
             }).catch(e => {
                 console.log(e);
@@ -467,7 +471,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12}>
 
 
-                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", display: "flex" }}>
+                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
                                 Target Keywords
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -511,13 +515,45 @@ export default function CreateArticle(props: any) {
 
 
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
                                 setTone(e.target.value)
                             }} value={tone} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }} />
+                        </Grid> */}
+
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
+                            Article Tone
+
+                        </Typography>
+                        <Grid item sm={12} xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>Article Tone</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='Article Tone'
+                                    label='Article Tone'
+                                    labelId='Article Tone'
+                                    defaultValue={tone}
+                                    onChange={e => {
+                                        setTone(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='Clear, Knowledgeable and Confident'>SEO Optimized (Clear, Knowledgeable and Confident)</MenuItem>
+                                    <MenuItem value='Informative, Friendly, Casual'>Informative, Friendly, Casual</MenuItem>
+                                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
+                                    <MenuItem value='Excited'>Excited</MenuItem>
+                                    <MenuItem value='Empathetic'>Empathetic</MenuItem>
+                                    <MenuItem value='Professional'>Professional</MenuItem>
+                                    <MenuItem value='Friendly'>Friendly</MenuItem>
+                                    <MenuItem value='Formal'>Formal</MenuItem>
+                                    <MenuItem value='Casual'>Casual</MenuItem>
+                                    <MenuItem value='Humorous'>Humorous</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
+
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "15px", display: "flex" }}>
                             Language & Country
                             <LightTooltip title={
@@ -588,6 +624,32 @@ export default function CreateArticle(props: any) {
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                                     {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
+                            Point of View of Article
+
+                        </Typography>
+                        <Grid item sm={12} xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>Point of View of Article</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='Point of View of Article'
+                                    label='Point of View of Article'
+                                    labelId='Point of View of Article'
+                                    defaultValue={pointOfView}
+                                    onChange={e => {
+                                        setPointOfView(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='Third Person (he, she, it, they)'>Third Person (he, she, it, they)</MenuItem>
+                                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
+                                    <MenuItem value='Second Person (you, your, yours)'>Second Person (you, your, yours)</MenuItem>
+                                    <MenuItem value='First Person Plural (we, us, our, ours)'>First Person Plural (we, us, our, ours)</MenuItem>
+                                    <MenuItem value='First Person Singular (I, me, my, mine)'>First Person Singular (I, me, my, mine)</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -702,6 +764,41 @@ export default function CreateArticle(props: any) {
 
                         </Grid>
                         {/* <Box > */}
+
+
+
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
+
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include Conclusion" isChecked={conclusion} onClick={() => setConclusion(!conclusion)} />
+
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include TABLE OF CONTENTS" isChecked={toc} onClick={() => setToc(!toc)} />
+
+                        </Grid>
+
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
+
+                        </Grid>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    All the showcased images are now sourced from unsplash.com. In upcoming releases, users will have the option to select from a variety of featured images.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                </div>
+                            </LightTooltip >
+
+                        </Grid>
+
+                        {/* </Box> */}
+
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
                             External Links
                             <LightTooltip title={
@@ -757,28 +854,6 @@ export default function CreateArticle(props: any) {
                         }} startIcon={<Icon icon="gg:add" />}>
                             Add Another Link
                         </Button>
-
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
-                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    All the showcased images are now sourced from unsplash.com. In upcoming releases, users will have the option to select from a variety of featured images.
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                </div>
-                            </LightTooltip >
-
-                        </Grid>
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                            <SwitchesCustomized label="Include TABLE OF CONTENTS" isChecked={toc} onClick={() => setToc(!toc)} />
-
-                        </Grid>
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                            <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
-
-                        </Grid>
-                        {/* </Box> */}
 
 
                     </Grid>
