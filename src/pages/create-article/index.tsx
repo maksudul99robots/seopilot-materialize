@@ -233,24 +233,24 @@ export default function CreateArticle(props: any) {
     }
 
     const sumbit = () => {
-        console.log({
-            article_type: articleType,
-            topic: topic,
-            keywords: convertArrayToCsvKeywords(keywords),
-            article_length: articleLength,
-            tone: tone,
-            language: language,
-            country: country,
-            links: JSON.stringify(links),
-            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-            outline_source: outlineSource,
-            outline_url: outlineURL,
-            faq: faq,
-            toc: toc,
-            model: model,
-            showFeaturedImg: showFeaturedImg
-        })
-        return
+        // console.log({
+        //     article_type: articleType,
+        //     topic: topic,
+        //     keywords: convertArrayToCsvKeywords(keywords),
+        //     article_length: articleLength,
+        //     tone: tone,
+        //     language: language,
+        //     country: country,
+        //     links: JSON.stringify(links),
+        //     outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+        //     outline_source: outlineSource,
+        //     outline_url: outlineURL,
+        //     faq: faq,
+        //     toc: toc,
+        //     model: model,
+        //     showFeaturedImg: showFeaturedImg
+        // })
+        // return
 
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             Swal.fire({
