@@ -41,7 +41,7 @@ export default function AdminDetailsComponent(props: any) {
 
             </Box>
             {
-                props.keywordByKeybert?.length > 0 ?
+                props.isKeybert && props.keywordByKeybert?.length > 0 ?
 
                     props.keywordByKeybert.map((h: any, i: any) => {
                         return (
@@ -51,6 +51,29 @@ export default function AdminDetailsComponent(props: any) {
                                 </Typography>
                                 <Typography variant='body1' sx={{ width: "10%", fontSize: "13px" }}>
                                     {h[1]}
+                                </Typography>
+                                {
+                                    i == headings.length - 1 ?
+                                        null :
+                                        <Divider variant="middle" />
+                                }
+                            </Box>
+                        )
+                    })
+                    : null
+            }
+
+            {
+                !props.isKeybert && props.keywordByKeybert?.length > 0 ?
+
+                    props.keywordByKeybert.map((h: any, i: any) => {
+                        return (
+                            <Box key={i} sx={{ display: "flex", width: "100%", backgroundColor: i % 2 == 0 ? "#F7F7F9" : "fff", padding: "10px" }}>
+                                <Typography variant='body1' sx={{ width: "90%", fontSize: "13px" }}>
+                                    {h} {i == 0 ? "(Used)" : ''}
+                                </Typography>
+                                <Typography variant='body1' sx={{ width: "10%", fontSize: "13px" }}>
+
                                 </Typography>
                                 {
                                     i == headings.length - 1 ?

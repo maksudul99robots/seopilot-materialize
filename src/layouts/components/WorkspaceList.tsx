@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { Box, Typography } from '@mui/material'
 import { LoginRegistrationAPI } from 'src/services/API'
 import { useAuth } from 'src/hooks/useAuth'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const WorkspaceList = (props: any) => {
     // ** State
@@ -38,7 +39,7 @@ const WorkspaceList = (props: any) => {
         <div style={{ display: "flex", alignItems: "center" }}>
             <Typography variant='button' sx={{ marginRight: "10px" }}>Current Workspace: </Typography>
             <>
-                <Button variant='outlined' aria-controls='simple-menu' aria-haspopup='true' onClick={handleClick}>
+                <Button variant='outlined' aria-controls='simple-menu' aria-haspopup='true' onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
                     {props.cw}
                 </Button>
                 <Menu onClose={e => { setAnchorEl(null) }} keepMounted id='simple-menu' anchorEl={anchorEl} open={Boolean(anchorEl)} sx={{ maxHeight: "500px" }}>

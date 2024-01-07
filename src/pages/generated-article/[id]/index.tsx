@@ -35,6 +35,8 @@ export default function Page() {
     const [tokens, setTokens] = useState<any>(null);
     const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
     const [price, setPrice] = useState<number | string>(0);
+    const [keywords, setKeywords] = useState<any>([])
+
     const router = useRouter()
 
     useEffect(() => {
@@ -127,6 +129,11 @@ export default function Page() {
 
                         setKeywordsByKeyBert(res.data.keyword_by_keybert)
 
+                        if (res.data.keywords) {
+                            const keywordArray = separateString(res.data.keywords);
+                            setKeywords(keywordArray)
+                        }
+
                     }, 1000)
                 } else {
 
@@ -175,6 +182,13 @@ export default function Page() {
                                     let tokenUsed = JSON.parse(res.data.token_used)
                                     setTokens(tokenUsed)
                                     setPrice(res.data?.price?.toFixed(4))
+                                }
+
+                                setKeywordsByKeyBert(res.data.keyword_by_keybert)
+
+                                if (res.data.keywords) {
+                                    const keywordArray = separateString(res.data.keywords);
+                                    setKeywords(keywordArray)
                                 }
 
                             }, 3000)
@@ -227,6 +241,17 @@ export default function Page() {
         }
 
     }, [callTracker])
+
+
+    function separateString(str: string) {
+        // Split the string by commas
+        const parts = str.split(',');
+
+        // Trim each part to remove leading and trailing whitespaces
+        const trimmedParts = parts.map((part: any) => part.trim());
+        // console.log("trimmedParts:", trimmedParts);
+        return trimmedParts;
+    }
 
     const save = () => {
 
@@ -284,6 +309,7 @@ export default function Page() {
                         price={price}
                         tokens={tokens}
                         keywordByKeybert={keywordByKeybert}
+                        keywords={keywords}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
