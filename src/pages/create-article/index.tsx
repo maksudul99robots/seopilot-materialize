@@ -248,7 +248,8 @@ export default function CreateArticle(props: any) {
         //     faq: faq,
         //     toc: toc,
         //     model: model,
-        //     showFeaturedImg: showFeaturedImg
+        //     showFeaturedImg: showFeaturedImg,
+        //     point_of_view: pointOfView
         // })
         // return
 
@@ -277,7 +278,8 @@ export default function CreateArticle(props: any) {
                 faq: faq,
                 toc: toc,
                 model: model,
-                showFeaturedImg: showFeaturedImg
+                showFeaturedImg: showFeaturedImg,
+                point_of_view: pointOfView
             }).
                 then(res => {
                     // console.log("res:", res);
