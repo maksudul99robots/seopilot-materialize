@@ -148,7 +148,6 @@ export default function CreateArticle(props: any) {
         if (getArticleFromParams > 0) {
             LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
                 if (res.status == 212) {
-                    console.log("res:", res.data);
 
                     setArticleType(res.data.article_type)
                     setArticleLength(res.data.article_length)
