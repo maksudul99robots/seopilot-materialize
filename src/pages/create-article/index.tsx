@@ -196,6 +196,7 @@ export default function CreateArticle(props: any) {
                     })
                     setShowFeaturedImg(res.data.show_featured_image)
                     setModel(res.data.model)
+                    setPointOfView(res.data.point_of_view)
                 }
             }).catch(e => {
                 console.log(e);
