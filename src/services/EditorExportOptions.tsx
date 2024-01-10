@@ -93,12 +93,36 @@ export default function CustomizedMenus(props: any) {
         return tempContainer.innerHTML;
     }
 
+    function insertH1BeforeFirstH2(htmlString: string, title: string) {
+        // Create a temporary div element to parse the HTML string
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlString;
+
+        // Find the first h2 element
+        const firstH2 = tempDiv.querySelector('h2');
+
+        if (firstH2) {
+            // Create a new h1 element
+            const h1 = document.createElement('h1');
+            h1.textContent = title;
+
+            // Insert the new h1 before the first h2
+            firstH2.parentNode?.insertBefore(h1, firstH2);
+        }
+
+        // Return the modified HTML string
+        return tempDiv.innerHTML;
+    }
+
+    // Example usage
+
+
     function copyToClip(str: any) {
         // console.log("str:", str)
         if (props.fImg?.urls?.full) {
+            str = insertH1BeforeFirstH2(str, props.title);
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
         }
-
 
         function listener(e: any) {
             e.clipboardData.setData("text/html", str);
@@ -109,6 +133,13 @@ export default function CustomizedMenus(props: any) {
         document.execCommand("copy");
         document.removeEventListener("copy", listener);
     };
+
+    function getFormatedHtml(str: string) {
+        str = insertH1BeforeFirstH2(str, props.title);
+        str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+
+        return str
+    }
 
     return (
         <div>
@@ -141,7 +172,7 @@ export default function CustomizedMenus(props: any) {
                     }}> */}
                 <div onClick={() => {
                     copyToClip(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML);
-
+                    toast('Rich Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                 }}>
                     <MenuItem onClick={handleClose} disableRipple>
                         <ContentCopyOutlinedIcon />
@@ -153,7 +184,7 @@ export default function CustomizedMenus(props: any) {
 
                 {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
-                <CopyToClipboard text={props.html}
+                <CopyToClipboard text={getFormatedHtml(props.html)}
                     onCopy={() => {
                         // props.setCopied(true)
                         toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
@@ -170,7 +201,7 @@ export default function CustomizedMenus(props: any) {
                 </CopyToClipboard>
                 <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={e => {
-                    props.download();
+                    props.download(getFormatedHtml(props.html));
                     setAnchorEl(null);
                 }} disableRipple>
                     <FileDownloadOutlinedIcon />
