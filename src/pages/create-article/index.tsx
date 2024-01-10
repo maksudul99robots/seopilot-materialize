@@ -62,7 +62,7 @@ const articleLengthObj: CustomRadioIconsData[] = [
         value: 'short',
         title: 'Normal Article',
         isSelected: true,
-        content: 'Approximately 1000-1500 words'
+        content: 'Approximately 1000-1800 words'
     },
     {
         value: 'long',
@@ -72,12 +72,12 @@ const articleLengthObj: CustomRadioIconsData[] = [
     {
         value: 'short-V2',
         title: 'Normal Article (Section wise article generation)',
-        content: 'Approximately 2000-3000 words'
+        content: 'Approximately 1000-1800 words'
     },
     {
         value: 'long-V2',
         title: 'Long Article (Section wise article generation)',
-        content: 'Approximately 2000-3000 words'
+        content: 'Approximately 2000-3500 words'
     }
 ]
 
