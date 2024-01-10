@@ -63,6 +63,61 @@ const SelectConnects = (props: any) => {
   const handleClose = () => {
     setShow(false)
   }
+
+  function insertImageAfterFirstH2(htmlString: string, imgSrc: string) {
+    // Create a temporary container element
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = htmlString;
+
+    // Find the first h1 element
+    const firstH1: any = tempContainer.querySelector('h2');
+
+    if (firstH1) {
+      // Create an img element
+      const imgElement: any = document.createElement('img');
+      // imgElement.width = "500";
+      // imgElement.height = "400";
+      imgElement.style.width = "100%"
+      imgElement.src = imgSrc;
+
+      // Insert the img element after the first h1
+      firstH1.parentNode.insertBefore(imgElement, firstH1.nextSibling);
+    } else {
+
+    }
+
+    // Return the modified HTML
+    return tempContainer.innerHTML;
+  }
+
+  function insertH1BeforeFirstH2(htmlString: string, title: string) {
+    // Create a temporary div element to parse the HTML string
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlString;
+
+    // Find the first h2 element
+    const firstH2 = tempDiv.querySelector('h2');
+
+    if (firstH2) {
+      // Create a new h1 element
+      const h1 = document.createElement('h1');
+      h1.textContent = title;
+
+      // Insert the new h1 before the first h2
+      firstH2.parentNode?.insertBefore(h1, firstH2);
+    }
+
+    // Return the modified HTML string
+    return tempDiv.innerHTML;
+  }
+
+  function getFormatedHtml(str: string) {
+    // str = insertH1BeforeFirstH2(str, props.title);
+    str = insertImageAfterFirstH2(str, props.fImg.urls.full)
+
+    return str
+  }
+
   const handleSubmit = () => {
     setLoading(true)
     headers.set("Content-Type", "application/json")
@@ -71,7 +126,7 @@ const SelectConnects = (props: any) => {
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ title: props.title, content: props.html, status: status })
+      body: JSON.stringify({ title: props.title, content: getFormatedHtml(props.html), status: status })
     }).then(res => {
       setShow(false)
       setLoading(false)

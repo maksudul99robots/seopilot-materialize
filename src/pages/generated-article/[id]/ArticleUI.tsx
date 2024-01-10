@@ -168,7 +168,7 @@ export default function ArticleIU(props: any) {
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
                     <CustomizedMenus title={props.articleTopic} html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} fImg={fImg} />
                     <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
-                    <SelectConnects html={props.html} title={props.articleTopic} />
+                    <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} />
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
