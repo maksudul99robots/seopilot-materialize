@@ -32,6 +32,7 @@ import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/component
 import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import CustomChip from 'src/@core/components/mui/chip'
 import { TagsInput } from "react-tag-input-component";
+import { ListicleInputComponent } from 'src/components/ListicleInputComponent';
 // ** Demo Components Imports
 
 interface IconType {
@@ -706,39 +707,6 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
-                        {/* <Grid item xs={12}>
-                            <FormControl>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginTop: "20px", marginBottom: "10px" }}>
-                                    Do you want to include FAQ section in this article?
-                                </Typography>
-                                <RadioGroup
-                                    row
-                                    defaultValue={true}
-                                    aria-label='FAQ'
-                                    name='form-layouts-collapsible-address-radio'
-                                >
-                                    <FormControlLabel value={true} control={<Radio />} label='Yes' checked={faq} onClick={e => setFaq(true)} />
-                                    <FormControlLabel value={false} control={<Radio />} label='No' checked={!faq} onClick={e => setFaq(false)} />
-                                </RadioGroup>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 400, marginLeft: "0px", marginBottom: "10px" }}>
-                                    Do you want to include TABLE OF CONTENTS section in this article?
-                                </Typography>
-                                <RadioGroup
-                                    row
-                                    defaultValue={true}
-                                    aria-label='Table of content'
-                                    name='form-layouts-collapsible-address-radio'
-                                >
-                                    <FormControlLabel value={true} control={<Radio />} label='Yes' checked={toc} onClick={e => setToc(true)} />
-                                    <FormControlLabel value={false} control={<Radio />} label='No' checked={!toc} onClick={e => setToc(false)} />
-                                </RadioGroup>
-                            </FormControl>
-                        </Grid> */}
-
 
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
                             Outline Source
@@ -806,7 +774,9 @@ export default function CreateArticle(props: any) {
                             />
                         }
 
-
+                        <Grid item xs={12}>
+                            <ListicleInputComponent />
+                        </Grid>
 
                         <Grid item xs={12} className='add-icon-color'>
                             <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
@@ -909,6 +879,10 @@ export default function CreateArticle(props: any) {
 
 
                     </Grid>
+
+
+
+
                 </DialogContent>
                 <DialogActions
                     sx={{
