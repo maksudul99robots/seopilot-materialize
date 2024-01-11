@@ -64,30 +64,10 @@ const SelectConnects = (props: any) => {
     setShow(false)
   }
 
-  function insertImageAfterFirstH2(htmlString: string, imgSrc: string) {
+  function insertImageAtTheBeginning(htmlString: string, imgSrc: string) {
     // Create a temporary container element
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = htmlString;
-
-    // Find the first h1 element
-    const firstH1: any = tempContainer.querySelector('h2');
-
-    if (firstH1) {
-      // Create an img element
-      const imgElement: any = document.createElement('img');
-      // imgElement.width = "500";
-      // imgElement.height = "400";
-      imgElement.style.width = "100%"
-      imgElement.src = imgSrc;
-
-      // Insert the img element after the first h1
-      firstH1.parentNode.insertBefore(imgElement, firstH1.nextSibling);
-    } else {
-
-    }
-
-    // Return the modified HTML
-    return tempContainer.innerHTML;
+    let img = `<img src="${imgSrc}" style="width: 100%;">`
+    return img + htmlString
   }
 
   function insertH1BeforeFirstH2(htmlString: string, title: string) {
@@ -113,7 +93,7 @@ const SelectConnects = (props: any) => {
 
   function getFormatedHtml(str: string) {
     // str = insertH1BeforeFirstH2(str, props.title);
-    str = insertImageAfterFirstH2(str, props.fImg.urls.full)
+    str = insertImageAtTheBeginning(str, props.fImg.urls.full)
 
     return str
   }
