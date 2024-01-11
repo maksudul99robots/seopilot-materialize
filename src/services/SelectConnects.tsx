@@ -93,7 +93,8 @@ const SelectConnects = (props: any) => {
 
   function getFormatedHtml(str: string) {
     // str = insertH1BeforeFirstH2(str, props.title);
-    str = insertImageAtTheBeginning(str, props.fImg.urls.full)
+    if (props.fImg.urls.full)
+      str = insertImageAtTheBeginning(str, props.fImg.urls.full)
 
     return str
   }
