@@ -63,7 +63,7 @@ const Pricing = () => {
         { text: "1 User/Team Member(s)", show: true },
         { text: "1 Workspace", show: true },
         { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article writer", show: true }
+        { text: "Generate AI article", show: true }
       ]
 
     },
@@ -87,7 +87,7 @@ const Pricing = () => {
         { text: "5 Users/Team Members", show: true },
         { text: "5 Workspaces", show: true },
         { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article writer", show: true }
+        { text: "Generate AI article", show: true }
       ]
     },
     {
@@ -110,7 +110,7 @@ const Pricing = () => {
         { text: "25 Users/Team Members", show: true },
         { text: "25 Workspaces", show: true },
         { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article writer", show: true }
+        { text: "Generate AI article", show: true }
       ]
     }
   ]

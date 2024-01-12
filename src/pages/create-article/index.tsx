@@ -33,6 +33,7 @@ import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import CustomChip from 'src/@core/components/mui/chip'
 import { TagsInput } from "react-tag-input-component";
 import { ListicleInputComponent } from 'src/components/ListicleInputComponent';
+import DndForListicle from 'src/services/DND/DNDForListicle';
 // ** Demo Components Imports
 
 interface IconType {
@@ -112,7 +113,7 @@ export default function CreateArticle(props: any) {
 
     const [numberOfLinks, setNumberOfLinks] = useState([1]);
     //Values
-    const [articleType, setArticleType] = useState('blog')
+    const [articleType, setArticleType] = useState('listicle')
     const [topic, setTopic] = useState('')
     const [keywords, setKeywords] = useState<any>([])
     const [tone, setTone] = useState('Clear, Knowledgeable and Confident')
@@ -137,7 +138,7 @@ export default function CreateArticle(props: any) {
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
     const [showFeaturedImg, setShowFeaturedImg] = useState(false);
-
+    const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
@@ -357,6 +358,8 @@ export default function CreateArticle(props: any) {
 
 
     //DND settings
+
+
     const editHeadingOnChange = (index: number, heading: string) => {
 
         headings[index] = headings[index].substring(0, 3) + heading;
@@ -392,6 +395,47 @@ export default function CreateArticle(props: any) {
         setHeadings(uniqueArr);
     }
 
+    // DND for Listicles
+    const editListicleOutlineChange = (index: number, heading: string) => {
+
+        listicleOutlines[index] = listicleOutlines[index].substring(6, 3) + heading;
+        // updateCsvHeadings(index, heading.slice(0))
+
+    }
+    const changeListicleOutlineTag = (index: number, tag: string, object: string) => {
+        if (object == 'title')
+            listicleOutlines[index] = listicleOutlines[index].substring(0, 5) + tag + ":" + listicleOutlines[index].substring(8, listicleOutlines[index].length);
+        else if (object == 'url') {
+            listicleOutlines[index] = listicleOutlines[index].substring(0, 5) + tag + ":" + listicleOutlines[index].substring(8, listicleOutlines[index].length);
+        }
+        let newArr = [...listicleOutlines];
+        let uniqueArr = [...new Set(newArr)];
+        setListicleOutlines(uniqueArr);
+
+    }
+    const removeListicleOutline = (index: number) => {
+        let newArr = [...listicleOutlines];
+        setListicleOutlines(newArr);
+        newArr = [...listicleOutlines]
+        newArr.splice(index, 1);
+
+
+        let uniqueArr = [...new Set(newArr)];
+        setListicleOutlines(uniqueArr);
+
+    }
+
+    const addnewListicleOutline = () => {
+        let newArr = [...listicleOutlines];
+        setListicleOutlines(newArr);
+        newArr = [...listicleOutlines];
+
+        newArr.push(makeid(5) + 'H2:');
+
+        let uniqueArr = [...new Set(newArr)];
+        setListicleOutlines(uniqueArr);
+    }
+    // DND for Listicles ends
     const fetchOutline = () => {
         setFetchOutlineLoading(true)
         LoginRegistrationAPI.fetchOutline({ url: outlineURL }).then((res: any) => {
@@ -501,12 +545,13 @@ export default function CreateArticle(props: any) {
                                     placeholder='Blog Article'
                                     label='Blog Article'
                                     labelId='blog'
-                                    defaultValue='blog'
+                                    defaultValue={articleType}
                                     onChange={e => {
                                         setArticleType(e.target.value);
                                     }}
                                 >
                                     <MenuItem value='blog'>Blog Article</MenuItem>
+                                    <MenuItem value='listicle'>Listicle</MenuItem>
                                     <MenuItem value='product'>Amazon Product Review</MenuItem>
                                     <MenuItem value='guest'>Guest Post</MenuItem>
                                 </Select>
@@ -566,15 +611,6 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-
-
-                        {/* <Grid item xs={12}>
-                            <TextField fullWidth label='Article Tone' placeholder='Friendly, Precise, Informative' name='tone' onChange={e => {
-                                setTone(e.target.value)
-                            }} value={tone} InputProps={{
-                                startAdornment: <InputAdornment position="start"></InputAdornment>,
-                            }} />
-                        </Grid> */}
 
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
                             Article Tone
@@ -707,37 +743,44 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
+                        {
+                            articleType != 'listicle' ?
+                                <>
+                                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
+                                        Outline Source
+                                        <LightTooltip title={
+                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
+                                                <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
+                                                <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
-                            Outline Source
-                            <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
-                                    <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
-                                    <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
+                                            </p>
+                                        } placement="top">
+                                            <div style={{ height: "100%" }}>
+                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                            </div>
+                                        </LightTooltip >
+                                    </Typography>
+                                    <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
+                                        {data.map((item, index) => (
+                                            <CustomRadioIcons
+                                                key={index}
+                                                data={data[index]}
+                                                selected={outlineSource}
+                                                icon={icons[index].icon}
+                                                name='custom-radios-icons'
+                                                handleChange={handleChange}
+                                                gridProps={{ sm: 4, xs: 12 }}
+                                                iconProps={icons[index].iconProps}
 
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                </div>
-                            </LightTooltip >
-                        </Typography>
-                        <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
-                            {data.map((item, index) => (
-                                <CustomRadioIcons
-                                    key={index}
-                                    data={data[index]}
-                                    selected={outlineSource}
-                                    icon={icons[index].icon}
-                                    name='custom-radios-icons'
-                                    handleChange={handleChange}
-                                    gridProps={{ sm: 4, xs: 12 }}
-                                    iconProps={icons[index].iconProps}
+                                            />
+                                        ))}
+                                    </Grid>
+                                </>
 
-                                />
-                            ))}
-                        </Grid>
+                                : null
+                        }
+
 
 
                         {
@@ -774,9 +817,22 @@ export default function CreateArticle(props: any) {
                             />
                         }
 
-                        <Grid item xs={12}>
-                            <ListicleInputComponent />
-                        </Grid>
+                        {
+                            articleType == 'listicle' ?
+                                <Grid item xs={12}>
+                                    {/* <ListicleInputComponent listicleOutlines={listicleOutlines} setListicleOutlines={setListicleOutlines} /> */}
+                                    <DndForListicle
+                                        listicleOutlines={listicleOutlines}
+                                        setListicleOutlines={setListicleOutlines}
+                                        editListicleOutlineChange={editListicleOutlineChange}
+                                        removeListicleOutline={removeListicleOutline}
+                                        changeListicleOutlineTag={changeListicleOutlineTag}
+                                        addnewListicleOutline={addnewListicleOutline}
+                                    />
+                                </Grid>
+                                : null
+                        }
+
 
                         <Grid item xs={12} className='add-icon-color'>
                             <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
