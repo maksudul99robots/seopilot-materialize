@@ -8,7 +8,7 @@ import { Box, Typography } from '@mui/material';
 import Icon from 'src/@core/components/icon';
 import { SortableItemForListicle } from './SortableItemForListicle';
 
-const DndForListicle = ({ listicleOutlines, setListicleOutlines, editListicleOutlineChange, addnewListicleOutline, setActiveElement, removeListicleOutline, activeElement, setHeadingsForCSV, headingsForCSV, changeListicleOutlineTag }: any) => {
+const DndForListicle = ({ listicleOutlines, setListicleOutlines, editListicleOutlineChange, addnewListicleOutline, setActiveElement, removeListicleOutline, activeElement, setHeadingsForCSV, headingsForCSV, changeListicleOutlineTag, changeListicleOutlineImgSrc, changeListicleOutlineImgSrcUrl }: any) => {
 
     function handleDragEnd(event: any) {
         // console.log("Drag end called");
@@ -16,7 +16,7 @@ const DndForListicle = ({ listicleOutlines, setListicleOutlines, editListicleOut
         // console.log("ACTIVE: " + active.id);
         // console.log("OVER :" + over.id);
 
-        if (active.id !== over.id) {
+        if (active?.id !== over?.id) {
             setListicleOutlines((items: any) => {
                 const activeIndex = items.indexOf(active.id);
                 const overIndex = items.indexOf(over.id);
@@ -83,6 +83,8 @@ const DndForListicle = ({ listicleOutlines, setListicleOutlines, editListicleOut
                                 setHeadingsForCSV={setHeadingsForCSV}
                                 headingsForCSV={headingsForCSV}
                                 changeListicleOutlineTag={changeListicleOutlineTag}
+                                changeListicleOutlineImgSrc={changeListicleOutlineImgSrc}
+                                changeListicleOutlineImgSrcUrl={changeListicleOutlineImgSrcUrl}
                             />)}
 
                         </div>

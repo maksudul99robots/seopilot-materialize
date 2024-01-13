@@ -32,7 +32,6 @@ import { CustomRadioIconsData, CustomRadioIconsProps } from 'src/@core/component
 import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import CustomChip from 'src/@core/components/mui/chip'
 import { TagsInput } from "react-tag-input-component";
-import { ListicleInputComponent } from 'src/components/ListicleInputComponent';
 import DndForListicle from 'src/services/DND/DNDForListicle';
 // ** Demo Components Imports
 
@@ -138,6 +137,7 @@ export default function CreateArticle(props: any) {
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
     const [showFeaturedImg, setShowFeaturedImg] = useState(false);
+    const [numberedItem, setNumberedItem] = useState(false);
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     // const [articleType, setArticleType] = useState('blog')
     // const [articleType, setArticleType] = useState('blog')
@@ -278,26 +278,81 @@ export default function CreateArticle(props: any) {
                 confirmButtonColor: "#2979FF"
             })
         } else {
-            setLoading(true)
-            LoginRegistrationAPI.generateSaasArticle({
-                article_type: articleType,
-                topic: topic,
-                keywords: convertArrayToCsvKeywords(keywords),
-                article_length: articleLength,
-                tone: tone,
-                language: language,
-                country: country,
-                links: JSON.stringify(links),
-                outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-                outline_source: outlineSource,
-                outline_url: outlineURL,
-                faq: faq,
-                toc: toc,
-                model: model,
-                showFeaturedImg: showFeaturedImg,
-                point_of_view: pointOfView
-            }).
-                then(res => {
+            if (articleType != 'listicle') {
+                setLoading(true)
+                LoginRegistrationAPI.generateSaasArticle({
+                    article_type: articleType,
+                    topic: topic,
+                    keywords: convertArrayToCsvKeywords(keywords),
+                    article_length: articleLength,
+                    tone: tone,
+                    language: language,
+                    country: country,
+                    links: JSON.stringify(links),
+                    outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                    outline_source: outlineSource,
+                    outline_url: outlineURL,
+                    faq: faq,
+                    toc: toc,
+                    model: model,
+                    showFeaturedImg: showFeaturedImg,
+                    point_of_view: pointOfView
+                }).
+                    then(res => {
+                        // console.log("res:", res);
+                        setLoading(false)
+                        router.push("/generated-article/" + res.data.id)
+                    }).catch(e => {
+                        setLoading(false)
+                        console.log("error:", e);
+                        if (e.response.status == 400) {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                          <h5>${e.response.data}</h5>
+                          `,
+                                icon: "error",
+                                // input: 'text',
+                                // inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            }).then(() => {
+                                router.push('/add-apikey')
+                            })
+                        } else {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                          <h5>Unable to Generate Article</h5>
+                          `,
+                                icon: "error",
+                                // input: 'text',
+                                inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            })
+                        }
+
+                    })
+            } else {
+                LoginRegistrationAPI.generateListicles(
+                    {
+                        article_type: articleType,
+                        topic: topic,
+                        keywords: convertArrayToCsvKeywords(keywords),
+                        article_length: articleLength,
+                        tone: tone,
+                        language: language,
+                        country: country,
+                        links: JSON.stringify(links),
+                        outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                        outline_source: outlineSource,
+                        outline_url: outlineURL,
+                        faq: faq,
+                        toc: toc,
+                        model: model,
+                        showFeaturedImg: showFeaturedImg,
+                        point_of_view: pointOfView,
+                        listicle_outlines: listicleOutlines,
+                        numbered_items: numberedItem
+                    }
+                ).then(res => {
                     // console.log("res:", res);
                     setLoading(false)
                     router.push("/generated-article/" + res.data.id)
@@ -307,8 +362,8 @@ export default function CreateArticle(props: any) {
                     if (e.response.status == 400) {
                         Swal.fire({
                             html: `<h3>Error</h3>
-                          <h5>${e.response.data}</h5>
-                          `,
+                      <h5>${e.response.data}</h5>
+                      `,
                             icon: "error",
                             // input: 'text',
                             // inputLabel: 'Please try again later.',
@@ -319,23 +374,18 @@ export default function CreateArticle(props: any) {
                     } else {
                         Swal.fire({
                             html: `<h3>Error</h3>
-                          <h5>Unable to Generate Article</h5>
-                          `,
+                      <h5>Unable to Generate Article</h5>
+                      `,
                             icon: "error",
                             // input: 'text',
                             inputLabel: 'Please try again later.',
                             confirmButtonColor: "#2979FF"
                         })
                     }
-                    // Swal.fire({
-                    //     title: 'Error!',
-                    //     text: 'Please Subscribe to Higher Plan to Get This Feature.',
-                    //     icon: 'error',
-                    //     confirmButtonText: 'Close',
-                    //     confirmButtonColor: "#2979FF"
-                    // })
 
                 })
+            }
+
         }
 
     }
@@ -358,8 +408,6 @@ export default function CreateArticle(props: any) {
 
 
     //DND settings
-
-
     const editHeadingOnChange = (index: number, heading: string) => {
 
         headings[index] = headings[index].substring(0, 3) + heading;
@@ -394,20 +442,43 @@ export default function CreateArticle(props: any) {
         let uniqueArr = [...new Set(newArr)];
         setHeadings(uniqueArr);
     }
+    //DND settings ends
 
     // DND for Listicles
-    const editListicleOutlineChange = (index: number, heading: string) => {
+    const editListicleOutlineChange = (index: number, heading: string, listicleItem: string) => {
 
-        listicleOutlines[index] = listicleOutlines[index].substring(6, 3) + heading;
+        let obj = JSON.parse(listicleOutlines[index])
+        if (listicleItem == 'title')
+            obj.title = heading;
+        else if (listicleItem == 'url') {
+            obj.url = heading;
+        }
+        listicleOutlines[index] = JSON.stringify(obj)
         // updateCsvHeadings(index, heading.slice(0))
 
     }
-    const changeListicleOutlineTag = (index: number, tag: string, object: string) => {
-        if (object == 'title')
-            listicleOutlines[index] = listicleOutlines[index].substring(0, 5) + tag + ":" + listicleOutlines[index].substring(8, listicleOutlines[index].length);
-        else if (object == 'url') {
-            listicleOutlines[index] = listicleOutlines[index].substring(0, 5) + tag + ":" + listicleOutlines[index].substring(8, listicleOutlines[index].length);
-        }
+    const changeListicleOutlineTag = (index: number, tag: string) => {
+        let obj = JSON.parse(listicleOutlines[index])
+        obj.tag = tag;
+        listicleOutlines[index] = JSON.stringify(obj)
+        let newArr = [...listicleOutlines];
+        let uniqueArr = [...new Set(newArr)];
+        setListicleOutlines(uniqueArr);
+
+    }
+    const changeListicleOutlineImgSrc = (index: number, imgSrc: string) => {
+        let obj = JSON.parse(listicleOutlines[index])
+        obj.imgSrc = imgSrc;
+        listicleOutlines[index] = JSON.stringify(obj)
+        let newArr = [...listicleOutlines];
+        let uniqueArr = [...new Set(newArr)];
+        setListicleOutlines(uniqueArr);
+
+    }
+    const changeListicleOutlineImgSrcUrl = (index: number, imgSrc: string) => {
+        let obj = JSON.parse(listicleOutlines[index])
+        obj.imgSrcUrl = imgSrc;
+        listicleOutlines[index] = JSON.stringify(obj)
         let newArr = [...listicleOutlines];
         let uniqueArr = [...new Set(newArr)];
         setListicleOutlines(uniqueArr);
@@ -424,14 +495,20 @@ export default function CreateArticle(props: any) {
         setListicleOutlines(uniqueArr);
 
     }
-
     const addnewListicleOutline = () => {
         let newArr = [...listicleOutlines];
         setListicleOutlines(newArr);
         newArr = [...listicleOutlines];
 
-        newArr.push(makeid(5) + 'H2:');
-
+        let obj = {
+            id: makeid(5),
+            tag: 'H2',
+            title: '',
+            url: '',
+            imgSrc: 'none',
+            imgUrl: ''
+        }
+        newArr.push(JSON.stringify(obj));
         let uniqueArr = [...new Set(newArr)];
         setListicleOutlines(uniqueArr);
     }
@@ -515,7 +592,6 @@ export default function CreateArticle(props: any) {
             setArticleLength((prop.target as HTMLInputElement).value)
         }
     }
-
 
 
     return (
@@ -743,43 +819,38 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
-                        {
-                            articleType != 'listicle' ?
-                                <>
-                                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
-                                        Outline Source
-                                        <LightTooltip title={
-                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
-                                                <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
-                                                <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
 
-                                            </p>
-                                        } placement="top">
-                                            <div style={{ height: "100%" }}>
-                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                            </div>
-                                        </LightTooltip >
-                                    </Typography>
-                                    <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
-                                        {data.map((item, index) => (
-                                            <CustomRadioIcons
-                                                key={index}
-                                                data={data[index]}
-                                                selected={outlineSource}
-                                                icon={icons[index].icon}
-                                                name='custom-radios-icons'
-                                                handleChange={handleChange}
-                                                gridProps={{ sm: 4, xs: 12 }}
-                                                iconProps={icons[index].iconProps}
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
+                            Outline Source
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
+                                    <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
+                                    <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
 
-                                            />
-                                        ))}
-                                    </Grid>
-                                </>
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                </div>
+                            </LightTooltip >
+                        </Typography>
+                        <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
+                            {data.map((item, index) => (
+                                <CustomRadioIcons
+                                    key={index}
+                                    data={data[index]}
+                                    selected={outlineSource}
+                                    icon={icons[index].icon}
+                                    name='custom-radios-icons'
+                                    handleChange={handleChange}
+                                    gridProps={{ sm: 4, xs: 12 }}
+                                    iconProps={icons[index].iconProps}
 
-                                : null
-                        }
+                                />
+                            ))}
+                        </Grid>
+
 
 
 
@@ -828,6 +899,8 @@ export default function CreateArticle(props: any) {
                                         removeListicleOutline={removeListicleOutline}
                                         changeListicleOutlineTag={changeListicleOutlineTag}
                                         addnewListicleOutline={addnewListicleOutline}
+                                        changeListicleOutlineImgSrc={changeListicleOutlineImgSrc}
+                                        changeListicleOutlineImgSrcUrl={changeListicleOutlineImgSrcUrl}
                                     />
                                 </Grid>
                                 : null
@@ -857,11 +930,31 @@ export default function CreateArticle(props: any) {
                             <SwitchesCustomized label="Include TABLE OF CONTENTS" isChecked={toc} onClick={() => setToc(!toc)} />
 
                         </Grid>
+                        {
+                            articleType != 'listicle' &&
+                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                                <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
 
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                            <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
+                            </Grid>
+                        }
 
-                        </Grid>
+                        {
+                            articleType == "listicle" ?
+                                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                    <SwitchesCustomized label="Number Each Listicle Item" isChecked={numberedItem} onClick={() => setNumberedItem(!numberedItem)} />
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            Each Item of The Listicle Will be Numbered (1, 2, 3, 4 ...)
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                        </div>
+                                    </LightTooltip >
+                                </Grid>
+                                : null
+                        }
+
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -892,7 +985,7 @@ export default function CreateArticle(props: any) {
 
                         </Typography>
                         {
-                            numberOfLinks.map((link, index) => {
+                            articleType != 'listicle' && numberOfLinks.map((link, index) => {
                                 return (
                                     <>
                                         <Grid item sm={11} xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>

@@ -212,6 +212,11 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async generateListicles(data: any, url = "/generate-saas-ai-listicle-article", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     }
 
 
