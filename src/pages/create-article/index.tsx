@@ -211,6 +211,14 @@ export default function CreateArticle(props: any) {
                     setShowFeaturedImg(res.data.show_featured_image)
                     setModel(res.data.model)
                     setPointOfView(res.data.point_of_view)
+                    if (res.data.listicle_outlines) {
+                        let lo = JSON.parse(res.data.listicle_outlines)
+                        setListicleOutlines(lo)
+                    }
+
+                    // if(res.data.numbered_items){
+                    setNumberedItem(res.data.numbered_items)
+                    // }
                 }
             }).catch(e => {
                 console.log(e);
@@ -218,6 +226,7 @@ export default function CreateArticle(props: any) {
         }
 
     }, [getArticleFromParams])
+
 
     function separateString(str: string) {
         // Split the string by commas
