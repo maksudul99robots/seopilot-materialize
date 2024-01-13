@@ -634,7 +634,7 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField fullWidth label='Topic*' placeholder='10 Reasons why we should use AI in blog writing' onChange={e => {
+                            <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
                                 setTopic(e.target.value)
                             }} value={topic} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,

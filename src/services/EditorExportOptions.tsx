@@ -119,8 +119,9 @@ export default function CustomizedMenus(props: any) {
 
     function copyToClip(str: any) {
         // console.log("str:", str)
+        str = insertH1BeforeFirstH2(str, props.title);
         if (props.fImg?.urls?.full) {
-            str = insertH1BeforeFirstH2(str, props.title);
+
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
         }
 
@@ -135,8 +136,9 @@ export default function CustomizedMenus(props: any) {
     };
 
     function getFormatedHtml(str: string) {
-        str = insertH1BeforeFirstH2(str, props.title);
-        str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        str = insertH1BeforeFirstH2(str, props?.title);
+        if (props?.fImg?.urls?.full)
+            str = insertImageAfterFirstH1(str, props?.fImg?.urls?.full)
 
         return str
     }
