@@ -978,21 +978,25 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
                         {/* </Box> */}
+                        {
+                            articleType != 'listicle' &&
+                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                External Links
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        Add external links in the article. You can add multiple external links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as external link in the article.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                    </div>
+                                </LightTooltip >
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                            External Links
-                            <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    Add external links in the article. You can add multiple external links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as external link in the article.
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                </div>
-                            </LightTooltip >
+
+                            </Typography>
+                        }
 
 
-                        </Typography>
                         {
                             articleType != 'listicle' && numberOfLinks.map((link, index) => {
                                 return (
@@ -1026,14 +1030,21 @@ export default function CreateArticle(props: any) {
 
                                 )
                             })
+
+
                         }
-                        <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
-                            const newArray = [...numberOfLinks];
-                            newArray.push(1);
-                            setNumberOfLinks(newArray);
-                        }} startIcon={<Icon icon="gg:add" />}>
-                            Add Another Link
-                        </Button>
+
+                        {
+                            articleType != 'listicle' &&
+                            <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
+                                const newArray = [...numberOfLinks];
+                                newArray.push(1);
+                                setNumberOfLinks(newArray);
+                            }} startIcon={<Icon icon="gg:add" />}>
+                                Add Another Link
+                            </Button>
+                        }
+
 
 
                     </Grid>
