@@ -50,11 +50,13 @@ const EditorControlled = (props: any) => {
       let elements = document.querySelectorAll(listicle.tag);
       elements = Array.from(elements);
       elements.forEach((element, index) => {
-        console.log("element:", index, isImgAdded, listicle);
+        // console.log("element:", index, isImgAdded, listicle);
         let title = listicle.title;
         if (props.numberedItem) {
           title = i + '. ' + title;
         }
+
+        console.log("element.innerText == title", element.innerText, title, isImgAdded[title])
         if (element.innerText == title && !isImgAdded[title]) {
           let x = isImgAdded;
           x[title] = true;
