@@ -112,7 +112,7 @@ export default function CreateArticle(props: any) {
 
     const [numberOfLinks, setNumberOfLinks] = useState([1]);
     //Values
-    const [articleType, setArticleType] = useState('listicle')
+    const [articleType, setArticleType] = useState('blog')
     const [topic, setTopic] = useState('')
     const [keywords, setKeywords] = useState<any>([])
     const [tone, setTone] = useState('Clear, Knowledgeable and Confident')
@@ -640,8 +640,8 @@ export default function CreateArticle(props: any) {
                                 >
                                     <MenuItem value='blog'>Blog Article</MenuItem>
                                     <MenuItem value='listicle'>Listicle</MenuItem>
-                                    <MenuItem value='product'>Amazon Product Review</MenuItem>
-                                    <MenuItem value='guest'>Guest Post</MenuItem>
+                                    {/* <MenuItem value='product'>Amazon Product Review</MenuItem>
+                                    <MenuItem value='guest'>Guest Post</MenuItem> */}
                                 </Select>
                             </FormControl>
                         </Grid>
