@@ -11,7 +11,6 @@ export function SortableItemForListicle(props: any) {
 
     // props.id
     // JavaScript
-    console.log("props.index:", props.index)
     let mainObject = JSON.parse(props.id);
     const {
         attributes,

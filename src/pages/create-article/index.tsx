@@ -68,18 +68,18 @@ const articleLengthObj: CustomRadioIconsData[] = [
     {
         value: 'long',
         title: 'Long Article',
-        content: 'Approximately 2000-3000 words'
-    },
-    {
-        value: 'short-V2',
-        title: 'Normal Article (Section wise article generation)',
-        content: 'Approximately 1000-1800 words'
-    },
-    {
-        value: 'long-V2',
-        title: 'Long Article (Section wise article generation)',
         content: 'Approximately 2000-3500 words'
     }
+    // {
+    //     value: 'short-V2',
+    //     title: 'Normal Article (Section wise article generation)',
+    //     content: 'Approximately 1000-1800 words'
+    // },
+    // {
+    //     value: 'long-V2',
+    //     title: 'Long Article (Section wise article generation)',
+    //     content: 'Approximately 2000-3500 words'
+    // }
 ]
 
 const icons: IconType[] = [
@@ -89,9 +89,9 @@ const icons: IconType[] = [
 ]
 const articleILngthIcons: IconType[] = [
     { icon: 'ooui:article-rtl', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
-    { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
-    { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
-    { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+    { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } }
+    // { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
+    // { icon: 'ooui:articles-ltr', iconProps: { fontSize: '2rem', style: { marginBottom: 8 } } },
 ]
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
