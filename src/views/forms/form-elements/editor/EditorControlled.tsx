@@ -53,10 +53,11 @@ const EditorControlled = (props: any) => {
         // console.log("element:", index, isImgAdded, listicle);
         let title = listicle.title;
         if (props.numberedItem) {
-          title = i + '. ' + title;
+          let count = i + 1;
+          title = count + '. ' + title;
         }
 
-        console.log("element.innerText == title", element.innerText, title, isImgAdded[title])
+        // console.log("element.innerText == title", element.innerText, title, isImgAdded[title])
         if (element.innerText == title && !isImgAdded[title]) {
           let x = isImgAdded;
           x[title] = true;
