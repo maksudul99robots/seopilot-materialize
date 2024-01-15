@@ -55,7 +55,7 @@ const EditorControlled = (props: any) => {
           let x = isImgAdded;
           x[listicle.title] = true;
           setIsImgAdded(x);
-          element.insertAdjacentHTML('afterend', `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="${listicle.imgSrcUrl}" style="height: auto; width: auto;"></span></span></figure>`);
+          element.insertAdjacentHTML('afterend', `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"></span></span></figure>`);
         }
 
       });
