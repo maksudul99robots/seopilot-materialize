@@ -8,12 +8,24 @@ export const PromptComponent = (props: any) => {
     const [articlePrompt, setArticlePrompt] = useState('');
     const [outlines, setOutlines] = useState('');
     const [collapsed, setCollapsed] = useState<boolean>(false)
+    //  For Listicles 
+    //  outlinePrompt == intro_prompt
+    //  article_prompt == article_prompt
+    //  outlines == conclusion_prompt
 
     useEffect(() => {
+
         LoginRegistrationAPI.getPrompt({ id: props.id }).then(res => {
-            setOutlinePrompt(res.data.outline_prompt)
-            setArticlePrompt(res.data.article_prompt)
-            setOutlines(res.data.generated_outlines)
+            if (props.articleType == 'listicle') {
+                setOutlinePrompt(res.data.intro_prompt)
+                setArticlePrompt(res.data.article_prompt)
+                setOutlines(res.data.conclusion_prompt)
+            } else {
+                setOutlinePrompt(res.data.outline_prompt)
+                setArticlePrompt(res.data.article_prompt)
+                setOutlines(res.data.generated_outlines)
+            }
+
         }).catch(e => {
             console.log(e)
         })
@@ -39,11 +51,11 @@ export const PromptComponent = (props: any) => {
 
             <Collapse in={collapsed}>
                 <CardContent>
-                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>Outline Prompt</Typography>
-                    <Typography id="modal-description" sx={{ whiteSpace: 'pre-line' }}>
+                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' ? 'Introduction Prompt' : 'Outline Prompt'}</Typography>
+                    <Typography id="modal-description" sx={{ whiteSpace: 'pre-line', marginBottom: "10px" }}>
                         {outlinePrompt}
                     </Typography>
-                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>Generated Outlines</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' ? 'Conclusion Prompt' : 'Generated Outlines'}</Typography>
                     <Typography id="modal-description" sx={{ whiteSpace: 'pre-line' }}>
                         {outlines}
                     </Typography>
