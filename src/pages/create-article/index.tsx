@@ -214,6 +214,8 @@ export default function CreateArticle(props: any) {
                     if (res.data.listicle_outlines) {
                         let lo = JSON.parse(res.data.listicle_outlines)
                         setListicleOutlines(lo)
+
+                        console.log(lo)
                     }
 
                     // if(res.data.numbered_items){
@@ -226,6 +228,7 @@ export default function CreateArticle(props: any) {
         }
 
     }, [getArticleFromParams])
+
 
 
     function separateString(str: string) {

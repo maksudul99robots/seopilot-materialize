@@ -36,6 +36,9 @@ export default function Page() {
     const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
     const [price, setPrice] = useState<number | string>(0);
     const [keywords, setKeywords] = useState<any>([])
+    const [listicleOutlines, setListicleOutlines] = useState<any>([]);
+    const [numberedItem, setNumberedItem] = useState(false);
+
 
     const router = useRouter()
 
@@ -190,6 +193,14 @@ export default function Page() {
                                     const keywordArray = separateString(res.data.keywords);
                                     setKeywords(keywordArray)
                                 }
+                                if (res.data.listicle_outlines) {
+                                    let lo = JSON.parse(res.data.listicle_outlines)
+                                    setListicleOutlines(lo)
+                                    console.log(lo)
+                                }
+
+                                // if(res.data.numbered_items){
+                                setNumberedItem(res.data.numbered_items)
 
                             }, 3000)
                         } else {
@@ -208,7 +219,7 @@ export default function Page() {
                         console.log(e);
                         clearInterval(interval)
                         Swal.fire({
-                            html: e.response.data?.message ? e.response.data?.message : 'Error from ChatGPT API. Please Try again later.',
+                            html: e.response?.data?.message ? e.response?.data?.message : 'Error from ChatGPT API. Please Try again later.',
                             icon: "error",
                             allowOutsideClick: false,
                             allowEscapeKey: false,
@@ -310,6 +321,7 @@ export default function Page() {
                         tokens={tokens}
                         keywordByKeybert={keywordByKeybert}
                         keywords={keywords}
+                        listicleOutlines={listicleOutlines}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

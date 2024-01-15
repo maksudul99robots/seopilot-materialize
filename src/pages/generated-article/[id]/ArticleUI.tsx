@@ -36,7 +36,6 @@ import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 
 export default function ArticleIU(props: any) {
-    console.log("props.token:", props)
     const router = useRouter()
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
@@ -228,7 +227,7 @@ export default function ArticleIU(props: any) {
 
                         {
                             article &&
-                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} />
+                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} listicleOutlines={props.listicleOutlines} />
                         }
 
 
@@ -236,32 +235,32 @@ export default function ArticleIU(props: any) {
                 </Grid>
 
                 <div style={{ width: "40%", }}>
-                    {
-                        auth?.user?.approle.role.id == 2 &&
-                        <>
-                            <PromptComponent id={props.id} />
-                            <Card sx={{ marginBottom: "10px" }}>
-                                <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} isKeybert={isKeybert} />
-                            </Card>
-                        </>
-
-                    }
-
-
-
                     <Card
-                        sx={{ overflow: 'visible', padding: "10px 20px 30px 20px" }}
+                        sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", marginBottom: "10px" }}
                     >
-                        <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
-                            <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px", marginRight: "10px" }}>Your Input</Typography>
-                            <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show</Button>
+
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
+                            <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
+                                <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Your Input</Button>
+                            </Box>
                         </Box>
 
-                        <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
 
                         {/* <Outlines outlines={outlines} /> */}
                         <Headings headings={headings} />
                     </Card>
+                    {
+                        auth?.user?.approle.role.id == 2 &&
+                        <>
+                            <PromptComponent id={props.id} />
+                            {/* <Card sx={{ marginBottom: "10px" }}> */}
+                            <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} isKeybert={isKeybert} />
+                            {/* </Card> */}
+                        </>
+
+                    }
+
                     {
                         auth?.user?.approle.role.id == 2 &&
                         <AiScoreComponent id={props.id} scoreObj={scoreObj} />

@@ -10,6 +10,7 @@ import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 
 
 const EditorControlled = (props: any) => {
+  const [isImgAdded, setIsImgAdded] = useState<any>([])
   // ** State
   const [value, setValue] = useState(EditorState.createWithContent(
     ContentState.createFromBlockArray(
@@ -26,8 +27,44 @@ const EditorControlled = (props: any) => {
       props.setHtml(convertToHTML(value.getCurrentContent()));
     }
 
+    // let x = getAllH2Elements(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML);
+    // x.map(h2Element => {
+    //   if (h2Element.innerText == 'Naruto') {
+    //     h2Element.innerHTML += `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="https://assets.agencyspotter.com/uploads/agency_image/image/46040/resized_1140x396px.png" style="height: auto; width: auto;"></span></span></figure>`;
+    //   }
+    // });
+    getAllH2Elements();
 
-  }, [value])
+
+  }, [value, props.listicleOutlines])
+
+  useEffect(() => {
+    // console.log("running ....")
+
+  }, [])
+
+  function getAllH2Elements() {
+
+    props.listicleOutlines?.map(x => {
+      let listicle = JSON.parse(x);
+      let elements = document.querySelectorAll(listicle.tag);
+      elements = Array.from(elements);
+      elements.forEach((element, index) => {
+        // console.log("element:",index, element.innerHTML);
+        if (element.innerText == listicle.title && !isImgAdded[listicle.title]) {
+          let x = isImgAdded;
+          x[listicle.title] = true;
+          setIsImgAdded(x);
+          element.insertAdjacentHTML('afterend', `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="${listicle.imgSrcUrl}" style="height: auto; width: auto;"></span></span></figure>`);
+        }
+
+      });
+    })
+
+
+  }
+
+
 
 
   function insertImageAfterFirstH1(htmlString, imgSrc) {

@@ -11,6 +11,7 @@ export function SortableItemForListicle(props: any) {
 
     // props.id
     // JavaScript
+    console.log("props.index:", props.index)
     let mainObject = JSON.parse(props.id);
     const {
         attributes,
@@ -20,16 +21,18 @@ export function SortableItemForListicle(props: any) {
         transition
     } = useSortable({ id: props.id });
 
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: props.index % 2 == 0 ? "#F8FBFC" : "fff"
-    }
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} className="aiwriter-inputs">
+        <div ref={setNodeRef} style={{
+            transform: CSS.Transform.toString(transform),
+            transition,
+            display: "flex",
+            alignItems: "center",
+            // backgroundColor: props.index % 2 == 0 ? "#F8FBFC" : "fff"
+            border: "1px solid #ECECEF",
+            borderRadius: "10px",
+            marginBottom: "20px"
+        }} {...attributes} className="aiwriter-inputs">
             {/* <MdOutlineDragIndicator {...listeners} style={{ display: "flex", color: "#999999" }} /> */}
             <Icon icon="ri:draggable" {...listeners} style={{ color: "#c0c0c4" }} />
             <div style={{ width: "100%", paddingBottom: "20px", paddingTop: "10px" }}>
@@ -37,9 +40,9 @@ export function SortableItemForListicle(props: any) {
 
                 {/* <span style={{color:"#6C757D",display: "flex", alignItems:"center", paddingRight:"3px", width:"23px"}}>{props.id.substring(0,2)}</span> */}
 
-                <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "conter" }}>
+                <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
 
-                    <select key={makeid()} name="cars" style={{ border: "none", backgroundColor: props.index % 2 == 0 ? "#F8FBFC" : "fff" }} onChange={e => { props.changeListicleOutlineTag(props.index, e.target.value) }}>
+                    <select key={makeid()} name="cars" style={{ border: "none", backgroundColor: props.index % 2 == 0 ? "#F8FBFC" : "fff", width: "4%" }} onChange={e => { props.changeListicleOutlineTag(props.index, e.target.value) }}>
                         {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
                         <option value='H2' selected={props.id.substring(0, 2) == 'H2'}>H2</option>
                         <option value='H3' selected={props.id.substring(0, 2) == 'H3'}>H3</option>
@@ -69,8 +72,9 @@ export function SortableItemForListicle(props: any) {
                     </div>
 
                 </div>
-                <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "conter", paddingLeft: "33px" }}>
-                    <div style={{ width: "47%", paddingRight: "5px" }}>
+                <div style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "conter", marginTop: "10px" }}>
+                    <div style={{ width: "4%" }}></div>
+                    <div style={{ width: "45%", paddingRight: "5px" }}>
                         <label>Item Image Option</label>
                         <select style={{ width: "100%", height: "63%", borderRadius: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
                             key={makeid()}
@@ -86,7 +90,7 @@ export function SortableItemForListicle(props: any) {
 
                         </select>
                     </div>
-                    <div style={{ width: "46%", paddingRight: "5px" }}>
+                    <div style={{ width: "45%", paddingRight: "5px" }}>
                         <label>{
                             mainObject.imgSrc == "none" ?
                                 "Image URL" :
