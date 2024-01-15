@@ -322,6 +322,7 @@ export default function Page() {
                         keywordByKeybert={keywordByKeybert}
                         keywords={keywords}
                         listicleOutlines={listicleOutlines}
+                        numberedItem={numberedItem}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

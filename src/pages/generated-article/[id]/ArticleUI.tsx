@@ -227,7 +227,7 @@ export default function ArticleIU(props: any) {
 
                         {
                             article &&
-                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} listicleOutlines={props.listicleOutlines} />
+                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} listicleOutlines={props.listicleOutlines} numberedItem={props.numberedItem} />
                         }
 
 

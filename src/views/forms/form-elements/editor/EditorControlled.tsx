@@ -45,15 +45,19 @@ const EditorControlled = (props: any) => {
 
   function getAllH2Elements() {
 
-    props.listicleOutlines?.map(x => {
+    props.listicleOutlines?.map((x: any, i: number) => {
       let listicle = JSON.parse(x);
       let elements = document.querySelectorAll(listicle.tag);
       elements = Array.from(elements);
       elements.forEach((element, index) => {
         console.log("element:", index, isImgAdded, listicle);
-        if (element.innerText == listicle.title && !isImgAdded[listicle.title]) {
+        let title = listicle.title;
+        if (props.numberedItem) {
+          title = i + '. ' + title;
+        }
+        if (element.innerText == title && !isImgAdded[title]) {
           let x = isImgAdded;
-          x[listicle.title] = true;
+          x[title] = true;
           setIsImgAdded(x);
           element.insertAdjacentHTML('afterend', `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"></span></span></figure>`);
         }
