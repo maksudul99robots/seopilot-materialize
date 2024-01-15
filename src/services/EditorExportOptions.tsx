@@ -59,6 +59,8 @@ const StyledMenu = styled((props: MenuProps) => (
 
 export default function CustomizedMenus(props: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -93,22 +95,25 @@ export default function CustomizedMenus(props: any) {
         return tempContainer.innerHTML;
     }
 
-    function insertH1BeforeFirstH2(htmlString: string, title: string) {
+    function insertH1AtTheBeginning(htmlString: string, title: string) {
         // Create a temporary div element to parse the HTML string
+        const h1 = document.createElement('h1');
+        h1.textContent = title;
+
         const tempDiv = document.createElement('div');
+        htmlString = `<h1>${title}</h1>` + htmlString;
         tempDiv.innerHTML = htmlString;
 
         // Find the first h2 element
-        const firstH2 = tempDiv.querySelector('h2');
+        // const firstH2 = tempDiv.querySelector('h2');
 
-        if (firstH2) {
-            // Create a new h1 element
-            const h1 = document.createElement('h1');
-            h1.textContent = title;
+        // if (firstH2) {
+        //     // Create a new h1 element
 
-            // Insert the new h1 before the first h2
-            firstH2.parentNode?.insertBefore(h1, firstH2);
-        }
+
+        //     // Insert the new h1 before the first h2
+        //     firstH2.parentNode?.insertBefore(h1, firstH2);
+        // }
 
         // Return the modified HTML string
         return tempDiv.innerHTML;
@@ -119,7 +124,7 @@ export default function CustomizedMenus(props: any) {
 
     function copyToClip(str: any) {
         // console.log("str:", str)
-        str = insertH1BeforeFirstH2(str, props.title);
+        str = insertH1AtTheBeginning(str, props.title);
         if (props.fImg?.urls?.full) {
 
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
@@ -136,10 +141,48 @@ export default function CustomizedMenus(props: any) {
     };
 
     function getFormatedHtml(str: string) {
-        str = insertH1BeforeFirstH2(str, props?.title);
+        let isImgAdded: any = [];
+        str = insertH1AtTheBeginning(str, props?.title);
         if (props?.fImg?.urls?.full)
             str = insertImageAfterFirstH1(str, props?.fImg?.urls?.full)
 
+        if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+            let doc = new DOMParser().parseFromString(str, "text/html");
+
+            for (let i = 0; i < props.listicleOutlines.length; i++) {
+                // props.listicleOutlines?.map((x: any, i: number) => {
+                let listicle = JSON.parse(props.listicleOutlines[i]);
+
+                // => <a href="#">Link...
+
+
+                let elements: any = doc.querySelectorAll(listicle.tag);
+                elements = Array.from(elements);
+                for (let j = 0; j < elements.length; j++) {
+
+                    let title = listicle.title;
+                    if (props.numberedItem) {
+                        let count = i + 1;
+                        title = count + '. ' + title;
+                    }
+
+                    if (elements[j].innerText == title && !isImgAdded[title]) {
+                        let x = isImgAdded;
+                        x[title] = true;
+                        isImgAdded = x;
+                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+                    }
+
+                }
+
+                str = doc.documentElement.outerHTML
+
+
+            }
+
+        }
+        // console.log("str:", str)
         return str
     }
 

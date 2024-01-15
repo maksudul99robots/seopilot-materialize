@@ -23,6 +23,7 @@ export default function Page() {
     const [showArticleEditor, setShowArticleEditor] = useState(false);
     const [article, setArticle] = useState('');
     const [articleTopic, setArticleTopic] = useState('');
+    const [articleType, setArticleType] = useState('');
     const [createdAt, setCreatedAt] = useState('');
     const [updatedAt, setUpdatedAt] = useState('');
     const [outlines, setOutlines] = useState('');
@@ -137,6 +138,16 @@ export default function Page() {
                             setKeywords(keywordArray)
                         }
 
+                        if (res.data.listicle_outlines) {
+                            let lo = JSON.parse(res.data.listicle_outlines)
+                            setListicleOutlines(lo)
+                            console.log(lo)
+                        }
+
+                        // if(res.data.numbered_items){
+                        setNumberedItem(res.data.numbered_items)
+                        setArticleType(res.data.article_type)
+
                     }, 1000)
                 } else {
 
@@ -196,11 +207,12 @@ export default function Page() {
                                 if (res.data.listicle_outlines) {
                                     let lo = JSON.parse(res.data.listicle_outlines)
                                     setListicleOutlines(lo)
-                                    console.log(lo)
+                                    // console.log(lo)
                                 }
 
                                 // if(res.data.numbered_items){
                                 setNumberedItem(res.data.numbered_items)
+                                setArticleType(res.data.article_type)
 
                             }, 3000)
                         } else {
@@ -323,6 +335,7 @@ export default function Page() {
                         keywords={keywords}
                         listicleOutlines={listicleOutlines}
                         numberedItem={numberedItem}
+                        articleType={articleType}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
