@@ -45,25 +45,22 @@ const Pricing = () => {
       title: 'Passenger',
       imgHeight: 100,
       monthlyPrice: 19,
-      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
+      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       popularPlan: false,
-      subtitle: 'Full access to the extension and upcomming features',
+      subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
         perMonth: 19,
         totalAnnual: 288
       },
       planBenefits: [
-        { text: "Get on-page SEO", show: true },
-        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
-        { text: "Download Data Points to .CSV", show: true },
-        { text: "Broken Link Checker", show: true },
-        { text: "Get all headings", show: true },
-        { text: "1 WordPress Site Connection", show: true },
-        { text: "1 User/Team Member(s)", show: true },
+        { text: "Advanced AI Writer (Saas)", show: true },
+        { text: "25 Articles / Month", show: true },
+        { text: "1 User", show: true },
         { text: "1 Workspace", show: true },
-        { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article", show: true }
+        { text: "1 Site Connected", show: true },
+        { text: "Folders (Coming Soon)", show: true },
+        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
       ]
 
     },
@@ -74,20 +71,17 @@ const Pricing = () => {
       title: 'Co-Pilot',
       popularPlan: true,
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
-      subtitle: 'Full access to the extension and upcomming features.',
+      subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
       yearlyPlan: { perMonth: 49, totalAnnual: 588 },
       planBenefits: [
-        { text: "Get on-page SEO", show: true },
-        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
-        { text: "Download Data Points to .CSV", show: true },
-        { text: "Broken Link Checker", show: true },
-        { text: "Get all headings", show: true },
-        { text: "5 WordPress Site Connections", show: true },
-        { text: "5 Users/Team Members", show: true },
+        { text: "Advanced AI Writer (Saas)", show: true },
+        { text: "Unlimited Articles", show: true },
+        { text: "5 Users", show: true },
         { text: "5 Workspaces", show: true },
-        { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article", show: true }
+        { text: "5 Sites Connected", show: true },
+        { text: "Folders (Coming Soon)", show: true },
+        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
       ]
     },
     {
@@ -97,20 +91,17 @@ const Pricing = () => {
       title: 'Captain',
       popularPlan: true,
       currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
-      subtitle: 'Full access to the extension and upcomming features.',
+      subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
       yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
       planBenefits: [
-        { text: "Get on-page SEO", show: true },
-        { text: "Contact and Social Info Scraper (Email & Phone)", show: true },
-        { text: "Download Data Points to .CSV", show: true },
-        { text: "Broken Link Checker", show: true },
-        { text: "Get all headings", show: true },
-        { text: "25 WordPress Site Connections", show: true },
-        { text: "25 Users/Team Members", show: true },
+        { text: "Advanced AI Writer (Saas)", show: true },
+        { text: "Unlimited Articles", show: true },
+        { text: "25 Users", show: true },
         { text: "25 Workspaces", show: true },
-        { text: "Free subscription to SEO & PR Newsletter", show: true },
-        { text: "Generate AI article", show: true }
+        { text: "25 Sites Connected", show: true },
+        { text: "Folders (Coming Soon)", show: true },
+        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
       ]
     }
   ]
