@@ -33,7 +33,11 @@ const EditorControlled = (props: any) => {
     //     h2Element.innerHTML += `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="https://assets.agencyspotter.com/uploads/agency_image/image/46040/resized_1140x396px.png" style="height: auto; width: auto;"></span></span></figure>`;
     //   }
     // });
-    getAllH2Elements();
+    // if(props.listicleOutlines)
+    setTimeout(() => {
+      getAllH2Elements();
+    }, 2000)
+
 
 
   }, [value, props.listicleOutlines])
@@ -44,7 +48,6 @@ const EditorControlled = (props: any) => {
   }, [])
 
   function getAllH2Elements() {
-
     props.listicleOutlines?.map((x: any, i: number) => {
       let listicle = JSON.parse(x);
       let elements = document.querySelectorAll(listicle.tag);
