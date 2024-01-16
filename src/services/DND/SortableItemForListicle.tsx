@@ -2,16 +2,26 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Icon from "src/@core/components/icon";
 import { makeid } from "../makeid";
+import { Chip } from "@mui/material";
+import { isValidURL } from "../URLChecker";
+import { useEffect, useRef, useState } from "react";
 // import { CiEdit } from 'react-icons/ci';
 // import { IoMdClose } from 'react-icons/io';
 // import { MdOutlineDragIndicator } from 'react-icons/md';
 // import { AiOutlineCheck } from "react-icons/ai";
 
 export function SortableItemForListicle(props: any) {
+    const [url, setUrl] = useState('');
+    const [imgUrl, setImgUrl] = useState('');
 
     // props.id
     // JavaScript
     let mainObject = JSON.parse(props.id);
+
+    useEffect(() => {
+        setUrl(mainObject.url)
+        setImgUrl(mainObject.imgSrcUrl)
+    }, [mainObject])
     const {
         attributes,
         listeners,
@@ -19,6 +29,8 @@ export function SortableItemForListicle(props: any) {
         transform,
         transition
     } = useSortable({ id: props.id });
+
+
 
 
     return (
@@ -56,12 +68,12 @@ export function SortableItemForListicle(props: any) {
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
-                            defaultValue={mainObject?.title}
+                            value={mainObject?.title}
                             onChange={e => { props.editListicleOutlineChange(props.index, e.target.value, 'title') }}
                         />
                     </div>
                     <div style={{ width: "45%", paddingRight: "5px" }}>
-                        <label>URL</label>
+                        <label>URL{!isValidURL(url) ? <Chip label="Chip Filled" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
@@ -96,7 +108,7 @@ export function SortableItemForListicle(props: any) {
                                 mainObject.imgSrc == "url" ? "Image URL" :
                                     mainObject.imgSrc == "ss" ? "Image URL" :
                                         "Upload Image"
-                        }</label>
+                        } {!isValidURL(url) ? <Chip label="Chip Filled" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: mainObject.imgSrc != "none" && mainObject.imgSrc != "ss" ? "#fff" : "#F7F7F9", color: "#333333", border: "1px solid #D8D8DD" }}

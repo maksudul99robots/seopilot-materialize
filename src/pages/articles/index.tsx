@@ -172,7 +172,7 @@ const TableServerSide = () => {
             field: 'is_error',
             headerName: 'Status',
             renderCell: (params: GridRenderCellParams) => {
-                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' ? 2 : 1]
+                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' || params.row?.status == 'initiated' ? 2 : 1]
                 return (
 
                     <>

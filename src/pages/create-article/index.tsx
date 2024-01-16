@@ -198,6 +198,7 @@ export default function CreateArticle(props: any) {
                     setFaq(res.data.faq)
 
                     const resultArray = separateString(res.data.links);
+                    console.log("resultArray:", resultArray)
                     setLinks(resultArray)
                     let x: any = [];
                     resultArray.map((l, i) => {
@@ -260,6 +261,22 @@ export default function CreateArticle(props: any) {
         }
     }
 
+    const convertArrayToCSV = (array: any) => {
+        let csv = '';
+        if (array.length > 0) {
+            for (let i = 0; i < array.length; i++) {
+                if (csv == '') {
+                    csv = array[i];
+                } else {
+                    csv = csv + ',' + array[i];
+                }
+            }
+
+        }
+
+        return csv;
+    }
+
     const sumbit = () => {
         // console.log({
         //     article_type: articleType,
@@ -300,7 +317,7 @@ export default function CreateArticle(props: any) {
                     tone: tone,
                     language: language,
                     country: country,
-                    links: JSON.stringify(links),
+                    links: convertArrayToCSV(links),
                     outlines: headings.length > 0 ? JSON.stringify(headings) : null,
                     outline_source: outlineSource,
                     outline_url: outlineURL,
@@ -352,7 +369,7 @@ export default function CreateArticle(props: any) {
                         tone: tone,
                         language: language,
                         country: country,
-                        links: JSON.stringify(links),
+                        links: convertArrayToCSV(links),
                         outlines: headings.length > 0 ? JSON.stringify(headings) : null,
                         outline_source: outlineSource,
                         outline_url: outlineURL,
@@ -454,6 +471,7 @@ export default function CreateArticle(props: any) {
         let uniqueArr = [...new Set(newArr)];
         setHeadings(uniqueArr);
     }
+
     //DND settings ends
 
     // DND for Listicles
@@ -466,6 +484,8 @@ export default function CreateArticle(props: any) {
             obj.url = heading;
         }
         listicleOutlines[index] = JSON.stringify(obj)
+        let newArr = [...listicleOutlines];
+        setListicleOutlines(newArr);
         // updateCsvHeadings(index, heading.slice(0))
 
     }
@@ -566,6 +586,10 @@ export default function CreateArticle(props: any) {
             setTempURLHeadings(headings)
         }
     }, [headings])
+    useEffect(() => {
+        console.log("articleType:", articleType)
+
+    }, [articleType])
 
 
 
@@ -648,8 +672,8 @@ export default function CreateArticle(props: any) {
                                     fullWidth
                                     placeholder='Blog Article'
                                     label='Blog Article'
-                                    labelId='blog'
-                                    defaultValue={articleType}
+                                    // labelId='blog'
+                                    value={articleType ? articleType : 'blog'}
                                     onChange={e => {
                                         setArticleType(e.target.value);
                                     }}
@@ -728,7 +752,7 @@ export default function CreateArticle(props: any) {
                                     placeholder='Article Tone'
                                     label='Article Tone'
                                     labelId='Article Tone'
-                                    defaultValue={tone}
+                                    value={tone ? tone : 'Clear, Knowledgeable and Confident'}
                                     onChange={e => {
                                         setTone(e.target.value)
                                     }}
@@ -770,7 +794,7 @@ export default function CreateArticle(props: any) {
                                         placeholder='Article Language'
                                         label='Article Language'
                                         labelId='English'
-                                        defaultValue={language}
+                                        value={language ? language : 'English'}
                                         onChange={e => {
                                             setLanguage(e.target.value)
                                         }}
@@ -1084,7 +1108,7 @@ export default function CreateArticle(props: any) {
                 >
                     <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
                         onClick={() => sumbit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
-                        disabled={loading ? true : articleType == 'listicle' && listicleOutlines.length == 0 ? true : false}
+                        disabled={loading}
 
 
                     >
@@ -1095,7 +1119,7 @@ export default function CreateArticle(props: any) {
                     </Button> */}
                 </DialogActions>
             </Card>
-        </Card>
+        </Card >
     )
 
 }
