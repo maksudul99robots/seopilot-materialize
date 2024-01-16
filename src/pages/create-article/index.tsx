@@ -215,7 +215,7 @@ export default function CreateArticle(props: any) {
                         let lo = JSON.parse(res.data.listicle_outlines)
                         setListicleOutlines(lo)
 
-                        console.log(lo)
+                        // console.log(lo)
                     }
 
                     // if(res.data.numbered_items){
@@ -605,6 +605,22 @@ export default function CreateArticle(props: any) {
         }
     }
 
+    const isLoading = () => {
+        if (loading) {
+            return true;
+        }
+        if (articleType == 'listicle') {
+            if (listicleOutlines.length > 0) {
+                return false
+            } else {
+                return true;
+            }
+        } else {
+            return false
+        }
+
+    }
+
 
     return (
         <Card>
@@ -831,38 +847,41 @@ export default function CreateArticle(props: any) {
                             </FormControl>
                         </Grid>
 
+                        {
+                            articleType != 'listicle' &&
+                            <>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
+                                    Outline Source
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
+                                            <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
+                                            <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
-                            Outline Source
-                            <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
-                                    <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
-                                    <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip >
+                                </Typography>
+                                <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
+                                    {data.map((item, index) => (
+                                        <CustomRadioIcons
+                                            key={index}
+                                            data={data[index]}
+                                            selected={outlineSource}
+                                            icon={icons[index].icon}
+                                            name='custom-radios-icons'
+                                            handleChange={handleChange}
+                                            gridProps={{ sm: 4, xs: 12 }}
+                                            iconProps={icons[index].iconProps}
 
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                </div>
-                            </LightTooltip >
-                        </Typography>
-                        <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
-                            {data.map((item, index) => (
-                                <CustomRadioIcons
-                                    key={index}
-                                    data={data[index]}
-                                    selected={outlineSource}
-                                    icon={icons[index].icon}
-                                    name='custom-radios-icons'
-                                    handleChange={handleChange}
-                                    gridProps={{ sm: 4, xs: 12 }}
-                                    iconProps={icons[index].iconProps}
-
-                                />
-                            ))}
-                        </Grid>
-
+                                        />
+                                    ))}
+                                </Grid>
+                            </>
+                        }
 
 
 
@@ -1065,7 +1084,9 @@ export default function CreateArticle(props: any) {
                 >
                     <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
                         onClick={() => sumbit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
-                        disabled={loading}
+                        disabled={loading ? true : articleType == 'listicle' && listicleOutlines.length == 0 ? true : false}
+
+
                     >
                         Create Article
                     </Button>

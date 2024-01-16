@@ -35,7 +35,7 @@ const BoxFeature = styled(Box)<BoxProps>(({ theme }) => ({
 const PlanDetails = (props: PricingPlanProps) => {
   // ** Props
   const { plan, data, index } = props
-  console.log("plan, data:", plan, data)
+  // console.log("plan, data:", plan, data)
 
   const renderFeatures = () => {
     return data?.planBenefits.map((item: any, index: number) => (

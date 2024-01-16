@@ -243,7 +243,7 @@ const SelectConnects = (props: any) => {
   }, [])
 
   useEffect(() => {
-    console.log(connectSelected)
+    // console.log(connectSelected)
   }, [connectSelected])
   return (
     <>

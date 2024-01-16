@@ -50,7 +50,7 @@ export default function AiScoreComponent(props: any) {
                 links_score: linkScore,
                 length_score: lengthScore
             }).then((res: any) => {
-                console.log(res.data)
+                // console.log(res.data)
                 // if(res.status ==200){
                 //     setWordScore
                 // }
