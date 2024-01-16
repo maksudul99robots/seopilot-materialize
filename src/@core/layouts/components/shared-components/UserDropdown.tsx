@@ -53,6 +53,7 @@ const UserDropdown = (props: Props) => {
   // ** Hooks
   const router = useRouter()
   const { logout } = useAuth()
+  const auth = useAuth()
 
   // ** Vars
   const { direction } = settings
@@ -166,9 +167,13 @@ const UserDropdown = (props: Props) => {
             {/* </Badge> */}
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
               <Typography sx={{ fontWeight: 600 }}>{user.first_name + ' ' + user.last_name}</Typography>
-              {/* <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Admin
-              </Typography> */}
+              {
+                auth?.user?.approle?.role.id == 2 &&
+                <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
+                  Super Admin
+                </Typography>
+              }
+
             </Box>
           </Box>
         </Box>
@@ -222,6 +227,25 @@ const UserDropdown = (props: Props) => {
         }
 
         <Divider />
+        {
+          auth?.user?.approle?.role.id == 2 &&
+          <>
+            <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/admin/articles')}>
+              <Box sx={styles}>
+                <Icon icon='ooui:articles-rtl' />
+                All Articles
+              </Box>
+            </MenuItem>
+            <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/admin/users')}>
+              <Box sx={styles}>
+                <Icon icon='mdi:account-outline' />
+                All Users
+              </Box>
+            </MenuItem>
+            <Divider />
+          </>
+
+        }
         <MenuItem
           onClick={handleLogout}
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}

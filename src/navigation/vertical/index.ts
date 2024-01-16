@@ -97,29 +97,29 @@ const navigation = (): VerticalNavItemsType => {
 
     ];
 
-  let adminMenus = [
-    {
-      sectionTitle: 'Admin Options'
-    },
-    {
-      title: 'All Articles',
-      icon: 'ooui:articles-rtl',
-      path: '/admin/articles'
-    },
-    {
-      title: 'All Users',
-      icon: 'mdi:account-outline',
-      path: '/admin/users'
-    },
-    // {
-    //   title: 'All Articles',
-    //   icon: 'material-symbols:key-outline',
-    //   path: '/add-apikey'
-    // }
-  ]
-  if (auth?.user?.approle?.role.id == 2) { //if app admin
-    menus = menus.concat(adminMenus);
-  }
+  // let adminMenus = [
+  //   {
+  //     sectionTitle: 'Admin Options'
+  //   },
+  //   {
+  //     title: 'All Articles',
+  //     icon: 'ooui:articles-rtl',
+  //     path: '/admin/articles'
+  //   },
+  //   {
+  //     title: 'All Users',
+  //     icon: 'mdi:account-outline',
+  //     path: '/admin/users'
+  //   },
+  //   // {
+  //   //   title: 'All Articles',
+  //   //   icon: 'material-symbols:key-outline',
+  //   //   path: '/add-apikey'
+  //   // }
+  // ]
+  // if (auth?.user?.approle?.role.id == 2) { //if app admin
+  //   menus = menus.concat(adminMenus);
+  // }
 
 
   return menus
