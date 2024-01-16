@@ -91,13 +91,107 @@ const SelectConnects = (props: any) => {
     return tempDiv.innerHTML;
   }
 
-  function getFormatedHtml(str: string) {
-    // str = insertH1BeforeFirstH2(str, props.title);
-    str = insertImageAtTheBeginning(str, props.fImg.urls.full)
+  // function getFormatedHtml(str: string) {
+  //   // str = insertH1BeforeFirstH2(str, props.title);
+  //   if()
+  //   str = insertImageAtTheBeginning(str, props.fImg.urls.full)
 
-    return str
+  //   return str
+  // }
+  function insertH1AtTheBeginning(htmlString: string, title: string) {
+    // Create a temporary div element to parse the HTML string
+    const h1 = document.createElement('h1');
+    h1.textContent = title;
+
+    const tempDiv = document.createElement('div');
+    htmlString = `<h1>${title}</h1>` + htmlString;
+    tempDiv.innerHTML = htmlString;
+
+    // Find the first h2 element
+    // const firstH2 = tempDiv.querySelector('h2');
+
+    // if (firstH2) {
+    //     // Create a new h1 element
+
+
+    //     // Insert the new h1 before the first h2
+    //     firstH2.parentNode?.insertBefore(h1, firstH2);
+    // }
+
+    // Return the modified HTML string
+    return tempDiv.innerHTML;
+  }
+  function insertImageAfterFirstH1(htmlString: string, imgSrc: string) {
+    // Create a temporary container element
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = htmlString;
+
+    // Find the first h1 element
+    const firstH1: any = tempContainer.querySelector('h1');
+
+    if (firstH1) {
+      // Create an img element
+      const imgElement: any = document.createElement('img');
+      // imgElement.width = "500";
+      // imgElement.height = "400";
+      imgElement.style.width = "100%"
+      imgElement.src = imgSrc;
+
+      // Insert the img element after the first h1
+      firstH1.parentNode.insertBefore(imgElement, firstH1.nextSibling);
+    } else {
+
+    }
+
+    // Return the modified HTML
+    return tempContainer.innerHTML;
   }
 
+  function getFormatedHtml(str: string) {
+    let isImgAdded: any = [];
+    str = insertH1AtTheBeginning(str, props?.title);
+    if (props?.fImg?.urls?.full)
+      str = insertImageAfterFirstH1(str, props?.fImg?.urls?.full)
+
+    if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+      let doc = new DOMParser().parseFromString(str, "text/html");
+
+      for (let i = 0; i < props.listicleOutlines.length; i++) {
+        // props.listicleOutlines?.map((x: any, i: number) => {
+        let listicle = JSON.parse(props.listicleOutlines[i]);
+
+        // => <a href="#">Link...
+
+
+        let elements: any = doc.querySelectorAll(listicle.tag);
+        elements = Array.from(elements);
+        for (let j = 0; j < elements.length; j++) {
+
+          let title = listicle.title;
+          if (props.numberedItem) {
+            let count = i + 1;
+            title = count + '. ' + title;
+          }
+
+          if (elements[j].innerText == title && !isImgAdded[title]) {
+            let x = isImgAdded;
+            x[title] = true;
+            isImgAdded = x;
+            elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+          }
+
+        }
+
+        str = doc.documentElement.outerHTML
+
+
+      }
+
+    }
+    // console.log("str:", str)
+    return str
+  }
   const handleSubmit = () => {
     setLoading(true)
     headers.set("Content-Type", "application/json")
