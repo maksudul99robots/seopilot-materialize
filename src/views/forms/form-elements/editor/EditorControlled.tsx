@@ -61,7 +61,7 @@ const EditorControlled = (props: any) => {
         }
 
         // console.log("element.innerText == title", element.innerText, title, isImgAdded[title])
-        if (element.innerText == title && !isImgAdded[title]) {
+        if (element.innerText == title && !isImgAdded[title] && listicle.imgSrcUrl.length > 5) {
           let x = isImgAdded;
           x[title] = true;
           setIsImgAdded(x);
