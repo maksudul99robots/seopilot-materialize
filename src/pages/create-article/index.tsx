@@ -198,7 +198,6 @@ export default function CreateArticle(props: any) {
                     setFaq(res.data.faq)
 
                     const resultArray = separateString(res.data.links);
-                    console.log("resultArray:", resultArray)
                     setLinks(resultArray)
                     let x: any = [];
                     resultArray.map((l, i) => {
@@ -484,8 +483,8 @@ export default function CreateArticle(props: any) {
             obj.url = heading;
         }
         listicleOutlines[index] = JSON.stringify(obj)
-        let newArr = [...listicleOutlines];
-        setListicleOutlines(newArr);
+        // let newArr = [...listicleOutlines];
+        // setListicleOutlines(newArr);
         // updateCsvHeadings(index, heading.slice(0))
 
     }
@@ -511,9 +510,9 @@ export default function CreateArticle(props: any) {
         let obj = JSON.parse(listicleOutlines[index])
         obj.imgSrcUrl = imgSrc;
         listicleOutlines[index] = JSON.stringify(obj)
-        let newArr = [...listicleOutlines];
-        let uniqueArr = [...new Set(newArr)];
-        setListicleOutlines(uniqueArr);
+        // let newArr = [...listicleOutlines];
+        // let uniqueArr = [...new Set(newArr)];
+        // setListicleOutlines(uniqueArr);
 
     }
     const removeListicleOutline = (index: number) => {
@@ -538,12 +537,13 @@ export default function CreateArticle(props: any) {
             title: '',
             url: '',
             imgSrc: 'none',
-            imgUrl: ''
+            imgSrcUrl: ''
         }
         newArr.push(JSON.stringify(obj));
         let uniqueArr = [...new Set(newArr)];
         setListicleOutlines(uniqueArr);
     }
+
     // DND for Listicles ends
     const fetchOutline = () => {
         setFetchOutlineLoading(true)
@@ -629,26 +629,13 @@ export default function CreateArticle(props: any) {
         }
     }
 
-    const isLoading = () => {
-        if (loading) {
-            return true;
-        }
-        if (articleType == 'listicle') {
-            if (listicleOutlines.length > 0) {
-                return false
-            } else {
-                return true;
-            }
-        } else {
-            return false
-        }
+    let setListicleOutlinesCommandSent = false;
 
-    }
 
 
     return (
         <Card>
-            <Card>
+            <Card >
                 <DialogContent
                     sx={{
                         position: 'relative',

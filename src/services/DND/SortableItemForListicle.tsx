@@ -11,17 +11,10 @@ import { useEffect, useRef, useState } from "react";
 // import { AiOutlineCheck } from "react-icons/ai";
 
 export function SortableItemForListicle(props: any) {
-    const [url, setUrl] = useState('');
-    const [imgUrl, setImgUrl] = useState('');
 
     // props.id
     // JavaScript
     let mainObject = JSON.parse(props.id);
-
-    useEffect(() => {
-        setUrl(mainObject.url)
-        setImgUrl(mainObject.imgSrcUrl)
-    }, [mainObject])
     const {
         attributes,
         listeners,
@@ -30,7 +23,13 @@ export function SortableItemForListicle(props: any) {
         transition
     } = useSortable({ id: props.id });
 
-
+    const checkValidityOfURL = (url: string) => {
+        if (url.trim() == '') {
+            return true
+        } else {
+            return isValidURL(url)
+        }
+    }
 
 
     return (
@@ -68,12 +67,12 @@ export function SortableItemForListicle(props: any) {
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
-                            value={mainObject?.title}
+                            defaultValue={mainObject?.title}
                             onChange={e => { props.editListicleOutlineChange(props.index, e.target.value, 'title') }}
                         />
                     </div>
                     <div style={{ width: "45%", paddingRight: "5px" }}>
-                        <label>URL{!isValidURL(url) ? <Chip label="Chip Filled" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
+                        <label>URL{!checkValidityOfURL(mainObject.url) ? <Chip label="Invalid URL" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
@@ -108,7 +107,7 @@ export function SortableItemForListicle(props: any) {
                                 mainObject.imgSrc == "url" ? "Image URL" :
                                     mainObject.imgSrc == "ss" ? "Image URL" :
                                         "Upload Image"
-                        } {!isValidURL(url) ? <Chip label="Chip Filled" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
+                        } {!checkValidityOfURL(mainObject.imgSrcUrl) ? <Chip label="Invalid URL" size="small" sx={{ backgroundColor: "#FFEBEB", color: "#B90000" }} /> : ''}</label>
                         <input
                             key={makeid()}
                             style={{ width: "100%", height: "45px", borderRadius: "5px", paddingLeft: "5px", backgroundColor: mainObject.imgSrc != "none" && mainObject.imgSrc != "ss" ? "#fff" : "#F7F7F9", color: "#333333", border: "1px solid #D8D8DD" }}
