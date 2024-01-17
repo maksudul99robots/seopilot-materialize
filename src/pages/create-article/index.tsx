@@ -465,7 +465,7 @@ export default function CreateArticle(props: any) {
         let newArr = [...headings];
         setHeadings(newArr);
         newArr = [...headings];
-        newArr.push('H1:');
+        newArr.push('H2:');
 
         let uniqueArr = [...new Set(newArr)];
         setHeadings(uniqueArr);

@@ -32,7 +32,7 @@ export function SortableItem(props: any) {
             <div style={{ padding: "10px", display: "flex", justifyContent: "spece-between", width: "100%" }}>
                 {/* <span style={{color:"#6C757D",display: "flex", alignItems:"center", paddingRight:"3px", width:"23px"}}>{props.id.substring(0,2)}</span> */}
                 <select key={makeid()} name="cars" style={{ border: "none" }} onChange={e => { props.changeHeadingTag(props.index, e.target.value) }}>
-                    <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option>
+                    {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
                     <option value='H2' selected={props.id.substring(0, 2) == 'H2'}>H2</option>
                     <option value='H3' selected={props.id.substring(0, 2) == 'H3'}>H3</option>
                     <option value='H4' selected={props.id.substring(0, 2) == 'H4'}>H4</option>
