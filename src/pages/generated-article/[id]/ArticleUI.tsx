@@ -253,7 +253,7 @@ export default function ArticleIU(props: any) {
                     {
                         auth?.user?.approle.role.id == 2 &&
                         <>
-                            <PromptComponent id={props.id} articleType={props.articleType} />
+                            <PromptComponent id={props.id} articleType={props.articleType} listicleOutlines={props.listicleOutlines} />
                             {/* <Card sx={{ marginBottom: "10px" }}> */}
                             <AdminDetailsComponent tokens={props.tokens} keywordByKeybert={keywords} isKeybert={isKeybert} />
                             {/* </Card> */}

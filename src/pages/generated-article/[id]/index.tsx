@@ -214,6 +214,7 @@ export default function Page() {
                                 setNumberedItem(res.data.numbered_items)
                                 setArticleType(res.data.article_type)
 
+
                             }, 3000)
                         } else {
                             Swal.fire({

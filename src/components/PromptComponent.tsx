@@ -16,7 +16,7 @@ export const PromptComponent = (props: any) => {
     useEffect(() => {
 
         LoginRegistrationAPI.getPrompt({ id: props.id }).then(res => {
-            if (props.articleType == 'listicle') {
+            if (props.articleType == 'listicle' && props.listicleOutlines.length > 0) {
                 setOutlinePrompt(res.data.intro_prompt)
                 setArticlePrompt(res.data.article_prompt)
                 setOutlines(res.data.conclusion_prompt)
@@ -51,11 +51,11 @@ export const PromptComponent = (props: any) => {
 
             <Collapse in={collapsed}>
                 <CardContent>
-                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' ? 'Introduction Prompt' : 'Outline Prompt'}</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' && props.listicleOutlines.length > 0 ? 'Introduction Prompt' : 'Outline Prompt'}</Typography>
                     <Typography id="modal-description" sx={{ whiteSpace: 'pre-line', marginBottom: "10px" }}>
                         {outlinePrompt}
                     </Typography>
-                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' ? 'Conclusion Prompt' : 'Generated Outlines'}</Typography>
+                    <Typography variant="h6" sx={{ marginBottom: "10px" }}>{props.articleType == 'listicle' && props.listicleOutlines.length > 0 ? 'Conclusion Prompt' : 'Generated Outlines'}</Typography>
                     <Typography id="modal-description" sx={{ whiteSpace: 'pre-line' }}>
                         {outlines}
                     </Typography>
