@@ -94,6 +94,12 @@ export default function CustomizedMenus(props: any) {
         // Return the modified HTML
         return tempContainer.innerHTML;
     }
+    function insertImageAtTheBeginning(htmlString: string, imgSrc: string) {
+
+        htmlString = `<img src="${imgSrc}" style="width:800;height:450" alt="Featured Image"/>` + htmlString;
+        // Return the modified HTML
+        return htmlString;
+    }
 
     function insertH1AtTheBeginning(htmlString: string, title: string) {
         // Create a temporary div element to parse the HTML string

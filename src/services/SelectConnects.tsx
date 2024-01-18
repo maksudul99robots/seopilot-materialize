@@ -64,11 +64,7 @@ const SelectConnects = (props: any) => {
     setShow(false)
   }
 
-  function insertImageAtTheBeginning(htmlString: string, imgSrc: string) {
-    // Create a temporary container element
-    let img = `<img src="${imgSrc}" style="width: 100%;">`
-    return img + htmlString
-  }
+
 
   function insertH1BeforeFirstH2(htmlString: string, title: string) {
     // Create a temporary div element to parse the HTML string
@@ -147,11 +143,23 @@ const SelectConnects = (props: any) => {
     return tempContainer.innerHTML;
   }
 
+  function insertImageAtTheBeginning(htmlString: string, imgSrc: string, fImgObj: any) {
+
+
+    if (fImgObj) {
+      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>${fImgObj.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a></figcaption>` + htmlString;
+    } else {
+      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/>` + htmlString;
+    }
+    // Return the modified HTML
+    return htmlString;
+  }
+
   function getFormatedHtml(str: string) {
     let isImgAdded: any = [];
     // str = insertH1AtTheBeginning(str, props?.title);
     if (props?.fImg?.urls?.full)
-      str = insertImageAfterFirstH1(str, props?.fImg?.urls?.full)
+      str = insertImageAtTheBeginning(str, props?.fImg?.urls?.full, props?.fImg)
 
     if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
 
@@ -192,6 +200,7 @@ const SelectConnects = (props: any) => {
     // console.log("str:", str)
     return str
   }
+
   const handleSubmit = () => {
     setLoading(true)
     headers.set("Content-Type", "application/json")
