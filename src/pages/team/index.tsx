@@ -61,6 +61,7 @@ import CreateWorkspace from 'src/services/CreateWorkspace'
 import InviteTeamMember from 'src/services/InviteTeamMember'
 import EditTeamMember from 'src/services/EditTeamMember'
 import DeleteTeamMember from 'src/services/DeleteTeamMember'
+import ResendInvitationTeamMember from 'src/services/ResendInvitationTeamMember'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -221,6 +222,18 @@ const Team = () => {
                                         setReRender={setReRender}
                                         disabled={row.role.toUpperCase() == "OWNER" || row.user_id == auth?.user?.id ? true : false}
                                     />
+                                    {
+                                        row.status.toUpperCase() != 'ACTIVE' &&
+                                        <ResendInvitationTeamMember
+                                            showResend={true}
+                                            email={row?.user?.email}
+                                            role={row?.role}
+                                            id={row.id}
+                                            reRender={reRender}
+                                            setReRender={setReRender}
+                                            disabled={row.role.toUpperCase() == "OWNER" || row.user_id == auth?.user?.id ? true : false}
+                                        />
+                                    }
                                 </>
                         }
 

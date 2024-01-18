@@ -102,8 +102,10 @@ export default function ArticleIU(props: any) {
         }
     }, [props.id])
     // console.log("articleObj", articleObj?.prompt)
-    const download = (html: string) => {
-        exportHtml(html)
+    const download = (html: string, title: string, id: any) => {
+        title = title.replaceAll(' ', '-')
+        title = title + id + '.html'
+        exportHtml(html, title)
     }
 
     useEffect(() => {
@@ -117,11 +119,12 @@ export default function ArticleIU(props: any) {
         getImgFromLocation(props.fImg?.links?.download_location);
     }, [props.fImg])
 
-    function exportHtml(str: string) {
+    function exportHtml(str: string, fileName: string) {
+        console.log("fileName:", fileName)
         const blob = new Blob([str], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.download = "seopilot-article.html";
+        link.download = fileName;
         link.href = url;
         link.click();
     }
@@ -165,7 +168,19 @@ export default function ArticleIU(props: any) {
 
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
-                    <CustomizedMenus title={props.articleTopic} html={props.html} setCopied={setCopied} copied={copied} save={props.save} download={download} plainText={props.plainText} fImg={fImg} listicleOutlines={props.listicleOutlines} articleType={props.articleType} numberedItem={props.numberedItem} />
+                    <CustomizedMenus
+                        id={props.id}
+                        title={props.articleTopic}
+                        html={props.html}
+                        setCopied={setCopied}
+                        copied={copied}
+                        save={props.save}
+                        download={download}
+                        plainText={props.plainText}
+                        fImg={fImg}
+                        listicleOutlines={props.listicleOutlines}
+                        articleType={props.articleType}
+                        numberedItem={props.numberedItem} />
                     <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
                     <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} />
                 </Box>
@@ -204,14 +219,14 @@ export default function ArticleIU(props: any) {
                             </div>
 
                         </div>
-                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px", overflow: "hidden" }}>
                             {
                                 fImg?.user?.links &&
-                                <div style={{ width: "600px", height: "400px", marginBottom: "40px", }}>
+                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
                                     <img
                                         src={imgSrc}
-                                        width={600}
-                                        height={400}
+                                        width={800}
+                                        height={450}
                                         style={{ objectFit: "cover" }}
                                         alt="Featured image"
                                     />
@@ -242,7 +257,7 @@ export default function ArticleIU(props: any) {
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
                             <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
-                                <Button variant='outlined' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Your Input</Button>
+                                <Button variant='outlined' color='secondary' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Inputs</Button>
                             </Box>
                         </Box>
 

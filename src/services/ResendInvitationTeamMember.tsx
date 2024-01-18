@@ -16,7 +16,7 @@ import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import EditIcon from '@mui/icons-material/Edit';
+
 // ** Third Party Imports
 import Payment from 'payment'
 import Cards, { Focused } from 'react-credit-cards'
@@ -33,11 +33,11 @@ import 'react-credit-cards/es/styles-compiled.css'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { FormControl, InputAdornment, InputLabel, MenuItem, Select, styled } from '@mui/material'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { LoginRegistrationAPI } from './API'
 import { ValidateEmail } from './emailValidation'
 import Swal from 'sweetalert2'
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-
+import SendIcon from '@mui/icons-material/Send';
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
   ref: Ref<unknown>
@@ -56,10 +56,10 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-const EditTeamMember = (props: any) => {
+const ResendInvitationTeamMember = (props: any) => {
   // ** States
   const [email, setEmail] = useState<string>(props.email)
-  const [role, setRole] = useState<string | null>(props.role)
+  const [role, setRole] = useState<string>(props.role)
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -81,12 +81,47 @@ const EditTeamMember = (props: any) => {
     setLoading(false)
   }
 
+  useEffect(() => {
+    if (email.length > 1) {
+      if (ValidateEmail(email)) {
+        setIsEmailValid(true)
+        setDisable(false)
+      } else {
+        setIsEmailValid(false)
+        setDisable(true)
+      }
+
+    } else {
+      setIsEmailValid(false)
+    }
+
+
+  }, [email])
 
   const handleSubmit = () => {
-    LoginRegistrationAPI.editTeamMember({ role, id: props.id }).then(res => {
+    setLoading(true);
+
+    LoginRegistrationAPI.inviteToTeam({ role: props.role, email: props.email }).then(res => {
       props.setReRender(!props.reRender);
+      setLoading(false);
+
+      Swal.fire({
+        title: 'Success!',
+        text: 'An Invitation Mail is Sent',
+        icon: 'success',
+        confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
+      })
     }).catch(e => {
+      setLoading(false);
       console.log(e)
+      Swal.fire({
+        title: 'Error!',
+        text: e.response.data,
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        confirmButtonColor: "#2979FF"
+      })
     })
     setShow(false)
   }
@@ -94,19 +129,19 @@ const EditTeamMember = (props: any) => {
   return (
     <>
 
+
       <IconButton aria-label="Edit" sx={{ marginRight: "10px" }} onClick={e => {
-        setShow(props.showEdit)
-      }} disabled={props.disabled}>
+        setShow(props.showResend)
+      }}>
         <LightTooltip title={
           <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-            Edit Team Member Role
+            Resend Invitation
           </p>
         } placement="top">
-
-          <EditIcon />
+          <SendIcon />
         </LightTooltip>
 
-      </IconButton >
+      </IconButton>
 
 
 
@@ -133,49 +168,17 @@ const EditTeamMember = (props: any) => {
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Edit Team Member's Role
+              Resend Invitation
             </Typography>
+            {/* <Typography variant='body2'>Send Article to WordPress</Typography> */}
           </Box>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sx={{ mt: 7 }}>
-                  <TextField
-                    fullWidth
-                    name='email'
-                    value={email}
-                    autoComplete='off'
-                    label='Email Address'
-                    onBlur={handleBlur}
-                    onChange={handleInputChange}
-                    placeholder=''
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-
-                  />
-                </Grid>
-
+          <Grid container spacing={1}>
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important`, }}>
+              <Grid container spacing={1} sx={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+                Are you sure you want to resend invitation to {props.email}?
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <FormControl fullWidth>
-                <InputLabel id='role-select'>Select Role</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Select Role'
-                  label='Select Role'
-                  labelId='Select Role'
-                  defaultValue={role}
-                  onChange={e => {
-                    setRole(e.target.value)
-                  }}
-                >
-                  <MenuItem value='member'>Member</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
+
           </Grid>
         </DialogContent>
         <DialogActions
@@ -185,10 +188,8 @@ const EditTeamMember = (props: any) => {
             pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
           }}
         >
-          <Button variant='contained' sx={{ mr: 2 }}
-            onClick={handleSubmit}
-          >
-            Save
+          <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit}>
+            Resend
           </Button>
           <Button variant='outlined' color='secondary' onClick={handleClose}>
             Cancel
@@ -199,4 +200,4 @@ const EditTeamMember = (props: any) => {
   )
 }
 
-export default EditTeamMember
+export default ResendInvitationTeamMember

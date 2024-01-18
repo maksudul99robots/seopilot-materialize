@@ -21,12 +21,20 @@ const navigation = (): VerticalNavItemsType => {
       path: '/create-article'
     },
     {
+      sectionTitle: 'Workspace Settings'
+    },
+    {
+      title: 'API Key',
+      icon: 'material-symbols:key-outline',
+      path: '/add-apikey'
+    },
+    {
       title: 'Integrations',
       icon: 'ic:round-wordpress',
       path: '/integrations'
     },
     {
-      sectionTitle: 'Workspaces & Team mgmt'
+      sectionTitle: 'Account Settings'
     },
     {
       title: 'Workspaces',
@@ -39,25 +47,18 @@ const navigation = (): VerticalNavItemsType => {
       path: '/team'
     },
     {
-      sectionTitle: 'Account Settings'
-    },
-    {
-      title: 'OpenAI API Key',
-      icon: 'material-symbols:key-outline',
-      path: '/add-apikey'
-    },
-    {
       sectionTitle: 'Profile Settings'
     },
+
     {
-      title: 'Profile Settings',
+      title: 'Profile',
       icon: 'mdi:account-outline',
       path: '/user-profile/account'
     },
     {
-      title: 'Pricing',
+      title: 'Plans',
       icon: 'mdi:currency-usd',
-      path: '/pricing'
+      path: '/plans'
     },
 
   ] :

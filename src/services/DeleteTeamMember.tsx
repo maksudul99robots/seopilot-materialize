@@ -16,6 +16,7 @@ import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // ** Third Party Imports
 import Payment from 'payment'
@@ -30,8 +31,9 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { InputAdornment } from '@mui/material'
+import { InputAdornment, styled } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -39,6 +41,16 @@ const Transition = forwardRef(function Transition(
 ) {
   return <Fade ref={ref} {...props} />
 })
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#fff",
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}));
 
 const DeleteWorkspace = (props: any) => {
   // ** States
@@ -81,11 +93,23 @@ const DeleteWorkspace = (props: any) => {
 
   return (
     <>
-      <Button variant='outlined' onClick={e => {
+
+
+      <IconButton aria-label="Edit" sx={{ marginRight: "10px" }} onClick={e => {
         setShow(props.showDelete)
-      }} startIcon={<Icon icon="material-symbols-light:delete-outline" />} disabled={props.disabled}>
-        delete
-      </Button>
+      }} disabled={props.disabled}>
+        <LightTooltip title={
+          <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+            Remove Team Member
+          </p>
+        } placement="top">
+          <DeleteIcon />
+        </LightTooltip>
+
+      </IconButton>
+
+
+
 
       <Dialog
         fullWidth

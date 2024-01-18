@@ -80,9 +80,9 @@ export default function CustomizedMenus(props: any) {
         if (firstH1) {
             // Create an img element
             const imgElement: any = document.createElement('img');
-            // imgElement.width = "500";
-            // imgElement.height = "400";
-            imgElement.style.width = "100%"
+            imgElement.width = "800";
+            imgElement.height = "450";
+            // imgElement.style.width = "100%"
             imgElement.src = imgSrc;
 
             // Insert the img element after the first h1
@@ -171,7 +171,7 @@ export default function CustomizedMenus(props: any) {
                         let x = isImgAdded;
                         x[title] = true;
                         isImgAdded = x;
-                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: 450px; width: 800px;"/>`);
                     }
 
                 }
@@ -246,7 +246,7 @@ export default function CustomizedMenus(props: any) {
                 </CopyToClipboard>
                 <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={e => {
-                    props.download(getFormatedHtml(props.html));
+                    props.download(getFormatedHtml(props.html), props.title, props.id);
                     setAnchorEl(null);
                 }} disableRipple>
                     <FileDownloadOutlinedIcon />

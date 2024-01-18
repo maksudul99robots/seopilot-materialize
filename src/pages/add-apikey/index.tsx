@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Card, CardContent, CardHeader, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Tooltip, TooltipProps, Typography, styled, tooltipClasses } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -27,6 +27,16 @@ interface State {
     password: string
     showPassword: boolean
 }
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: "#fff",
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
 
 const AddApiKey = () => {
     const [apikey, setApikey] = useState('');
@@ -121,8 +131,17 @@ const AddApiKey = () => {
                         <Grid container spacing={5} >
 
 
-                            <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10 }}>
+                            <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10, display: "flex" }}>
                                 Please Enter your API Key:
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        Click on Edit Icon to Enable the Input Field
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                    </div>
+                                </LightTooltip>
                             </Typography>
                             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
                                 <Grid item xs={11} sx={{ paddingLeft: "20px" }}>

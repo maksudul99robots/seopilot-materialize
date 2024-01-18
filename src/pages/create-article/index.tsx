@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material'
+import { Alert, Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material'
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 import Switch from '@mui/material/Switch'
@@ -33,6 +33,7 @@ import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import CustomChip from 'src/@core/components/mui/chip'
 import { TagsInput } from "react-tag-input-component";
 import DndForListicle from 'src/services/DND/DNDForListicle';
+import Link from 'next/link';
 // ** Demo Components Imports
 
 interface IconType {
@@ -49,13 +50,13 @@ const data: CustomRadioIconsData[] = [
     },
     {
         value: 'user',
-        title: 'Create Your Own Outline',
-        content: 'Create your article outline by adding Headings and Heading Texts.'
+        title: 'Custom Outline',
+        content: 'Specify your own article outline for greater control.'
     },
     {
         value: 'url',
         title: 'Get Outline From a URL',
-        content: 'Extracts outline from an article URL. You can Edit/Remove/Reorder outline.'
+        content: 'Extract outline from an URL. Add, edit, remove, & reorder sections before generation.'
     }
 ]
 const articleLengthObj: CustomRadioIconsData[] = [
@@ -98,7 +99,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
     [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
+        backgroundColor: "#fff",
         color: 'rgba(0, 0, 0, 0.87)',
         boxShadow: theme.shadows[1],
         fontSize: 11,
@@ -125,7 +126,7 @@ export default function CreateArticle(props: any) {
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
-    const [model, setModel] = useState<string>('gpt-3.5-turbo-1106');
+    const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
@@ -139,7 +140,7 @@ export default function CreateArticle(props: any) {
     const [showFeaturedImg, setShowFeaturedImg] = useState(false);
     const [numberedItem, setNumberedItem] = useState(false);
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
-    // const [articleType, setArticleType] = useState('blog')
+    const [apiKey, setApiKey] = useState<string | null>('')
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
     const auth = useAuth();
@@ -229,6 +230,33 @@ export default function CreateArticle(props: any) {
 
     }, [getArticleFromParams])
 
+    useEffect(() => {
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    setApiKey(res.data.apikey)
+                } else {
+                    setApiKey(null)
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                console.log(e);
+                setApiKey(null)
+            })
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: "#2979FF"
+            })
+            router.push('/')
+        }
+
+    }, [])
 
 
     function separateString(str: string) {
@@ -241,24 +269,6 @@ export default function CreateArticle(props: any) {
         return trimmedParts;
     }
 
-    const setToneIfMatchesExistingTones = (newTone: string) => {
-        const existingTones = [
-            'Clear, Knowledgeable, Confident',
-            'Professional',
-            'Empathetic',
-            'Informative',
-            'Casual',
-            'Excited',
-            'Formal',
-            'Friendly',
-            'Humorous',
-        ];
-        if (existingTones.includes(newTone)) {
-            setTone(newTone)
-        } else {
-            setTone('Clear, Knowledgeable, Confident')
-        }
-    }
 
     const convertArrayToCSV = (array: any) => {
         let csv = '';
@@ -634,24 +644,53 @@ export default function CreateArticle(props: any) {
 
 
     return (
-        <Card>
-            <Card >
+        // <Card>
+        <>
+            {
+                !apiKey &&
+                <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
+                    You have to add API key to generate article. Click <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Here</Link> to add API Key.
+
+                </Alert>
+            }
+
+
+            <Card sx={{ padding: "0px" }}>
                 <DialogContent
                     sx={{
                         position: 'relative',
                         pb: theme => `${theme.spacing(15)} !important`,
                         px: theme => [`${theme.spacing(15)} !important`, `${theme.spacing(35)} !important`],
-                        pt: theme => [`${theme.spacing(15)} !important`, `${theme.spacing(32.5)} !important`]
+                        pt: theme => [`${theme.spacing(15)} !important`, `${theme.spacing(15.5)} !important`]
                     }}
                 >
                     <Box sx={{ mb: 9, textAlign: 'center' }}>
                         <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
                             Create Article
                         </Typography>
-                        <Typography variant='body2'>Enter your topic and target keywords, and watch Seopilot research and generate article for you</Typography>
+                        <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article for you.</Typography>
                     </Box>
 
                     <Grid container spacing={6}>
+                        <Grid item sm={12} xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>AI Model</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='AI Model'
+                                    label='AI Model'
+                                    labelId='AI Model'
+                                    defaultValue={model}
+                                    onChange={e => {
+                                        setModel(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommanded)</MenuItem>
+                                    <MenuItem value='gpt-4'>GPT-4</MenuItem>
+                                    <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Type</InputLabel>
@@ -812,25 +851,7 @@ export default function CreateArticle(props: any) {
 
 
 
-                        <Grid item sm={12} xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel id='country-select'>AI Model</InputLabel>
-                                <Select
-                                    fullWidth
-                                    placeholder='AI Model'
-                                    label='AI Model'
-                                    labelId='AI Model'
-                                    defaultValue={model}
-                                    onChange={e => {
-                                        setModel(e.target.value)
-                                    }}
-                                >
-                                    <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
-                                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                                    <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+
 
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
                             Point of View of Article
@@ -865,9 +886,12 @@ export default function CreateArticle(props: any) {
                                     Outline Source
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            If you choose "Get Outline From a URL", the system will scrape the given URL to get all the Headings as your Article Outline.
-                                            <br></br>If you choose "Create Your Own Outline", you can also Create your own article manually.
-                                            <br></br>If you choose "System Generated Outline", the system will generate Article Outline on its own.
+                                            <b>System Generated Outline</b>- Based on the given inputs, SEO Pilot will programmatically generate an outline and produce the article.
+                                            <br></br>
+                                            <b>Create Your Own Outline</b>- Allows you to specify the outline. Add, edit, remove, and re-order headings.
+                                            <br></br>
+                                            <b>Get Outline From a URL</b>- the system will scrape the given URL to extract all Headings to form an outline. Thereafter, you can add, edit, remove, and re-order headings.
+
 
                                         </p>
                                     } placement="top">
@@ -960,22 +984,59 @@ export default function CreateArticle(props: any) {
 
 
 
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    By default, Introduction sections are always included. You can turn off Introduction by disabling this option.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                </div>
+                            </LightTooltip >
 
                         </Grid>
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Conclusion" isChecked={conclusion} onClick={() => setConclusion(!conclusion)} />
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    By default, Conclusion sections are always included. You can turn off Conclusions by disabling this option.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                </div>
+                            </LightTooltip >
 
                         </Grid>
-                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                            <SwitchesCustomized label="Include TABLE OF CONTENTS" isChecked={toc} onClick={() => setToc(!toc)} />
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                            <SwitchesCustomized label="Table of Contents (TOC)" isChecked={toc} onClick={() => setToc(!toc)} />
+                            <LightTooltip title={
+                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                    The table of contents will be added to the top of the article under the title.
+                                </p>
+                            } placement="top">
+                                <div style={{ height: "100%" }}>
+                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                </div>
+                            </LightTooltip >
 
                         </Grid>
                         {
                             articleType != 'listicle' &&
-                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                                 <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        System will include Frequently Asked Questions (FAQ) at the end of the article.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip >
+
 
                             </Grid>
                         }
@@ -1000,7 +1061,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    All the showcased images are now sourced from unsplash.com. In upcoming releases, users will have the option to select from a variety of featured images.
+                                    System will select one image from Unsplash to use as the featured image. In the future, we will allow choosing from multiple images.
                                 </p>
                             } placement="top">
                                 <div style={{ height: "100%" }}>
@@ -1106,7 +1167,9 @@ export default function CreateArticle(props: any) {
                     </Button> */}
                 </DialogActions>
             </Card>
-        </Card >
+        </>
+
+        // </Card >
     )
 
 }
