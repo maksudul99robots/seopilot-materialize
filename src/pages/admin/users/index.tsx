@@ -80,6 +80,7 @@ import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
+import UserDetails from 'src/services/UserDetails/UserDetails'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -120,9 +121,10 @@ const TableServerSide = () => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                        {/* <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                             {row.email ? row.email : ""}
-                        </Typography>
+                        </Typography> */}
+                        <UserDetails user={row} />
 
                     </Box>
                 )
