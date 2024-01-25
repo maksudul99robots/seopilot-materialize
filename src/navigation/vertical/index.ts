@@ -91,9 +91,9 @@ const navigation = (): VerticalNavItemsType => {
         path: '/user-profile/account'
       },
       {
-        title: 'Pricing',
+        title: 'Plans',
         icon: 'mdi:currency-usd',
-        path: '/pricing'
+        path: '/plans'
       },
 
     ];
