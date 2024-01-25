@@ -156,18 +156,16 @@ export default function ArticleIU(props: any) {
                     <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
                         Last Updated: {props.updatedAt}
                     </Typography>
-                    {
-                        props.wordCount && props.tokens && props.price &&
-                        <Typography variant='subtitle2' sx={{}}>
-                            Word Count: {props.wordCount} words
-                            {
-                                (props.tokens != 0 && props.tokens != undefined && props.tokens != null) ?
-                                    ` | Tokens Used: ${props.tokens.total_tokens} 
+
+                    <Typography variant='subtitle2' sx={{}}>
+                        Word Count: {props.wordCount} words
+                        {
+                            (props.tokens != 0 && props?.tokens != undefined && props?.tokens != null) ?
+                                ` | Tokens Used: ${props?.tokens?.total_tokens} 
                                 | Cost: ~$${props.price}` : ''
 
-                            }
-                        </Typography>
-                    }
+                        }
+                    </Typography>
 
 
                 </Box>
