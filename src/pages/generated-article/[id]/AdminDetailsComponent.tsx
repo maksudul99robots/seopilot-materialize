@@ -34,17 +34,17 @@ export default function AdminDetailsComponent(props: any) {
                     <CardContent>
                         <Box sx={{ display: "flex", marginTop: "5px", padding: "5px" }}>
                             <Typography variant="body1">Prompt tokens : </Typography>
-                            <Typography variant="body1">{props.tokens.prompt_tokens}</Typography>
+                            <Typography variant="body1">{props?.tokens?.prompt_tokens}</Typography>
 
                         </Box>
                         <Box sx={{ display: "flex", padding: "5px" }}>
                             <Typography variant="body1">Completion tokens : </Typography>
-                            <Typography variant="body1">{props.tokens.completion_tokens}</Typography>
+                            <Typography variant="body1">{props?.tokens?.completion_tokens}</Typography>
 
                         </Box>
                         <Box sx={{ display: "flex", padding: "5px", marginBottom: "10px" }}>
                             <Typography variant="body1">Total tokens : </Typography>
-                            <Typography variant="body1">{props.tokens.total_tokens}</Typography>
+                            <Typography variant="body1">{props?.tokens?.total_tokens}</Typography>
 
                         </Box>
                     </CardContent>
