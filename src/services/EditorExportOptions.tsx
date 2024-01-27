@@ -129,11 +129,14 @@ export default function CustomizedMenus(props: any) {
 
 
     function copyToClip(str: any) {
-        // console.log("str:", str)
+        // console.log("props.fImg?.photos:", props.fImg?.photos)
         str = insertH1AtTheBeginning(str, props.title);
         if (props.fImg?.urls?.full) {
 
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        }
+        if (props.fImg?.photos) {
+            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
         }
 
         function listener(e: any) {
@@ -152,6 +155,9 @@ export default function CustomizedMenus(props: any) {
         if (props?.fImg?.urls?.full)
             str = insertImageAfterFirstH1(str, props?.fImg?.urls?.full)
 
+        if (props.fImg?.photos) {
+            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+        }
         if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
 
             let doc = new DOMParser().parseFromString(str, "text/html");

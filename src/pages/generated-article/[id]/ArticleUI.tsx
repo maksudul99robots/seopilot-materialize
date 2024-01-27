@@ -116,7 +116,10 @@ export default function ArticleIU(props: any) {
     }, [props.keywords])
 
     useEffect(() => {
-        getImgFromLocation(props.fImg?.links?.download_location);
+        if (props.imgService == 'unsplash')
+            getImgFromLocation(props.fImg?.links?.download_location);
+
+        console.log(props.fImg, props.imgService)
     }, [props.fImg])
 
     function exportHtml(str: string, fileName: string) {
@@ -223,7 +226,7 @@ export default function ArticleIU(props: any) {
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px", overflow: "hidden" }}>
                             {
-                                fImg?.user?.links &&
+                                props.imgService == 'unsplash' && fImg?.user?.links &&
                                 <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
                                     <img
                                         src={imgSrc}
@@ -234,6 +237,22 @@ export default function ArticleIU(props: any) {
                                     />
                                     <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
                                         Photo by <a href={fImg.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>{fImg.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a>
+                                    </p>
+                                </div>
+                            }
+
+                            {
+                                props.imgService == 'pexels' && fImg?.photos &&
+                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                    <img
+                                        src={fImg.photos[0].src.original}
+                                        width={800}
+                                        height={450}
+                                        style={{ objectFit: "cover" }}
+                                        alt="Featured image"
+                                    />
+                                    <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
+                                        Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
                                     </p>
                                 </div>
                             }

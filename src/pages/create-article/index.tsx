@@ -127,6 +127,7 @@ export default function CreateArticle(props: any) {
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
     const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
+    const [imgService, setImgService] = useState<string>('unsplash');
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
@@ -163,7 +164,6 @@ export default function CreateArticle(props: any) {
         if (getArticleFromParams > 0) {
             LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
                 if (res.status == 212) {
-
                     setArticleType(res.data.article_type)
                     setArticleLength(res.data.article_length)
                     setCountry(res.data.country)
@@ -221,6 +221,7 @@ export default function CreateArticle(props: any) {
 
                     // if(res.data.numbered_items){
                     setNumberedItem(res.data.numbered_items)
+                    setImgService(res.data.img_service)
                     // }
                 }
             }).catch(e => {
@@ -334,7 +335,8 @@ export default function CreateArticle(props: any) {
                     toc: toc,
                     model: model,
                     showFeaturedImg: showFeaturedImg,
-                    point_of_view: pointOfView
+                    point_of_view: pointOfView,
+                    img_service: showFeaturedImg ? imgService : null
                 }).
                     then(res => {
                         // console.log("res:", res);
@@ -388,7 +390,8 @@ export default function CreateArticle(props: any) {
                         showFeaturedImg: showFeaturedImg,
                         point_of_view: pointOfView,
                         listicle_outlines: listicleOutlines,
-                        numbered_items: numberedItem
+                        numbered_items: numberedItem,
+                        img_service: showFeaturedImg ? imgService : null
                     }
                 ).then(res => {
                     // console.log("res:", res);
@@ -427,6 +430,10 @@ export default function CreateArticle(props: any) {
         }
 
     }
+
+    useEffect(() => {
+        console.log("imgService:", imgService)
+    }, [imgService])
 
     const convertArrayToCsvKeywords = (keywordArray: any) => {
         let csvKeywords = '';
@@ -680,7 +687,7 @@ export default function CreateArticle(props: any) {
                                     placeholder='AI Model'
                                     label='AI Model'
                                     labelId='AI Model'
-                                    defaultValue={model}
+                                    value={model}
                                     onChange={e => {
                                         setModel(e.target.value)
                                     }}
@@ -1065,7 +1072,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    System will select one image from Unsplash to use as the featured image. In the future, we will allow choosing from multiple images.
+                                    System will select one image from Unsplash or Pexels to use as the featured image. In the future, we will allow choosing from multiple images.
                                 </p>
                             } placement="top">
                                 <div style={{ height: "100%" }}>
@@ -1074,6 +1081,31 @@ export default function CreateArticle(props: any) {
                             </LightTooltip >
 
                         </Grid>
+                        {
+                            showFeaturedImg &&
+                            <Box sx={{ width: "100%", padding: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Grid item sm={6} xs={6}>
+                                    <FormControl size='medium' fullWidth>
+                                        <InputLabel id='img-service'>Select Image Service</InputLabel>
+                                        <Select
+                                            fullWidth
+                                            placeholder='Select Image Service'
+                                            label='Select Image Service'
+                                            labelId='Select Image Service'
+                                            value={imgService}
+                                            onChange={e => {
+                                                setImgService(e.target.value)
+                                            }}
+                                        >
+                                            <MenuItem value='unsplash'>Unsplash</MenuItem>
+                                            <MenuItem value='pexels'>Pexels</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Box>
+
+
+                        }
 
                         {/* </Box> */}
                         {

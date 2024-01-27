@@ -31,6 +31,7 @@ export default function Page() {
     const [callTracker, setCallTracker] = useState(false);
     const [showOutlines, setShowOutlines] = useState(false);
     const [html, setHtml] = useState<string>('');
+    const [imgService, setImgService] = useState<string>('');
     const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
     const [tokens, setTokens] = useState<any>(null);
@@ -147,6 +148,7 @@ export default function Page() {
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
+                        setImgService(res.data.img_service)
 
                     }, 1000)
                 } else {
@@ -213,7 +215,7 @@ export default function Page() {
                                 // if(res.data.numbered_items){
                                 setNumberedItem(res.data.numbered_items)
                                 setArticleType(res.data.article_type)
-
+                                setImgService(res.data.img_service)
 
                             }, 3000)
                         } else {
@@ -337,6 +339,7 @@ export default function Page() {
                         listicleOutlines={listicleOutlines}
                         numberedItem={numberedItem}
                         articleType={articleType}
+                        imgService={imgService}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

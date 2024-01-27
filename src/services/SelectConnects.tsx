@@ -146,8 +146,10 @@ const SelectConnects = (props: any) => {
   function insertImageAtTheBeginning(htmlString: string, imgSrc: string, fImgObj: any) {
 
 
-    if (fImgObj) {
+    if (fImgObj?.user?.links?.html) {
       htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>${fImgObj.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a></figcaption>` + htmlString;
+    } else if (fImgObj?.photos) {
+      `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.photos[0].photographer_url} target='_blank' className='colorLink'>${fImgObj.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a></figcaption>` + htmlString;
     } else {
       htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/>` + htmlString;
     }
@@ -160,6 +162,10 @@ const SelectConnects = (props: any) => {
     // str = insertH1AtTheBeginning(str, props?.title);
     if (props?.fImg?.urls?.full)
       str = insertImageAtTheBeginning(str, props?.fImg?.urls?.full, props?.fImg)
+
+    if (props.fImg?.photos) {
+      str = insertImageAtTheBeginning(str, props.fImg.photos[0].src.original, props?.fImg)
+    }
 
     if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
 
