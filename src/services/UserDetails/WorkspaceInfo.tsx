@@ -26,6 +26,7 @@ export const WorkspaceInfo = (props: any) => {
                                 {/* </Box> */}
                             </Box>
                             {
+                                w.team.length > 0 &&
                                 <Typography variant='body1' sx={{ mb: 3, fontWeight: 700, fontSize: "18px" }}>
                                     Team
                                 </Typography>
@@ -48,6 +49,32 @@ export const WorkspaceInfo = (props: any) => {
                                                     Role: <span style={{ fontWeight: "400" }}>{t.role}</span>
                                                 </Typography>
                                                 {/* </Box> */}
+                                            </Box>
+                                        </div>
+                                    )
+                                })
+                            }
+                            {
+                                w.wp_connects.length > 0 &&
+                                <Typography variant='body1' sx={{ mb: 3, fontWeight: 700, fontSize: "18px" }}>
+                                    Integrations
+                                </Typography>
+                            }
+                            {
+
+                                w.wp_connects.map((t: any, j: number) => {
+                                    return (
+                                        <div style={{ marginLeft: "20px" }}>
+
+                                            <Box sx={{ display: "flex", justifyContent: "start", width: "100%" }}>
+                                                {/* <Box> */}
+                                                <Typography variant='body1' sx={{ mb: 3, mr: 2, fontWeight: "600" }}>
+                                                    {j + 1}.
+                                                </Typography>
+                                                <Typography variant='body1' sx={{ mb: 3, mr: 2, fontWeight: "600" }}>
+                                                    Address: <span style={{ fontWeight: "400" }}>{t.address}</span>
+                                                </Typography>
+
                                             </Box>
                                         </div>
                                     )

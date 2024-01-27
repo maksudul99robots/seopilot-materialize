@@ -722,19 +722,23 @@ export default function CreateArticle(props: any) {
                         </Grid>
                         <Grid item xs={12}>
 
+                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                                    Target Keywords
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip >
+                                </Typography>
+                                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                            </Box>
 
-                            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
-                                Target Keywords
-                                <LightTooltip title={
-                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
-                                    </p>
-                                } placement="top">
-                                    <div style={{ height: "100%" }}>
-                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                    </div>
-                                </LightTooltip >
-                            </Typography>
                             <TagsInput
                                 value={keywords}
                                 onChange={setKeywords}
