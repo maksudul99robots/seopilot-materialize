@@ -81,7 +81,7 @@ import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import { makeid } from 'src/services/makeid'
-import { sampleIdeas } from './sample'
+import sampleIdeas from './sample'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

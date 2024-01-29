@@ -1,4 +1,4 @@
-export const sampleIdeas = () => {
+const sampleIdeas = () => {
     return [
         {
             id: 1,
@@ -52,3 +52,5 @@ export const sampleIdeas = () => {
         }
     ]
 }
+
+export default sampleIdeas;

@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export const InsertImage = (props: any) => {
+const InsertImage = (props: any) => {
     const [imgSrc, setImgSrc] = useState('');
 
 
@@ -40,3 +40,5 @@ export const InsertImage = (props: any) => {
         </div>
     )
 }
+
+export default InsertImage
