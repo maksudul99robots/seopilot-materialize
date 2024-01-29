@@ -696,7 +696,7 @@ export default function CreateArticle(props: any) {
                                         setModel(e.target.value)
                                     }}
                                 >
-                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommanded)</MenuItem>
+                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommended)</MenuItem>
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                                 </Select>

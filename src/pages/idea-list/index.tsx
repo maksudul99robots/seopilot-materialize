@@ -217,7 +217,7 @@ const IdeaList = () => {
                             value={row.model}
                         >
                             {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
-                            <option value='gpt-4-1106-preview'>GPT-4-TURBO (Recommanded)</option>
+                            <option value='gpt-4-1106-preview'>GPT-4-TURBO (Recommended)</option>
                             <option value='gpt-4'>GPT-4</option>
                             <option value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</option>
 
