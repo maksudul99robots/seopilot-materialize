@@ -258,7 +258,7 @@ export default function CreateArticle(props: any) {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: "#2979FF"
             })
-            router.push('/')
+            // router.push('/')
         }
 
     }, [])
