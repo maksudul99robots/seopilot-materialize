@@ -20,6 +20,16 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'streamline:ai-edit-spark',
       path: '/create-article'
     },
+    // {
+    //   title: 'Generate Ideas',
+    //   icon: 'icons8:idea',
+    //   path: '/generate-idea'
+    // },
+    // {
+    //   title: 'My Article Ideas',
+    //   icon: 'fluent-mdl2:folder-list-mirrored',
+    //   path: '/idea-list'
+    // },
     {
       sectionTitle: 'Workspace Settings'
     },

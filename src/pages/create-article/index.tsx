@@ -127,7 +127,7 @@ export default function CreateArticle(props: any) {
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
     const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
-    const [imgService, setImgService] = useState<string>('unsplash');
+    const [imgService, setImgService] = useState<string>('none');
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
     const [showOutline, setShowOutline] = useState(false);
@@ -221,7 +221,11 @@ export default function CreateArticle(props: any) {
 
                     // if(res.data.numbered_items){
                     setNumberedItem(res.data.numbered_items)
-                    setImgService(res.data.img_service)
+                    if (!res.data.show_featured_image)
+                        setImgService('none')
+                    else {
+                        setImgService(res.data.img_service)
+                    }
                     // }
                 }
             }).catch(e => {
@@ -1070,20 +1074,7 @@ export default function CreateArticle(props: any) {
                         }
 
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
-                            <SwitchesCustomized label="Include Featured Image" isChecked={showFeaturedImg} onClick={() => setShowFeaturedImg(!showFeaturedImg)} /> <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    System will select one image from Unsplash or Pexels to use as the featured image. In the future, we will allow choosing from multiple images.
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                </div>
-                            </LightTooltip >
-
-                        </Grid>
-                        {
-                            showFeaturedImg &&
-                            <Box sx={{ width: "100%", padding: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                            <Box sx={{ width: "100%", display: showAdditionalSettings ? "flex" : "none" }}>
                                 <Grid item sm={6} xs={6}>
                                     <FormControl size='medium' fullWidth>
                                         <InputLabel id='img-service'>Select Image Service</InputLabel>
@@ -1094,18 +1085,36 @@ export default function CreateArticle(props: any) {
                                             labelId='Select Image Service'
                                             value={imgService}
                                             onChange={e => {
-                                                setImgService(e.target.value)
+                                                if (e.target.value == 'none') {
+                                                    setImgService(e.target.value)
+                                                    setShowFeaturedImg(false)
+                                                } else {
+                                                    setImgService(e.target.value)
+                                                    setShowFeaturedImg(true)
+                                                }
+
                                             }}
                                         >
+                                            <MenuItem value='none'>No Featured Image</MenuItem>
                                             <MenuItem value='unsplash'>Unsplash</MenuItem>
                                             <MenuItem value='pexels'>Pexels</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        System will select one image from Unsplash or Pexels to use as the featured image. In the future, we will allow choosing from multiple images.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip >
                             </Box>
 
 
-                        }
+                        </Grid>
+
 
                         {/* </Box> */}
                         {
