@@ -227,6 +227,11 @@ export default function CreateArticle(props: any) {
                     else {
                         setImgService(res.data.img_service)
                     }
+                    if (res.data.extra_prompt) {
+                        setExtraPrompt(res.data.extra_prompt)
+                    } else {
+                        setExtraPrompt('')
+                    }
                     // }
                 }
             }).catch(e => {
@@ -1140,6 +1145,7 @@ export default function CreateArticle(props: any) {
                                     multiline
                                     rows={2}
                                     // maxRows={4}
+                                    value={extraPrompt}
                                     onChange={e => {
                                         setExtraPrompt(e.target.value)
                                     }}
