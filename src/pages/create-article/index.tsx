@@ -142,6 +142,7 @@ export default function CreateArticle(props: any) {
     const [numberedItem, setNumberedItem] = useState(false);
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [apiKey, setApiKey] = useState<string | null>('')
+    const [extraPrompt, setExtraPrompt] = useState<string>('')
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
     const auth = useAuth();
@@ -291,7 +292,7 @@ export default function CreateArticle(props: any) {
         return csv;
     }
 
-    const sumbit = () => {
+    const submit = () => {
         // console.log({
         //     article_type: articleType,
         //     topic: topic,
@@ -340,7 +341,8 @@ export default function CreateArticle(props: any) {
                     model: model,
                     showFeaturedImg: showFeaturedImg,
                     point_of_view: pointOfView,
-                    img_service: showFeaturedImg ? imgService : null
+                    img_service: showFeaturedImg ? imgService : null,
+                    extra_prompt: extraPrompt
                 }).
                     then(res => {
                         // console.log("res:", res);
@@ -1115,15 +1117,48 @@ export default function CreateArticle(props: any) {
 
                         </Grid>
 
+                        {
+                            articleType != 'listicle' && showAdditionalSettings &&
+                            <>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                    Extra Section Prompt
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            Additional information that will be applied for each of the sections. You must not give instructions like "write 1500 words" or anything similar because it will be applied to individually each of the sections, not the whole article at once.
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip >
+
+
+                                </Typography>
+                                <TextField
+                                    fullWidth
+                                    placeholder="Insert your Extra Section Prompt Here."
+                                    multiline
+                                    rows={2}
+                                    // maxRows={4}
+                                    onChange={e => {
+                                        setExtraPrompt(e.target.value)
+                                    }}
+                                    sx={{ paddingLeft: "24px" }}
+                                />
+
+                            </>
+
+                        }
+
 
                         {/* </Box> */}
                         {
                             articleType != 'listicle' &&
                             <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                                External Links
+                                Links
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        Add external links in the article. You can add multiple external links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as external link in the article.
+                                        Add links in the article. You can add multiple links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as link in the article.
                                     </p>
                                 } placement="top">
                                     <div style={{ height: "100%" }}>
@@ -1200,7 +1235,7 @@ export default function CreateArticle(props: any) {
                     }}
                 >
                     <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
-                        onClick={() => sumbit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
+                        onClick={() => submit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
                         disabled={loading}
 
 

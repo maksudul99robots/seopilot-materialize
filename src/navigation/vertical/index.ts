@@ -21,12 +21,12 @@ const navigation = (): VerticalNavItemsType => {
       path: '/create-article'
     },
     // {
-    //   title: 'Generate Ideas',
+    //   title: 'Keyword Research',
     //   icon: 'icons8:idea',
     //   path: '/generate-idea'
     // },
     // {
-    //   title: 'My Article Ideas',
+    //   title: 'Idea Library',
     //   icon: 'fluent-mdl2:folder-list-mirrored',
     //   path: '/idea-list'
     // },

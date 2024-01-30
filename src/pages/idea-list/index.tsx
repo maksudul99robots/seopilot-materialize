@@ -72,7 +72,7 @@ const statusObj: StatusObj = {
 
 
 import { LoginRegistrationAPI } from '../../services/API'
-import { Button } from '@mui/material'
+import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
@@ -225,6 +225,22 @@ const IdeaList = () => {
                             {/* <option value='upload' >Upload Image</option> */}
 
                         </select>
+
+                        <FormControl size='small' sx={{ fontSize: "12px" }}>
+                            <Select
+                                sx={{ fontSize: "12px", color: "black" }}
+                                value={row.tone}
+                                // onChange={handleChange}
+                                displayEmpty
+                            // inputProps={{ 'aria-label': 'Without label' }}
+
+                            >
+                                <MenuItem value='gpt-4-1106-preview' sx={{ fontSize: "12px" }}>GPT-4-TURBO (Recommended)</MenuItem>
+                                <MenuItem value='gpt-4' sx={{ fontSize: "12px" }}>GPT-4</MenuItem>
+                                <MenuItem value='gpt-3.5-turbo-1106' sx={{ fontSize: "12px" }}>GPT-3.5-TURBO</MenuItem>
+
+                            </Select>
+                        </FormControl>
                     </>
 
                 )
@@ -242,27 +258,45 @@ const IdeaList = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
                 return (
-                    <>
-                        <select style={{ width: "100%", height: "63%", borderRadius: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
-                            key={makeid()}
+                    // <select style={{ width: "100%", height: "63%", borderRadius: "5px", backgroundColor: "#fff", color: "#333333", border: "1px solid #D8D8DD" }}
+                    //     key={makeid()}
+                    //     defaultValue={row.tone}
+                    // >
+                    //     {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
+                    //     <option value='Clear, Knowledgeable and Confident'>SEO Optimized (Clear, Knowledgeable and Confident)</option>
+                    //     <option value='Informative, Friendly, Casual'>Informative, Friendly, Casual</option>
+                    //     <option value='Excited'>Excited</option>
+                    //     <option value='Empathetic'>Empathetic</option>
+                    //     <option value='Professional'>Professional</option>
+                    //     <option value='Friendly'>Friendly</option>
+                    //     <option value='Formal'>Formal</option>
+                    //     <option value='Casual'>Casual</option>
+                    //     <option value='Humorous'>Humorous</option>
+
+                    //     {/* <option value='ss' >Screenshot Of The Item URL</option> */}
+                    //     {/* <option value='upload' >Upload Image</option> */}
+
+                    // </select>
+                    <FormControl size='small' sx={{ fontSize: "12px" }}>
+                        <Select
+                            sx={{ fontSize: "12px", color: "black" }}
                             value={row.tone}
+                            // onChange={handleChange}
+                            displayEmpty
+                        // inputProps={{ 'aria-label': 'Without label' }}
+
                         >
-                            {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
-                            <option value='Clear, Knowledgeable and Confident'>SEO Optimized (Clear, Knowledgeable and Confident)</option>
-                            <option value='Informative, Friendly, Casual'>Informative, Friendly, Casual</option>
-                            <option value='Excited'>Excited</option>
-                            <option value='Empathetic'>Empathetic</option>
-                            <option value='Professional'>Professional</option>
-                            <option value='Friendly'>Friendly</option>
-                            <option value='Formal'>Formal</option>
-                            <option value='Casual'>Casual</option>
-                            <option value='Humorous'>Humorous</option>
-
-                            {/* <option value='ss' >Screenshot Of The Item URL</option> */}
-                            {/* <option value='upload' >Upload Image</option> */}
-
-                        </select>
-                    </>
+                            <MenuItem value='Clear, Knowledgeable and Confident' sx={{ fontSize: "12px" }}>Clear, Knowledgeable and Confident</MenuItem>
+                            <MenuItem value='Informative, Friendly, Casual' sx={{ fontSize: "12px" }}>Informative, Friendly, Casual</MenuItem>
+                            <MenuItem value='Excited' sx={{ fontSize: "12px" }}>Excited</MenuItem>
+                            <MenuItem value='Empathetic' sx={{ fontSize: "12px" }}>Empathetic</MenuItem>
+                            <MenuItem value='Professional' sx={{ fontSize: "12px" }}>Professional</MenuItem>
+                            <MenuItem value='Friendly' sx={{ fontSize: "12px" }}>Friendly</MenuItem>
+                            <MenuItem value='Formal' sx={{ fontSize: "12px" }}>Formal</MenuItem>
+                            <MenuItem value='Casual' sx={{ fontSize: "12px" }}>Casual</MenuItem>
+                            <MenuItem value='Humorous' sx={{ fontSize: "12px" }}>Humorous</MenuItem>
+                        </Select>
+                    </FormControl>
 
                 )
 
