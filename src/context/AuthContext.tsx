@@ -335,7 +335,7 @@ const AuthProvider = ({ children }: Props) => {
           }
         }).catch(err => {
           // console.log(err?.response);
-          if (err?.response?.status) {
+          if (err?.response?.status == 399) {
             Swal.fire({
               title: 'Warning!',
               text: err?.response?.data?.message,
@@ -346,6 +346,19 @@ const AuthProvider = ({ children }: Props) => {
               // router.push('/login')
               window.location.href = window.location.origin
             })
+          } else {
+
+            Swal.fire({
+              title: 'Error!',
+              text: 'Registration Failed',
+              icon: 'error',
+              confirmButtonText: 'Close',
+              confirmButtonColor: "#2979FF",
+            }).then(res => {
+              // router.push('/login')
+              window.location.href = window.location.origin
+            })
+
           }
 
         })
