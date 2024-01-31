@@ -34,6 +34,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { TagsInput } from "react-tag-input-component";
 import DndForListicle from 'src/services/DND/DNDForListicle';
 import Link from 'next/link';
+import { checkIfDallEExists } from 'src/services/checkIfDallEExists';
 // ** Demo Components Imports
 
 interface IconType {
@@ -130,6 +131,7 @@ export default function CreateArticle(props: any) {
     const [imgService, setImgService] = useState<string>('none');
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
+    const [imgPrompt, setImgPrompt] = useState('');
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
@@ -141,6 +143,20 @@ export default function CreateArticle(props: any) {
     const [showFeaturedImg, setShowFeaturedImg] = useState(false);
     const [numberedItem, setNumberedItem] = useState(false);
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
+    const [imgServiceList, setImgServiceList] = useState<any>([
+        {
+            value: 'none',
+            display: 'No Featured Image'
+        },
+        {
+            value: 'unsplash',
+            display: 'Unsplash'
+        },
+        {
+            value: 'pexels',
+            display: 'Pexels'
+        }
+    ]);
     const [apiKey, setApiKey] = useState<string | null>('')
     const [extraPrompt, setExtraPrompt] = useState<string>('')
     // const [articleType, setArticleType] = useState('blog')
@@ -232,6 +248,12 @@ export default function CreateArticle(props: any) {
                     } else {
                         setExtraPrompt('')
                     }
+                    if (res.data.img_prompt) {
+                        setImgPrompt(res.data.img_prompt)
+                    } else {
+                        setImgPrompt('')
+                    }
+
                     // }
                 }
             }).catch(e => {
@@ -256,6 +278,33 @@ export default function CreateArticle(props: any) {
                 console.log(e);
                 setApiKey(null)
             })
+
+            LoginRegistrationAPI.getAIModels({}).then(res => {
+                if (res.status == 200) {
+                    let checkDallEExists = checkIfDallEExists(res.data.models.data);
+                    console.log("checkDallEExists", checkDallEExists)
+                    if (checkDallEExists) {
+
+                        let x = [...imgServiceList]
+                        checkDallEExists.map((dallE: any, i: number) => {
+                            x.push({
+                                value: dallE.id,
+                                display: dallE.id == 'dall-e-3' ? "Dall-E-3" : "Dall-E-2"
+                            });
+                            if (i == checkDallEExists?.length - 1) {
+                                setImgServiceList(x);
+                            }
+                        })
+
+
+                    }
+                } else {
+
+                }
+            }).catch(e => {
+                console.log(e);
+            })
+
         } else {
             Swal.fire({
                 title: 'Error!',
@@ -347,7 +396,8 @@ export default function CreateArticle(props: any) {
                     showFeaturedImg: showFeaturedImg,
                     point_of_view: pointOfView,
                     img_service: showFeaturedImg ? imgService : null,
-                    extra_prompt: extraPrompt
+                    extra_prompt: extraPrompt,
+                    img_prompt: imgPrompt
                 }).
                     then(res => {
                         // console.log("res:", res);
@@ -402,7 +452,9 @@ export default function CreateArticle(props: any) {
                         point_of_view: pointOfView,
                         listicle_outlines: listicleOutlines,
                         numbered_items: numberedItem,
-                        img_service: showFeaturedImg ? imgService : null
+                        img_service: showFeaturedImg ? imgService : null,
+                        extra_prompt: extraPrompt,
+                        img_prompt: imgPrompt
                     }
                 ).then(res => {
                     // console.log("res:", res);
@@ -442,9 +494,7 @@ export default function CreateArticle(props: any) {
 
     }
 
-    useEffect(() => {
-        console.log("imgService:", imgService)
-    }, [imgService])
+
 
     const convertArrayToCsvKeywords = (keywordArray: any) => {
         let csvKeywords = '';
@@ -1102,9 +1152,13 @@ export default function CreateArticle(props: any) {
 
                                             }}
                                         >
-                                            <MenuItem value='none'>No Featured Image</MenuItem>
-                                            <MenuItem value='unsplash'>Unsplash</MenuItem>
-                                            <MenuItem value='pexels'>Pexels</MenuItem>
+                                            {
+                                                imgServiceList.map((imgS: any, k: number) => {
+                                                    return (
+                                                        <MenuItem key={k} value={imgS.value}>{imgS.display}</MenuItem>
+                                                    )
+                                                })
+                                            }
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -1123,13 +1177,13 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
                         {
-                            articleType != 'listicle' && showAdditionalSettings &&
+                            showAdditionalSettings && (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
                             <>
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                                    Extra Section Prompt
+                                    Image Prompt for DALL-E
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            Additional information that will be applied for each of the sections. You must not give instructions like "write 1500 words" or anything similar because it will be applied to individually each of the sections, not the whole article at once.
+                                            Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> If the prompt is kept empty then the topic of the article will be sent to Dall-E to get your featured image.
                                         </p>
                                     } placement="top">
                                         <div style={{ height: "100%" }}>
@@ -1141,7 +1195,40 @@ export default function CreateArticle(props: any) {
                                 </Typography>
                                 <TextField
                                     fullWidth
-                                    placeholder="Insert your Extra Section Prompt Here."
+                                    placeholder="Visualize a piece of futuristic technology, like ‘a holographic communication device’."
+                                    multiline
+                                    rows={2}
+                                    // maxRows={4}
+                                    value={imgPrompt}
+                                    onChange={e => {
+                                        setImgPrompt(e.target.value)
+                                    }}
+                                    sx={{ paddingLeft: "24px" }}
+                                />
+
+                            </>
+
+                        }
+                        {
+                            articleType != 'listicle' && showAdditionalSettings &&
+                            <>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                    Extra Section Prompt
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            Additional information that will be applied to EVERY section. You must not give instructions like “Write 1500 words” or anything similar because it will be applied individually to each section, not the whole article at once.
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip >
+
+
+                                </Typography>
+                                <TextField
+                                    fullWidth
+                                    placeholder='ONLY provide a prompt that you’d like to apply to EVERY section. Keep it short. Do NOT give article-level or global prompt like “Write 1500 words”. Example1: Avoid transitional phrases. Example2: Do not use the word “However”.'
                                     multiline
                                     rows={2}
                                     // maxRows={4}

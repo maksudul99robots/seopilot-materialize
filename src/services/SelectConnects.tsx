@@ -151,7 +151,7 @@ const SelectConnects = (props: any) => {
     } else if (fImgObj?.photos) {
       `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.photos[0].photographer_url} target='_blank' className='colorLink'>${fImgObj.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a></figcaption>` + htmlString;
     } else {
-      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/>` + htmlString;
+      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image" style="object-fit: cover" />` + htmlString;
     }
     // Return the modified HTML
     return htmlString;
@@ -165,6 +165,10 @@ const SelectConnects = (props: any) => {
 
     if (props.fImg?.photos) {
       str = insertImageAtTheBeginning(str, props.fImg.photos[0].src.original, props?.fImg)
+    }
+
+    if (typeof (props.fImg) == 'string') {
+      str = insertImageAtTheBeginning(str, props.fImg, props.fImg)
     }
 
     if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {

@@ -185,9 +185,10 @@ export default function ArticleIU(props: any) {
                         fImg={fImg}
                         listicleOutlines={props.listicleOutlines}
                         articleType={props.articleType}
-                        numberedItem={props.numberedItem} />
+                        numberedItem={props.numberedItem}
+                        imgService={props.imgService} />
                     <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
-                    <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} />
+                    <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} />
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -254,6 +255,21 @@ export default function ArticleIU(props: any) {
                                     <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
                                         Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
                                     </p>
+                                </div>
+                            }
+                            {
+                                (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') &&
+                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                    <img
+                                        src={fImg}
+                                        width={800}
+                                        height={450}
+                                        style={{ objectFit: "cover" }}
+                                        alt="Featured image"
+                                    />
+                                    {/* <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
+                                        Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
+                                    </p> */}
                                 </div>
                             }
 

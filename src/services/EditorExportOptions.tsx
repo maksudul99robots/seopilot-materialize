@@ -84,7 +84,7 @@ export default function CustomizedMenus(props: any) {
             imgElement.height = "450";
             // imgElement.style.width = "100%"
             imgElement.src = imgSrc;
-
+            imgElement.style.objectFit = "cover"
             // Insert the img element after the first h1
             firstH1.parentNode.insertBefore(imgElement, firstH1.nextSibling);
         } else {
@@ -138,6 +138,9 @@ export default function CustomizedMenus(props: any) {
         if (props.fImg?.photos) {
             str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
         }
+        if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+            str = insertImageAfterFirstH1(str, props.fImg)
+        }
 
         function listener(e: any) {
             e.clipboardData.setData("text/html", str);
@@ -157,6 +160,9 @@ export default function CustomizedMenus(props: any) {
 
         if (props.fImg?.photos) {
             str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+        }
+        if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+            str = insertImageAfterFirstH1(str, props.fImg)
         }
         if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
 

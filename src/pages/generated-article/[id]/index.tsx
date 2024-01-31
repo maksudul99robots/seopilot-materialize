@@ -95,7 +95,7 @@ export default function Page() {
                         if (res.data.article_length == "long") {
                             let outlineFromResp = res?.data.outline;
                             try {
-                                outlineFromResp = outlineFromResp.replace(/,(?=\s*[\]}])/, '');
+                                outlineFromResp = outlineFromResp?.replace(/,(?=\s*[\]}])/, '');
                                 outlineFromResp = JSON.parse(outlineFromResp);
                                 let x = '';
                                 outlineFromResp.map((o: any, i: any) => {
@@ -119,7 +119,7 @@ export default function Page() {
                         setCreatedAt(res?.data?.createdAt)
                         setUpdatedAt(res?.data?.updatedAt)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
-                        if (res?.data?.featured_img) {
+                        if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
                             setFImg(JSON.parse(res?.data?.featured_img))
                         } else {
                             setFImg(res?.data?.featured_img)
@@ -188,7 +188,7 @@ export default function Page() {
                                 setArticleTopic(res?.data?.topic)
                                 setCreatedAt(res?.data?.createdAt)
                                 setUpdatedAt(res?.data?.updatedAt)
-                                if (res?.data?.featured_img) {
+                                if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
                                     setFImg(JSON.parse(res?.data?.featured_img))
                                 } else {
                                     setFImg(res?.data?.featured_img)
