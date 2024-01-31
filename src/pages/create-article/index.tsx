@@ -377,63 +377,19 @@ export default function CreateArticle(props: any) {
             })
         } else {
             if (articleType != 'listicle') {
-                setLoading(true)
-                LoginRegistrationAPI.generateSaasArticle({
-                    article_type: articleType,
-                    topic: topic,
-                    keywords: convertArrayToCsvKeywords(keywords),
-                    article_length: articleLength,
-                    tone: tone,
-                    language: language,
-                    country: country,
-                    links: convertArrayToCSV(links),
-                    outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-                    outline_source: outlineSource,
-                    outline_url: outlineURL,
-                    faq: faq,
-                    toc: toc,
-                    model: model,
-                    showFeaturedImg: showFeaturedImg,
-                    point_of_view: pointOfView,
-                    img_service: showFeaturedImg ? imgService : null,
-                    extra_prompt: extraPrompt,
-                    img_prompt: imgPrompt
-                }).
-                    then(res => {
-                        // console.log("res:", res);
-                        setLoading(false)
-                        router.push("/generated-article/" + res.data.id)
-                    }).catch(e => {
-                        setLoading(false)
-                        console.log("error:", e);
-                        if (e.response.status == 400) {
-                            Swal.fire({
-                                html: `<h3>Error</h3>
-                          <h5>${e.response.data}</h5>
-                          `,
-                                icon: "error",
-                                // input: 'text',
-                                // inputLabel: 'Please try again later.',
-                                confirmButtonColor: "#2979FF"
-                            }).then(() => {
-                                router.push('/add-apikey')
-                            })
-                        } else {
-                            Swal.fire({
-                                html: `<h3>Error</h3>
-                          <h5>Unable to Generate Article</h5>
-                          `,
-                                icon: "error",
-                                // input: 'text',
-                                inputLabel: 'Please try again later.',
-                                confirmButtonColor: "#2979FF"
-                            })
-                        }
-
+                if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Please Set Image Prompt.',
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
                     })
-            } else {
-                LoginRegistrationAPI.generateListicles(
-                    {
+                    return;
+                } else {
+
+                    setLoading(true)
+                    LoginRegistrationAPI.generateSaasArticle({
                         article_type: articleType,
                         topic: topic,
                         keywords: convertArrayToCsvKeywords(keywords),
@@ -450,44 +406,114 @@ export default function CreateArticle(props: any) {
                         model: model,
                         showFeaturedImg: showFeaturedImg,
                         point_of_view: pointOfView,
-                        listicle_outlines: listicleOutlines,
-                        numbered_items: numberedItem,
                         img_service: showFeaturedImg ? imgService : null,
                         extra_prompt: extraPrompt,
                         img_prompt: imgPrompt
-                    }
-                ).then(res => {
-                    // console.log("res:", res);
-                    setLoading(false)
-                    router.push("/generated-article/" + res.data.id)
-                }).catch(e => {
-                    setLoading(false)
-                    console.log("error:", e);
-                    if (e.response.status == 400) {
-                        Swal.fire({
-                            html: `<h3>Error</h3>
+                    }).
+                        then(res => {
+                            // console.log("res:", res);
+                            setLoading(false)
+                            router.push("/generated-article/" + res.data.id)
+                        }).catch(e => {
+                            setLoading(false)
+                            console.log("error:", e);
+                            if (e.response.status == 400) {
+                                Swal.fire({
+                                    html: `<h3>Error</h3>
+                          <h5>${e.response.data}</h5>
+                          `,
+                                    icon: "error",
+                                    // input: 'text',
+                                    // inputLabel: 'Please try again later.',
+                                    confirmButtonColor: "#2979FF"
+                                }).then(() => {
+                                    router.push('/add-apikey')
+                                })
+                            } else {
+                                Swal.fire({
+                                    html: `<h3>Error</h3>
+                          <h5>Unable to Generate Article</h5>
+                          `,
+                                    icon: "error",
+                                    // input: 'text',
+                                    inputLabel: 'Please try again later.',
+                                    confirmButtonColor: "#2979FF"
+                                })
+                            }
+
+                        })
+                }
+            } else {
+                if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Please Set Image Prompt.',
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
+                    })
+                    return;
+                } else {
+
+                    LoginRegistrationAPI.generateListicles(
+                        {
+                            article_type: articleType,
+                            topic: topic,
+                            keywords: convertArrayToCsvKeywords(keywords),
+                            article_length: articleLength,
+                            tone: tone,
+                            language: language,
+                            country: country,
+                            links: convertArrayToCSV(links),
+                            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                            outline_source: outlineSource,
+                            outline_url: outlineURL,
+                            faq: faq,
+                            toc: toc,
+                            model: model,
+                            showFeaturedImg: showFeaturedImg,
+                            point_of_view: pointOfView,
+                            listicle_outlines: listicleOutlines,
+                            numbered_items: numberedItem,
+                            img_service: showFeaturedImg ? imgService : null,
+                            extra_prompt: extraPrompt,
+                            img_prompt: imgPrompt
+                        }
+                    ).then(res => {
+                        // console.log("res:", res);
+                        setLoading(false)
+                        router.push("/generated-article/" + res.data.id)
+                    }).catch(e => {
+                        setLoading(false)
+                        console.log("error:", e);
+                        if (e.response.status == 400) {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
                       <h5>${e.response.data}</h5>
                       `,
-                            icon: "error",
-                            // input: 'text',
-                            // inputLabel: 'Please try again later.',
-                            confirmButtonColor: "#2979FF"
-                        }).then(() => {
-                            router.push('/add-apikey')
-                        })
-                    } else {
-                        Swal.fire({
-                            html: `<h3>Error</h3>
+                                icon: "error",
+                                // input: 'text',
+                                // inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            }).then(() => {
+                                router.push('/add-apikey')
+                            })
+                        } else {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
                       <h5>Unable to Generate Article</h5>
                       `,
-                            icon: "error",
-                            // input: 'text',
-                            inputLabel: 'Please try again later.',
-                            confirmButtonColor: "#2979FF"
-                        })
-                    }
+                                icon: "error",
+                                // input: 'text',
+                                inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            })
+                        }
 
-                })
+                    })
+                }
+
+
             }
 
         }
@@ -1180,7 +1206,7 @@ export default function CreateArticle(props: any) {
                             showAdditionalSettings && (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
                             <>
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                                    Image Prompt for DALL-E
+                                    Image Prompt for DALL-E*
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
                                             Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> If the prompt is kept empty then the topic of the article will be sent to Dall-E to get your featured image.
