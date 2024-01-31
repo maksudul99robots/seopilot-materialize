@@ -334,16 +334,20 @@ const AuthProvider = ({ children }: Props) => {
             })
           }
         }).catch(err => {
-          console.log(err);
-          Swal.fire({
-            title: 'Error!',
-            text: 'Registration failed',
-            icon: 'error',
-            confirmButtonText: 'Close',
-            confirmButtonColor: "#2979FF",
-          }).then(res => {
-            // router.push('/login')
-          })
+          // console.log(err?.response);
+          if (err?.response?.status) {
+            Swal.fire({
+              title: 'Warning!',
+              text: err?.response?.data?.message,
+              icon: 'warning',
+              confirmButtonText: 'Close',
+              confirmButtonColor: "#2979FF",
+            }).then(res => {
+              // router.push('/login')
+              window.location.href = window.location.origin
+            })
+          }
+
         })
 
 

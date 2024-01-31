@@ -275,7 +275,7 @@ export default function CreateArticle(props: any) {
                 // setApikey(res.data.apikey)
                 // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
             }).catch(e => {
-                console.log(e);
+                // console.log(e);
                 setApiKey(null)
             })
 
@@ -302,7 +302,7 @@ export default function CreateArticle(props: any) {
 
                 }
             }).catch(e => {
-                console.log(e);
+                // console.log(e);
             })
 
         } else {
