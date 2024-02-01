@@ -71,19 +71,30 @@ const DeleteWorkspace = (props: any) => {
     setShow(false)
   }
   const handleSubmit = () => {
-    LoginRegistrationAPI.deleteWorkspace({ id: props.id }).then(res => {
-      // props.setReRender(!props.reRender);
-      window.location.href = window.location.href;
-    }).catch(e => {
-      console.log("error:", e)
+    if (props.id == props.currentWorkspace) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Cannot Delete! There Must be at Least One Workspace on the Owner\'s Account.',
+        title: 'Sorry!',
+        text: 'You Cannot Delete The Current Workspace. Please Checkout to Another Workspace to Delete This Workspace.',
         icon: 'error',
         confirmButtonText: 'Close',
         confirmButtonColor: "#2979FF"
       })
-    })
+    } else {
+      LoginRegistrationAPI.deleteWorkspace({ id: props.id }).then(res => {
+        // props.setReRender(!props.reRender);
+        window.location.href = window.location.href;
+      }).catch(e => {
+        console.log("error:", e)
+        Swal.fire({
+          title: 'Error!',
+          text: 'Cannot Delete! There Must be at Least One Workspace on the Owner\'s Account.',
+          icon: 'warning',
+          confirmButtonText: 'Close',
+          confirmButtonColor: "#2979FF"
+        })
+      })
+
+    }
     setShow(false)
   }
 
@@ -124,7 +135,8 @@ const DeleteWorkspace = (props: any) => {
           <Grid container spacing={1}>
             <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important`, }}>
               <Grid container spacing={1} sx={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
-                Are you sure you want to delete this Workspace?
+                <p>Are you sure you want to delete this Workspace?</p>
+                <p><b>Note:</b> All your articles, integrations, and saved API Key will be removed permanently.</p>
               </Grid>
             </Grid>
 

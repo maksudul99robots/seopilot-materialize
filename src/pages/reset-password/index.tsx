@@ -142,7 +142,7 @@ const ResetPassword = () => {
                                     title: 'success!',
                                     text: 'Password changed successfully',
                                     icon: 'success',
-                                    confirmButtonText: 'Ok',
+                                    confirmButtonText: 'OK',
                                     confirmButtonColor: "#2979FF"
                                 }).then(res => {
                                     router.push('/login')

@@ -40,11 +40,13 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 const AddApiKey = () => {
     const [apikey, setApikey] = useState('');
+    const [newApikey, setNewApikey] = useState('');
     const [apikeyTmp, setApikeyTmp] = useState('');
     const [apikeyToShow, setApikeyToShow] = useState('');
     const [disable, setDisable] = useState(true);
     const [loading, setLoading] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
+    const [teamObj, setTeamObj] = useState<any>(null);
     const auth = useAuth();
     const router = useRouter()
     // const formattedString = originalString.substring(0, 10) + "*".repeat(originalString.length - 15) + originalString.slice(-5);
@@ -58,12 +60,18 @@ const AddApiKey = () => {
             }).catch(e => {
                 console.log(e);
             })
+
+            LoginRegistrationAPI.getMyTeamObject({}).then(res => {
+                setTeamObj(res.data);
+            }).catch(e => {
+                console.log(e)
+            })
         } else {
             Swal.fire({
-                title: 'Error!',
+                title: 'Check Your Email',
                 text: 'Please Verify Your Account To get Full Access!',
-                icon: 'error',
-                confirmButtonText: 'Ok',
+                icon: 'warning',
+                confirmButtonText: 'OK',
                 confirmButtonColor: "#2979FF"
             })
             // router.push('/')
@@ -72,48 +80,61 @@ const AddApiKey = () => {
     }, [])
     useEffect(() => {
 
-        if (apikey.length > 5 && isEditable) {
+        if (newApikey.length > 5) {
             setDisable(false)
         } else {
             setDisable(true)
         }
 
-    }, [apikey])
+    }, [newApikey])
 
     const submit = async () => {
-        if (apikey.length > 5) {
-            setDisable(true)
-            setLoading(true)
-            LoginRegistrationAPI.addOpenAIApiKey({ openai_apikey: apikey }).then((res) => {
-                if (res.status == 200) {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'OpenAI API Key is added Successfully!',
-                        icon: 'success',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: "#2979FF"
-                    })
-                    auth.resetToken({});
+        if (teamObj?.role == 'owner' || teamObj?.role == 'admin') {
+            if (newApikey.length > 5) {
+                setDisable(true)
+                setLoading(true)
+                LoginRegistrationAPI.addOpenAIApiKey({ openai_apikey: newApikey }).then((res) => {
+                    if (res.status == 200) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'OpenAI API Key is added Successfully!',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: "#2979FF"
+                        })
+                        auth.resetToken({});
 
-                }
-                setDisable(false)
-                setLoading(false)
-            }).catch(e => {
-                console.log(e);
-                setDisable(false)
-                setLoading(false)
-                Swal.fire({
-                    html: `<h3>Error</h3>
+                    }
+                    setDisable(false)
+                    setLoading(false)
+                }).catch(e => {
+                    console.log(e);
+                    setDisable(false)
+                    setLoading(false)
+                    Swal.fire({
+                        html: `<h2>Error</h2>
                       <h5>${e.response.data.message}</h5>
                       `,
-                    icon: "error",
-                    // input: 'text',
-                    inputLabel: 'Please try again later.',
-                    confirmButtonColor: "#2979FF"
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
                 })
-            })
 
+            }
+        } else {
+            Swal.fire({
+                html: `<h3>Error</h3>
+              <h5>You Don't Have Permission to Change OpenAI API Key.</h5>
+              `,
+                icon: "error",
+                // input: 'text',
+                inputLabel: 'Please try again later.',
+                confirmButtonColor: "#2979FF"
+            })
         }
+
 
 
     }
@@ -126,49 +147,25 @@ const AddApiKey = () => {
                 <CardHeader title='OpenAI API Key' />
                 <CardContent>
                     <APIKeyInstructions />
-                    <form >
+                    <form>
 
-                        <Grid container spacing={5} >
+                        <Grid sx={{ width: "100%", padding: "0px" }}>
 
+                            {
+                                apikey &&
+                                <Typography variant='subtitle1' sx={{ mb: 2, mt: 10, display: "flex" }}>
+                                    Your API Key: &nbsp;<strong style={{ backgroundColor: "#ECECEF", color: "#0C0C0D" }}>{apikey}</strong>
+                                </Typography>
+                            }
 
-                            <Typography variant='subtitle1' sx={{ mb: 2, pl: 5, mt: 10, display: "flex" }}>
+                            <Typography variant='subtitle1' sx={{ mb: 2, mt: 5, display: "flex" }}>
                                 Please Enter your API Key:
-                                <LightTooltip title={
-                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        Click on Edit Icon to Enable the Input Field
-                                    </p>
-                                } placement="top">
-                                    <div style={{ height: "100%" }}>
-                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                    </div>
-                                </LightTooltip>
                             </Typography>
-                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
-                                <Grid item xs={11} sx={{ paddingLeft: "20px" }}>
-                                    <TextField fullWidth label='Open-AI API Key' value={apikey} placeholder='Open-AI API Key' onChange={e => { setApikey(e.target.value); }} disabled={!isEditable} />
+                            <Box sx={{ alignItems: "center", width: "100%" }}>
+                                <Grid item xs={11} >
+                                    <TextField fullWidth label='Open-AI API Key' value={newApikey} placeholder={apikey} onChange={e => { setNewApikey(e.target.value); }} />
                                 </Grid>
-                                <Grid item xs={1} sx={{ paddingLeft: "20px" }} >
-                                    <Tooltip title={<p style={{ color: "white", fontSize: "15px" }}>Edit API Key</p>} placement="top-start">
-                                        {/* <Button>top</Button> */}
-                                        <div>
-                                            <Icon icon="akar-icons:edit" color={iconColor} onMouseOver={e => setIconColor("#2979FF")} onMouseOut={e => setIconColor("#999999")} cursor="pointer" fontSize={40} xlinkTitle="Edit"
-                                                onClick={e => {
-                                                    if (!isEditable) {
-                                                        // setApikeyToShow(apikey)
-                                                        setIsEditable(true)
-                                                        setApikeyTmp(apikey)
-                                                        setApikey('')
-                                                    } else {
-                                                        setIsEditable(false)
-                                                        setApikey(apikeyTmp)
-                                                        // setApikeyToShow(apikey.substring(0, 10) + "*".repeat(apikey.length - 15) + apikey.slice(-5))
-                                                    }
-                                                }} />
-                                        </div>
 
-                                    </Tooltip>
-
-                                </Grid>
 
                             </Box>
 
@@ -179,8 +176,8 @@ const AddApiKey = () => {
                             color="primary"
                             variant="contained"
                             size="large"
-                            type="submit"
-                            style={{ color: disable ? "#595959" : "white", marginTop: "30px", padding: "10px 35px 10px 35px" }}
+                            // type="submit"
+                            style={{ marginTop: "30px", padding: "10px 35px 10px 35px" }}
                             onClick={() => submit()}
                             disabled={disable}
                             loading={loading}
@@ -192,7 +189,7 @@ const AddApiKey = () => {
                     </form>
 
                 </CardContent>
-            </Card>
+            </Card >
         </>
 
     );

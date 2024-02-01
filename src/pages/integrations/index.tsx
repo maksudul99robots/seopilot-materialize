@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState, useCallback, ChangeEvent } from 'react'
+import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect, useCallback } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -8,9 +8,10 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
 import Alert from '@mui/material/Alert'
+import ReactPlayer from 'react-player/lazy'
 // ** ThirdParty Components
 import axios from 'axios'
-
+import Dialog from '@mui/material/Dialog'
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -73,7 +74,7 @@ const statusObj: StatusObj = {
 
 
 import { LoginRegistrationAPI } from '../../services/API'
-import { Button } from '@mui/material'
+import { Button, Fade, FadeProps } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
@@ -95,7 +96,12 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontSize: 11,
     },
 }));
-
+const Transition = forwardRef(function Transition(
+    props: FadeProps & { children?: ReactElement<any, any> },
+    ref: Ref<unknown>
+) {
+    return <Fade ref={ref} {...props} />
+})
 const TableServerSide = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
@@ -111,6 +117,8 @@ const TableServerSide = () => {
     const auth = useAuth()
     const router = useRouter()
     const [integrationCount, setIntegrationCount] = useState<number>(0);
+    const [teamObj, setTeamObj] = useState<any>(null);
+    const [show, setShow] = useState<boolean>(false)
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -118,6 +126,7 @@ const TableServerSide = () => {
 
     useEffect(() => {
         LoginRegistrationAPI.getConnections({}).then(res => {
+            // console.log("integrations:", res)
             loadServerRows
             setMainData(res.data);
             // setTotal(res.data.total)
@@ -243,36 +252,25 @@ const TableServerSide = () => {
                 // setTotal(res.data.total)
                 // setRows(loadServerRows(paginationModel.page, res.data.data))
             })
+
+            LoginRegistrationAPI.getMyTeamObject({}).then(res => {
+                // console.log("res.data", res.data)
+                setTeamObj(res.data);
+            }).catch(e => {
+                console.log(e)
+            })
         } else {
             Swal.fire({
-                title: 'Error!',
+                title: 'Check Your Email',
                 text: 'Please Verify Your Account To get Full Access!',
-                icon: 'error',
-                confirmButtonText: 'Ok',
+                icon: 'warning',
+                confirmButtonText: 'OK',
                 confirmButtonColor: "#2979FF"
             })
-            router.push('/')
+            // router.push('/')
         }
     }, [])
-    useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
 
-            Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable Integrations Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
-            })
-        }
-    }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -299,6 +297,11 @@ const TableServerSide = () => {
         [paginationModel, mainData]
     ))
 
+    console.log((teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
+        (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
+        (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
+        (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+        (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)))
     useEffect(() => {
         fetchTableData(sort, searchValue, sortColumn)
     }, [fetchTableData, searchValue, sort, sortColumn])
@@ -322,7 +325,10 @@ const TableServerSide = () => {
     useEffect(() => {
         setIntegrationCount(mainData.length)
     }, [mainData])
+    const handleClose = () => {
 
+        setShow(false)
+    }
 
 
     return (
@@ -332,17 +338,36 @@ const TableServerSide = () => {
                 <Alert severity='info' variant='standard' onClose={e => {
                     e.preventDefault();
                     setShowAlert(false)
-                }} sx={{ marginBottom: "20px", fontSize: "16px" }}><a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Here's</a> a Step By Step Guide to Connect a WordPress Website and Publish an Article on Your Website.</Alert>
+                }} sx={{ marginBottom: "20px", fontSize: "16px" }}>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website. Or <Button variant='text' onClick={e => {
+                    setShow(true)
+                }} startIcon={<Icon icon="ph:video-thin" />} >
+                        See The Video Instruction.
+                    </Button></Alert>
             }
+
+            <Dialog
+                fullWidth
+                open={show}
+                maxWidth='lg'
+                sx={{ display: "flex", justifyContent: "center" }}
+                onClose={handleClose}
+                onBackdropClick={handleClose}
+                TransitionComponent={Transition}
+            >
+
+                <ReactPlayer url='https://vimeo.com/908440876/4a42c699f8?share=copy' controls style={{ height: "100%", width: "100%" }} />
+            </Dialog>
+
+
 
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 <DialogAddCard reRender={reRender} setReRender={setReRender}
                     disabled={
-                        auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
+                        (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
                             (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)
+                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
                             ? true : false
                     }
                 />

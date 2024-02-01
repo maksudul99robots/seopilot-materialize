@@ -227,7 +227,7 @@ const SelectConnects = (props: any) => {
         title: 'Success!',
         text: 'The article is posted successfully',
         icon: 'success',
-        confirmButtonText: 'Ok',
+        confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
     }).catch(e => {
@@ -238,7 +238,7 @@ const SelectConnects = (props: any) => {
         title: 'Error!',
         text: 'Unable to publish article to WordPress',
         icon: 'error',
-        confirmButtonText: 'Ok',
+        confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
     })

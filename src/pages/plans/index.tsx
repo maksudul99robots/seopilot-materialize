@@ -45,8 +45,9 @@ const Pricing = () => {
       title: 'Passenger',
       imgHeight: 100,
       monthlyPrice: 19,
-      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
-      popularPlan: false,
+      // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
+      currentPlan: false,
+      popularPlan: true,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
@@ -60,7 +61,7 @@ const Pricing = () => {
         { text: "1 Workspace", show: true },
         { text: "1 Site Connected", show: true },
         { text: "Folders (Coming Soon)", show: true },
-        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
+        { text: "Extension Access (Contact info & Ai Writer)", show: true }
       ]
 
     },
@@ -81,7 +82,7 @@ const Pricing = () => {
         { text: "5 Workspaces", show: true },
         { text: "5 Sites Connected", show: true },
         { text: "Folders (Coming Soon)", show: true },
-        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
+        { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     },
     {
@@ -101,7 +102,7 @@ const Pricing = () => {
         { text: "25 Workspaces", show: true },
         { text: "25 Sites Connected", show: true },
         { text: "Folders (Coming Soon)", show: true },
-        { text: "Extension Access (Conteact info & Ai Writer)", show: true }
+        { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     }
   ]

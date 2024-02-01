@@ -109,7 +109,7 @@ const ResendInvitationTeamMember = (props: any) => {
         title: 'Success!',
         text: 'An Invitation Mail is Sent',
         icon: 'success',
-        confirmButtonText: 'Ok',
+        confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
     }).catch(e => {
@@ -119,7 +119,7 @@ const ResendInvitationTeamMember = (props: any) => {
         title: 'Error!',
         text: e.response.data,
         icon: 'error',
-        confirmButtonText: 'Ok',
+        confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
     })

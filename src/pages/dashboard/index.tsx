@@ -18,7 +18,7 @@ const Dashboard = () => {
                         title: 'Sent!',
                         text: 'A Verification email is sent',
                         icon: 'success',
-                        confirmButtonText: 'Ok',
+                        confirmButtonText: 'OK',
                         confirmButtonColor: "#2979FF"
                     })
                 }

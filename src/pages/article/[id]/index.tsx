@@ -59,21 +59,21 @@ export default function Page() {
         }
     }, [router.query.id])
 
-    useEffect(() => {
-        //auth?.user?.plan?.plan
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+    // useEffect(() => {
+    //     //auth?.user?.plan?.plan
+    //     if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
 
-            Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
-            })
-        }
-    }, [auth?.user?.plan])
+    //         Swal.fire({
+    //             title: '401',
+    //             text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //             icon: 'error',
+    //             confirmButtonText: 'Close',
+    //             confirmButtonColor: "#2979FF",
+    //         }).then(() => {
+    //             router.push("/")
+    //         })
+    //     }
+    // }, [auth?.user?.plan])
     // console.log("articleObj", articleObj?.prompt)
     const download = () => {
         exportHtml(html)

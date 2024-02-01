@@ -47,12 +47,13 @@ const RedeemCoupon = () => {
     useEffect(() => {
         if (!auth.user?.is_active) {
             Swal.fire({
-                title: 'Error!',
+                title: 'Check Your Email',
                 text: 'Please Verify Your Account To get Full Access!',
-                icon: 'error',
-                confirmButtonText: 'Ok',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
             })
-            router.push('/')
+            // router.push('/')
         }
     }, [])
 

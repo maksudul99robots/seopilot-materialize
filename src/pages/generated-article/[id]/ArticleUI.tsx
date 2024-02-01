@@ -56,30 +56,30 @@ export default function ArticleIU(props: any) {
     });
     const auth = useAuth()
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        // if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
-        if (auth?.user?.approle.role.id == 1) {
-            if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-                // Swal.fire('401',
-                //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                //     'error').then(() => {
-                //         router.push("/")
-                //     })
+    //     // if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
+    //     if (auth?.user?.approle.role.id == 1) {
+    //         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+    //             // Swal.fire('401',
+    //             //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //             //     'error').then(() => {
+    //             //         router.push("/")
+    //             //     })
 
-                Swal.fire({
-                    title: '401',
-                    text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                    icon: 'error',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: "#2979FF",
-                }).then(() => {
-                    router.push("/")
-                })
-            }
-        }
+    //             Swal.fire({
+    //                 title: '401',
+    //                 text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //                 icon: 'error',
+    //                 confirmButtonText: 'Close',
+    //                 confirmButtonColor: "#2979FF",
+    //             }).then(() => {
+    //                 router.push("/")
+    //             })
+    //         }
+    //     }
 
-    }, [auth?.user?.plan])
+    // }, [auth?.user?.plan])
 
     useEffect(() => {
         if (auth?.user?.approle.role.id == 2) {

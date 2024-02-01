@@ -159,6 +159,7 @@ export default function CreateArticle(props: any) {
     ]);
     const [apiKey, setApiKey] = useState<string | null>('')
     const [extraPrompt, setExtraPrompt] = useState<string>('')
+    const [isAllowedToCreateArticle, setIsAllowedToCreateArticle] = useState<boolean>(false)
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
     const auth = useAuth();
@@ -302,19 +303,36 @@ export default function CreateArticle(props: any) {
 
                 }
             }).catch(e => {
-                // console.log(e);
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                })
+                // }else{}
+            })
+
+            LoginRegistrationAPI.isAllowedToCreateArticle({}).then(res => {
+                setIsAllowedToCreateArticle(res.data)
+            }).catch(e => {
+                console.log(e)
             })
 
         } else {
             Swal.fire({
-                title: 'Error!',
+                title: 'Check Your Email',
                 text: 'Please Verify Your Account To get Full Access!',
-                icon: 'error',
-                confirmButtonText: 'Ok',
+                icon: 'warning',
+                confirmButtonText: 'OK',
                 confirmButtonColor: "#2979FF"
             })
             // router.push('/')
         }
+
+
 
     }, [])
 
@@ -367,15 +385,16 @@ export default function CreateArticle(props: any) {
         // })
         // return
 
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            Swal.fire({
-                title: 'Error!',
-                text: 'Please Subscribe to Higher Plan to Get This Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF"
-            })
-        } else {
+        // if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+        //     Swal.fire({
+        //         title: 'Error!',
+        //         text: 'Please Subscribe to Higher Plan to Get This Feature.',
+        //         icon: 'error',
+        //         confirmButtonText: 'Close',
+        //         confirmButtonColor: "#2979FF"
+        //     })
+        // } else {
+        if (isAllowedToCreateArticle) {
             if (articleType != 'listicle') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
                     Swal.fire({
@@ -515,8 +534,18 @@ export default function CreateArticle(props: any) {
 
 
             }
-
+        } else {
+            Swal.fire({
+                title: 'Please Upgrade',
+                text: 'You Have Reached Your Limit. Please Subscribe to Higher Plan to Increase Your Plan Limit.',
+                icon: 'warning',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
+            })
         }
+
+
+        // }
 
     }
 
@@ -743,7 +772,7 @@ export default function CreateArticle(props: any) {
             {
                 !apiKey &&
                 <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
-                    You have to add API key to generate article. Click <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Here</Link> to add API Key.
+                    You Have to Add API Key to Generate Article. <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Click Here to Add API Key</Link> .
 
                 </Alert>
             }
@@ -1190,7 +1219,7 @@ export default function CreateArticle(props: any) {
                                 </Grid>
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        System will select one image from Unsplash or Pexels to use as the featured image. In the future, we will allow choosing from multiple images.
+                                        System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
                                     </p>
                                 } placement="top">
                                     <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
@@ -1209,7 +1238,7 @@ export default function CreateArticle(props: any) {
                                     Image Prompt for DALL-E*
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> If the prompt is kept empty then the topic of the article will be sent to Dall-E to get your featured image.
+                                            Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> We recommend DALL-E-3 because it produces significantly better images than DALL-E-2.
                                         </p>
                                     } placement="top">
                                         <div style={{ height: "100%" }}>
@@ -1354,7 +1383,22 @@ export default function CreateArticle(props: any) {
                     }}
                 >
                     <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
-                        onClick={() => submit()} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
+                        onClick={
+                            () => {
+                                if (auth.user?.is_active) {
+                                    submit()
+                                } else {
+                                    Swal.fire({
+                                        title: 'Verify Your Account',
+                                        text: 'Please Verify Your Account to Generate Article!',
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK',
+                                        confirmButtonColor: "#2979FF"
+                                    })
+                                }
+
+                            }
+                        } startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
                         disabled={loading}
 
 
