@@ -144,12 +144,12 @@ const SelectConnects = (props: any) => {
   }
 
   function insertImageAtTheBeginning(htmlString: string, imgSrc: string, fImgObj: any) {
-
+    console.log("imgSrc:", imgSrc, fImgObj?.photos)
 
     if (fImgObj?.user?.links?.html) {
       htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>${fImgObj.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a></figcaption>` + htmlString;
     } else if (fImgObj?.photos) {
-      `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.photos[0].photographer_url} target='_blank' className='colorLink'>${fImgObj.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a></figcaption>` + htmlString;
+      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.photos[0].photographer_url} target='_blank' className='colorLink'>${fImgObj.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a></figcaption>` + htmlString;
     } else {
       htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image" style="object-fit: cover" />` + htmlString;
     }
@@ -158,6 +158,7 @@ const SelectConnects = (props: any) => {
   }
 
   function getFormatedHtml(str: string) {
+    console.log("props.fImg:", props.fImg);
     let isImgAdded: any = [];
     // str = insertH1AtTheBeginning(str, props?.title);
     if (props?.fImg?.urls?.full)
