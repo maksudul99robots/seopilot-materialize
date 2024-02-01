@@ -221,16 +221,29 @@ const SelectConnects = (props: any) => {
       headers: headers,
       body: JSON.stringify({ title: props.title, content: getFormatedHtml(props.html), status: status })
     }).then(res => {
+      // console.log(res);
       setShow(false)
       setLoading(false)
-      Swal.fire({
-        title: 'Success!',
-        text: 'The article is posted successfully',
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: "#2979FF"
-      })
+      if (res.status == 201) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'The article is posted successfully',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: "#2979FF"
+        })
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Unable to publish article to WordPress. Please check your credentials.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: "#2979FF"
+        })
+      }
+
     }).catch(e => {
+      console.log(e)
       setShow(false)
       setLoading(false)
 
