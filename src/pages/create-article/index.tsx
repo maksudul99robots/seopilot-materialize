@@ -273,20 +273,20 @@ export default function CreateArticle(props: any) {
                 if (res.status == 200) {
                     setApiKey(res.data.apikey)
                 } else {
-                    setApiKey(null)
+                    setApiKey('none')
                 }
                 // setApikey(res.data.apikey)
                 // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
             }).catch(e => {
                 // console.log(e);
-                setApiKey(null)
+                setApiKey('none')
             })
 
             LoginRegistrationAPI.getAIModels({}).then(res => {
                 if (res.status == 200) {
                     setAllModels(res.data.models.data)
                     let checkDallEExists = checkIfDallEExists(res.data.models.data);
-                    console.log("checkDallEExists", checkDallEExists)
+                    // console.log("checkDallEExists", checkDallEExists)
                     if (checkDallEExists) {
 
                         let x = [...imgServiceList]
@@ -370,12 +370,22 @@ export default function CreateArticle(props: any) {
     const submit = async () => {
         // check if AI model allowed
         const isModelAllowed = await isAIModelAllowed(model, allModels);
-        console.log("isModelAllowed", isModelAllowed)
+        // console.log("isModelAllowed", isModelAllowed)
         if (!isModelAllowed) {
             Swal.fire({
                 title: 'Error!',
-                text: `Your selected model ${model} is not accessible from your API key. Try Another AI Model.`,
+                text: `Your Selected Model ${model} is Not Accessible from Your API Key. Try Another AI Model.`,
                 icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
+            })
+            return ''
+        }
+        if (topic == '') {
+            Swal.fire({
+                title: '',
+                text: `Please Enter Article Topic.`,
+                icon: 'warning',
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#2979FF"
             })
@@ -680,7 +690,7 @@ export default function CreateArticle(props: any) {
             setFetchOutlineLoading(false)
             Swal.fire({
                 title: 'Error',
-                text: 'Could not fetch outline.',
+                text: 'Could Not Fetch Outline.',
                 icon: 'error',
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#2979FF",
@@ -708,10 +718,10 @@ export default function CreateArticle(props: any) {
             setTempURLHeadings(headings)
         }
     }, [headings])
-    useEffect(() => {
-        console.log("articleType:", articleType)
+    // useEffect(() => {
+    //     console.log("articleType:", articleType)
 
-    }, [articleType])
+    // }, [articleType])
 
 
 
@@ -751,19 +761,18 @@ export default function CreateArticle(props: any) {
         }
     }
 
-    let setListicleOutlinesCommandSent = false;
-
 
 
     return (
         // <Card>
         <>
             {
-                !apiKey &&
+                (apiKey == 'none') &&
                 <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
-                    You Have to Add API Key to Generate Article. <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Click Here to Add API Key</Link> .
+                    You Have to Add API Key to Generate Article. <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Click Here to Add API Key</Link>.
 
                 </Alert>
+
             }
 
 

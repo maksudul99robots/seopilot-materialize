@@ -84,7 +84,7 @@ export default function Page() {
                     }
                     setShowOutlines(true)
                 } else if (res.status == 212) {
-                    console.log("returned value:", res.data)
+                    // console.log("returned value:", res.data)
                     setCurrentStep(5);
                     setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                         setShowArticleEditor(true);               //  ..  setTimeout()
@@ -142,7 +142,7 @@ export default function Page() {
                         if (res.data.listicle_outlines) {
                             let lo = JSON.parse(res.data.listicle_outlines)
                             setListicleOutlines(lo)
-                            console.log(lo)
+                            // console.log(lo)
                         }
 
                         // if(res.data.numbered_items){

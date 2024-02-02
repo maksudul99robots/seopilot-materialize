@@ -119,7 +119,7 @@ const PlanDetails = (props: PricingPlanProps) => {
         variant={data?.popularPlan ? 'contained' : 'outlined'}
       >
         {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
-        {'Upgrade'}
+        {'Plan Coming Soon'}
         {/* {data?.currentPlan ? 'Your Current Plan' : 'Upgrade'} */}
       </Button>
     </BoxWrapper>
