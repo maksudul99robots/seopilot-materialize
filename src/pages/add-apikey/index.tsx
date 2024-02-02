@@ -1,8 +1,8 @@
 "use client";
 
-import { Box, Button, Card, CardContent, CardHeader, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Tooltip, TooltipProps, Typography, styled, tooltipClasses } from "@mui/material";
+import { Box, Button, Card, CardContent, CardHeader, Dialog, Fade, FadeProps, FormControl, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Tooltip, TooltipProps, Typography, styled, tooltipClasses } from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ReactElement, Ref, forwardRef, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { RedeemCouponCode } from "src/services/RedeemCoupon";
 
@@ -18,6 +18,8 @@ import { LoadingButton } from '@mui/lab';
 import APIKeyInstructions from "src/views/pages/pricing/APIKeyInstructions";
 import { useAuth } from "src/hooks/useAuth";
 import Icon from "src/@core/components/icon";
+import ReactPlayer from "react-player";
+import { width } from "@mui/system";
 
 interface State {
     password: string
@@ -38,6 +40,13 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     },
 }));
 
+const Transition = forwardRef(function Transition(
+    props: FadeProps & { children?: ReactElement<any, any> },
+    ref: Ref<unknown>
+) {
+    return <Fade ref={ref} {...props} />
+})
+
 const AddApiKey = () => {
     const [apikey, setApikey] = useState('');
     const [newApikey, setNewApikey] = useState('');
@@ -47,6 +56,7 @@ const AddApiKey = () => {
     const [loading, setLoading] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
     const [teamObj, setTeamObj] = useState<any>(null);
+    const [show, setShow] = useState<boolean>(false)
     const auth = useAuth();
     const router = useRouter()
     // const formattedString = originalString.substring(0, 10) + "*".repeat(originalString.length - 15) + originalString.slice(-5);
@@ -139,12 +149,39 @@ const AddApiKey = () => {
 
     }
     const [iconColor, setIconColor] = useState('#999999')
+    const handleClose = () => {
+
+        setShow(false)
+    }
 
     return (
         <>
 
             <Card>
-                <CardHeader title='OpenAI API Key' />
+                {/* <CardHeader title='OpenAI API Key' /> */}
+                <Box sx={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
+                    <Typography variant="h6">
+                        OpenAI API Key
+
+                    </Typography>
+                    <Button variant='outlined' onClick={e => {
+                        setShow(true)
+                    }} startIcon={<Icon icon="ph:video-thin" />} >
+                        Watch Step-by-Step Instructions
+                    </Button>
+                </Box>
+                <Dialog
+                    fullWidth
+                    open={show}
+                    maxWidth='xl'
+                    sx={{ display: "flex", justifyContent: "center" }}
+                    onClose={handleClose}
+                    onBackdropClick={handleClose}
+                    TransitionComponent={Transition}
+                >
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/n8AxB_j4naM?si=k_ZZAbvLzi-ivc5k" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+                </Dialog>
+
                 <CardContent>
                     <APIKeyInstructions />
                     <form>

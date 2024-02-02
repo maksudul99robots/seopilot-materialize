@@ -207,6 +207,8 @@ const TableServerSide = () => {
             setMainData(res.data);
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch(e => {
+
         })
     }, [])
     useEffect(() => {

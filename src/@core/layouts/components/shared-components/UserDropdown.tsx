@@ -203,10 +203,10 @@ const UserDropdown = (props: Props) => {
             Settings
           </Box>
         </MenuItem> */}
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pricing')}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/plans')}>
           <Box sx={styles}>
             <Icon icon='mdi:currency-usd' />
-            Pricing
+            Plans
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/add-apikey')}>

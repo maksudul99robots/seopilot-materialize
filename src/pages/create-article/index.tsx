@@ -35,6 +35,7 @@ import { TagsInput } from "react-tag-input-component";
 import DndForListicle from 'src/services/DND/DNDForListicle';
 import Link from 'next/link';
 import { checkIfDallEExists } from 'src/services/checkIfDallEExists';
+import { isAIModelAllowed } from 'src/services/isAIModelAllowed';
 // ** Demo Components Imports
 
 interface IconType {
@@ -157,6 +158,7 @@ export default function CreateArticle(props: any) {
             display: 'Pexels'
         }
     ]);
+    const [allModels, setAllModels] = useState<any>([]);
     const [apiKey, setApiKey] = useState<string | null>('')
     const [extraPrompt, setExtraPrompt] = useState<string>('')
     const [isAllowedToCreateArticle, setIsAllowedToCreateArticle] = useState<boolean>(false)
@@ -282,6 +284,7 @@ export default function CreateArticle(props: any) {
 
             LoginRegistrationAPI.getAIModels({}).then(res => {
                 if (res.status == 200) {
+                    setAllModels(res.data.models.data)
                     let checkDallEExists = checkIfDallEExists(res.data.models.data);
                     console.log("checkDallEExists", checkDallEExists)
                     if (checkDallEExists) {
@@ -364,36 +367,22 @@ export default function CreateArticle(props: any) {
         return csv;
     }
 
-    const submit = () => {
-        // console.log({
-        //     article_type: articleType,
-        //     topic: topic,
-        //     keywords: convertArrayToCsvKeywords(keywords),
-        //     article_length: articleLength,
-        //     tone: tone,
-        //     language: language,
-        //     country: country,
-        //     links: JSON.stringify(links),
-        //     outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-        //     outline_source: outlineSource,
-        //     outline_url: outlineURL,
-        //     faq: faq,
-        //     toc: toc,
-        //     model: model,
-        //     showFeaturedImg: showFeaturedImg,
-        //     point_of_view: pointOfView
-        // })
-        // return
+    const submit = async () => {
+        // check if AI model allowed
+        const isModelAllowed = await isAIModelAllowed(model, allModels);
+        console.log("isModelAllowed", isModelAllowed)
+        if (!isModelAllowed) {
+            Swal.fire({
+                title: 'Error!',
+                text: `Your selected model ${model} is not accessible from your API key. Try Another AI Model.`,
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
+            })
+            return
+        }
 
-        // if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-        //     Swal.fire({
-        //         title: 'Error!',
-        //         text: 'Please Subscribe to Higher Plan to Get This Feature.',
-        //         icon: 'error',
-        //         confirmButtonText: 'Close',
-        //         confirmButtonColor: "#2979FF"
-        //     })
-        // } else {
+        return
         if (isAllowedToCreateArticle) {
             if (articleType != 'listicle') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
