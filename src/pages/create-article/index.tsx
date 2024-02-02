@@ -379,10 +379,10 @@ export default function CreateArticle(props: any) {
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#2979FF"
             })
-            return
+            return ''
         }
 
-        return
+        // return
         if (isAllowedToCreateArticle) {
             if (articleType != 'listicle') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
