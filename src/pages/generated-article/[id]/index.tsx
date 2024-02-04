@@ -52,6 +52,8 @@ export default function Page() {
         // console.log("outlines:", outlines)
     }, [outlines])
     useEffect(() => {
+        let counter = 0;
+        let interval: any = null
         if (router.query.id) {
             LoginRegistrationAPI.getSaasArticle({ id: router.query.id }).then(async (res) => {
                 // console.log("res:", res.data)
@@ -105,7 +107,7 @@ export default function Page() {
                                     }
                                 })
                             } catch (e) {
-                                console.log("e:", e)
+                                // console.log("e:", e)
                             }
                         } else {
                             setOutlines(res?.data.outline ? res.data.outline : '')
@@ -155,12 +157,27 @@ export default function Page() {
 
                 }
             }).catch(e => {
-                console.log(e);
+                // console.log(e);
+                counter = 1200000;
+                if (interval) {
+                    clearInterval(interval)
+                }
+                Swal.fire({
+                    html: e.response?.data?.message ? e.response?.data?.message : 'Error from ChatGPT API. Please Try again later.',
+                    icon: "error",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonColor: "#2979FF"
+                }).then((res) => {
+
+                    router.push("/create-article")
+                })
             })
         }
-        let counter = 0;
+
         if (callTracker) {
-            let interval = setInterval(async () => {
+            interval = setInterval(async () => {
+                // console.log("interval is running....")
                 counter = counter + 15000;
                 if (counter < 1200000) {
                     await LoginRegistrationAPI.getSaasArticle({ id: router.query.id }).then(async (res) => {
@@ -231,7 +248,7 @@ export default function Page() {
                             })
                         }
                     }).catch(e => {
-                        console.log(e);
+                        // console.log(e);
                         clearInterval(interval)
                         Swal.fire({
                             html: e.response?.data?.message ? e.response?.data?.message : 'Error from ChatGPT API. Please Try again later.',

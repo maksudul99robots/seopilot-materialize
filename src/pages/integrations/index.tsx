@@ -367,13 +367,13 @@ const TableServerSide = () => {
                 fullWidth
                 open={show}
                 maxWidth='lg'
-                sx={{ display: "flex", justifyContent: "center" }}
+                sx={{ display: "flex", justifyContent: "center", height: "900", width: "506" }}
                 onClose={handleClose}
                 onBackdropClick={handleClose}
                 TransitionComponent={Transition}
             >
 
-                <ReactPlayer url='https://vimeo.com/908440876/4a42c699f8?share=copy' controls style={{ height: "100%", width: "100%" }} />
+                <ReactPlayer url='https://vimeo.com/908440876/4a42c699f8?share=copy' controls style={{ height: "900", width: "506" }} />
             </Dialog>
 
 
