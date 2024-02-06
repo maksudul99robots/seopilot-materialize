@@ -10,6 +10,8 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2';
 import Outlines from './Outlines';
 import { getDateTime } from 'src/services/DateTimeFormatter';
+import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 const steps = [
     'Researching Keywords',
     'Web Researching',
@@ -151,6 +153,18 @@ export default function Page() {
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
                         setImgService(res.data.img_service)
+                        if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
+                            // Swal.fire({
+                            //     title: 'Unable to Generate Image',
+                            //     text: 'Your given image prompt is not accepted by DALL-E. DALL-E responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."',
+                            //     icon: 'warning',
+                            //     confirmButtonText: 'OK',
+                            //     confirmButtonColor: "#2979FF"
+                            // })
+                            toast.warning('Your given image prompt is not accepted by DALL-E. It responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."', {
+                                autoClose: 5000,
+                            })
+                        }
 
                     }, 1000)
                 } else {
@@ -233,6 +247,7 @@ export default function Page() {
                                 setNumberedItem(res.data.numbered_items)
                                 setArticleType(res.data.article_type)
                                 setImgService(res.data.img_service)
+
 
                             }, 3000)
                         } else {
@@ -330,6 +345,7 @@ export default function Page() {
 
     return (
         <>
+            <ToastContainer style={{ width: "600px" }} />
             {
                 showArticleEditor ?
 

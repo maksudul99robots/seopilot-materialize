@@ -258,7 +258,7 @@ export default function ArticleIU(props: any) {
                                 </div>
                             }
                             {
-                                (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') &&
+                                (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') && fImg &&
                                 <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
                                     <img
                                         src={fImg}

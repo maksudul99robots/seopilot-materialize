@@ -103,34 +103,62 @@ const AddApiKey = () => {
             if (newApikey.length > 5) {
                 setDisable(true)
                 setLoading(true)
-                LoginRegistrationAPI.addOpenAIApiKey({ openai_apikey: newApikey }).then((res) => {
-                    if (res.status == 200) {
+                LoginRegistrationAPI.verifyOpenAIKey({ api_key: newApikey }).then((responseFronVerification) => {
+                    console.log(responseFronVerification.data)
+                    LoginRegistrationAPI.addOpenAIApiKey({ openai_apikey: newApikey }).then((res) => {
+                        if (res.status == 200) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'OpenAI API Key is added Successfully!',
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: "#2979FF"
+                            })
+                            auth.resetToken({});
+
+                        }
+                        setDisable(false)
+                        setLoading(false)
+                    }).catch(e => {
+                        console.log(e);
+                        setDisable(false)
+                        setLoading(false)
                         Swal.fire({
-                            title: 'Success!',
-                            text: 'OpenAI API Key is added Successfully!',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
+                            html: `<h2>Error</h2>
+                          <h5>${e.response.data.message}</h5>
+                          `,
+                            icon: "error",
+                            // input: 'text',
+                            // inputLabel: 'Please try again later.',
                             confirmButtonColor: "#2979FF"
                         })
-                        auth.resetToken({});
-
-                    }
-                    setDisable(false)
-                    setLoading(false)
-                }).catch(e => {
-                    console.log(e);
-                    setDisable(false)
-                    setLoading(false)
-                    Swal.fire({
-                        html: `<h2>Error</h2>
-                      <h5>${e.response.data.message}</h5>
-                      `,
-                        icon: "error",
-                        // input: 'text',
-                        // inputLabel: 'Please try again later.',
-                        confirmButtonColor: "#2979FF"
                     })
+                }).catch(e => {
+                    // Swal.fire({
+                    //     html: `<h3>Error</h3>
+                    //   <h5>${e.response.data}</h5>
+                    //   `,
+                    //     icon: "error",
+                    //     // input: 'text',
+                    //     inputLabel: 'Please try again later.',
+                    //     confirmButtonColor: "#2979FF"
+                    // }).then(() => {
+                    //     setDisable(false)
+                    //     setLoading(false)
+                    // })
+                    Swal.fire({
+                        title: 'Error',
+                        text: e.response.data,
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        setDisable(false)
+                        setLoading(false)
+                    })
+
                 })
+
 
             }
         } else {

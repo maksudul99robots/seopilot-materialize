@@ -314,6 +314,8 @@ export default function CreateArticle(props: any) {
                     icon: 'warning',
                     confirmButtonText: 'OK',
                     confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
                 })
                 // }else{}
             })
@@ -370,7 +372,7 @@ export default function CreateArticle(props: any) {
     const submit = async () => {
         // check if AI model allowed
         const isModelAllowed = await isAIModelAllowed(model, allModels);
-        // console.log("isModelAllowed", isModelAllowed)
+        console.log("isModelAllowed", isModelAllowed)
         if (!isModelAllowed) {
             Swal.fire({
                 title: 'Error!',

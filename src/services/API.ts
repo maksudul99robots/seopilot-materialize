@@ -228,6 +228,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async verifyOpenAIKey(data: any, url = "/verify-api-key", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async isAllowedToCreateArticle(data: any, url = "/is-user-allowed-to-create-article", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
