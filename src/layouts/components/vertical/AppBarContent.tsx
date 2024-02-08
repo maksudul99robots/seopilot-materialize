@@ -17,7 +17,7 @@ import BackToTheLastPage from './BackToTheLastPage'
 import {
   NotificationsType
 } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
-import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown.1'
+import { NotificationDropdown } from 'src/@core/layouts/components/shared-components/NotificationDropdown.1'
 import ShortcutsDropdown, { ShortcutsType } from 'src/@core/layouts/components/shared-components/ShortcutsDropdown'
 
 // ** Hook Import
