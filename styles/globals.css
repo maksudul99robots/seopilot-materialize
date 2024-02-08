@@ -73,3 +73,13 @@ code[class*='language-'] {
   background: #bcb5b5;
 }
 
+.search {
+  border-radius: 8px;
+  border: 1px solid #D8D8DD;
+  margin-right: 5px;
+  padding: 5px !important;
+}
+.search:focus{
+  outline:solid 1px #D8D8DD;
+
+}

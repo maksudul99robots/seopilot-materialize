@@ -7,7 +7,9 @@ import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
-
+// import IconButton from "@material-ui/core/IconButton";
+// import InputAdornment from "@material-ui/core/InputAdornment";
+// import SearchIcon from "@material-ui/icons/Search";
 // ** ThirdParty Components
 import axios from 'axios'
 
@@ -34,6 +36,8 @@ type CustomRowType = {
     id: number,
     user_id: number,
     output: string,
+    article_length: string,
+    article_type: string,
     is_error: boolean,
     source: string,
     createdAt: string,
@@ -72,7 +76,7 @@ const statusObj: StatusObj = {
 
 
 import { LoginRegistrationAPI } from '../../services/API'
-import { Button } from '@mui/material'
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
@@ -80,6 +84,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
+import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -91,41 +96,68 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontSize: 11,
     },
 }));
+const notifications: NotificationsType[] = [
+    {
+        meta: 'Today',
+        avatarAlt: 'Flora',
+        title: 'Congratulation Flora! 🎉',
+        avatarImg: '/images/avatars/4.png',
+        subtitle: 'Won the monthly best seller badge'
+    },
+    {
+        meta: 'Yesterday',
+        avatarColor: 'primary',
+        subtitle: '5 hours ago',
+        avatarText: 'Robert Austin',
+        title: 'New user registered.'
+    },
+    {
+        meta: '11 Aug',
+        avatarAlt: 'message',
+        title: 'New message received 👋🏻',
+        avatarImg: '/images/avatars/5.png',
+        subtitle: 'You have 10 unread messages'
+    },
+    {
+        meta: '25 May',
+        title: 'Paypal',
+        avatarAlt: 'paypal',
+        subtitle: 'Received Payment',
+        avatarImg: '/images/misc/paypal.png'
+    },
+    {
+        meta: '19 Mar',
+        avatarAlt: 'order',
+        title: 'Received Order 📦',
+        avatarImg: '/images/avatars/3.png',
+        subtitle: 'New order received from John'
+    },
+    {
+        meta: '27 Dec',
+        avatarAlt: 'chart',
+        subtitle: '25 hrs ago',
+        avatarImg: '/images/misc/chart.png',
+        title: 'Finance report has been generated'
+    }
+]
 
 const TableServerSide = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
-    const [rows, setRows] = useState<CustomRowType[]>([])
+    const [rows, setRows] = useState<any>([])
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([]);
     const [retryLoading, setRetryLoading] = useState<any>([]);
-    const auth = useAuth()
-    const router = useRouter()
+    const [status, setStatus] = useState<string>('all')
+    const [type, setType] = useState<string>('all')
+    const [length, setLength] = useState<string>('all')
+    const [runFilter, setRunFilter] = useState<number>(0)
 
-    // useEffect(() => {
-    //     if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-    //         // Swal.fire('401',
-    //         //     'You don\'t have access to this page. Please Upgrade to Higher Plan to SEE, EDIT and, PUBLISH your articles.',
-    //         //     'error').then(() => {
-    //         //         router.push("/")
-    //         //     })
-
-    //         Swal.fire({
-    //             title: '401',
-    //             text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //             icon: 'error',
-    //             confirmButtonText: 'Close',
-    //             confirmButtonColor: "#2979FF",
-    //         }).then(() => {
-    //             router.push("/")
-    //         })
-    //     }
-    // }, [auth?.user?.plan])
-
-    function loadServerRows(currentPage: number, data: CustomRowType[]) {
+    function loadServerRows(currentPage: number, data: any) {
+        console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
 
@@ -153,10 +185,11 @@ const TableServerSide = () => {
                 )
             }
         },
+
         {
-            flex: 0.175,
+            flex: 0.09,
             type: 'date',
-            minWidth: 120,
+            // minWidth: 120,
             headerName: 'Created',
             field: 'createdAt',
             valueGetter: params => new Date(params.value),
@@ -167,7 +200,32 @@ const TableServerSide = () => {
             )
         },
         {
-            flex: 0.175,
+            // flex: 0.05,
+            minWidth: 50,
+            field: 'article_type',
+            headerName: 'Type',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {params.row.article_type ? params.row.article_type?.toUpperCase() : ''}
+                </Typography>
+            )
+        },
+        {
+            // flex: 0.05,
+            // minWidth: 50,
+            sortable: false,
+            headerName: 'Length',
+            field: 'article_length',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {params.row.article_length ? params.row.article_length?.toUpperCase() : ''}
+                </Typography>
+            )
+        },
+        {
+            flex: 0.15,
             minWidth: 140,
             field: 'is_error',
             headerName: 'Status',
@@ -290,6 +348,7 @@ const TableServerSide = () => {
             })
         })
     }
+    let searchElementField = document.getElementsByClassName("MuiFormControl-root MuiTextField-root")[0];
     useEffect(() => {
 
         LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
@@ -297,34 +356,51 @@ const TableServerSide = () => {
             setMainData(res.data);
 
         })
+
     }, [])
-    // useEffect(() => {
-    //     if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-    //         // Swal.fire('401',
-    //         //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //         //     'error').then(() => {
-    //         //         router.push("/")
-    //         //     })
+    useEffect(() => {
+        // console.log("searchElementField:", searchElementField)
+        // searchElementField?.setAttribute("style", 'display: none')
+        // var selectElement = document.createElement('select');
+        // selectElement.id = 'mySelect';
 
-    //         Swal.fire({
-    //             title: '401',
-    //             text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //             icon: 'error',
-    //             confirmButtonText: 'Close',
-    //             confirmButtonColor: "#2979FF",
-    //         }).then(() => {
-    //             router.push("/")
-    //         })
-    //     }
-    // }, [auth?.user?.plan])
+        // // Create option elements and add them to the select element
+        // var option1 = document.createElement('option');
+        // option1.value = 'option1';
+        // option1.textContent = 'Option 1';
+        // selectElement.appendChild(option1);
+
+        // var option2 = document.createElement('option');
+        // option2.value = 'option2';
+        // option2.textContent = 'Option 2';
+        // selectElement.appendChild(option2);
+
+        // var option3 = document.createElement('option');
+        // option3.value = 'option3';
+        // option3.textContent = 'Option 3';
+        // selectElement.appendChild(option3);
+        // selectElement.setAttribute('style', 'width:30%; margin-left:10px; border-radius:8px; border-color:#D8D8DD')
+
+        // searchElementField?.appendChild(selectElement); // Append the new div inside the existing div
+
+
+    }, [searchElementField])
     const fetchTableData = (useCallback(
-        async (sort: SortType, q: string, column: string) => {
-
+        async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
             const queryLowered = q.toLowerCase()
             const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
-
-            const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
-            // console.log("dataAsc, sort, q, column", dataAsc, sort, q, column)
+            console.log("type:", type)
+            let dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
+            if (type != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.article_type?.toLowerCase().includes(type))
+            }
+            if (length != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.article_length?.toLowerCase().includes(length))
+            }
+            if (status != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.status?.toLowerCase().includes(status))
+            }
+            console.log("dataToFilter:", dataToFilter)
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
@@ -344,14 +420,14 @@ const TableServerSide = () => {
     ))
 
     useEffect(() => {
-        fetchTableData(sort, searchValue, sortColumn)
-    }, [fetchTableData, searchValue, sort, sortColumn])
+        fetchTableData(sort, searchValue, sortColumn, type, length, status)
+    }, [fetchTableData, searchValue, sort, sortColumn, runFilter])
 
     const handleSortModel = (newModel: GridSortModel) => {
         if (newModel.length) {
             setSort(newModel[0].sort)
             setSortColumn(newModel[0].field)
-            fetchTableData(newModel[0].sort, searchValue, newModel[0].field)
+            fetchTableData(newModel[0].sort, searchValue, newModel[0].field, type, length, status)
         } else {
             setSort('asc')
             setSortColumn('full_name')
@@ -360,7 +436,7 @@ const TableServerSide = () => {
 
     const handleSearch = (value: string) => {
         setSearchValue(value)
-        fetchTableData(sort, value, sortColumn)
+        fetchTableData(sort, value, sortColumn, type, length, status)
     }
 
 
@@ -370,7 +446,47 @@ const TableServerSide = () => {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 <Button variant='contained' href='/create-article'>+ Create Article</Button>
             </Box>
+
             <Card>
+                <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
+                    <Typography variant='h6'>
+                        Articles
+                    </Typography>
+                    <Box sx={{ display: "flex", justifyContent: "end" }}>
+                        {/* <input type="text" placeholder="Search" className='search' name="search" /> */}
+                        <TextField InputProps={{
+                            startAdornment: <InputAdornment position="start">
+                                <Icon icon="material-symbols:search" />
+                            </InputAdornment>,
+                        }}
+                            size='small'
+                            sx={{ marginRight: "10px" }}
+                            value={searchValue} onChange={e => handleSearch(e.target.value)}
+                        />
+                        <NotificationDropdown notifications={notifications} settings={{
+                            skin: 'default',
+                            mode: 'dark',
+                            appBar: undefined,
+                            footer: undefined,
+                            navHidden: undefined,
+                            appBarBlur: false,
+                            direction: 'ltr',
+                            navCollapsed: false,
+                            themeColor: 'primary',
+                            contentWidth: 'full',
+                            layout: undefined,
+                            lastLayout: undefined,
+                            verticalNavToggleType: 'collapse',
+                            toastPosition: undefined
+                        }}
+                            status={status} type={type} length={length} setStatus={setStatus} setType={setType}
+                            setLength={setLength} runFilter={runFilter} setRunFilter={setRunFilter}
+                            handleSearch={handleSearch}
+                        />
+                    </Box>
+                </Box>
+
+
                 <DataGrid
                     autoHeight
                     pagination
@@ -383,20 +499,24 @@ const TableServerSide = () => {
                     pageSizeOptions={[50]}
                     paginationModel={paginationModel}
                     onSortModelChange={handleSortModel}
-                    slots={{ toolbar: ServerSideToolbar }}
+                    // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
-                    slotProps={{
-                        baseButton: {
-                            variant: 'outlined'
-                        },
-                        toolbar: {
-                            title: "Articles",
-                            value: searchValue,
-                            clearSearch: () => handleSearch(''),
-                            onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                        }
-                    }}
+                // slotProps={{
+                //     baseButton: {
+                //         variant: 'outlined'
+                //     },
+                //     toolbar: {
+                //         title: "Articles",
+                //         value: searchValue,
+                //         clearSearch: () => handleSearch(''),
+                //         onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
+                //     },
+                //     // baseTooltip:{
+
+                //     // }
+                // }}
                 />
+
             </Card>
         </Box>
 

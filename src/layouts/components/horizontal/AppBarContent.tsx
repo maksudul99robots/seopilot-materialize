@@ -9,9 +9,10 @@ import Autocomplete from 'src/layouts/components/Autocomplete'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from 'src/@core/layouts/components/shared-components/UserDropdown'
 import LanguageDropdown from 'src/@core/layouts/components/shared-components/LanguageDropdown'
-import NotificationDropdown, {
+import {
   NotificationsType
 } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown.1'
 import ShortcutsDropdown, { ShortcutsType } from 'src/@core/layouts/components/shared-components/ShortcutsDropdown'
 
 // ** Hook Import
