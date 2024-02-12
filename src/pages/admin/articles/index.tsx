@@ -73,13 +73,16 @@ const statusObj: StatusObj = {
 
 
 import { LoginRegistrationAPI } from 'src/services/API'
-import { Button } from '@mui/material'
+import { Button, InputAdornment, TextField } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
+import Icon from 'src/@core/components/icon'
+import NotificationDropdown from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import FilterOptions from './filterOptions/FilterOptions'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -101,6 +104,11 @@ const TableServerSide = () => {
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 })
     const [mainData, setMainData] = useState<any>([]);
+    const [retryLoading, setRetryLoading] = useState<any>([]);
+    const [status, setStatus] = useState<string>('all')
+    const [type, setType] = useState<string>('all')
+    const [length, setLength] = useState<string>('all')
+    const [runFilter, setRunFilter] = useState<number>(0)
 
     const auth = useAuth()
     const router = useRouter()
@@ -128,7 +136,7 @@ const TableServerSide = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'output',
+            field: 'topic',
             headerName: 'AI Article',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -138,7 +146,7 @@ const TableServerSide = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.output ? row.output?.replace(/<\/?[^>]+(>|$)/g, "") : row.topic}
+                                {row.topic}
                             </Typography>
                             <Typography noWrap variant='caption'>
                                 {row.source ? row.source : 'https://app.seopilot.io'}
@@ -148,10 +156,11 @@ const TableServerSide = () => {
                 )
             }
         },
+
         {
-            flex: 0.175,
+            flex: 0.09,
             type: 'date',
-            minWidth: 120,
+            // minWidth: 120,
             headerName: 'Created',
             field: 'createdAt',
             valueGetter: params => new Date(params.value),
@@ -162,19 +171,44 @@ const TableServerSide = () => {
             )
         },
         {
-            flex: 0.175,
+            // flex: 0.05,
+            minWidth: 50,
+            field: 'article_type',
+            headerName: 'Type',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {params.row.article_type ? params.row.article_type?.toUpperCase() : ''}
+                </Typography>
+            )
+        },
+        {
+            // flex: 0.05,
+            // minWidth: 50,
+            sortable: false,
+            headerName: 'Length',
+            field: 'article_length',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    {params.row.article_length ? params.row.article_length?.toUpperCase() : ''}
+                </Typography>
+            )
+        },
+        {
+            flex: 0.15,
             minWidth: 140,
             field: 'is_error',
             headerName: 'Status',
             renderCell: (params: GridRenderCellParams) => {
-                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' ? 2 : 1]
+                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' || params.row?.status == 'initiated' ? 2 : 1]
                 return (
 
                     <>
                         {
                             status.title == 'Error' ?
 
-                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
                                     <div>
                                         <CustomChip
                                             size='small'
@@ -216,7 +250,7 @@ const TableServerSide = () => {
 
                                 <Button variant='outlined' onClick={e => {
                                     regenerateArticle(row.id)
-                                }} disabled={!row.article_type}>
+                                }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
                                     Retry
                                 </Button >
                                 :
@@ -291,14 +325,23 @@ const TableServerSide = () => {
         })
     }, [])
     const fetchTableData = (useCallback(
-        async (sort: SortType, q: string, column: string) => {
+        async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
 
 
             const queryLowered = q.toLowerCase()
             const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
 
-            const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
+            let dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
             // console.log("dataAsc", dataAsc)
+            if (type != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.article_type?.toLowerCase().includes(type))
+            }
+            if (length != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.article_length?.toLowerCase().includes(length))
+            }
+            if (status != 'all') {
+                dataToFilter = dataToFilter.filter((item: any) => item.status?.toLowerCase().includes(status))
+            }
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
@@ -318,14 +361,14 @@ const TableServerSide = () => {
     ))
 
     useEffect(() => {
-        fetchTableData(sort, searchValue, sortColumn)
-    }, [fetchTableData, searchValue, sort, sortColumn])
+        fetchTableData(sort, searchValue, sortColumn, type, length, status)
+    }, [fetchTableData, searchValue, sort, sortColumn, runFilter])
 
     const handleSortModel = (newModel: GridSortModel) => {
         if (newModel.length) {
             setSort(newModel[0].sort)
             setSortColumn(newModel[0].field)
-            fetchTableData(newModel[0].sort, searchValue, newModel[0].field)
+            fetchTableData(newModel[0].sort, searchValue, newModel[0].field, type, length, status)
         } else {
             setSort('asc')
             setSortColumn('full_name')
@@ -334,7 +377,7 @@ const TableServerSide = () => {
 
     const handleSearch = (value: string) => {
         setSearchValue(value)
-        fetchTableData(sort, value, sortColumn)
+        fetchTableData(sort, value, sortColumn, type, length, status)
     }
 
 
@@ -342,6 +385,37 @@ const TableServerSide = () => {
     return (
         <Box >
             <Card>
+                <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
+                    <Typography variant='h6'>
+                        Articles
+                    </Typography>
+                    <Box sx={{ display: "flex", justifyContent: "end" }}>
+                        {/* <input type="text" placeholder="Search" className='search' name="search" /> */}
+                        <TextField InputProps={{
+                            startAdornment: <InputAdornment position="start">
+                                <Icon icon="material-symbols:search" />
+                            </InputAdornment>,
+                        }}
+                            size='small'
+                            sx={{ marginRight: "10px" }}
+                            value={searchValue} onChange={e => handleSearch(e.target.value)}
+                        />
+                        <NotificationDropdown
+                            status={status} type={type} length={length} setStatus={setStatus} setType={setType}
+                            setLength={setLength} runFilter={runFilter} setRunFilter={setRunFilter}
+                            handleSearch={handleSearch}
+                            FilterOptions={<FilterOptions type={type} length={length} setStatus={setStatus} status={status} setType={setType} setLength={setLength} />}
+                            reset={() => {
+                                setStatus('all')
+                                setLength('all')
+                                setType('all')
+                                setRunFilter(runFilter + 1)
+                                // handleDropdownClose()
+                            }}
+                        > </NotificationDropdown>
+                    </Box>
+                </Box>
+
                 <DataGrid
                     autoHeight
                     pagination
@@ -354,19 +428,19 @@ const TableServerSide = () => {
                     pageSizeOptions={[50]}
                     paginationModel={paginationModel}
                     onSortModelChange={handleSortModel}
-                    slots={{ toolbar: ServerSideToolbar }}
+                    // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
-                    slotProps={{
-                        baseButton: {
-                            variant: 'outlined'
-                        },
-                        toolbar: {
-                            title: "Articles",
-                            value: searchValue,
-                            clearSearch: () => handleSearch(''),
-                            onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                        }
-                    }}
+                // slotProps={{
+                //     baseButton: {
+                //         variant: 'outlined'
+                //     },
+                //     toolbar: {
+                //         title: "Articles",
+                //         value: searchValue,
+                //         clearSearch: () => handleSearch(''),
+                //         onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
+                //     }
+                // }}
                 />
             </Card>
         </Box>

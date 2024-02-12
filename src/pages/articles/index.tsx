@@ -5,25 +5,15 @@ import { useEffect, useState, useCallback, ChangeEvent } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
-// import IconButton from "@material-ui/core/IconButton";
-// import InputAdornment from "@material-ui/core/InputAdornment";
-// import SearchIcon from "@material-ui/icons/Search";
-// ** ThirdParty Components
-import axios from 'axios'
+
 
 // ** Custom Components
 import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
-import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar'
 
 // ** Types Imports
 import { ThemeColor } from 'src/@core/layouts/types'
-import { DataGridRowType } from 'src/@fake-db/types'
 
-// ** Utils Import
-import { getInitials } from 'src/@core/utils/get-initials'
 
 interface StatusObj {
     [key: number]: {
@@ -32,41 +22,10 @@ interface StatusObj {
     }
 }
 
-type CustomRowType = {
-    id: number,
-    user_id: number,
-    output: string,
-    article_length: string,
-    article_type: string,
-    is_error: boolean,
-    source: string,
-    createdAt: string,
-    updatedAt: string
-}
 
 type SortType = 'asc' | 'desc' | undefined | null
 
-// ** renders client column
-const renderClient = (params: GridRenderCellParams) => {
-    const { row } = params
-    const stateNum = Math.floor(Math.random() * 6)
-    const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
-    const color = states[stateNum]
 
-    if (row.avatar.length) {
-        return <CustomAvatar src={`/images/avatars/${row.avatar}`} sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }} />
-    } else {
-        return (
-            <CustomAvatar
-                skin='light'
-                color={color as ThemeColor}
-                sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
-            >
-                {getInitials(row.full_name ? row.full_name : 'John Doe')}
-            </CustomAvatar>
-        )
-    }
-}
 
 const statusObj: StatusObj = {
     1: { title: 'Success', color: 'success' },
@@ -85,6 +44,7 @@ import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
+import FilterOptions from '../admin/articles/filterOptions/FilterOptions'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -96,50 +56,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontSize: 11,
     },
 }));
-const notifications: NotificationsType[] = [
-    {
-        meta: 'Today',
-        avatarAlt: 'Flora',
-        title: 'Congratulation Flora! 🎉',
-        avatarImg: '/images/avatars/4.png',
-        subtitle: 'Won the monthly best seller badge'
-    },
-    {
-        meta: 'Yesterday',
-        avatarColor: 'primary',
-        subtitle: '5 hours ago',
-        avatarText: 'Robert Austin',
-        title: 'New user registered.'
-    },
-    {
-        meta: '11 Aug',
-        avatarAlt: 'message',
-        title: 'New message received 👋🏻',
-        avatarImg: '/images/avatars/5.png',
-        subtitle: 'You have 10 unread messages'
-    },
-    {
-        meta: '25 May',
-        title: 'Paypal',
-        avatarAlt: 'paypal',
-        subtitle: 'Received Payment',
-        avatarImg: '/images/misc/paypal.png'
-    },
-    {
-        meta: '19 Mar',
-        avatarAlt: 'order',
-        title: 'Received Order 📦',
-        avatarImg: '/images/avatars/3.png',
-        subtitle: 'New order received from John'
-    },
-    {
-        meta: '27 Dec',
-        avatarAlt: 'chart',
-        subtitle: '25 hrs ago',
-        avatarImg: '/images/misc/chart.png',
-        title: 'Finance report has been generated'
-    }
-]
+
 
 const TableServerSide = () => {
     // ** States
@@ -389,7 +306,7 @@ const TableServerSide = () => {
         async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
             const queryLowered = q.toLowerCase()
             const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
-            console.log("type:", type)
+
             let dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
             if (type != 'all') {
                 dataToFilter = dataToFilter.filter((item: any) => item.article_type?.toLowerCase().includes(type))
@@ -400,7 +317,6 @@ const TableServerSide = () => {
             if (status != 'all') {
                 dataToFilter = dataToFilter.filter((item: any) => item.status?.toLowerCase().includes(status))
             }
-            console.log("dataToFilter:", dataToFilter)
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
@@ -463,26 +379,19 @@ const TableServerSide = () => {
                             sx={{ marginRight: "10px" }}
                             value={searchValue} onChange={e => handleSearch(e.target.value)}
                         />
-                        <NotificationDropdown notifications={notifications} settings={{
-                            skin: 'default',
-                            mode: 'dark',
-                            appBar: undefined,
-                            footer: undefined,
-                            navHidden: undefined,
-                            appBarBlur: false,
-                            direction: 'ltr',
-                            navCollapsed: false,
-                            themeColor: 'primary',
-                            contentWidth: 'full',
-                            layout: undefined,
-                            lastLayout: undefined,
-                            verticalNavToggleType: 'collapse',
-                            toastPosition: undefined
-                        }}
+                        <NotificationDropdown
                             status={status} type={type} length={length} setStatus={setStatus} setType={setType}
                             setLength={setLength} runFilter={runFilter} setRunFilter={setRunFilter}
                             handleSearch={handleSearch}
-                        />
+                            FilterOptions={<FilterOptions type={type} length={length} setStatus={setStatus} status={status} setType={setType} setLength={setLength} />}
+                            reset={() => {
+                                setStatus('all')
+                                setLength('all')
+                                setType('all')
+                                setRunFilter(runFilter + 1)
+                                // handleDropdownClose()
+                            }}
+                        > </NotificationDropdown>
                     </Box>
                 </Box>
 

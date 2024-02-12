@@ -956,13 +956,21 @@ export default function CreateArticle(props: any) {
                                         <MenuItem value='French'>French</MenuItem>
                                         <MenuItem value='German'>German</MenuItem>
                                         <MenuItem value='Spanish'>Spanish</MenuItem>
+                                        <MenuItem value='Arabic'>Arabic</MenuItem>
                                         <MenuItem value='Japanese'>Japanese</MenuItem>
                                         <MenuItem value='Chinese'>Chinese</MenuItem>
+                                        <MenuItem value='Mandarin Chinese'>Mandarin Chinese</MenuItem>
                                         <MenuItem value='Russian'>Russian</MenuItem>
-                                        <MenuItem value='Italian'>Italian</MenuItem>
-                                        <MenuItem value='Arabic'>Arabic</MenuItem>
+                                        <MenuItem value='Romanian'>Romanian</MenuItem>
+                                        <MenuItem value='Dutch'>Dutch</MenuItem>
                                         <MenuItem value='Portuguese'>Portuguese</MenuItem>
                                         <MenuItem value='Swedish'>Swedish</MenuItem>
+                                        <MenuItem value='Hindi'>Hindi</MenuItem>
+                                        <MenuItem value='Bengali'>Bengali</MenuItem>
+                                        <MenuItem value='Italian'>Italian</MenuItem>
+                                        <MenuItem value='Malay'>Malay</MenuItem>
+
+
                                     </Select>
                                 </FormControl>
                             </Grid>

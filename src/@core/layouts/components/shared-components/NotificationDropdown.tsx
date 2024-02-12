@@ -19,13 +19,7 @@ import Icon from 'src/@core/components/icon'
 
 // ** Type Imports
 import { ThemeColor } from 'src/@core/layouts/types'
-import { CustomAvatarProps } from 'src/@core/components/mui/avatar/types'
 
-// ** Custom Components Imports
-import CustomAvatar from 'src/@core/components/mui/avatar'
-
-// ** Util Import
-import { getInitials } from 'src/@core/utils/get-initials'
 import { FormControl, Grid, InputLabel, Select } from '@mui/material'
 
 export type NotificationsType = {
@@ -81,18 +75,10 @@ const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
 }))
 
 
-// ** Styled Avatar component
-const Avatar = styled(CustomAvatar)<CustomAvatarProps>({
-  width: 38,
-  height: 38,
-  fontSize: '1.125rem'
-})
-
-
 
 const NotificationDropdown = (props: any) => {
   // ** Props
-  const { settings, status, type, length, setStatus, setType, setLength, setRunFilter, runFilter } = props
+  // const { settings, status, type, length, setStatus, setType, setLength, setRunFilter, runFilter } = props
 
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
@@ -100,7 +86,25 @@ const NotificationDropdown = (props: any) => {
   // ** Hook
 
   // ** Vars
+  let settings = {
+    skin: 'default',
+    mode: 'dark',
+    appBar: undefined,
+    footer: undefined,
+    navHidden: undefined,
+    appBarBlur: false,
+    direction: 'ltr',
+    navCollapsed: false,
+    themeColor: 'primary',
+    contentWidth: 'full',
+    layout: undefined,
+    lastLayout: undefined,
+    verticalNavToggleType: 'collapse',
+    toastPosition: undefined
+  }
   const { direction } = settings
+  const FilterOptions: React.ReactElement = props.FilterOptions;
+
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
@@ -110,25 +114,6 @@ const NotificationDropdown = (props: any) => {
     setAnchorEl(null)
   }
 
-  const RenderAvatar = ({ notification }: { notification: NotificationsType }) => {
-    const { avatarAlt, avatarImg, avatarIcon, avatarText, avatarColor } = notification
-
-    if (avatarImg) {
-      return <Avatar alt={avatarAlt} src={avatarImg} />
-    } else if (avatarIcon) {
-      return (
-        <Avatar skin='light' color={avatarColor}>
-          {avatarIcon}
-        </Avatar>
-      )
-    } else {
-      return (
-        <Avatar skin='light' color={avatarColor}>
-          {getInitials(avatarText as string)}
-        </Avatar>
-      )
-    }
-  }
 
   return (
     <Fragment>
@@ -162,81 +147,18 @@ const NotificationDropdown = (props: any) => {
             /> */}
           </Box>
         </MenuItem>
-        <Box sx={{ padding: "15px" }}>
-          <Grid item sm={12} xs={12} sx={{ paddingBottom: "10px" }}>
-            <FormControl fullWidth>
-              <InputLabel id='type-select'>Article Type</InputLabel>
-              <Select
-                fullWidth
-                placeholder='Article Type'
-                label='Article Type'
-                labelId='Article Type'
-                value={type}
-                onChange={e => {
-                  setType(e.target.value)
-                }}
-              >
-                <MenuItem value='all'>All</MenuItem>
-                <MenuItem value='blog'>Blog</MenuItem>
-                <MenuItem value='listicle'>Listicle</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item sm={12} xs={12} sx={{ paddingBottom: "10px" }}>
-            <FormControl fullWidth>
-              <InputLabel id='length-select'>Article Length</InputLabel>
-              <Select
-                fullWidth
-                placeholder='Article Length'
-                label='Article Length'
-                labelId='Article Length'
-                value={length}
-                onChange={e => {
-                  setLength(e.target.value)
-                }}
-              >
-                <MenuItem value='all'>All</MenuItem>
-                <MenuItem value='short'>Short</MenuItem>
-                <MenuItem value='long'>Long</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item sm={12} xs={12} sx={{ paddingBottom: "10px" }}>
-            <FormControl fullWidth>
-              <InputLabel id='country-select'>Status</InputLabel>
-              <Select
-                fullWidth
-                placeholder='Status'
-                label='Status'
-                labelId='Status'
-                value={status}
-                onChange={e => {
-                  setStatus(e.target.value)
-                }}
-              >
-                <MenuItem value='all'>All</MenuItem>
-                {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                <MenuItem value='completed'>Completed</MenuItem>
-                <MenuItem value='error'>Error</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Box>
+        {
+          FilterOptions
+        }
         <MenuItem sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
 
 
-          <Button variant='outlined' onClick={e => {
-            setStatus('all')
-            setLength('all')
-            setType('all')
-            setRunFilter(runFilter + 1)
-            // handleDropdownClose()
-          }} sx={{ marginRight: "10px" }}>
+          <Button variant='outlined' onClick={e => { props.reset() }} sx={{ marginRight: "10px" }}>
             Reset
           </Button>
 
           <Button variant='contained' onClick={e => {
-            setRunFilter(runFilter + 1)
+            props.setRunFilter(props.runFilter + 1)
             handleDropdownClose()
           }}>
             Apply
