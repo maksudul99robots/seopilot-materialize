@@ -215,7 +215,7 @@ const SelectConnects = (props: any) => {
   const handleSubmit = () => {
     setLoading(true)
     headers.set("Content-Type", "application/json")
-    headers.set('Access-Control-Allow-Origin', '*')
+    // headers.set('Access-Control-Allow-Origin', '*')
     headers.set("Authorization", "Basic " + Buffer.from(`${connectSelected.username}:${connectSelected.password}`).toString("base64"))
 
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
