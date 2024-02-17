@@ -345,7 +345,7 @@ export default function Page() {
 
     return (
         <>
-            <ToastContainer style={{ width: "600px" }} />
+            <ToastContainer style={{ width: "400px" }} />
             {
                 showArticleEditor ?
 

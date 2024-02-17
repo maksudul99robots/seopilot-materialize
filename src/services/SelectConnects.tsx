@@ -221,7 +221,7 @@ const SelectConnects = (props: any) => {
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ title: props.title, content: getFormatedHtml(props.html), status: status })
+      body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML), status: status })
     }).then(res => {
       // console.log(res);
       setShow(false)
@@ -261,6 +261,93 @@ const SelectConnects = (props: any) => {
 
 
   }
+
+  function getHtmlFromDocument(str: any) {
+    // Regular expression to match HTML tags with attributes
+    const regex = /<([^>\s]+)(?:\s+([^>]*))?>/g;
+
+    // Function to handle replacement. Replacing all the attributes except anchor tags
+    function replaceAttributes(match: any, tag: any, attributes: any) {
+      // Check if the tag is an anchor tag
+      if (tag.toLowerCase() === 'a') {
+        return match; // If it's an anchor tag, leave it as it is
+      } else {
+        // If it's not an anchor tag, remove all attributes
+        return `<${tag}>`;
+      }
+    }
+
+    // Replace attributes in HTML string
+    let sanitizedHtml = str.replace(regex, replaceAttributes);
+
+    sanitizedHtml = sanitizedHtml.replaceAll('<span><span>', '<span>')
+    sanitizedHtml = sanitizedHtml.replaceAll('</span></span>', '</span>')
+
+    str = insertH1AtTheBeginning(sanitizedHtml, props.title);
+    if (props.fImg?.urls?.full) {
+
+      str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+    }
+    if (props.fImg?.photos) {
+      str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+    }
+    if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+      str = insertImageAfterFirstH1(str, props.fImg)
+    }
+
+    // if (props?.fImg?.urls?.full)
+    //   str = insertImageAtTheBeginning(str, props?.fImg?.urls?.full, props?.fImg)
+
+    // if (props.fImg?.photos) {
+    //   str = insertImageAtTheBeginning(str, props.fImg.photos[0].src.original, props?.fImg)
+    // }
+
+    // if (typeof (props.fImg) == 'string') {
+    //   str = insertImageAtTheBeginning(str, props.fImg, props.fImg)
+    // }
+
+    if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+      let doc = new DOMParser().parseFromString(str, "text/html");
+      let isImgAdded: any = [];
+      for (let i = 0; i < props.listicleOutlines.length; i++) {
+        // props.listicleOutlines?.map((x: any, i: number) => {
+        let listicle = JSON.parse(props.listicleOutlines[i]);
+
+        // => <a href="#">Link...
+
+
+        let elements: any = doc.querySelectorAll(listicle.tag);
+        elements = Array.from(elements);
+        for (let j = 0; j < elements.length; j++) {
+
+          let title = listicle.title;
+          if (props.numberedItem) {
+            let count = i + 1;
+            title = count + '. ' + title;
+          }
+
+          if (elements[j].innerText == title && !isImgAdded[title]) {
+            let x = isImgAdded;
+            x[title] = true;
+            isImgAdded = x;
+            elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+          }
+
+        }
+
+        str = doc.documentElement.outerHTML
+
+
+      }
+
+    }
+
+    const regex1 = /<h1\b[^>]*>(.*?)<\/h1>/g; //removing H1 from the top (if we do not use insertH1AtTheBeginning at the top, it creates weird gap after every headings)
+    str = str.replace(regex1, '');
+    return str;
+  }
+
 
 
   useEffect(() => {

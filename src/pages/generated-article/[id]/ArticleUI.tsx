@@ -142,7 +142,6 @@ export default function ArticleIU(props: any) {
         }
         let h = getHeadings(props.html)
         setHeadings(h);
-
     }, [props.html])
 
     const getImgFromLocation = async (url: string) => {
@@ -192,7 +191,7 @@ export default function ArticleIU(props: any) {
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <ToastContainer
+                {/* <ToastContainer
                     position="top-right"
                     autoClose={5000}
                     hideProgressBar
@@ -203,7 +202,7 @@ export default function ArticleIU(props: any) {
                     draggable
                     pauseOnHover
                     theme="light"
-                />
+                /> */}
                 <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}

@@ -94,12 +94,6 @@ export default function CustomizedMenus(props: any) {
         // Return the modified HTML
         return tempContainer.innerHTML;
     }
-    function insertImageAtTheBeginning(htmlString: string, imgSrc: string) {
-
-        htmlString = `<img src="${imgSrc}" style="width:800;height:450" alt="Featured Image"/>` + htmlString;
-        // Return the modified HTML
-        return htmlString;
-    }
 
     function insertH1AtTheBeginning(htmlString: string, title: string) {
         // Create a temporary div element to parse the HTML string
@@ -203,6 +197,103 @@ export default function CustomizedMenus(props: any) {
         // console.log("str:", str)
         return str
     }
+    function copy(str: string) {
+        str = getHtmlFromDocument(str)
+        function listener(e: any) {
+            e.clipboardData.setData("text/html", str);
+            e.clipboardData.setData("text/plain", str);
+            e.preventDefault();
+        }
+        document.addEventListener("copy", listener);
+        document.execCommand("copy");
+        document.removeEventListener("copy", listener);
+        toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+    }
+    function download(str: string) {
+        str = getHtmlFromDocument(str)
+
+        let title = props.title.replaceAll(' ', '-')
+        title = title + props.id + '.html'
+
+        const blob = new Blob([str], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = title;
+        link.href = url;
+        link.click();
+    }
+
+    function getHtmlFromDocument(str: any) {
+        // Regular expression to match HTML tags with attributes
+        const regex = /<([^>\s]+)(?:\s+([^>]*))?>/g;
+
+        // Function to handle replacement
+        function replaceAttributes(match: any, tag: any, attributes: any) {
+            // Check if the tag is an anchor tag
+            if (tag.toLowerCase() === 'a') {
+                return match; // If it's an anchor tag, leave it as it is
+            } else {
+                // If it's not an anchor tag, remove all attributes
+                return `<${tag}>`;
+            }
+        }
+
+        // Replace attributes in HTML string
+        let sanitizedHtml = str.replace(regex, replaceAttributes);
+        sanitizedHtml = sanitizedHtml.replaceAll('<span><span>', '<span>')
+        sanitizedHtml = sanitizedHtml.replaceAll('</span></span>', '</span>')
+
+        str = insertH1AtTheBeginning(sanitizedHtml, props.title);
+        if (props.fImg?.urls?.full) {
+
+            str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        }
+        if (props.fImg?.photos) {
+            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+        }
+        if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+            str = insertImageAfterFirstH1(str, props.fImg)
+        }
+
+        if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+            let doc = new DOMParser().parseFromString(str, "text/html");
+            let isImgAdded: any = [];
+            for (let i = 0; i < props.listicleOutlines.length; i++) {
+                // props.listicleOutlines?.map((x: any, i: number) => {
+                let listicle = JSON.parse(props.listicleOutlines[i]);
+
+                // => <a href="#">Link...
+
+
+                let elements: any = doc.querySelectorAll(listicle.tag);
+                elements = Array.from(elements);
+                for (let j = 0; j < elements.length; j++) {
+
+                    let title = listicle.title;
+                    if (props.numberedItem) {
+                        let count = i + 1;
+                        title = count + '. ' + title;
+                    }
+
+                    if (elements[j].innerText == title && !isImgAdded[title]) {
+                        let x = isImgAdded;
+                        x[title] = true;
+                        isImgAdded = x;
+                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+                    }
+
+                }
+
+                str = doc.documentElement.outerHTML
+
+
+            }
+
+        }
+
+        return str;
+    }
 
     return (
         <div>
@@ -247,24 +338,32 @@ export default function CustomizedMenus(props: any) {
 
                 {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
-                <CopyToClipboard text={getFormatedHtml(props.html)}
+                {/* <CopyToClipboard text={
+                    getFormatedHtml(props.html)
+
+
+                }
                     onCopy={() => {
                         // props.setCopied(true)
-                        toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+
+                        getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
                         // setTimeout(() => {
                         //     props.setCopied(false)
                         // }, 5000)
-                    }}>
-                    <MenuItem onClick={handleClose} disableRipple>
-                        {/* <Icon icon="clarity:code-line" /> */}
-                        <CodeIcon />
-                        Copy HTML
-                    </MenuItem>
+                    }}> */}
+                <MenuItem onClick={() => {
+                    copy(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
+                    handleClose()
+                }} disableRipple>
+                    {/* <Icon icon="clarity:code-line" /> */}
+                    <CodeIcon />
+                    Copy HTML
+                </MenuItem>
 
-                </CopyToClipboard>
+                {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={e => {
-                    props.download(getFormatedHtml(props.html), props.title, props.id);
+                    download(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML);
                     setAnchorEl(null);
                 }} disableRipple>
                     <FileDownloadOutlinedIcon />

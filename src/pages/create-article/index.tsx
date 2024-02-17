@@ -136,6 +136,7 @@ export default function CreateArticle(props: any) {
     const [showOutline, setShowOutline] = useState(false);
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
+    const [citation, setCitation] = useState(false);
     const [introduction, setIntroduction] = useState(true);
     const [conclusion, setConclusion] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -257,6 +258,10 @@ export default function CreateArticle(props: any) {
                         setImgPrompt('')
                     }
 
+                    if (res.data.citation) {
+                        setCitation(true);
+                    }
+
                     // }
                 }
             }).catch(e => {
@@ -265,6 +270,15 @@ export default function CreateArticle(props: any) {
         }
 
     }, [getArticleFromParams])
+
+    useEffect(() => {
+        if (model == 'gpt-4-1106-preview' || model == 'gpt-4') {
+
+        } else {
+            setCitation(false)
+        }
+
+    }, [model])
 
     useEffect(() => {
         if (auth.user?.is_active) {
@@ -428,7 +442,8 @@ export default function CreateArticle(props: any) {
                         point_of_view: pointOfView,
                         img_service: showFeaturedImg ? imgService : null,
                         extra_prompt: extraPrompt,
-                        img_prompt: imgPrompt
+                        img_prompt: imgPrompt,
+                        citation: citation
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -497,7 +512,8 @@ export default function CreateArticle(props: any) {
                             numbered_items: numberedItem,
                             img_service: showFeaturedImg ? imgService : null,
                             extra_prompt: extraPrompt,
-                            img_prompt: imgPrompt
+                            img_prompt: imgPrompt,
+                            citation: citation
                         }
                     ).then(res => {
                         // console.log("res:", res);
@@ -796,6 +812,23 @@ export default function CreateArticle(props: any) {
 
                     <Grid container spacing={6}>
                         <Grid item sm={12} xs={12}>
+                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                                    Select AI Model
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            For improved quality GPT-4-Turbo is recommanded.
+                                            <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip >
+                                </Typography>
+                                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                            </Box>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>AI Model</InputLabel>
                                 <Select
@@ -1158,6 +1191,23 @@ export default function CreateArticle(props: any) {
                             </LightTooltip >
 
                         </Grid>
+                        {
+                            (model == 'gpt-4-1106-preview' || model == 'gpt-4') &&
+                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        Fetches real time search result to cite sources into the article.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip >
+
+                            </Grid>
+                        }
+
                         {
                             articleType != 'listicle' &&
                             <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
