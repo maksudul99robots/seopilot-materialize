@@ -1195,9 +1195,10 @@ export default function CreateArticle(props: any) {
                             (model == 'gpt-4-1106-preview' || model == 'gpt-4') &&
                             <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                                 <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        Fetches real time search result to cite sources into the article.
+                                        Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
                                     </p>
                                 } placement="top">
                                     <div style={{ height: "100%" }}>
