@@ -193,12 +193,17 @@ const TableServerSide = () => {
                     <>
                         {
                             row.status == 'error' ?
+                                <>
+                                    <Button variant='outlined' onClick={e => {
+                                        regenerateArticle(row.id)
+                                    }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
+                                        Retry
+                                    </Button >
+                                    <Button variant='outlined' sx={{ marginLeft: "5px" }} href={`/create-article?id=${parseInt(row.id) - 50000}`} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
+                                        Edit
+                                    </Button >
+                                </>
 
-                                <Button variant='outlined' onClick={e => {
-                                    regenerateArticle(row.id)
-                                }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
-                                    Retry
-                                </Button >
                                 :
                                 row.status == 'outlined' ?
                                     <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}

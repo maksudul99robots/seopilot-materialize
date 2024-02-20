@@ -83,6 +83,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async getSaasArticleWithoutStatus(data: any, url = "/get-saas-ai-article-without-status", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async generateSaasArticle(data: any, url = "/generate-saas-ai-article", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return

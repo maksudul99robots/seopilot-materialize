@@ -183,7 +183,7 @@ export default function CreateArticle(props: any) {
     useEffect(() => {
 
         if (getArticleFromParams > 0) {
-            LoginRegistrationAPI.getSaasArticle({ id: existingArticle }).then(async (res) => {
+            LoginRegistrationAPI.getSaasArticleWithoutStatus({ id: existingArticle }).then(async (res) => {
                 if (res.status == 212) {
                     setArticleType(res.data.article_type)
                     setArticleLength(res.data.article_length)
