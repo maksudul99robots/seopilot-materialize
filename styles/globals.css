@@ -87,7 +87,7 @@ code[class*='language-'] {
 
 .custom-toolbar {
   position: absolute;
-  z-index: 1000;
+  z-index: 1001;
   background-color: #F7F7F9;
   border: 1px solid #ccc;
   border-radius: 5px;
