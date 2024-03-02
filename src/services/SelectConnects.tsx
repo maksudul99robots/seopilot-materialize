@@ -144,7 +144,7 @@ const SelectConnects = (props: any) => {
   }
 
   function insertImageAtTheBeginning(htmlString: string, imgSrc: string, fImgObj: any) {
-    console.log("imgSrc:", imgSrc, fImgObj?.photos)
+    // console.log("imgSrc:", imgSrc, fImgObj?.photos)
 
     if (fImgObj?.user?.links?.html) {
       htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>${fImgObj.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a></figcaption>` + htmlString;
@@ -368,7 +368,7 @@ const SelectConnects = (props: any) => {
   }, [connectSelected])
   return (
     <>
-      <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish to wordpress</Button>
+      <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish</Button>
 
       <Dialog
         fullWidth

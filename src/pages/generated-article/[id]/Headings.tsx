@@ -24,12 +24,7 @@ export default function Headings(props: any) {
                                 <Typography variant='body1' sx={{ width: "90%", fontSize: "13px" }}>
                                     {h?.textContent}
                                 </Typography>
-                                {/* </Box> */}
-                                {
-                                    i == headings.length - 1 ?
-                                        null :
-                                        <Divider variant="middle" />
-                                }
+
                             </Box>
                         )
                     })

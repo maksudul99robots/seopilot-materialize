@@ -307,6 +307,7 @@ export default function CustomizedMenus(props: any) {
                 onClick={handleClick}
                 startIcon={<Icon icon="entypo:export" />}
                 endIcon={<KeyboardArrowDownIcon />}
+                sx={{ backgroundColor: "#fff" }}
             // startIcon={<Icon icon="icon-park-outline:copy" style={{ color: "#fff", cursor: "pointer", fontSize: "15px" }} />}
             >
                 Export

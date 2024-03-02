@@ -34,6 +34,7 @@ import axios from 'axios';
 import AiScoreComponent from 'src/components/ArticleScoreComponent';
 import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
+import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 
 export default function ArticleIU(props: any) {
     const router = useRouter()
@@ -44,6 +45,11 @@ export default function ArticleIU(props: any) {
     const [copied, setCopied] = useState(false);
     const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
     const [isKeybert, setIsKeybert] = useState(true)
+    const [saveBtnStyle, setSaveBtnStyle] = useState({
+        marginLeft: "5px",
+        position: "relative",
+        backgroundColor: "#fff",
+    })
     const [scoreObj, setScoreObj] = useState<any>({
         words_score: 0,
         style_score: 0,
@@ -54,32 +60,30 @@ export default function ArticleIU(props: any) {
         links_score: 0,
         length_score: 0
     });
+
     const auth = useAuth()
 
-    // useEffect(() => {
+    window.addEventListener('scroll', function () {
+        var div = document.getElementById('custom-actions');
+        var rect = div?.getBoundingClientRect();
 
-    //     // if (auth?.user?.plan?.plan == 'free' || auth?.user?.plan?.plan == 'extension_only') {
-    //     if (auth?.user?.approle.role.id == 1) {
-    //         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-    //             // Swal.fire('401',
-    //             //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //             //     'error').then(() => {
-    //             //         router.push("/")
-    //             //     })
+        if (rect?.bottom && (rect?.bottom < 0 || rect?.top > window?.innerHeight)) {
+            // console.log('Div is out of view');
+            setSaveBtnStyle({
+                marginLeft: "5px",
+                position: "fixed",
+                backgroundColor: "#fff",
 
-    //             Swal.fire({
-    //                 title: '401',
-    //                 text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-    //                 icon: 'error',
-    //                 confirmButtonText: 'Close',
-    //                 confirmButtonColor: "#2979FF",
-    //             }).then(() => {
-    //                 router.push("/")
-    //             })
-    //         }
-    //     }
-
-    // }, [auth?.user?.plan])
+            })
+        } else {
+            // console.log('Div is in view');
+            setSaveBtnStyle({
+                marginLeft: "5px",
+                position: "relative",
+                backgroundColor: "#fff",
+            })
+        }
+    });
 
     useEffect(() => {
         if (auth?.user?.approle.role.id == 2) {
@@ -119,11 +123,9 @@ export default function ArticleIU(props: any) {
         if (props.imgService == 'unsplash')
             getImgFromLocation(props.fImg?.links?.download_location);
 
-        console.log(props.fImg, props.imgService)
     }, [props.fImg])
 
     function exportHtml(str: string, fileName: string) {
-        console.log("fileName:", fileName)
         const blob = new Blob([str], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -171,7 +173,7 @@ export default function ArticleIU(props: any) {
 
 
                 </Box>
-                <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
+                <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
                     <CustomizedMenus
                         id={props.id}
                         title={props.articleTopic}
@@ -186,7 +188,6 @@ export default function ArticleIU(props: any) {
                         articleType={props.articleType}
                         numberedItem={props.numberedItem}
                         imgService={props.imgService} />
-                    <Button variant='outlined' onClick={e => props.save()} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="mdi:content-save-outline" />}>Save Changes</Button>
                     <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} />
                 </Box>
             </Box >
@@ -203,7 +204,7 @@ export default function ArticleIU(props: any) {
                     pauseOnHover
                     theme="light"
                 /> */}
-                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+                <Grid item xs={12} sx={{ width: "70%", marginRight: "10px" }}>
                     <Card
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
@@ -278,14 +279,25 @@ export default function ArticleIU(props: any) {
 
                         {
                             article &&
-                            <EditorControlled data={article} setHtml={props.setHtml} setPlainText={props.setPlainText} fImg={fImg} listicleOutlines={props.listicleOutlines} numberedItem={props.numberedItem} />
+                            <EditorControlled
+                                data={props.article}
+                                setHtml={props.setHtml}
+                                setPlainText={props.setPlainText}
+                                fImg={fImg}
+                                listicleOutlines={props.listicleOutlines}
+                                numberedItem={props.numberedItem}
+                                setReloadArticle={props.setReloadArticle}
+                                reloadArticle={props.reloadArticle}
+                                article_id={props.id}
+                                save={props.save}
+                            />
                         }
 
 
                     </Card>
                 </Grid>
 
-                <div style={{ width: "40%", }}>
+                <div style={{ width: "30%", }}>
                     <Card
                         sx={{ overflow: 'visible', padding: "10px 20px 30px 20px", marginBottom: "10px" }}
                     >

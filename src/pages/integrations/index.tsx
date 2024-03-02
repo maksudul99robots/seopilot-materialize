@@ -297,11 +297,11 @@ const TableServerSide = () => {
         [paginationModel, mainData]
     ))
 
-    console.log((teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
-        (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
-        (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
-        (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
-        (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)))
+    // console.log((teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
+    //     (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
+    //     (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
+    //     (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+    //     (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24)))
     useEffect(() => {
         fetchTableData(sort, searchValue, sortColumn)
     }, [fetchTableData, searchValue, sort, sortColumn])

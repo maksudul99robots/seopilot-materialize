@@ -52,7 +52,7 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
-      let settings = { themeColor: "primary", mode: "semi-dark", skin: "default", direction: "ltr", appBarBlur: true, navCollapsed: false, contentWidth: "boxed", verticalNavToggleType: "accordion" }
+      let settings = { themeColor: "primary", mode: "semi-dark", skin: "default", direction: "ltr", appBarBlur: false, navCollapsed: false, contentWidth: "boxed", verticalNavToggleType: "accordion", AppBar: "static" }
       window.localStorage.setItem("settings", JSON.stringify(settings))
       if (window.location.origin == "https://app.seopilot.io") {
         setExtensionId(process.env.NEXT_PUBLIC_EXT_ID)

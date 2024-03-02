@@ -104,7 +104,7 @@ const AddApiKey = () => {
                 setDisable(true)
                 setLoading(true)
                 LoginRegistrationAPI.verifyOpenAIKey({ api_key: newApikey }).then((responseFronVerification) => {
-                    console.log(responseFronVerification.data)
+                    // console.log(responseFronVerification.data)
                     LoginRegistrationAPI.addOpenAIApiKey({ openai_apikey: newApikey }).then((res) => {
                         if (res.status == 200) {
                             Swal.fire({

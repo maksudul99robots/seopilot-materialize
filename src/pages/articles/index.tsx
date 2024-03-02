@@ -74,7 +74,7 @@ const TableServerSide = () => {
     const [runFilter, setRunFilter] = useState<number>(0)
 
     function loadServerRows(currentPage: number, data: any) {
-        console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
+        // console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
 

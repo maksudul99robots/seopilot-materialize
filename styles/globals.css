@@ -83,3 +83,75 @@ code[class*='language-'] {
   outline:solid 1px #D8D8DD;
 
 }
+
+
+.custom-toolbar {
+  position: absolute;
+  z-index: 1000;
+  background-color: #F7F7F9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  position: fixed;
+  transform: translate(-50%, -50%);
+}
+
+.toolbar-class{
+  position: sticky !important;
+  top:0%;
+  background-color: #fff !important;
+  z-index: 1000;
+  border: 1px solid #EAEAEE !important;
+  /* width: 55%; */
+}
+.rdw-editor-main{
+  overflow: hidden;
+}
+
+.MuiDataGrid-row{
+  cursor: pointer;
+}
+.swal2-popup .swal2-modal .swal2-icon-warning .swal2-show{
+  z-index: 10000000;
+}
+
+.rewrite-info::-webkit-scrollbar {
+  width: 7px;
+  cursor: pointer !important;
+}
+
+.rewrite-info {
+  scrollbar-width: thin;
+  scrollbar-color: #009EF7 !important;
+  /* cursor: pointer !important; */
+}
+
+.rewrite-info::-webkit-scrollbar-track {
+  background: #ffffff;
+  cursor: pointer !important;
+  scrollbar-color: #009EF7 !important;
+}
+.rewrite-info::-webkit-scrollbar-track:hover {
+  background: #ffffff;
+  cursor: pointer !important;
+  scrollbar-color: #009EF7 !important;
+}
+
+.rewrite-info::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 8px solid #dbe0e3;
+  cursor: pointer !important;
+  scrollbar-color: #009EF7 !important;
+}
+
+/* .custom-action-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+} */

@@ -36,6 +36,7 @@ export default function Page() {
     const [imgService, setImgService] = useState<string>('');
     const [plainText, setPlainText] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
+    const [reloadArticle, setReloadArticle] = useState<number>(0);
     const [tokens, setTokens] = useState<any>(null);
     const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
     const [price, setPrice] = useState<number | string>(0);
@@ -49,10 +50,22 @@ export default function Page() {
     useEffect(() => {
         if (router.query.id)
             setCallTracker(true)
+
+
+
+        // return () => {
+
+        //     LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
+
+        //     }).catch(e => {
+
+        //     })
+
+        // }
+
+
     }, [router.query.id])
-    useEffect(() => {
-        // console.log("outlines:", outlines)
-    }, [outlines])
+
     useEffect(() => {
         let counter = 0;
         let interval: any = null
@@ -210,11 +223,11 @@ export default function Page() {
                             setTimeout(function () {   //  call a 3s setTimeout when the loop is called
                                 setShowArticleEditor(true);               //  ..  setTimeout()
                                 clearInterval(interval)
-
+                                setArticle('')
                                 // setArticle(res?.data.content ? res.data.content : '')
                                 // setOutlines(res?.data.outline ? res.data.outline : '')
-                                var outputString = res?.data?.content.replace('<article>', '');
-                                var outputString1 = outputString.replace('</article>', '');
+                                let outputString = res?.data?.content.replace('<article>', '');
+                                let outputString1 = outputString.replace('</article>', '');
                                 setArticle(res?.data.content ? outputString1 : '')
                                 setArticleTopic(res?.data?.topic)
                                 setCreatedAt(res?.data?.createdAt)
@@ -300,6 +313,17 @@ export default function Page() {
 
     }, [callTracker])
 
+    // useEffect(() => {
+    //     // console.log("props.setReloadArticle(props.reloadArticle + 1) working..", reloadArticle)
+    //     if (reloadArticle > 0) {
+    //         // console.log("props.setReloadArticle(props.reloadArticle + 1) working..", reloadArticle)
+    //         setCallTracker(!callTracker)
+    //     }
+
+    // }, [reloadArticle])
+
+
+
 
     function separateString(str: string) {
         // Split the string by commas
@@ -373,6 +397,8 @@ export default function Page() {
                         numberedItem={numberedItem}
                         articleType={articleType}
                         imgService={imgService}
+                        reloadArticle={reloadArticle}
+                        setReloadArticle={setReloadArticle}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
