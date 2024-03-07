@@ -105,14 +105,30 @@ const InsertNewText = (props: any) => {
 
   return (
     <>
-      <Button variant='outlined' onClick={e => {
+      <LightTooltip title={
+        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+          Insert Text inside the editor.
+          <p>Click here to create AI article with your own prompt.</p>
+        </p>
+      } placement="top">
+        <div style={{ height: "100%" }}>
+          <Icon icon="pixelarticons:text-add" className='add-icon-color' style={{ padding: "5px", border: "1px solid #E9E9EC" }}
+            onClick={e => {
+
+              setShow(true);
+
+            }}
+          />
+        </div>
+      </LightTooltip >
+      {/* <Button variant='outlined' onClick={e => {
 
         setShow(true);
 
-      }} startIcon={<Icon icon="dashicons:insert" />} size='small' sx={
+      }} startIcon={<Icon icon="pixelarticons:text-add" />} size='small' sx={
         {
           marginLeft: "10px", marginBottom: "5px",
-        }}>Insert</Button>
+        }}>Insert</Button> */}
 
       <Dialog
         fullWidth

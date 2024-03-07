@@ -155,3 +155,22 @@ code[class*='language-'] {
   display: flex;
   flex-direction: column;
 } */
+
+.MuiCard-root{
+  box-shadow: none !important;
+  border: 1px solid #E9E9EC;
+}
+
+.rdw-dropdown-optionwrapper{
+  overflow-y: hidden !important;
+}
+
+.rdw-link-modal{
+  height: 230px !important;
+}
+.rdw-link-modal-input{
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}

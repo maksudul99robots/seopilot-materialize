@@ -46,10 +46,10 @@ export const EditorWrapper = styled('div')(({ theme }) => ({
         },
         ...(theme.palette.mode === 'dark'
           ? {
-              '& img': {
-                filter: 'invert(1)'
-              }
+            '& img': {
+              filter: 'invert(1)'
             }
+          }
           : {})
       },
       '& .rdw-embedded-modal-size-input, & .rdw-image-modal-size-input': {
@@ -60,20 +60,20 @@ export const EditorWrapper = styled('div')(({ theme }) => ({
         minHeight: 38
       },
       '& .rdw-link-modal-input, & .rdw-embedded-modal-link-input, & .rdw-image-modal-url-input, & .rdw-embedded-modal-size-input, & .rdw-image-modal-size-input':
-        {
-          fontSize: '1rem',
-          background: 'none',
-          padding: theme.spacing(0, 3.5),
-          color: theme.palette.text.primary,
-          borderColor: theme.palette.divider,
-          borderRadius: theme.shape.borderRadius,
-          '&:focus': {
-            borderColor: theme.palette.primary.main
-          },
-          '&::placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder': {
-            color: theme.palette.text.disabled
-          }
+      {
+        fontSize: '1rem',
+        background: 'none',
+        padding: theme.spacing(0, 3.5),
+        color: theme.palette.text.primary,
+        borderColor: theme.palette.divider,
+        borderRadius: theme.shape.borderRadius,
+        '&:focus': {
+          borderColor: theme.palette.primary.main
         },
+        '&::placeholder, &:-ms-input-placeholder, &::-ms-input-placeholder': {
+          color: theme.palette.text.disabled
+        }
+      },
       '& .rdw-link-modal-btn, & .rdw-embedded-modal-btn, & .rdw-image-modal-btn': {
         border: 0,
         lineHeight: 1.71,
@@ -121,11 +121,11 @@ export const EditorWrapper = styled('div')(({ theme }) => ({
 
       ...(theme.direction === 'rtl'
         ? {
-            '& .public-DraftStyleDefault-block': {
-              direction: 'ltr !important',
-              textAlign: 'left !important'
-            }
+          '& .public-DraftStyleDefault-block': {
+            direction: 'ltr !important',
+            textAlign: 'left !important'
           }
+        }
         : {})
     }
   }

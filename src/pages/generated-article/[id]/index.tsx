@@ -336,7 +336,7 @@ export default function Page() {
     }
 
     const save = () => {
-
+        console.log("inside save...")
         LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
             if (res.status == 200) {
                 // Swal.fire(

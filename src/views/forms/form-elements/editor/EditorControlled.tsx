@@ -12,7 +12,7 @@ import ToolbarDropdown from 'src/services/ToolbarOptions/ToolbarDropdown';
 import { Icon } from '@iconify/react';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import InsertNewText from 'src/services/ToolbarOptions/InsertNewText';
-
+import draftToHtml from 'draftjs-to-html';
 
 const EditorControlled = (props: any) => {
   const [isImgAdded, setIsImgAdded] = useState<any>([])
@@ -50,17 +50,21 @@ const EditorControlled = (props: any) => {
 
   const [text, setText] = useState(props.text)
   useEffect(() => {
-
+    let htmlTmp = convertEditorStateToHTML(value);
     if (props.fImg?.urls?.full) {
-      props.setHtml(insertImageAfterFirstH1(convertToHTML(value.getCurrentContent()), props.fImg.urls.full));
+      props.setHtml(insertImageAfterFirstH1(htmlTmp, props.fImg.urls.full));
 
     } else {
       // props.setHtml(convertToHTML(value.getCurrentContent()));
-      props.setHtml(convertToHTML(value.getCurrentContent()));
+
+      // let urls = getAllImgUrls(htmlTmp)
+
+      props.setHtml(htmlTmp);
 
     }
     setTimeout(() => {
       getAllH2Elements();
+      // replaceImgSpansWithFigures(getAllImgUrls(htmlTmp))
     }, 2000)
 
     setLastSelectionOnePoint(value.getSelection())
@@ -70,6 +74,28 @@ const EditorControlled = (props: any) => {
     // console.log("has getFocusOffset:", value.getSelection().getFocusOffset())
 
   }, [value, props.listicleOutlines])
+
+  useEffect(() => {
+    setTimeout(() => {
+      // replaceImgSpansWithFigures(getAllImgUrls(convertEditorStateToHTML(value)))
+      replaceCameraEmojisWithImages(getAllImgUrls(convertEditorStateToHTML(value)))
+    }, 800)
+  }, [])
+
+  const convertEditorStateToHTML = (editorState) => {
+    const contentState = editorState.getCurrentContent();
+    const rawContent = convertToRaw(contentState);
+
+    const html = draftToHtml(rawContent, {}, (entity, text, createEntity) => {
+      if (entity.type === 'LINK') {
+        return `<a href="${entity.data.url}">${text}</a>`;
+      }
+      // Handle other entity types if needed
+      return text;
+    });
+
+    return html;
+  };
 
 
   function insertText(text) {
@@ -253,6 +279,27 @@ const EditorControlled = (props: any) => {
 
   }, [text])
 
+  function getAllImgUrls(htmlString) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const imgElements = doc.querySelectorAll('img');
+    const imgUrls = Array.from(imgElements).map(img => img.src);
+    return imgUrls;
+  }
+
+  function replaceCameraEmojisWithImages(images) {
+    let x = 0;
+    document.querySelectorAll('span[data-text="true"]').forEach((span, i) => {
+      if (span.innerText === '📷') {
+
+        const figureHTML = `<figure class="" data-block="true" data-editor="cd4ar" data-offset-key="cohm8-0-0" contenteditable="false"><span class="rdw-image-alignment rdw-image-center"><span class="rdw-image-imagewrapper"><img src="${images[x]}" style="height: auto; width: 100%;"></span></span></figure>`;
+        x = x + 1;
+        // Replace the innerHTML of the span with the figureHTML
+        span.innerHTML = figureHTML;
+      }
+    });
+  }
+
 
 
   return (
@@ -294,7 +341,7 @@ const EditorControlled = (props: any) => {
 
         ]}
         toolbar={{
-          options: ['inline', 'blockType', 'fontSize', 'list', 'textAlign', 'history'],
+          options: ['inline', 'blockType', 'fontSize', 'list', 'link', 'image', 'textAlign', 'history'],
           inline: { inDropdown: false, options: ['bold', 'italic', 'underline'] },
           list: { inDropdown: true },
           textAlign: { inDropdown: true },
