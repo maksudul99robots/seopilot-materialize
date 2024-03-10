@@ -22,6 +22,11 @@ const navigation = (): VerticalNavItemsType => {
         icon: 'streamline:ai-edit-spark',
         path: '/create-article'
       },
+      {
+        title: 'Folders',
+        icon: 'mdi:folders-outline',
+        path: '/folders'
+      },
       // {
       //   title: 'Keyword Research',
       //   icon: 'icons8:idea',

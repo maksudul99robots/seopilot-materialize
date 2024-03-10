@@ -198,7 +198,56 @@ export default function CustomizedMenus(props: any) {
         return str
     }
     function copy(str: string) {
-        str = getHtmlFromDocument(str)
+        console.log("copied html:", str)
+        // str = getHtmlFromDocument(str)
+        str = insertH1AtTheBeginning(str, props.title);
+        if (props.fImg?.urls?.full) {
+
+            str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        }
+        if (props.fImg?.photos) {
+            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+        }
+        if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+            str = insertImageAfterFirstH1(str, props.fImg)
+        }
+
+        if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+            let doc = new DOMParser().parseFromString(str, "text/html");
+            let isImgAdded: any = [];
+            for (let i = 0; i < props.listicleOutlines.length; i++) {
+                // props.listicleOutlines?.map((x: any, i: number) => {
+                let listicle = JSON.parse(props.listicleOutlines[i]);
+
+                // => <a href="#">Link...
+
+
+                let elements: any = doc.querySelectorAll(listicle.tag);
+                elements = Array.from(elements);
+                for (let j = 0; j < elements.length; j++) {
+
+                    let title = listicle.title;
+                    if (props.numberedItem) {
+                        let count = i + 1;
+                        title = count + '. ' + title;
+                    }
+
+                    if (elements[j].innerText == title && !isImgAdded[title]) {
+                        let x = isImgAdded;
+                        x[title] = true;
+                        isImgAdded = x;
+                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+                    }
+
+                }
+
+                str = doc.documentElement.outerHTML
+
+
+            }
+
+        }
         function listener(e: any) {
             e.clipboardData.setData("text/html", str);
             e.clipboardData.setData("text/plain", str);
@@ -210,7 +259,55 @@ export default function CustomizedMenus(props: any) {
         toast('HTML Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
     }
     function download(str: string) {
-        str = getHtmlFromDocument(str)
+        // str = getHtmlFromDocument(str)
+        str = insertH1AtTheBeginning(str, props.title);
+        if (props.fImg?.urls?.full) {
+
+            str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+        }
+        if (props.fImg?.photos) {
+            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+        }
+        if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+            str = insertImageAfterFirstH1(str, props.fImg)
+        }
+
+        if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+            let doc = new DOMParser().parseFromString(str, "text/html");
+            let isImgAdded: any = [];
+            for (let i = 0; i < props.listicleOutlines.length; i++) {
+                // props.listicleOutlines?.map((x: any, i: number) => {
+                let listicle = JSON.parse(props.listicleOutlines[i]);
+
+                // => <a href="#">Link...
+
+
+                let elements: any = doc.querySelectorAll(listicle.tag);
+                elements = Array.from(elements);
+                for (let j = 0; j < elements.length; j++) {
+
+                    let title = listicle.title;
+                    if (props.numberedItem) {
+                        let count = i + 1;
+                        title = count + '. ' + title;
+                    }
+
+                    if (elements[j].innerText == title && !isImgAdded[title]) {
+                        let x = isImgAdded;
+                        x[title] = true;
+                        isImgAdded = x;
+                        elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+                    }
+
+                }
+
+                str = doc.documentElement.outerHTML
+
+
+            }
+
+        }
 
         let title = props.title.replaceAll(' ', '-')
         title = title + props.id + '.html'
@@ -353,7 +450,8 @@ export default function CustomizedMenus(props: any) {
                         // }, 5000)
                     }}> */}
                 <MenuItem onClick={() => {
-                    copy(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
+                    // copy(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
+                    copy(props.html)
                     handleClose()
                 }} disableRipple>
                     {/* <Icon icon="clarity:code-line" /> */}
@@ -364,7 +462,7 @@ export default function CustomizedMenus(props: any) {
                 {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={e => {
-                    download(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML);
+                    download(props.html);
                     setAnchorEl(null);
                 }} disableRipple>
                     <FileDownloadOutlinedIcon />

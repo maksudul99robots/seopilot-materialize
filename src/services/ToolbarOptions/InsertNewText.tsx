@@ -71,7 +71,7 @@ const InsertNewText = (props: any) => {
     setErrorText('');
     if (prompt.length < 20) {
       if (prompt.length == 0) {
-        setErrorText('Please write a prompt for your generate a text.')
+        setErrorText('Please write a prompt to generate a text.')
         setIsError(true);
 
       } else {

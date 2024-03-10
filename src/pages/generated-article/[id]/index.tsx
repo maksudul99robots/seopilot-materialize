@@ -52,18 +52,6 @@ export default function Page() {
             setCallTracker(true)
 
 
-
-        // return () => {
-
-        //     LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
-
-        //     }).catch(e => {
-
-        //     })
-
-        // }
-
-
     }, [router.query.id])
 
     useEffect(() => {

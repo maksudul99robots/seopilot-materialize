@@ -45,6 +45,8 @@ import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 import FilterOptions from '../admin/articles/filterOptions/FilterOptions'
+import ActionDropdown from './ActionDropdown'
+import CreateFolder from './CreateFolder'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -58,7 +60,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 
-const TableServerSide = () => {
+const Folders = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -67,13 +69,12 @@ const TableServerSide = () => {
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([]);
-    const [retryLoading, setRetryLoading] = useState<any>([]);
+    const [reloadData, setReloadData] = useState<any>(0);
     const [status, setStatus] = useState<string>('all')
     const [type, setType] = useState<string>('all')
     const [length, setLength] = useState<string>('all')
     const [runFilter, setRunFilter] = useState<number>(0)
-    const [getArticleFromParams, setGetArticleFromParams] = useState(0);
-    const [existingFolder, setExistingFolder] = useState<any>(null);
+
 
     function loadServerRows(currentPage: number, data: any) {
         // console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
@@ -84,8 +85,8 @@ const TableServerSide = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'topic',
-            headerName: 'AI Article',
+            field: 'name',
+            headerName: 'Name',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -94,10 +95,27 @@ const TableServerSide = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.topic}
+                                <Button variant='text' href={`/articles?id=${row.id}`}>{row.name.toUpperCase()}</Button>
                             </Typography>
-                            <Typography noWrap variant='caption'>
-                                {row.source ? row.source : 'https://app.seopilot.io'}
+                        </Box>
+                    </Box>
+                )
+            }
+        },
+        {
+            flex: 0.1,
+            minWidth: 290,
+            field: 'article_count',
+            headerName: 'Number of Articles',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+
+                return (
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {/* {renderClient(params)} */}
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                                {row.article_count}
                             </Typography>
                         </Box>
                     </Box>
@@ -118,73 +136,9 @@ const TableServerSide = () => {
                 </Typography>
             )
         },
+
         {
-            // flex: 0.05,
-            minWidth: 50,
-            field: 'article_type',
-            headerName: 'Type',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => (
-                <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                    {params.row.article_type ? params.row.article_type?.toUpperCase() : ''}
-                </Typography>
-            )
-        },
-        {
-            // flex: 0.05,
-            // minWidth: 50,
-            sortable: false,
-            headerName: 'Length',
-            field: 'article_length',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => (
-                <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                    {params.row.article_length ? params.row.article_length?.toUpperCase() : ''}
-                </Typography>
-            )
-        },
-        {
-            flex: 0.15,
-            minWidth: 140,
-            field: 'is_error',
-            headerName: 'Status',
-            renderCell: (params: GridRenderCellParams) => {
-                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' || params.row?.status == 'initiated' ? 2 : 1]
-                return (
-
-                    <>
-                        {
-                            status.title == 'Error' ?
-
-                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-                                    <div>
-                                        <CustomChip
-                                            size='small'
-                                            skin='light'
-                                            color={status.color}
-                                            label={status.title}
-                                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-                                        />
-                                    </div>
-                                </LightTooltip >
-                                :
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                        }
-                    </>
-
-
-
-                )
-            }
-        },
-        {
-            flex: 0.175,
+            flex: 0.06,
             minWidth: 110,
             field: 'action',
             sortable: false,
@@ -192,87 +146,48 @@ const TableServerSide = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
                 return (
-                    <>
-                        {
-                            row.status == 'error' ?
-                                <>
-                                    <Button variant='outlined' onClick={e => {
-                                        regenerateArticle(row.id)
-                                    }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
-                                        Retry
-                                    </Button >
-                                    <Button variant='outlined' sx={{ marginLeft: "5px" }} href={`/create-article?id=${parseInt(row.id) - 50000}`} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
-                                        Edit
-                                    </Button >
-                                </>
-
-                                :
-                                row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}
-                                        disabled={
-                                            row.is_error ? row.is_error : false
-                                        }>
-                                        View
-                                    </Button >
-                                    :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} disabled={
-                                        row.is_error ? row.is_error : false
-                                    }>
-                                        View
-                                    </Button >
-                        }
-                    </>
-
+                    <ActionDropdown row={row} reloadData={reloadData} setReloadData={setReloadData} />
                 )
 
             }
-
-
         }
     ]
-    const regenerateArticle = (id: number) => {
-        let retryID: boolean[] = [];
-        retryID[id] = true;
 
-        setRetryLoading(retryID)
+    let searchElementField = document.getElementsByClassName("MuiFormControl-root MuiTextField-root")[0];
+    useEffect(() => {
 
-        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
-            retryID[id] = false;
-
-            setRetryLoading(retryID)
-            setTimeout(() => {
-
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                    loadServerRows
-                    setMainData(res.data);
-                    // console.log("data:", res.data)
-                    // setTotal(res.data.total)
-                    // setRows(loadServerRows(paginationModel.page, res.data.data))
-                })
-            }, 3000)
-
-
-            Swal.fire({
-                title: 'Success',
-                text: 'Article is Being Re-generated.',
-                icon: 'success',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            })
-        }).catch(e => {
-            retryID[id] = false;
-
-            setRetryLoading(retryID)
-            Swal.fire({
-                title: 'Error',
-                text: 'Unable to Re-generate.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            })
+        LoginRegistrationAPI.getFolders({ get_count: true }).then(res => {
+            loadServerRows
+            setMainData(res.data);
         })
-    }
+    }, [])
+    useEffect(() => {
+        // console.log("searchElementField:", searchElementField)
+        // searchElementField?.setAttribute("style", 'display: none')
+        // var selectElement = document.createElement('select');
+        // selectElement.id = 'mySelect';
 
+        // // Create option elements and add them to the select element
+        // var option1 = document.createElement('option');
+        // option1.value = 'option1';
+        // option1.textContent = 'Option 1';
+        // selectElement.appendChild(option1);
+
+        // var option2 = document.createElement('option');
+        // option2.value = 'option2';
+        // option2.textContent = 'Option 2';
+        // selectElement.appendChild(option2);
+
+        // var option3 = document.createElement('option');
+        // option3.value = 'option3';
+        // option3.textContent = 'Option 3';
+        // selectElement.appendChild(option3);
+        // selectElement.setAttribute('style', 'width:30%; margin-left:10px; border-radius:8px; border-color:#D8D8DD')
+
+        // searchElementField?.appendChild(selectElement); // Append the new div inside the existing div
+
+
+    }, [searchElementField])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
             const queryLowered = q.toLowerCase()
@@ -307,6 +222,16 @@ const TableServerSide = () => {
     ))
 
     useEffect(() => {
+        console.log("getting data reload")
+        if (reloadData > 0) {
+            LoginRegistrationAPI.getFolders({ get_count: true }).then(res => {
+                loadServerRows
+                setMainData(res.data);
+            })
+        }
+    }, [reloadData])
+
+    useEffect(() => {
         fetchTableData(sort, searchValue, sortColumn, type, length, status)
     }, [fetchTableData, searchValue, sort, sortColumn, runFilter])
 
@@ -326,47 +251,20 @@ const TableServerSide = () => {
         fetchTableData(sort, value, sortColumn, type, length, status)
     }
 
-    const router = useRouter()
-    useEffect(() => {
-        const { id } = router.query;
-
-        if (id) {
-            setExistingFolder(id)
-            setGetArticleFromParams(getArticleFromParams + 1);
-        } else {
-            LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                loadServerRows
-                setMainData(res.data);
-
-            })
-        }
-    }, [router.query])
-    useEffect(() => {
-
-        if (getArticleFromParams > 0) {
-            LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
-                loadServerRows
-                setMainData(res.data);
-
-            })
-        }
-
-    }, [getArticleFromParams])
 
 
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <Button variant='contained' href='/create-article'>+ Create Article</Button>
+                <CreateFolder reloadData={reloadData} setReloadData={setReloadData} />
             </Box>
 
             <Card>
                 <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
                     <Typography variant='h6'>
-                        Articles
+                        Folders
                     </Typography>
-                    <Box sx={{ display: "flex", justifyContent: "end" }}>
-                        {/* <input type="text" placeholder="Search" className='search' name="search" /> */}
+                    {/* <Box sx={{ display: "flex", justifyContent: "end" }}>
                         <TextField InputProps={{
                             startAdornment: <InputAdornment position="start">
                                 <Icon icon="material-symbols:search" />
@@ -386,10 +284,9 @@ const TableServerSide = () => {
                                 setLength('all')
                                 setType('all')
                                 setRunFilter(runFilter + 1)
-                                // handleDropdownClose()
                             }}
                         > </NotificationDropdown>
-                    </Box>
+                    </Box> */}
                 </Box>
 
 
@@ -407,20 +304,6 @@ const TableServerSide = () => {
                     onSortModelChange={handleSortModel}
                     // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
-                // slotProps={{
-                //     baseButton: {
-                //         variant: 'outlined'
-                //     },
-                //     toolbar: {
-                //         title: "Articles",
-                //         value: searchValue,
-                //         clearSearch: () => handleSearch(''),
-                //         onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                //     },
-                //     // baseTooltip:{
-
-                //     // }
-                // }}
                 />
 
             </Card>
@@ -429,4 +312,4 @@ const TableServerSide = () => {
     )
 }
 
-export default TableServerSide
+export default Folders

@@ -58,7 +58,7 @@ const EditorControlled = (props: any) => {
       // props.setHtml(convertToHTML(value.getCurrentContent()));
 
       // let urls = getAllImgUrls(htmlTmp)
-
+      console.log("html:", htmlTmp)
       props.setHtml(htmlTmp);
 
     }

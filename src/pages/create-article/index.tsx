@@ -36,6 +36,7 @@ import DndForListicle from 'src/services/DND/DNDForListicle';
 import Link from 'next/link';
 import { checkIfDallEExists } from 'src/services/checkIfDallEExists';
 import { isAIModelAllowed } from 'src/services/isAIModelAllowed';
+import Folders from './Folders';
 // ** Demo Components Imports
 
 interface IconType {
@@ -162,6 +163,7 @@ export default function CreateArticle(props: any) {
     const [allModels, setAllModels] = useState<any>([]);
     const [apiKey, setApiKey] = useState<string | null>('')
     const [extraPrompt, setExtraPrompt] = useState<string>('')
+    const [folder, setFolder] = useState<string | number>('')
     const [isAllowedToCreateArticle, setIsAllowedToCreateArticle] = useState<boolean>(false)
     // const [articleType, setArticleType] = useState('blog')
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
@@ -260,6 +262,9 @@ export default function CreateArticle(props: any) {
 
                     if (res.data.citation) {
                         setCitation(true);
+                    }
+                    if (res.data.folder_id) {
+                        setFolder(res.data.folder_id)
                     }
 
                     // }
@@ -443,7 +448,8 @@ export default function CreateArticle(props: any) {
                         img_service: showFeaturedImg ? imgService : null,
                         extra_prompt: extraPrompt,
                         img_prompt: imgPrompt,
-                        citation: citation
+                        citation: citation,
+                        folder_id: folder
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -812,6 +818,25 @@ export default function CreateArticle(props: any) {
 
                     <Grid container spacing={6}>
                         <Grid item sm={12} xs={12}>
+                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                                    Select Folder
+                                    {/* <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            For improved quality GPT-4-Turbo is recommanded.
+                                            <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip > */}
+                                </Typography>
+
+                                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                            </Box>
+                            <Folders folder={folder} setFolder={setFolder} />
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
                                     Select AI Model
