@@ -117,18 +117,18 @@ export default function ActionDropdown(props: any) {
                 onClose={handleClose}
             >
 
+
                 <MenuItem onClick={() => {
                     let url = props.article_type ? `/generated-article/${props.article_id}` : `/article/${props.article_id}`;
                     router.push(url)
                 }}
                     disabled={
-                        props.is_error ? props.is_error : false
+                        props.is_error ? props.is_error : (props.status == 'error') ? true : false
                     }>
                     <Icon icon="fluent:content-view-gallery-24-regular" />
                     &nbsp;&nbsp;View
 
                 </MenuItem >
-
 
 
                 {
