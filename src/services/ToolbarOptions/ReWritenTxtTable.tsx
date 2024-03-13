@@ -197,7 +197,7 @@ const ReWritenTxtTable = (props: any) => {
 
     return (
         <>
-            <Button variant='outlined' size='small' onClick={e => setShow(true)} sx={{ marginLeft: "10px", marginBottom: "5px", backgroundColor: "#fff" }} startIcon={<Icon icon="oui:index-edit" />}>AI Edits</Button>
+            <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={e => setShow(true)} sx={{ marginLeft: "10px", marginBottom: "5px", backgroundColor: "#fff" }} startIcon={<Icon icon="oui:index-edit" />}>AI Edits</Button>
 
             <Dialog
                 fullWidth

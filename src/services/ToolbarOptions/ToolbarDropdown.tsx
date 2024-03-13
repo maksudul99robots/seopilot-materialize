@@ -91,10 +91,11 @@ export default function ToolbarDropdown(props: any) {
                 aria-expanded={open ? 'true' : undefined}
                 variant="text"
                 size='small'
-                color='primary'
+                color='secondary'
+                className='outlined-btn-color'
                 disableElevation
                 onClick={handleClick}
-                sx={{ border: "1px solid #2979FF", backgroundColor: "#fff" }}
+                sx={{ border: "1px solid #B6BBC6", backgroundColor: "#fff" }}
                 startIcon={<Icon icon="f7:wand-stars-inverse" />}
                 endIcon={<KeyboardArrowDownIcon />}
             // startIcon={<Icon icon="icon-park-outline:copy" style={{ color: "#fff", cursor: "pointer", fontSize: "15px" }} />}

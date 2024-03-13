@@ -37,6 +37,15 @@ code[class*='language-'] {
   color: #2979FF !important;
   cursor: pointer;
 }
+.outlined-btn-color{
+  color: #8f919b;
+
+}
+.outlined-btn-color:hover{
+  color: #2979FF !important;
+  cursor: pointer;
+  border: 1px solid #2979FF !important;
+}
 
 .close-icon-style{
   color: #b7b8c2;
@@ -173,4 +182,15 @@ code[class*='language-'] {
   padding-bottom: 10px !important;
   padding-left: 5px !important;
   padding-right: 5px !important;
+}
+.article_urls{
+  text-decoration: none;
+  color: #626477;
+}
+.article_urls:hover{
+  color:#2979FF;
+}
+
+.article_tbl_folder_dropdown{
+  padding: 4.5px 14px;
 }

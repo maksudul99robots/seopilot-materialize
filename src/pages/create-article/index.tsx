@@ -169,17 +169,20 @@ export default function CreateArticle(props: any) {
     const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
     const auth = useAuth();
     const router = useRouter()
-    // ** Hooks
-    const bgColors = useBgColor()
+    const [retryArticle, setRetryArticle] = useState(false)
 
     const [existingArticle, setExistingArticle] = useState<any>(null);
 
     useEffect(() => {
-        const { id } = router.query;
+        const { id, edit_article } = router.query;
 
         if (id) {
             setExistingArticle(id)
             setGetArticleFromParams(getArticleFromParams + 1);
+        }
+        if (edit_article && edit_article == "true") {
+            console.log("edit_article:", edit_article)
+            setRetryArticle(true)
         }
     }, [router.query])
     useEffect(() => {
@@ -449,7 +452,9 @@ export default function CreateArticle(props: any) {
                         extra_prompt: extraPrompt,
                         img_prompt: imgPrompt,
                         citation: citation,
-                        folder_id: folder
+                        folder_id: folder,
+                        retryArticle: retryArticle,
+                        article_id: router.query.id
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -519,7 +524,10 @@ export default function CreateArticle(props: any) {
                             img_service: showFeaturedImg ? imgService : null,
                             extra_prompt: extraPrompt,
                             img_prompt: imgPrompt,
-                            citation: citation
+                            citation: citation,
+                            folder_id: folder,
+                            retryArticle: retryArticle,
+                            article_id: router.query.id
                         }
                     ).then(res => {
                         // console.log("res:", res);

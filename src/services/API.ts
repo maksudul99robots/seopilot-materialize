@@ -278,6 +278,27 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async updateFolderIdForArticle(data: any, url = "/update-folder-id-for-article", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async getCurrentOwnerWorkspaces(data: any, url = "/current-owners-workspaces", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+
+    async moveToAnotherWorkspace(data: any, url = "/move-to-another-workspace", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
+    async deleteArticle(data: any, url = "/delete-article", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
 
 
 };

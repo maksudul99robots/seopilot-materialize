@@ -13,14 +13,14 @@ const navigation = (): VerticalNavItemsType => {
         sectionTitle: 'Menu' //leaving  for now. Change later
       },
       {
-        title: 'My Articles',
-        icon: 'ic:outline-article',
-        path: '/articles'
-      },
-      {
         title: 'Create Article',
         icon: 'streamline:ai-edit-spark',
         path: '/create-article'
+      },
+      {
+        title: 'My Articles',
+        icon: 'ic:outline-article',
+        path: '/articles'
       },
       {
         title: 'Folders',

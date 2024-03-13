@@ -45,6 +45,9 @@ import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 import FilterOptions from '../admin/articles/filterOptions/FilterOptions'
+import FolderDropdown from 'src/services/FolderDropdown/FolderDropdown'
+import Link from 'next/link'
+import ActionDropdown from './ActionDropdown'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -71,30 +74,56 @@ const TableServerSide = () => {
     const [status, setStatus] = useState<string>('all')
     const [type, setType] = useState<string>('all')
     const [length, setLength] = useState<string>('all')
+    const [folderName, setFolderName] = useState<string>('')
     const [runFilter, setRunFilter] = useState<number>(0)
     const [getArticleFromParams, setGetArticleFromParams] = useState(0);
     const [existingFolder, setExistingFolder] = useState<any>(null);
-
+    const [folders, setFolders] = useState<any>([])
+    const [workspaces, setWorkspaces] = useState<any>([])
+    const [team, setTeam] = useState<any>({})
+    const [resetDataset, setResetDataset] = useState<number>(0);
     function loadServerRows(currentPage: number, data: any) {
         // console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
+
+    useEffect(() => {
+        if (resetDataset > 0) {
+            if (getArticleFromParams > 0) {
+                LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
+                    loadServerRows
+                    setMainData(res.data);
+
+                })
+            } else {
+                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+                    loadServerRows
+                    setMainData(res.data);
+
+                })
+            }
+        }
+    }, [resetDataset])
 
     const columns: GridColDef[] = [
         {
             flex: 0.25,
             minWidth: 290,
             field: 'topic',
-            headerName: 'AI Article',
+            headerName: 'Article Title',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
-
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.topic}
+                                {
+                                    (!row.is_error && row.status != 'error') ?
+                                        <Link className='article_urls' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}>{row.topic}</Link>
+                                        : row.topic
+                                }
+
                             </Typography>
                             <Typography noWrap variant='caption'>
                                 {row.source ? row.source : 'https://app.seopilot.io'}
@@ -105,6 +134,24 @@ const TableServerSide = () => {
             }
         },
 
+        {
+            flex: 0.14,
+            headerName: 'Folder',
+            field: 'folder_id',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => (
+                <Typography variant='body2' sx={{ color: 'text.primary' }}>
+                    <FolderDropdown
+                        article_id={params.row.source ? params.row.id : `${parseInt(params.row.id) - 50000}`}
+                        folder_id={params.row.folder_id}
+                        folders={folders}
+                        setResetDataset={setResetDataset}
+                        resetDataset={resetDataset}
+                        source={params.row.source ? params.row.source : 'https://app.seopilot.io'}
+                    />
+                </Typography>
+            )
+        },
         {
             flex: 0.09,
             type: 'date',
@@ -144,7 +191,7 @@ const TableServerSide = () => {
             )
         },
         {
-            flex: 0.15,
+            flex: 0.07,
             minWidth: 140,
             field: 'is_error',
             headerName: 'Status',
@@ -184,7 +231,7 @@ const TableServerSide = () => {
             }
         },
         {
-            flex: 0.175,
+            flex: 0.09,
             minWidth: 110,
             field: 'action',
             sortable: false,
@@ -193,7 +240,19 @@ const TableServerSide = () => {
                 const { row } = params;
                 return (
                     <>
-                        {
+                        <ActionDropdown
+                            workspaces={workspaces}
+                            article_id={row.article_type ? parseInt(row.id) - 50000 : row.id}
+                            status={row.status}
+                            article_type={row.article_type}
+                            retryLoading={retryLoading[row.id]}
+                            is_error={row.is_error}
+                            resetDataset={resetDataset}
+                            setResetDataset={setResetDataset}
+                            regenerateArticle={regenerateArticle}
+                            team={team}
+                        />
+                        {/* {
                             row.status == 'error' ?
                                 <>
                                     <Button variant='outlined' onClick={e => {
@@ -201,7 +260,7 @@ const TableServerSide = () => {
                                     }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
                                         Retry
                                     </Button >
-                                    <Button variant='outlined' sx={{ marginLeft: "5px" }} href={`/create-article?id=${parseInt(row.id) - 50000}`} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
+                                    <Button variant='outlined' sx={{ marginLeft: "5px" }} href={`/create-article?id=${parseInt(row.id) - 50000}&edit_article=true`} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
                                         Edit
                                     </Button >
                                 </>
@@ -220,7 +279,7 @@ const TableServerSide = () => {
                                     }>
                                         View
                                     </Button >
-                        }
+                        } */}
                     </>
 
                 )
@@ -242,13 +301,27 @@ const TableServerSide = () => {
             setRetryLoading(retryID)
             setTimeout(() => {
 
-                LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                    loadServerRows
-                    setMainData(res.data);
-                    // console.log("data:", res.data)
-                    // setTotal(res.data.total)
-                    // setRows(loadServerRows(paginationModel.page, res.data.data))
-                })
+                if (getArticleFromParams > 0) {
+                    LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
+                        loadServerRows
+                        setMainData(res.data);
+
+                    })
+                } else {
+                    LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+                        loadServerRows
+                        setMainData(res.data);
+
+                    })
+                }
+
+                // LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
+                //     loadServerRows
+                //     setMainData(res.data);
+                //     // console.log("data:", res.data)
+                //     // setTotal(res.data.total)
+                //     // setRows(loadServerRows(paginationModel.page, res.data.data))
+                // })
             }, 3000)
 
 
@@ -340,7 +413,22 @@ const TableServerSide = () => {
 
             })
         }
+        LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {
+            setFolders(res.data);
+        }).catch(e => {
+            console.log("unable to get Folders")
+        })
     }, [router.query])
+
+    useEffect(() => {
+        if (router.query.id) {
+            folders.map((f: any) => {
+                if (f.id == router.query.id) {
+                    setFolderName(f.name);
+                }
+            })
+        }
+    }, [folders])
     useEffect(() => {
 
         if (getArticleFromParams > 0) {
@@ -353,6 +441,16 @@ const TableServerSide = () => {
 
     }, [getArticleFromParams])
 
+    useEffect(() => {
+        LoginRegistrationAPI.getCurrentOwnerWorkspaces({}).then(res => {
+            setWorkspaces(res.data.workspaces)
+            setTeam(res.data.team)
+            console.log("res:", res.data)
+        }).catch((e: any) => {
+            console.log("e:", e)
+        })
+    }, [])
+
 
     return (
         <Box >
@@ -364,6 +462,11 @@ const TableServerSide = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
                     <Typography variant='h6'>
                         Articles
+                        {
+                            router.query.id &&
+                            <Typography variant='body2'>Folder: {folderName}</Typography>
+                        }
+
                     </Typography>
                     <Box sx={{ display: "flex", justifyContent: "end" }}>
                         {/* <input type="text" placeholder="Search" className='search' name="search" /> */}

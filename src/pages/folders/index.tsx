@@ -264,29 +264,6 @@ const Folders = () => {
                     <Typography variant='h6'>
                         Folders
                     </Typography>
-                    {/* <Box sx={{ display: "flex", justifyContent: "end" }}>
-                        <TextField InputProps={{
-                            startAdornment: <InputAdornment position="start">
-                                <Icon icon="material-symbols:search" />
-                            </InputAdornment>,
-                        }}
-                            size='small'
-                            sx={{ marginRight: "10px" }}
-                            value={searchValue} onChange={e => handleSearch(e.target.value)}
-                        />
-                        <NotificationDropdown
-                            status={status} type={type} length={length} setStatus={setStatus} setType={setType}
-                            setLength={setLength} runFilter={runFilter} setRunFilter={setRunFilter}
-                            handleSearch={handleSearch}
-                            FilterOptions={<FilterOptions type={type} length={length} setStatus={setStatus} status={status} setType={setType} setLength={setLength} />}
-                            reset={() => {
-                                setStatus('all')
-                                setLength('all')
-                                setType('all')
-                                setRunFilter(runFilter + 1)
-                            }}
-                        > </NotificationDropdown>
-                    </Box> */}
                 </Box>
 
 

@@ -15,9 +15,11 @@ import Icon from 'src/@core/components/icon';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from "react-toastify";
 import CodeIcon from '@mui/icons-material/Code';
-import EditFolderName from './EditFolderName';
 import Swal from 'sweetalert2';
 import { LoginRegistrationAPI } from 'src/services/API';
+import EditFolderName from '../folders/EditFolderName';
+import ShowWorkspaces from 'src/services/WorkspacesMoveArticles/ShowWorkspaces';
+import { useRouter } from 'next/router';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -62,7 +64,7 @@ const StyledMenu = styled((props: MenuProps) => (
 
 export default function ActionDropdown(props: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+    const router = useRouter()
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement> | any) => {
@@ -71,19 +73,18 @@ export default function ActionDropdown(props: any) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const deleteFolder = () => {
+    const deleteArticle = () => {
         Swal.fire({
             // title: 'Error',
-            text: 'Are you sure you want to delete this Folder? All the articles of this folder will be deleted.',
+            text: 'Are you sure you want to delete this article?',
             icon: 'warning',
             confirmButtonText: 'Delete',
             showCancelButton: true,
             confirmButtonColor: "#BB2124",
         }).then(res => {
             if (res.value) {
-                LoginRegistrationAPI.deleteFolder({ id: props.row.id }).then(res => {
-                    props.setReloadData(props.reloadData + 1);
+                LoginRegistrationAPI.deleteArticle({ article_id: props.article_id }).then(res => {
+                    props.setResetDataset(props.resetDataset + 1);
                 }).catch(e => {
                     console.log("error in delete folder")
                 })
@@ -115,29 +116,68 @@ export default function ActionDropdown(props: any) {
                 open={open}
                 onClose={handleClose}
             >
-                {/* <CopyToClipboard text={props.plainText}
-                    onCopy={() => {
-                        toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                    }}> */}
-                <div onClick={() => {
 
-                }}>
-                    {/* <MenuItem onClick={handleClose} className='add-icon-color' disableRipple> */}
-                    <EditFolderName row={props.row} reloadData={props.reloadData} setReloadData={props.setReloadData} />
-                    {/* </MenuItem> */}
-
-                </div>
-
-
-                {/* </CopyToClipboard> */}
-                <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={() => {
-                    deleteFolder()
-                    handleClose()
-                }} className='add-icon-color' disableRipple>
-                    <Icon icon="ph:trash" />
-                    &nbsp;&nbsp;Delete
-                </MenuItem>
+                    let url = props.article_type ? `/generated-article/${props.article_id}` : `/article/${props.article_id}`;
+                    router.push(url)
+                }}
+                    disabled={
+                        props.is_error ? props.is_error : false
+                    }>
+                    <Icon icon="fluent:content-view-gallery-24-regular" />
+                    &nbsp;&nbsp;View
+
+                </MenuItem >
+
+
+
+                {
+                    (props.team?.role == "owner") &&
+                    <ShowWorkspaces
+                        workspaces={props.workspaces}
+                        article_id={props.article_id}
+                        resetDataset={props.resetDataset}
+                        setResetDataset={props.setResetDataset}
+                    />
+
+                }
+
+                {
+                    props.status == 'error' &&
+                    <div>
+                        <MenuItem onClick={() => {
+                            // deleteFolder()
+                            props.regenerateArticle(props.article_id)
+                            handleClose()
+                        }} className='add-icon-color' disableRipple disabled={!props.article_type || props.retryLoading == true}>
+                            <Icon icon="streamline:arrow-reload-horizontal-2" />
+                            &nbsp;&nbsp;Retry
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                            // deleteFolder()
+                            router.push(`/create-article?id=${props.article_id}&edit_article=true`)
+                            handleClose()
+                        }} className='add-icon-color' disableRipple >
+                            <Icon icon="carbon:edit" />
+                            &nbsp;&nbsp;Edit
+                        </MenuItem>
+                    </div>
+                }
+                {/* <Divider sx={{ my: 0.5 }} /> */}
+                {
+                    (props.team?.role == "owner" || props.team?.role == "admin") &&
+
+
+                    <MenuItem onClick={() => {
+                        deleteArticle()
+                        handleClose()
+                    }} className='add-icon-color' disableRipple>
+                        <Icon icon="ph:trash" />
+                        &nbsp;&nbsp;Delete
+                    </MenuItem>
+
+                }
+
 
 
 

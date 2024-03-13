@@ -121,7 +121,7 @@ const NotificationDropdown = (props: any) => {
 
 
       </IconButton> */}
-      <Button variant='outlined' onClick={handleDropdownOpen} startIcon={<Icon icon="mdi:filter" />}>
+      <Button variant='outlined' onClick={handleDropdownOpen} startIcon={<Icon icon="mdi:filter" />} style={{ height: "40px" }}>
         Filter
       </Button>
       <Menu

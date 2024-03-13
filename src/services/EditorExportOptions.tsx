@@ -198,7 +198,6 @@ export default function CustomizedMenus(props: any) {
         return str
     }
     function copy(str: string) {
-        console.log("copied html:", str)
         // str = getHtmlFromDocument(str)
         str = insertH1AtTheBeginning(str, props.title);
         if (props.fImg?.urls?.full) {
@@ -400,6 +399,8 @@ export default function CustomizedMenus(props: any) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 variant="outlined"
+                color='secondary'
+                className='outlined-btn-color'
                 disableElevation
                 onClick={handleClick}
                 startIcon={<Icon icon="entypo:export" />}
