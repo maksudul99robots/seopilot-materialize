@@ -108,7 +108,7 @@ const ShowWorkspaces = (props: any) => {
                 setShow(true)
             }} className='add-icon-color' disableRipple>
                 <Icon icon="fluent:arrow-move-24-regular" />
-                &nbsp;&nbsp;Move to another workspace
+                &nbsp;&nbsp;Move Workspace
             </MenuItem>
             <Dialog
                 fullWidth

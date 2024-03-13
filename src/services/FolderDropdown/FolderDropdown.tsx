@@ -17,10 +17,11 @@ const FolderDropdown = (props: any) => {
 
     return (
         <>
-            <FormControl sx={{ m: 1, minWidth: 120 }} className="article_tbl_folder_dropdown">
+            <FormControl sx={{ m: 1, minWidth: 120, }} className="article_tbl_folder_dropdown">
                 <Select
 
                     size="small"
+                    sx={{ fontSize: "14px", padding: "0px" }}
                     value={props.folder_id}
                     onChange={handleChange}
                     displayEmpty
@@ -28,7 +29,7 @@ const FolderDropdown = (props: any) => {
                 >
                     {
                         props?.folders?.map((f: any) => {
-                            return <MenuItem value={f?.id}>{f?.name?.toUpperCase()}</MenuItem>
+                            return <MenuItem value={f?.id}>{f?.name}</MenuItem>
                         })
                     }
                 </Select>

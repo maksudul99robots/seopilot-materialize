@@ -78,9 +78,10 @@ export default function ActionDropdown(props: any) {
             // title: 'Error',
             text: 'Are you sure you want to delete this article?',
             icon: 'warning',
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'DELETE',
             showCancelButton: true,
             confirmButtonColor: "#BB2124",
+            cancelButtonText: "CANCEL"
         }).then(res => {
             if (res.value) {
                 LoginRegistrationAPI.deleteArticle({ article_id: props.article_id }).then(res => {

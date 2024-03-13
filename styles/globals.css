@@ -194,3 +194,6 @@ code[class*='language-'] {
 .article_tbl_folder_dropdown{
   padding: 4.5px 14px;
 }
+.rdw-dropdown-wrapper{
+  margin-top: 2px !important;
+}

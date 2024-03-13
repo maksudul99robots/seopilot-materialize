@@ -95,7 +95,7 @@ const Folders = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                <Button variant='text' href={`/articles?id=${row.id}`}>{row.name.toUpperCase()}</Button>
+                                <Button variant='text' sx={{ textTransform: "none" }} href={`/articles?id=${row.id}`}>{row.name}</Button>
                             </Typography>
                         </Box>
                     </Box>

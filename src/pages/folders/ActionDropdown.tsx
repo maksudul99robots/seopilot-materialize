@@ -77,9 +77,10 @@ export default function ActionDropdown(props: any) {
             // title: 'Error',
             text: 'Are you sure you want to delete this Folder? All the articles of this folder will be deleted.',
             icon: 'warning',
-            confirmButtonText: 'Delete',
+            confirmButtonText: 'DELETE',
             showCancelButton: true,
             confirmButtonColor: "#BB2124",
+            cancelButtonText: "CANCEL"
         }).then(res => {
             if (res.value) {
                 LoginRegistrationAPI.deleteFolder({ id: props.row.id }).then(res => {
