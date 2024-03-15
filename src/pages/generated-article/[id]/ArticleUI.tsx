@@ -35,6 +35,7 @@ import AiScoreComponent from 'src/components/ArticleScoreComponent';
 import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
+import Metrics from 'src/components/Metrics';
 
 export default function ArticleIU(props: any) {
     const router = useRouter()

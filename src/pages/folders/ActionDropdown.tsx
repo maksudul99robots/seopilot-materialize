@@ -66,6 +66,7 @@ export default function ActionDropdown(props: any) {
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement> | any) => {
+        event.preventDefault();
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -120,9 +121,7 @@ export default function ActionDropdown(props: any) {
                     onCopy={() => {
                         toast('Text Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                     }}> */}
-                <div onClick={() => {
-
-                }}>
+                <div >
                     {/* <MenuItem onClick={handleClose} className='add-icon-color' disableRipple> */}
                     <EditFolderName row={props.row} reloadData={props.reloadData} setReloadData={props.setReloadData} />
                     {/* </MenuItem> */}

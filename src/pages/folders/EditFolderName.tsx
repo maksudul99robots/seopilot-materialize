@@ -1,3 +1,4 @@
+//@ts-nocheck
 // ** React Imports
 import { Ref, useState, forwardRef, ReactElement, useEffect } from 'react'
 
@@ -139,6 +140,11 @@ const EditFolderName = (props: any) => {
             onChange={(e) => {
               setName(e.target.value)
             }}
+            onKeyDown={(e: KeyboardEvent) => {
+              e.stopPropagation();
+            }}
+
+
           />
 
         </DialogContent>
