@@ -1,5 +1,7 @@
-import { Box, Typography } from "@mui/material"
+import { Box, LinearProgress, Typography } from "@mui/material"
 import ReactSpeedometer from "react-d3-speedometer"
+import ProgressBar from "@ramonak/react-progress-bar";
+
 const Metrics = () => {
     return (
         <Box sx={{}}>
@@ -15,12 +17,32 @@ const Metrics = () => {
                         width={350}
                         ringWidth={30}
                         height={220}
+                        valueTextFontSize="23px"
                     />
                 </Box>
                 <Box>
-                    <Typography >Title (Ideally 55-60 characters):</Typography>
-                    <Typography >Headings: </Typography>
-                    <Typography >Words:</Typography>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", backgroundColor: "#F7F7F9" }}>
+                        <Typography sx={{ width: "30%", textAlign: "start", paddingLeft: "5px" }}>Title</Typography>
+                        <Box sx={{ width: "70%" }}>
+                            <ProgressBar completed={70} bgColor="#2979FF" />
+                        </Box>
+
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Typography sx={{ width: "30%", textAlign: "start", paddingLeft: "5px" }}>Headings </Typography>
+                        <Box sx={{ width: "70%" }}>
+                            <ProgressBar completed={80} bgColor="#2979FF" />
+                        </Box>
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", backgroundColor: "#F7F7F9" }}>
+                        <Typography sx={{ width: "30%", textAlign: "start", paddingLeft: "5px" }}>Words</Typography>
+                        <Box sx={{ width: "70%" }}>
+                            <ProgressBar completed={60} bgColor="#2979FF" />
+                        </Box>
+                    </Box>
+
+
+
                 </Box>
 
             </Box>

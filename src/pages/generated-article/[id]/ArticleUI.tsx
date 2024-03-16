@@ -304,12 +304,12 @@ export default function ArticleIU(props: any) {
                     >
 
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                            <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Article Outline</Typography>
+                            <Typography variant='h5' sx={{ paddingTop: "20px", paddingBottom: "20px" }}>Metrics</Typography>
                             <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center" }}>
                                 <Button variant='outlined' color='secondary' className='outlined-btn-color' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Inputs</Button>
                             </Box>
                         </Box>
-
+                        <Metrics />
 
                         {/* <Outlines outlines={outlines} /> */}
                         <Headings headings={headings} />
