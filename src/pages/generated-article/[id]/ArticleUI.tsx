@@ -36,6 +36,7 @@ import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
+import { getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 
 export default function ArticleIU(props: any) {
     const router = useRouter()
@@ -46,6 +47,8 @@ export default function ArticleIU(props: any) {
     const [copied, setCopied] = useState(false);
     const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
     const [isKeybert, setIsKeybert] = useState(true)
+    const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
+    const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
         position: "relative",
@@ -153,6 +156,17 @@ export default function ArticleIU(props: any) {
             setImgSrc(img.data.url);
         }
     }
+
+    useEffect(() => {
+        console.log(wordScore, titleScore)
+    }, [wordScore, titleScore])
+
+    useEffect(() => {
+        setWordScore(getWordCountCalculations(props.wordCount))
+    }, [props.wordCount])
+    useEffect(() => {
+        setTitleScore(getTitleCalculation(props.articleTopic))
+    }, [props.articleTopic])
     return (
         <>
 
@@ -309,7 +323,7 @@ export default function ArticleIU(props: any) {
                                 <Button variant='outlined' color='secondary' className='outlined-btn-color' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Inputs</Button>
                             </Box>
                         </Box>
-                        <Metrics />
+                        <Metrics titleScore={titleScore} wordScore={wordScore} />
 
                         {/* <Outlines outlines={outlines} /> */}
                         <Headings headings={headings} />
