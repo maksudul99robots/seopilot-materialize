@@ -823,22 +823,15 @@ const SelectConnects = (props: any) => {
             justifyContent: "end",
           }}
         >
-
-
-          {
-            connects.length > 0 ?
-              <div style={{ marginTop: "10px" }}>
-                <Button variant='contained' sx={{ mr: 2 }} onClick={handleScheduleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
-                }>
-                  Save
-                </Button>
-                <Button variant='outlined' color='secondary' onClick={handleCloseSchedule}>
-                  Cancel
-                </Button>
-              </div>
-              :
-              null
-          }
+          <div style={{ marginTop: "10px" }}>
+            <Button variant='contained' sx={{ mr: 2 }} onClick={handleScheduleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+            }>
+              Save
+            </Button>
+            <Button variant='outlined' color='secondary' onClick={handleCloseSchedule}>
+              Cancel
+            </Button>
+          </div>
 
         </DialogActions>
       </Dialog>
