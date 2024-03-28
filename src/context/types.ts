@@ -48,7 +48,6 @@ export type UserDataType = {
   workspaces: any | undefined
   workspace_owner_info: any | undefined
   current_workspace: any | undefined
-  timezone: string | undefined
 }
 
 export type AuthValuesType = {
