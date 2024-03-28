@@ -16,7 +16,9 @@ import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import FormControlLabel from '@mui/material/FormControlLabel'
-
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import DatePicker from 'react-datepicker'
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 // ** Third Party Imports
 import Payment from 'payment'
 import Cards, { Focused } from 'react-credit-cards'
@@ -32,7 +34,7 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { Divider, FormControl, InputAdornment, InputLabel, MenuItem, Select } from '@mui/material'
+import { Divider, FormControl, InputAdornment, InputLabel, Menu, MenuItem, MenuProps, Select, alpha, styled } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
 
 const Transition = forwardRef(function Transition(
@@ -45,7 +47,80 @@ const Transition = forwardRef(function Transition(
 import fetch, { Headers } from "node-fetch"
 import Swal from 'sweetalert2'
 import Link from 'next/link'
+import { EventDateType } from 'src/types/apps/calendarTypes'
+
 const headers = new Headers()
+
+const StyledMenu = styled((props: MenuProps) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
+
+interface PickerProps {
+  label?: string
+  error?: boolean
+  registername?: string
+}
+
+interface DefaultStateType {
+  url: string
+  title: string
+  allDay: boolean
+  calendar: string
+  description: string
+  endDate: Date | string
+  startDate: Date | string
+  guests: string[] | string | undefined
+}
+
+const capitalize = (string: string) => string && string[0].toUpperCase() + string.slice(1)
+
+const defaultState: DefaultStateType = {
+  url: '',
+  title: '',
+  guests: [],
+  allDay: false,
+  description: '',
+  endDate: new Date(),
+  calendar: 'Business',
+  startDate: new Date()
+}
 
 const SelectConnects = (props: any) => {
   // ** States
@@ -56,44 +131,20 @@ const SelectConnects = (props: any) => {
   const [focus, setFocus] = useState<Focused | undefined>()
   // const [expiry, setExpiry] = useState<string | number>('')
   const [show, setShow] = useState<boolean>(false)
+  const [showSchedule, setShowSchedule] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
   const [connects, setConnects] = useState<any>([]);
   const [status, setStatus] = useState<string>('publish');
+  const [timeZone, setTimeZone] = useState<string>(props.timezone);
+  const [dateTime, setDateTime] = useState<Date>(new Date());
+  const [values, setValues] = useState<DefaultStateType>(defaultState)
 
   const handleClose = () => {
     setShow(false)
   }
-
-
-
-  function insertH1BeforeFirstH2(htmlString: string, title: string) {
-    // Create a temporary div element to parse the HTML string
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = htmlString;
-
-    // Find the first h2 element
-    const firstH2 = tempDiv.querySelector('h2');
-
-    if (firstH2) {
-      // Create a new h1 element
-      const h1 = document.createElement('h1');
-      h1.textContent = title;
-
-      // Insert the new h1 before the first h2
-      firstH2.parentNode?.insertBefore(h1, firstH2);
-    }
-
-    // Return the modified HTML string
-    return tempDiv.innerHTML;
+  const handleCloseSchedule = () => {
+    setShowSchedule(false)
   }
-
-  // function getFormatedHtml(str: string) {
-  //   // str = insertH1BeforeFirstH2(str, props.title);
-  //   if()
-  //   str = insertImageAtTheBeginning(str, props.fImg.urls.full)
-
-  //   return str
-  // }
   function insertH1AtTheBeginning(htmlString: string, title: string) {
     // Create a temporary div element to parse the HTML string
     const h1 = document.createElement('h1');
@@ -143,74 +194,8 @@ const SelectConnects = (props: any) => {
     return tempContainer.innerHTML;
   }
 
-  function insertImageAtTheBeginning(htmlString: string, imgSrc: string, fImgObj: any) {
-    // console.log("imgSrc:", imgSrc, fImgObj?.photos)
-
-    if (fImgObj?.user?.links?.html) {
-      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>${fImgObj.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a></figcaption>` + htmlString;
-    } else if (fImgObj?.photos) {
-      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image"/> <figcaption>Photo by <a href=${fImgObj.photos[0].photographer_url} target='_blank' className='colorLink'>${fImgObj.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a></figcaption>` + htmlString;
-    } else {
-      htmlString = `<img src="${imgSrc}" width=800 height=450 alt="Featured Image" style="object-fit: cover" />` + htmlString;
-    }
-    // Return the modified HTML
-    return htmlString;
-  }
-
-  function getFormatedHtml(str: string) {
-    console.log("props.fImg:", props.fImg);
-    let isImgAdded: any = [];
-    // str = insertH1AtTheBeginning(str, props?.title);
-    if (props?.fImg?.urls?.full)
-      str = insertImageAtTheBeginning(str, props?.fImg?.urls?.full, props?.fImg)
-
-    if (props.fImg?.photos) {
-      str = insertImageAtTheBeginning(str, props.fImg.photos[0].src.original, props?.fImg)
-    }
-
-    if (typeof (props.fImg) == 'string') {
-      str = insertImageAtTheBeginning(str, props.fImg, props.fImg)
-    }
-
-    if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
-
-      let doc = new DOMParser().parseFromString(str, "text/html");
-
-      for (let i = 0; i < props.listicleOutlines.length; i++) {
-        // props.listicleOutlines?.map((x: any, i: number) => {
-        let listicle = JSON.parse(props.listicleOutlines[i]);
-
-        // => <a href="#">Link...
 
 
-        let elements: any = doc.querySelectorAll(listicle.tag);
-        elements = Array.from(elements);
-        for (let j = 0; j < elements.length; j++) {
-
-          let title = listicle.title;
-          if (props.numberedItem) {
-            let count = i + 1;
-            title = count + '. ' + title;
-          }
-
-          if (elements[j].innerText == title && !isImgAdded[title]) {
-            let x = isImgAdded;
-            x[title] = true;
-            isImgAdded = x;
-            elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
-          }
-
-        }
-
-        str = doc.documentElement.outerHTML
-
-
-      }
-
-    }
-    // console.log("str:", str)
-    return str
-  }
 
   const handleSubmit = () => {
     setLoading(true)
@@ -260,6 +245,47 @@ const SelectConnects = (props: any) => {
 
 
 
+  }
+  const handleScheduleSubmit = () => {
+    setLoading(true)
+    LoginRegistrationAPI.saveSchadule({
+      article_id: props.article_id,
+      timezone: timeZone,
+      date_time: dateTime,
+      site: connectSelected.id,
+      post_status: status
+
+    }).then(res => {
+      setLoading(false)
+      handleCloseSchedule()
+      if (res.status == 201) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Schedule is saved successfully',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          confirmButtonColor: "#2979FF"
+        })
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Unable to Save Schedule.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          confirmButtonColor: "#2979FF"
+        })
+      }
+    }).catch(e => {
+      setLoading(false)
+      handleCloseSchedule()
+      Swal.fire({
+        title: 'Error!',
+        text: 'Unable to Save Schedule',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: "#2979FF"
+      })
+    })
   }
 
   function getHtmlFromDocument(str: any) {
@@ -366,10 +392,105 @@ const SelectConnects = (props: any) => {
   useEffect(() => {
     // console.log(connectSelected)
   }, [connectSelected])
-  return (
-    <>
-      <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish</Button>
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleDDClose = () => {
+    setAnchorEl(null);
+  };
+
+  const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
+    return (
+      <TextField
+        inputRef={ref}
+        fullWidth
+        {...props}
+        label={props.label || ''}
+        sx={{ width: '100%' }}
+        error={props.error}
+      />
+    )
+  })
+
+  const handleStartDate = (date: Date) => {
+    if (date > values.endDate) {
+      setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
+    }
+  }
+  return (
+    <div style={{}}>
+      {/* <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish</Button> */}
+      <div>
+        <Button
+          id="demo-customized-button"
+          aria-controls={open ? 'demo-customized-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          variant="contained"
+          color='primary'
+          // className='outlined-btn-color'
+          disableElevation
+          onClick={handleClick}
+          startIcon={<Icon icon="ic:round-wordpress" />}
+          endIcon={<KeyboardArrowDownIcon />}
+          sx={{ marginLeft: "5px" }}
+        // startIcon={<Icon icon="icon-park-outline:copy" style={{ color: "#fff", cursor: "pointer", fontSize: "15px" }} />}
+        >
+          Publish
+        </Button>
+        <StyledMenu
+          id="demo-customized-menu"
+          MenuListProps={{
+            'aria-labelledby': 'demo-customized-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleDDClose}
+        >
+          <div onClick={() => {
+            setShow(true)
+          }}>
+            <MenuItem onClick={handleDDClose} disableRipple>
+              {/* <ContentCopyOutlinedIcon /> */}
+              <Icon icon="material-symbols-light:published-with-changes" />
+              &nbsp;&nbsp;Publish
+            </MenuItem>
+
+          </div>
+
+
+          {/* </CopyToClipboard> */}
+          <Divider sx={{ my: 0.5 }} />
+          {/* <CopyToClipboard text={
+                    getFormatedHtml(props.html)
+
+
+                }
+                    onCopy={() => {
+                        // props.setCopied(true)
+
+                        getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
+                        // setTimeout(() => {
+                        //     props.setCopied(false)
+                        // }, 5000)
+                    }}> */}
+          <MenuItem onClick={() => {
+            setShowSchedule(true)
+            handleDDClose()
+          }} disableRipple>
+            <Icon icon="carbon:event-schedule" />
+            &nbsp;&nbsp;Schedule Post
+          </MenuItem>
+
+          {/* </CopyToClipboard> */}
+
+        </StyledMenu>
+      </div>
       <Dialog
         fullWidth
         open={show}
@@ -510,7 +631,220 @@ const SelectConnects = (props: any) => {
 
         </DialogActions>
       </Dialog>
-    </>
+      <Dialog
+        fullWidth
+        open={showSchedule}
+        maxWidth='sm'
+        scroll='body'
+        onClose={handleCloseSchedule}
+        onBackdropClick={handleCloseSchedule}
+        TransitionComponent={Transition}
+        sx={{
+          overflowY: "visible", '& .MuiPaper-root': {
+            overflowY: "visible",
+          }
+        }}
+      >
+        <DialogContent
+
+          sx={{
+            overflowY: "visible",
+            position: 'relative',
+            pb: theme => `${theme.spacing(2)} !important`,
+            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15)} !important`],
+            pt: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
+          }}
+        >
+          <Box sx={{ mb: 7, textAlign: 'center' }}>
+            <Typography variant='h5' sx={{ mb: 2, lineHeight: '2rem' }}>
+              Schedule Post
+            </Typography>
+            <Typography variant='body2'>Insert you date, time and timezone to set a schedule.</Typography>
+          </Box>
+          <IconButton size='small' onClick={handleCloseSchedule} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+            <Icon icon='mdi:close' />
+          </IconButton>
+        </DialogContent>
+
+        <Box sx={{
+          display: "block",
+          // justifyContent: "center",
+          // flexDirection: "column",
+          // flexDirection: "row",
+          // width: "100%"
+        }}>
+
+          <div style={{ paddingLeft: "7%", paddingRight: "7%" }}>
+
+            <FormControl fullWidth sx={{
+              width: "100%", marginBottom: "20px"
+            }}>
+              <InputLabel id='address-select'>WordPress Address</InputLabel>
+              <Select
+                fullWidth
+                placeholder='WordPress Address'
+                label='WordPress Address'
+                labelId={connectSelected.id}
+                defaultValue={connectSelected.id}
+                onChange={e => {
+                  setSelectedId(e.target.value)
+                  setConnectSelected(e.target.value);
+                  connects.map((c: any) => {
+                    if (c.id == e.target.value)
+                      setConnectSelected(c);
+                  })
+
+                }}
+
+
+              >
+                {
+                  connects.map((c: any, i: any) => {
+                    return (
+                      <MenuItem key={i} value={c.id}>{c.address}</MenuItem>
+                    )
+                  })
+
+                }
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth sx={{ width: "100%" }}>
+              <InputLabel id='Status-select'>Post Status</InputLabel>
+              <Select
+                fullWidth
+                placeholder='Post Status'
+                label='Post Status'
+                labelId='Status-select'
+                defaultValue={status}
+                onChange={e => {
+                  setStatus(e.target.value);
+                }}
+              >
+                <MenuItem value='publish'>Publish</MenuItem>
+                <MenuItem value='draft'>Draft</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth sx={{
+              width: "100%", marginBottom: "20px"
+            }}>
+              <InputLabel id='address-select'></InputLabel>
+
+            </FormControl>
+            <DatePickerWrapper>
+              <DatePicker
+                selectsStart
+                id='event-start-date'
+                selected={dateTime}
+                minDate={new Date()}
+                showTimeSelect={true}
+                dateFormat={'MM-dd-yyyy hh:mm a'}
+                customInput={<PickersComponent label='Schadule date' registername='Schadule date' />}
+                onChange={(date: Date) => {
+                  setDateTime(date)
+                  console.log("date:", date)
+                }
+                }
+                onSelect={handleStartDate}
+              />
+            </DatePickerWrapper>
+
+            <FormControl fullWidth sx={{
+              width: "100%", marginTop: "20px"
+            }}>
+              <InputLabel id='address-select'>Time Zone</InputLabel>
+              <Select
+                fullWidth
+                placeholder='Time Zone'
+                label='Time Zone'
+                defaultValue={timeZone}
+                onChange={e => {
+                  setTimeZone(e.target.value)
+                }}
+              >
+                <MenuItem value="-12:00">(GMT -12:00) Eniwetok, Kwajalein</MenuItem>
+                <MenuItem value="-11:00">(GMT -11:00) Midway Island, Samoa</MenuItem>
+                <MenuItem value="-10:00">(GMT -10:00) Hawaii</MenuItem>
+                <MenuItem value="-09:50">(GMT -9:30) Taiohae</MenuItem>
+                <MenuItem value="-09:00">(GMT -9:00) Alaska</MenuItem>
+                <MenuItem value="-08:00">(GMT -8:00) Pacific Time (US &amp; Canada)</MenuItem>
+                <MenuItem value="-07:00">(GMT -7:00) Mountain Time (US &amp; Canada)</MenuItem>
+                <MenuItem value="-06:00">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</MenuItem>
+                <MenuItem value="-05:00">(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</MenuItem>
+                <MenuItem value="-04:50">(GMT -4:30) Caracas</MenuItem>
+                <MenuItem value="-04:00">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</MenuItem>
+                <MenuItem value="-03:50">(GMT -3:30) Newfoundland</MenuItem>
+                <MenuItem value="-03:00">(GMT -3:00) Brazil, Buenos Aires, Georgetown</MenuItem>
+                <MenuItem value="-02:00">(GMT -2:00) Mid-Atlantic</MenuItem>
+                <MenuItem value="-01:00">(GMT -1:00) Azores, Cape Verde Islands</MenuItem>
+                <MenuItem value="+00:00">(GMT) Western Europe Time, London, Lisbon, Casablanca</MenuItem>
+                <MenuItem value="+01:00">(GMT +1:00) Brussels, Copenhagen, Madrid, Paris</MenuItem>
+                <MenuItem value="+02:00">(GMT +2:00) Kaliningrad, South Africa</MenuItem>
+                <MenuItem value="+03:00">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</MenuItem>
+                <MenuItem value="+03:50">(GMT +3:30) Tehran</MenuItem>
+                <MenuItem value="+04:00">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</MenuItem>
+                <MenuItem value="+04:50">(GMT +4:30) Kabul</MenuItem>
+                <MenuItem value="+05:00">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</MenuItem>
+                <MenuItem value="+05:50">(GMT +5:30) Bombay, Calcutta, Madras, New Delhi</MenuItem>
+                <MenuItem value="+05:75">(GMT +5:45) Kathmandu, Pokhara</MenuItem>
+                <MenuItem value="+06:00">(GMT +6:00) Almaty, Dhaka, Colombo</MenuItem>
+                <MenuItem value="+06:50">(GMT +6:30) Yangon, Mandalay</MenuItem>
+                <MenuItem value="+07:00">(GMT +7:00) Bangkok, Hanoi, Jakarta</MenuItem>
+                <MenuItem value="+08:00">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</MenuItem>
+                <MenuItem value="+08:75">(GMT +8:45) Eucla</MenuItem>
+                <MenuItem value="+09:00">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</MenuItem>
+                <MenuItem value="+09:50">(GMT +9:30) Adelaide, Darwin</MenuItem>
+                <MenuItem value="+10:00">(GMT +10:00) Eastern Australia, Guam, Vladivostok</MenuItem>
+                <MenuItem value="+10:50">(GMT +10:30) Lord Howe Island</MenuItem>
+                <MenuItem value="+11:00">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</MenuItem>
+                <MenuItem value="+11:50">(GMT +11:30) Norfolk Island</MenuItem>
+                <MenuItem value="+12:00">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</MenuItem>
+                <MenuItem value="+12:75">(GMT +12:45) Chatham Islands</MenuItem>
+                <MenuItem value="+13:00">(GMT +13:00) Apia, Nukualofa</MenuItem>
+                <MenuItem value="+14:00">(GMT +14:00) Line Islands, Tokelau</MenuItem>
+              </Select>
+            </FormControl>
+
+
+          </div>
+
+
+
+
+        </Box>
+
+
+        <DialogActions
+          sx={{
+
+            px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(11)} !important`],
+            pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`],
+            display: "flex",
+            justifyContent: "end",
+          }}
+        >
+
+
+          {
+            connects.length > 0 ?
+              <div style={{ marginTop: "10px" }}>
+                <Button variant='contained' sx={{ mr: 2 }} onClick={handleScheduleSubmit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+                }>
+                  Save
+                </Button>
+                <Button variant='outlined' color='secondary' onClick={handleCloseSchedule}>
+                  Cancel
+                </Button>
+              </div>
+              :
+              null
+          }
+
+        </DialogActions>
+      </Dialog>
+
+
+    </div>
   )
 }
 

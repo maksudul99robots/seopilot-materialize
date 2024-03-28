@@ -74,7 +74,7 @@ const Calendar = (props: CalendarType) => {
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
     */
-      editable: true,
+      editable: false,
 
       /*
       Enable resizing event from start

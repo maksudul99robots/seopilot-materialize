@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import Outlines from './Outlines';
 import { getDateTime } from 'src/services/DateTimeFormatter';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAuth } from 'src/hooks/useAuth';
 // import 'react-toastify/dist/ReactToastify.css';
 const steps = [
     'Researching Keywords',
@@ -35,6 +36,7 @@ export default function Page() {
     const [html, setHtml] = useState<string>('');
     const [imgService, setImgService] = useState<string>('');
     const [plainText, setPlainText] = useState<string>('');
+    const [timezone, setTimezone] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
     const [reloadArticle, setReloadArticle] = useState<number>(0);
     const [tokens, setTokens] = useState<any>(null);
@@ -43,7 +45,6 @@ export default function Page() {
     const [keywords, setKeywords] = useState<any>([])
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [numberedItem, setNumberedItem] = useState(false);
-
 
     const router = useRouter()
 
@@ -301,18 +302,11 @@ export default function Page() {
 
     }, [callTracker])
 
-    // useEffect(() => {
-    //     // console.log("props.setReloadArticle(props.reloadArticle + 1) working..", reloadArticle)
-    //     if (reloadArticle > 0) {
-    //         // console.log("props.setReloadArticle(props.reloadArticle + 1) working..", reloadArticle)
-    //         setCallTracker(!callTracker)
-    //     }
-
-    // }, [reloadArticle])
-
-
-
-
+    useEffect(() => {
+        LoginRegistrationAPI.getTimezone({}).then(res => {
+            setTimezone(res.data)
+        })
+    }, [])
     function separateString(str: string) {
         // Split the string by commas
         const parts = str.split(',');
@@ -362,6 +356,7 @@ export default function Page() {
                 showArticleEditor ?
 
                     <ArticleIU
+                        timezone={timezone}
                         article={article}
                         id={router.query.id}
                         outlines={outlines}

@@ -3,19 +3,25 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+import { LoginRegistrationAPI } from 'src/services/API'
 
 // ** Types
 import { CalendarFiltersType, AddEventType, EventType } from 'src/types/apps/calendarTypes'
 
 // ** Fetch Events
-export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (calendars: CalendarFiltersType[]) => {
-  const response = await axios.get('/apps/calendar/events', {
-    params: {
-      calendars
-    }
-  })
+export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (calendars: CalendarFiltersType[] | any) => {
+  let res = await LoginRegistrationAPI.getSchadules({})
 
-  return response.data
+  // let folders = await LoginRegistrationAPI.getFolders({});
+  // let folder: any[] = []
+  // folders.data.map(async (f: any, i: number) => {
+  //   folder.push(f.name)
+  //   if (i == folders.data.length - 1) {
+  //     await dispatch(fetchEvents(folder))
+  //   }
+  // })
+
+  return res.data
 })
 
 // ** Add Event
@@ -25,8 +31,16 @@ export const addEvent = createAsyncThunk('appCalendar/addEvent', async (event: A
       event
     }
   })
-  await dispatch(fetchEvents(['Personal', 'Business', 'Family', 'Holiday', 'ETC']))
-
+  // await dispatch(fetchEvents(['Personal', 'Business', 'Family', 'Holiday', 'ETC']))
+  // console.log("event:", response.data.event)
+  let folders = await LoginRegistrationAPI.getFolders({});
+  let folder: any[] = []
+  folders.data.map(async (f: any, i: number) => {
+    folder.push(f.name)
+    if (i == folders.data.length - 1) {
+      await dispatch(fetchEvents(folder))
+    }
+  })
   return response.data.event
 })
 
@@ -37,7 +51,15 @@ export const updateEvent = createAsyncThunk('appCalendar/updateEvent', async (ev
       event
     }
   })
-  await dispatch(fetchEvents(['Personal', 'Business', 'Family', 'Holiday', 'ETC']))
+  let folders = await LoginRegistrationAPI.getFolders({});
+  let folder: any[] = []
+  folders.data.map(async (f: any, i: number) => {
+    folder.push(f.name)
+    if (i == folders.data.length - 1) {
+      await dispatch(fetchEvents(folder))
+    }
+  })
+
 
   return response.data.event
 })
@@ -47,7 +69,14 @@ export const deleteEvent = createAsyncThunk('appCalendar/deleteEvent', async (id
   const response = await axios.delete('/apps/calendar/remove-event', {
     params: { id }
   })
-  await dispatch(fetchEvents(['Personal', 'Business', 'Family', 'Holiday', 'ETC']))
+  let folders = await LoginRegistrationAPI.getFolders({});
+  let folder: any[] = []
+  folders.data.map(async (f: any, i: number) => {
+    folder.push(f.name)
+    if (i == folders.data.length - 1) {
+      await dispatch(fetchEvents(folder))
+    }
+  })
 
   return response.data
 })
@@ -61,6 +90,7 @@ export const appCalendarSlice = createSlice({
   },
   reducers: {
     handleSelectEvent: (state, action) => {
+      // console.log("action.payload?._def:", action.payload)
       state.selectedEvent = action.payload
     },
     handleCalendarsUpdate: (state, action) => {

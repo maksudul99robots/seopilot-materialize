@@ -51,7 +51,7 @@ const data: { events: EventType[] } = {
     {
       id: 4,
       url: '',
-      title: "Doctor's Appointment",
+      title: "Doctor's Appointment for Surger in Lungs",
       start: new Date(date.getFullYear(), date.getMonth() + 1, -11),
       end: new Date(date.getFullYear(), date.getMonth() + 1, -10),
       allDay: true,

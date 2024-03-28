@@ -20,11 +20,14 @@ const Metrics = (props: any) => {
     // const [heading, setHeading] = useState(60)
     const [title, setTitle] = useState(props.titleScore.score)
     const [word, setWord] = useState(props.wordScore.score)
+    const [mainValue, setMainValue] = useState(0);
 
     useEffect(() => {
         setTitle(props.titleScore.score);
-        setWord(props.wordScore.score)
-    }, [props])
+        setWord(props.wordScore.score);
+        let x = parseFloat(((props.titleScore.score * 0.4) + (props.wordScore.score * 0.6)).toFixed(2));
+        setMainValue(x)
+    }, [props.titleScore.score, props.wordScore.score])
 
     return (
         <Box sx={{}}>
@@ -33,7 +36,7 @@ const Metrics = (props: any) => {
                 <Box>
 
                     <ReactSpeedometer
-                        value={parseFloat(((title + word) / 2).toFixed(2))}
+                        value={mainValue}
                         labelFontSize="12px"
                         maxValue={100}
                         segments={10}
@@ -62,12 +65,7 @@ const Metrics = (props: any) => {
                         </Box>
 
                     </Box>
-                    {/* <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
-                        <Typography sx={{ width: "25%", textAlign: "start", paddingLeft: "5px" }}>Headings </Typography>
-                        <Box sx={{ width: "75%" }}>
-                            <ProgressBar completed={(heading).toFixed(0)} bgColor="#2979FF" />
-                        </Box>
-                    </Box> */}
+
                     <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
                         <Typography sx={{ width: "25%", textAlign: "start", paddingLeft: "5px" }}>Words</Typography>
                         <Box sx={{ width: "75%" }}>

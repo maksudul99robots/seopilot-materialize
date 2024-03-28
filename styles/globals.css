@@ -197,3 +197,8 @@ code[class*='language-'] {
 .rdw-dropdown-wrapper{
   margin-top: 2px !important;
 }
+
+#calendar-12h_panel{
+  background-color: #b7b8c2;
+  z-index: 10000000000 !important;
+}

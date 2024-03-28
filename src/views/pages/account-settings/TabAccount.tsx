@@ -38,37 +38,15 @@ interface Data {
   email: string
   last_name: string
   first_name: string
+  timezone: string
 }
 
 const initialData: Data = {
   last_name: 'Doe',
   first_name: 'John',
   email: 'john.doe@example.com',
+  timezone: '+00:00'
 }
-
-const ImgStyled = styled('img')(({ theme }) => ({
-  width: 120,
-  height: 120,
-  marginRight: theme.spacing(5),
-  borderRadius: theme.shape.borderRadius
-}))
-
-const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center'
-  }
-}))
-
-const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
-  marginLeft: theme.spacing(4),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(4)
-  }
-}))
 
 const TabAccount = () => {
   // ** State
@@ -105,6 +83,8 @@ const TabAccount = () => {
       first_name: user?.first_name ? user?.first_name : '',
 
       email: user?.email ? user?.email : '',
+
+      timezone: user?.timezone ? user?.timezone : '+00:00'
     }
     setFormData(userData);
   }
@@ -235,6 +215,7 @@ const TabAccount = () => {
                     onChange={e => handleFormChange('email', e.target.value)}
                   />
                 </Grid>
+
 
                 <Grid item xs={12} sx={{ mb: 10 }}>
                   <Button variant='contained' sx={{ mr: 3 }} onClick={e => submit()}>

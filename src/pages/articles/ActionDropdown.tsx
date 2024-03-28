@@ -87,7 +87,7 @@ export default function ActionDropdown(props: any) {
                 LoginRegistrationAPI.deleteArticle({ article_id: props.article_id }).then(res => {
                     props.setResetDataset(props.resetDataset + 1);
                 }).catch(e => {
-                    console.log("error in delete folder")
+                    console.log("error in delete article")
                 })
             }
 

@@ -158,10 +158,6 @@ export default function ArticleIU(props: any) {
     }
 
     useEffect(() => {
-        console.log(wordScore, titleScore)
-    }, [wordScore, titleScore])
-
-    useEffect(() => {
         setWordScore(getWordCountCalculations(props.wordCount))
     }, [props.wordCount])
     useEffect(() => {
@@ -203,7 +199,7 @@ export default function ArticleIU(props: any) {
                         articleType={props.articleType}
                         numberedItem={props.numberedItem}
                         imgService={props.imgService} />
-                    <SelectConnects html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} />
+                    <SelectConnects timezone={props.timezone} html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} article_id={props.id} />
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -230,7 +226,7 @@ export default function ArticleIU(props: any) {
                                 <div style={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
                                     <TextField fullWidth value={props.articleTopic}
                                         inputProps={{ style: { fontSize: 20, padding: 10, fontWeight: 600, width: "100%" } }}
-                                        onChange={e => {
+                                        onChange={(e: any) => {
                                             props.setTopic(e.target.value)
                                         }}
                                     />

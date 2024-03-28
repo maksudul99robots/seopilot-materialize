@@ -225,6 +225,7 @@ const Workspaces = () => {
                             setReRender={setReRender}
                             address={row.address}
                             name={row.name}
+                            timezone={row.timezone}
                             appPassword={row.password}
                             disabled={currentWorkspaceRole !== 'member' ? false : true}
                         />

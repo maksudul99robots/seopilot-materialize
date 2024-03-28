@@ -462,7 +462,7 @@ export default function CustomizedMenus(props: any) {
 
                 {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
-                <MenuItem onClick={e => {
+                <MenuItem onClick={(e: any) => {
                     download(props.html);
                     setAnchorEl(null);
                 }} disableRipple>
@@ -472,6 +472,6 @@ export default function CustomizedMenus(props: any) {
 
 
             </StyledMenu>
-        </div>
+        </div >
     );
 }

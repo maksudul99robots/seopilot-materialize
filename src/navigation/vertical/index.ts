@@ -27,6 +27,11 @@ const navigation = (): VerticalNavItemsType => {
         icon: 'mdi:folders-outline',
         path: '/folders'
       },
+      {
+        title: 'Schedule',
+        icon: 'fluent-mdl2:date-time-mirrored',
+        path: '/schedule'
+      },
       // {
       //   title: 'Keyword Research',
       //   icon: 'icons8:idea',
@@ -47,7 +52,7 @@ const navigation = (): VerticalNavItemsType => {
       },
       {
         title: 'Integrations',
-        icon: 'ic:round-wordpress',
+        icon: 'carbon:plug',
         path: '/integrations'
       },
       {

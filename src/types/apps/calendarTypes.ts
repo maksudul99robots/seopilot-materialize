@@ -23,12 +23,7 @@ export type EventType = {
   allDay: boolean
   end: Date | string
   start: Date | string
-  extendedProps: {
-    location?: string
-    calendar?: string
-    description?: string
-    guests?: string[] | string | undefined
-  }
+  extendedProps: any
 }
 
 export type AddEventType = {
@@ -100,4 +95,6 @@ export type AddEventSidebarType = {
   updateEvent: (event: EventType) => void
   handleAddEventSidebarToggle: () => void
   handleSelectEvent: (event: null | EventType) => void
+  setUpdateValue: any
+  updateValue: any
 }
