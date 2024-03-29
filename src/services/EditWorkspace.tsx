@@ -48,7 +48,7 @@ const EditWorkspace = (props: any) => {
 
   const [focus, setFocus] = useState<Focused | undefined>()
   const [show, setShow] = useState<boolean>(false)
-  const [timezone, setTimezone] = useState<string>(props.timezone);
+  // const [timezone, setTimezone] = useState<string>(props.timezone);
 
 
   const handleBlur = () => setFocus(undefined)
@@ -66,7 +66,7 @@ const EditWorkspace = (props: any) => {
   }
   const handleSubmit = () => {
 
-    LoginRegistrationAPI.editWorkspace({ name, id: props.id, timezone }).then(res => {
+    LoginRegistrationAPI.editWorkspace({ name, id: props.id }).then(res => {
       // props.setReRender(!props.reRender);
       window.location.href = window.location.href;
     }).catch(e => {
@@ -130,7 +130,7 @@ const EditWorkspace = (props: any) => {
 
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+            {/* <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
               <Grid container spacing={6}>
                 <Grid item xs={12} sx={{ mt: 1 }}>
                   <FormControl fullWidth sx={{
@@ -193,7 +193,7 @@ const EditWorkspace = (props: any) => {
                 </Grid>
 
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         </DialogContent>
         <DialogActions

@@ -34,6 +34,7 @@ import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
+import { Alert } from '@mui/material'
 
 interface PickerProps {
   label?: string
@@ -363,6 +364,9 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
 
               />
             </Box>
+            <Alert severity='info' variant='standard' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", marginTop: "20px", marginBottom: "20px" }}>
+              Scheduling is based on your local timezone
+            </Alert>
 
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <RenderSidebarFooter />
