@@ -252,7 +252,8 @@ const SelectConnects = (props: any) => {
       article_id: props.article_id,
       date_time: dateTime,
       site: connectSelected.id,
-      post_status: status
+      post_status: status,
+      article_content: getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
 
     }).then(res => {
       setLoading(false)
