@@ -336,10 +336,10 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
                   skin='light'
                   color={store?.selectedEvent?.extendedProps?.status ?
                     (store?.selectedEvent?.extendedProps?.status == 'initiated' ? 'info'
-                      : store?.selectedEvent?.extendedProps?.status == 'published' ? 'success' : 'error') : 'error'}
+                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'success' : 'error') : 'error'}
                   label={store?.selectedEvent?.extendedProps?.status ?
                     (store?.selectedEvent?.extendedProps?.status == 'initiated' ? 'Not Published Yet'
-                      : store?.selectedEvent?.extendedProps?.status == 'published' ? 'Published' : 'Error') : ''}
+                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'Published' : 'Failed') : ''}
                   sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, display: "flex", justifyContent: "start" }}
                 />
               </Box>
