@@ -195,7 +195,59 @@ const SelectConnects = (props: any) => {
   }
 
 
+  function getHtmlFromDocument(str: string) {
+    // str = getHtmlFromDocument(str)
+    str = insertH1AtTheBeginning(str, props.title);
+    if (props.fImg?.urls?.full) {
 
+      str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+    }
+    if (props.fImg?.photos) {
+      str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+    }
+    if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
+      str = insertImageAfterFirstH1(str, props.fImg)
+    }
+
+    if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
+
+      let doc = new DOMParser().parseFromString(str, "text/html");
+      let isImgAdded: any = [];
+      for (let i = 0; i < props.listicleOutlines.length; i++) {
+        // props.listicleOutlines?.map((x: any, i: number) => {
+        let listicle = JSON.parse(props.listicleOutlines[i]);
+
+        // => <a href="#">Link...
+
+
+        let elements: any = doc.querySelectorAll(listicle.tag);
+        elements = Array.from(elements);
+        for (let j = 0; j < elements.length; j++) {
+
+          let title = listicle.title;
+          if (props.numberedItem) {
+            let count = i + 1;
+            title = count + '. ' + title;
+          }
+
+          if (elements[j].innerText == title && !isImgAdded[title]) {
+            let x = isImgAdded;
+            x[title] = true;
+            isImgAdded = x;
+            elements[j].insertAdjacentHTML('afterend', `<img src="${listicle.imgSrcUrl}" style="height: auto; width: 100%;"/>`);
+          }
+
+        }
+
+        str = doc.documentElement.outerHTML
+
+
+      }
+
+    }
+
+    return str
+  }
 
   const handleSubmit = () => {
     setLoading(true)
@@ -206,7 +258,7 @@ const SelectConnects = (props: any) => {
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML), status: status })
+      body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(props.html), status: status })
     }).then(res => {
       // console.log(res);
       setShow(false)
@@ -253,7 +305,7 @@ const SelectConnects = (props: any) => {
       date_time: dateTime,
       site: connectSelected.id,
       post_status: status,
-      article_content: getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
+      article_content: getHtmlFromDocument(props.html)
 
     }).then(res => {
       setLoading(false)
@@ -288,7 +340,7 @@ const SelectConnects = (props: any) => {
     })
   }
 
-  function getHtmlFromDocument(str: any) {
+  function getHtmlFromDocumentPrevious(str: any) {
     // Regular expression to match HTML tags with attributes
     const regex = /<([^>\s]+)(?:\s+([^>]*))?>/g;
 
@@ -388,10 +440,6 @@ const SelectConnects = (props: any) => {
       console.log(e)
     })
   }, [])
-
-  useEffect(() => {
-    // console.log(connectSelected)
-  }, [connectSelected])
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

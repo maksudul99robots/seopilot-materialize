@@ -236,7 +236,7 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
           <Button size='large' variant='outlined' color='error' sx={{ mr: 1 }} onClick={handleDeleteEvent} startIcon={<Icon icon='mdi:delete-outline' fontSize={20} />}>
             Delete
           </Button>
-          <Button size='large' type='submit' variant='contained' sx={{ mr: 0 }}>
+          <Button size='large' type='submit' variant='contained' sx={{ mr: 0 }} disabled={store?.selectedEvent?.extendedProps?.status == 'success'}>
             Update
           </Button>
           {/* <Button size='large' variant='outlined' color='secondary' onClick={resetToStoredValues}>
@@ -361,6 +361,7 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
                 onChange={(date: Date) => setValues({ ...values, startDate: new Date(date) })}
                 onSelect={handleStartDate}
                 minDate={new Date()}
+                disabled={store?.selectedEvent?.extendedProps?.status == 'success'}
 
               />
             </Box>
