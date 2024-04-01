@@ -302,11 +302,11 @@ export default function Page() {
 
     }, [callTracker])
 
-    useEffect(() => {
-        LoginRegistrationAPI.getTimezone({}).then(res => {
-            setTimezone(res.data)
-        })
-    }, [])
+    // useEffect(() => {
+    //     LoginRegistrationAPI.getTimezone({}).then(res => {
+    //         setTimezone(res.data)
+    //     })
+    // }, [])
     function separateString(str: string) {
         // Split the string by commas
         const parts = str.split(',');
