@@ -101,7 +101,7 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
   }, [store, addEventSidebarOpen])
   // ** States
   const [values, setValues] = useState<DefaultStateType>(defaultState)
-  // console.log("values:", values, store.selectedEvent?.extendedProps)
+  console.log("values:", store.selectedEvent?.extendedProps)
   const {
     control,
     setValue,
@@ -336,10 +336,12 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
                   skin='light'
                   color={store?.selectedEvent?.extendedProps?.status ?
                     (store?.selectedEvent?.extendedProps?.status == 'initiated' ? 'info'
-                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'success' : 'error') : 'error'}
+                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'success'
+                        : store?.selectedEvent?.extendedProps?.status == 'processing' ? 'info' : 'error') : 'error'}
                   label={store?.selectedEvent?.extendedProps?.status ?
                     (store?.selectedEvent?.extendedProps?.status == 'initiated' ? 'Not Published Yet'
-                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'Published' : 'Failed') : ''}
+                      : store?.selectedEvent?.extendedProps?.status == 'success' ? 'Published'
+                        : store?.selectedEvent?.extendedProps?.status == 'processing' ? 'On Process' : 'Failed') : ''}
                   sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, display: "flex", justifyContent: "start" }}
                 />
               </Box>
@@ -374,6 +376,14 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
             </Box>
           </form>
         </DatePickerWrapper>
+        {store?.selectedEvent?.extendedProps?.status == 'failed' &&
+
+          <Alert severity='warning' variant='standard' sx={{ display: "flex", alignItems: "center", justifyContent: "start", fontSize: "14px", marginTop: "20px", marginBottom: "20px" }}>
+            <p style={{ fontWeight: "bold", }}>Error message:</p>
+            <p>{store?.selectedEvent?.extendedProps?.err_msg}</p>
+          </Alert>
+        }
+
       </Box>
     </Drawer>
   )

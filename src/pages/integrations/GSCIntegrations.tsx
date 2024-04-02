@@ -85,7 +85,6 @@ import DialogAddCard from 'src/services/DialogAddCard'
 import Icon from 'src/@core/components/icon'
 import DeleteWordpressConnect from 'src/services/DeleteWordpressConnect'
 import EditWordpressConnect from 'src/services/EditWordpressConnect'
-import GSCIntegrations from './GSCIntegrations'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -103,14 +102,27 @@ const Transition = forwardRef(function Transition(
 ) {
     return <Fade ref={ref} {...props} />
 })
-const TableServerSide = () => {
+const data = [
+    {
+        id: 1,
+        site: 'https://seopilot.io'
+    },
+    {
+        id: 2,
+        site: 'https://99robots.com'
+    },
+    {
+        id: 3,
+        site: 'https://rockethub.com'
+    }
+]
+const GSCIntegrations = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('asc')
     const [rows, setRows] = useState<CustomRowType[]>([])
-    const [rowsGSC, setRowsGSC] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
-    const [sortColumn, setSortColumn] = useState<string>('address')
+    const [sortColumn, setSortColumn] = useState<string>('site')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
     const [reRender, setReRender] = useState<any>([]);
@@ -127,13 +139,14 @@ const TableServerSide = () => {
     }
 
     useEffect(() => {
-        LoginRegistrationAPI.getConnections({}).then(res => {
-            // console.log("integrations:", res)
-            loadServerRows
-            setMainData(res.data);
-            // setTotal(res.data.total)
-            // setRows(loadServerRows(paginationModel.page, res.data.data))
-        })
+        // LoginRegistrationAPI.getConnections({}).then(res => {
+        // console.log("integrations:", res)
+        loadServerRows
+        setMainData(data);
+        setTotal(3)
+        // setTotal(res.data.total)
+        // setRows(loadServerRows(paginationModel.page, res.data.data))
+        // })
 
     }, [reRender])
 
@@ -143,8 +156,8 @@ const TableServerSide = () => {
         {
             flex: 0.25,
             minWidth: 290,
-            field: 'address',
-            headerName: 'WordPress URL',
+            field: 'site',
+            headerName: 'Sites',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -153,110 +166,21 @@ const TableServerSide = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.address}
+                                {row.site}
                             </Typography>
                         </Box>
                     </Box>
                 )
             }
-        },
-        {
-            flex: 0.25,
-            minWidth: 290,
-            field: 'username',
-            headerName: 'User Name',
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-
-                return (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.username}
-                            </Typography>
-                        </Box>
-                    </Box>
-                )
-            }
-        },
-        {
-            flex: 0.25,
-            minWidth: 290,
-            field: 'password',
-            headerName: 'App Password',
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-
-                return (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.password}
-                            </Typography>
-                        </Box>
-                    </Box>
-                )
-            }
-        },
-        {
-            flex: 0.175,
-            type: 'date',
-            minWidth: 120,
-            headerName: 'Created',
-            field: 'createdAt',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => (
-                <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                    {getDateTime(params.row.createdAt)}
-                </Typography>
-            )
-        },
-        {
-            flex: 0.175,
-            minWidth: 110,
-            field: 'action',
-            sortable: false,
-            headerName: 'Action',
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params;
-
-                return (
-                    <>
-
-
-                        <EditWordpressConnect
-                            showEdit={true}
-                            id={row.id}
-                            reRender={reRender}
-                            setReRender={setReRender}
-                            address={row.address}
-                            username={row.username}
-                            appPassword={row.password}
-                        />
-
-                        <DeleteWordpressConnect showDelete={true} id={row.id} reRender={reRender} setReRender={setReRender} />
-
-                    </>
-
-                )
-
-            }
-
-
         }
     ]
 
     useEffect(() => {
         if (auth.user?.is_active) {
-            LoginRegistrationAPI.getConnections({}).then(res => {
-                loadServerRows
-                setMainData(res.data);
-                // console.log("data:", res.data)
-                // setTotal(res.data.total)
-                // setRows(loadServerRows(paginationModel.page, res.data.data))
-            })
+
+            loadServerRows
+            setMainData(data);
+
 
             LoginRegistrationAPI.getMyTeamObject({}).then(res => {
                 // console.log("res.data", res.data)
@@ -288,11 +212,10 @@ const TableServerSide = () => {
             const filteredData = dataToFilter.filter(
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
-                    item.output?.toLowerCase().includes(queryLowered) ||
-                    // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.source?.toLowerCase().includes(queryLowered) ||
-                    // item.user_id.toLowerCase().includes(queryLowered) ||
-                    item.createdAt.toString().toLowerCase().includes(queryLowered) //||
+                    item.site?.toLowerCase().includes(queryLowered)
+                // item.is_error.toLowerCase().includes(queryLowered) ||
+                // item.user_id.toLowerCase().includes(queryLowered) ||
+
                 // item.updatedAt.toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
@@ -318,7 +241,7 @@ const TableServerSide = () => {
             fetchTableData(newModel[0].sort, searchValue, newModel[0].field)
         } else {
             setSort('asc')
-            setSortColumn('full_name')
+            setSortColumn('site')
         }
     }
 
@@ -338,37 +261,8 @@ const TableServerSide = () => {
 
     return (
         <Box >
-            {
-                showAlert &&
-                //         <Alert severity='info' variant='standard' sx={{ marginBottom: "20px", fontSize: "16px", , width: "100%" }}>
-                //     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                //         <p>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website.</p> <Button variant='outlined' onClick={e => {
-                //             setShow(true)
-                //         }} startIcon={<Icon icon="ph:video-thin" />} >
-                //             Watch Step-by-Step Instructions
-                //         </Button>
 
-                //     </div>
-
-                // </Alert>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#DEF1F9", color: "#22B2E0", borderRadius: "10px", paddingX: "10px", marginBottom: "20px" }}>
-                    <p>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic", color: "#22B2E0" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website.</p> <Button variant='outlined' onClick={e => {
-                        setShow(true)
-                    }} startIcon={<Icon icon="ph:video-thin" />} >
-                        Watch Step-by-Step Instructions
-                    </Button>
-                </Box>
-                // <Box sx={{
-                //     backgroundColor: "#DEF1F9",
-                //     color:
-                // }}>
-
-                // </Box>
-
-
-            }
-
-            <Dialog
+            {/* <Dialog
                 fullWidth
                 open={show}
                 maxWidth='lg'
@@ -379,23 +273,16 @@ const TableServerSide = () => {
             >
 
                 <ReactPlayer url='https://vimeo.com/908440876/4a42c699f8?share=copy' controls style={{ height: "900", width: "506" }} />
-            </Dialog>
+            </Dialog> */}
 
 
 
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <DialogAddCard reRender={reRender} setReRender={setReRender}
-                    disabled={
-                        (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
-                            ? true : false
-                    }
-                />
-            </Box>
-            <Card>
+            {/* <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
+                <Button variant='contained' onClick={() => setShow(true)} disabled={props.disabled}>
+                    + Add a connection
+                </Button>
+            </Box> */}
+            <Card sx={{ marginTop: "20px" }}>
                 <DataGrid
                     autoHeight
                     pagination
@@ -415,7 +302,7 @@ const TableServerSide = () => {
                             variant: 'outlined'
                         },
                         toolbar: {
-                            title: "WordPress Connections",
+                            title: "Google Search Console",
                             value: searchValue,
                             clearSearch: () => handleSearch(''),
                             onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
@@ -423,10 +310,10 @@ const TableServerSide = () => {
                     }}
                 />
             </Card>
-            <GSCIntegrations />
+
         </Box >
 
     )
 }
 
-export default TableServerSide
+export default GSCIntegrations
