@@ -38,6 +38,7 @@ export default function Page() {
     const [plainText, setPlainText] = useState<string>('');
     const [timezone, setTimezone] = useState<string>('');
     const [wordCount, setWordCount] = useState<number>(0);
+    const [featuredImgIndex, setFeaturedImgIndex] = useState<number>(0);
     const [reloadArticle, setReloadArticle] = useState<number>(0);
     const [tokens, setTokens] = useState<any>(null);
     const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
@@ -45,6 +46,7 @@ export default function Page() {
     const [keywords, setKeywords] = useState<any>([])
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [numberedItem, setNumberedItem] = useState(false);
+    const [alreadyLoaded, setAlreadyLoaded] = useState(false);
 
     const router = useRouter()
 
@@ -124,12 +126,38 @@ export default function Page() {
                         setArticleTopic(res?.data?.topic)
                         setCreatedAt(res?.data?.createdAt)
                         setUpdatedAt(res?.data?.updatedAt)
+                        setImgService(res.data.img_service)
                         // setOutlines(res?.data.outline ? res.data.outline : '')
-                        if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
-                            setFImg(JSON.parse(res?.data?.featured_img))
-                        } else {
-                            setFImg(res?.data?.featured_img)
-                        }
+                        LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
+
+                            if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
+                                let x = JSON.parse(responseImg?.data?.featured_img)
+                                if (responseImg.data.service == 'unsplash')
+                                    x = x[responseImg.data.index]
+                                else
+                                    setFeaturedImgIndex(responseImg.data.index)
+                                setFImg(x);
+
+                            } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
+                                setFImg(responseImg?.data?.featured_img)
+                            } else {
+                                setFImg(res?.data?.featured_img)
+                            }
+                        }).catch(error => {
+                            console.log("errors:", error)
+                            if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
+
+                                setFImg(JSON.parse(res?.data?.featured_img))
+                            } else {
+                                setFImg(res?.data?.featured_img)
+                            }
+
+                        })
+                        // if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
+                        //     setFImg(JSON.parse(res?.data?.featured_img))
+                        // } else {
+                        //     setFImg(res?.data?.featured_img)
+                        // }
                         // console.log("res.data.token_used:", res.data.token_used)
                         // console.log("price:", res.data.price)
                         if (res.data.token_used) {
@@ -154,7 +182,7 @@ export default function Page() {
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
-                        setImgService(res.data.img_service)
+
                         if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
                             // Swal.fire({
                             //     title: 'Unable to Generate Image',
@@ -167,10 +195,9 @@ export default function Page() {
                                 autoClose: 5000,
                             })
                         }
+                        setAlreadyLoaded(true)
 
                     }, 1000)
-                } else {
-
                 }
             }).catch(e => {
                 // console.log(e);
@@ -196,88 +223,113 @@ export default function Page() {
                 // console.log("interval is running....")
                 counter = counter + 15000;
                 if (counter < 1200000) {
-                    await LoginRegistrationAPI.getSaasArticle({ id: router.query.id }).then(async (res) => {
+                    if (!alreadyLoaded) {
+                        await LoginRegistrationAPI.getSaasArticle({ id: router.query.id }).then(async (res) => {
 
-                        if (res.status == 210) {
-                            setCurrentStep(2);
-                        } else if (res.status == 211) {
-                            setCurrentStep(3);
-                            // setTimeout(function () {   //  call a 3s setTimeout when the loop is called
-                            //     setShowArticleEditor(true);               //  ..  setTimeout()
-                            //     clearInterval(interval)
-                            //     setArticle(res?.data.content ? res.data.content : '')
-                            // }, 3000)
-                        } else if (res.status == 212) {
-                            setCurrentStep(5);
-                            setTimeout(function () {   //  call a 3s setTimeout when the loop is called
-                                setShowArticleEditor(true);               //  ..  setTimeout()
-                                clearInterval(interval)
-                                setArticle('')
-                                // setArticle(res?.data.content ? res.data.content : '')
-                                // setOutlines(res?.data.outline ? res.data.outline : '')
-                                let outputString = res?.data?.content.replace('<article>', '');
-                                let outputString1 = outputString.replace('</article>', '');
-                                setArticle(res?.data.content ? outputString1 : '')
-                                setArticleTopic(res?.data?.topic)
-                                setCreatedAt(res?.data?.createdAt)
-                                setUpdatedAt(res?.data?.updatedAt)
-                                if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
-                                    setFImg(JSON.parse(res?.data?.featured_img))
-                                } else {
-                                    setFImg(res?.data?.featured_img)
-                                }
+                            if (res.status == 210) {
+                                setCurrentStep(2);
+                            } else if (res.status == 211) {
+                                setCurrentStep(3);
+                                // setTimeout(function () {   //  call a 3s setTimeout when the loop is called
+                                //     setShowArticleEditor(true);               //  ..  setTimeout()
+                                //     clearInterval(interval)
+                                //     setArticle(res?.data.content ? res.data.content : '')
+                                // }, 3000)
+                            } else if (res.status == 212) {
+                                setCurrentStep(5);
+                                setTimeout(function () {   //  call a 3s setTimeout when the loop is called
+                                    setShowArticleEditor(true);               //  ..  setTimeout()
+                                    clearInterval(interval)
+                                    setArticle('')
+                                    // setArticle(res?.data.content ? res.data.content : '')
+                                    // setOutlines(res?.data.outline ? res.data.outline : '')
+                                    let outputString = res?.data?.content.replace('<article>', '');
+                                    let outputString1 = outputString.replace('</article>', '');
+                                    setArticle(res?.data.content ? outputString1 : '')
+                                    setArticleTopic(res?.data?.topic)
+                                    setCreatedAt(res?.data?.createdAt)
+                                    setUpdatedAt(res?.data?.updatedAt)
 
-                                if (res.data.token_used) {
-                                    let tokenUsed = JSON.parse(res.data.token_used)
-                                    setTokens(tokenUsed)
-                                    setPrice(res.data?.price?.toFixed(4))
-                                }
+                                    LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
+                                        // console.log("responseImg:", responseImg.data)
+                                        if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
+                                            let x = JSON.parse(responseImg?.data?.featured_img)
+                                            // console.log("x:", x)
+                                            if (responseImg.data.service == 'unsplash')
+                                                x = x[responseImg.data.index]
+                                            else
+                                                setFeaturedImgIndex(responseImg.data.index)
+                                            // console.log("x:......", x)
+                                            setFImg(x);
 
-                                setKeywordsByKeyBert(res.data.keyword_by_keybert)
+                                        } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
+                                            setFImg(responseImg?.data?.featured_img)
+                                        } else {
+                                            setFImg(res?.data?.featured_img)
+                                        }
+                                    }).catch(error => {
+                                        console.log("errors:", error)
+                                        if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
+                                            setFImg(JSON.parse(res?.data?.featured_img))
+                                        } else {
+                                            setFImg(res?.data?.featured_img)
+                                        }
 
-                                if (res.data.keywords) {
-                                    const keywordArray = separateString(res.data.keywords);
-                                    setKeywords(keywordArray)
-                                }
-                                if (res.data.listicle_outlines) {
-                                    let lo = JSON.parse(res.data.listicle_outlines)
-                                    setListicleOutlines(lo)
-                                    // console.log(lo)
-                                }
+                                    })
 
-                                // if(res.data.numbered_items){
-                                setNumberedItem(res.data.numbered_items)
-                                setArticleType(res.data.article_type)
-                                setImgService(res.data.img_service)
+                                    if (res.data.token_used) {
+                                        let tokenUsed = JSON.parse(res.data.token_used)
+                                        setTokens(tokenUsed)
+                                        setPrice(res.data?.price?.toFixed(4))
+                                    }
+
+                                    setKeywordsByKeyBert(res.data.keyword_by_keybert)
+
+                                    if (res.data.keywords) {
+                                        const keywordArray = separateString(res.data.keywords);
+                                        setKeywords(keywordArray)
+                                    }
+                                    if (res.data.listicle_outlines) {
+                                        let lo = JSON.parse(res.data.listicle_outlines)
+                                        setListicleOutlines(lo)
+                                        // console.log(lo)
+                                    }
+
+                                    // if(res.data.numbered_items){
+                                    setNumberedItem(res.data.numbered_items)
+                                    setArticleType(res.data.article_type)
+                                    setImgService(res.data.img_service)
 
 
-                            }, 3000)
-                        } else {
+                                }, 3000)
+                            } else {
+                                Swal.fire({
+                                    html: '<h3>Invalid Article ID</h3>',
+                                    icon: "error",
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    confirmButtonColor: "#2979FF"
+                                }).then((res) => {
+                                    clearInterval(interval)
+                                    router.push("/create-article")
+                                })
+                            }
+                        }).catch(e => {
+                            // console.log(e);
+                            clearInterval(interval)
                             Swal.fire({
-                                html: '<h3>Invalid Article ID</h3>',
+                                html: e.response?.data?.message ? e.response?.data?.message : 'Error from ChatGPT API. Please Try again later.',
                                 icon: "error",
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
                                 confirmButtonColor: "#2979FF"
                             }).then((res) => {
-                                clearInterval(interval)
+
                                 router.push("/create-article")
                             })
-                        }
-                    }).catch(e => {
-                        // console.log(e);
-                        clearInterval(interval)
-                        Swal.fire({
-                            html: e.response?.data?.message ? e.response?.data?.message : 'Error from ChatGPT API. Please Try again later.',
-                            icon: "error",
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            confirmButtonColor: "#2979FF"
-                        }).then((res) => {
-
-                            router.push("/create-article")
                         })
-                    })
+                    }
+
                 }
 
 
@@ -372,6 +424,7 @@ export default function Page() {
                         setPlainText={setPlainText}
                         plainText={plainText}
                         fImg={fImg}
+                        setFImg={setFImg}
                         price={price}
                         tokens={tokens}
                         keywordByKeybert={keywordByKeybert}
@@ -380,8 +433,11 @@ export default function Page() {
                         numberedItem={numberedItem}
                         articleType={articleType}
                         imgService={imgService}
+                        setImgService={setImgService}
                         reloadArticle={reloadArticle}
                         setReloadArticle={setReloadArticle}
+                        featuredImgIndex={featuredImgIndex}
+                        setFeaturedImgIndex={setFeaturedImgIndex}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

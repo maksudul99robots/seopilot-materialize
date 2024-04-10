@@ -37,9 +37,11 @@ import { PromptComponent } from 'src/components/PromptComponent';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
 import { getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
+import ImageSection from './ImageSection';
 
 export default function ArticleIU(props: any) {
-    const router = useRouter()
+
+    // console.log("props.imgService and img", props.imgService, props.fImg)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -47,6 +49,7 @@ export default function ArticleIU(props: any) {
     const [copied, setCopied] = useState(false);
     const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
     const [isKeybert, setIsKeybert] = useState(true)
+    const [reloadUnsplashRequest, setReloadUnsplashRequest] = useState(0)
     const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
     const [saveBtnStyle, setSaveBtnStyle] = useState({
@@ -151,7 +154,8 @@ export default function ArticleIU(props: any) {
     }, [props.html])
 
     const getImgFromLocation = async (url: string) => {
-        if (url && imgSrc == '') {
+        // console.log("requesting to unsplash:", url)
+        if ((url && imgSrc == '')) {
             let img = await axios.get(url + '?client_id=' + process.env.NEXT_PUBLIC_UNSPLASH_CLIENT_ID)
             setImgSrc(img.data.url);
         }
@@ -238,52 +242,78 @@ export default function ArticleIU(props: any) {
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px", overflow: "hidden" }}>
                             {
-                                props.imgService == 'unsplash' && fImg?.user?.links &&
-                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
-                                    <img
-                                        src={imgSrc}
-                                        width={800}
-                                        height={450}
-                                        style={{ objectFit: "cover" }}
-                                        alt="Featured image"
-                                    />
-                                    <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
-                                        Photo by <a href={fImg.user.links.html + "?utm_source=Seopilot&utm_medium=referral"} target='_blank' className='colorLink'>{fImg.user.name}</a> on <a href='https://unsplash.com/?utm_source=Seopilot&utm_medium=referral' target='_blank' className='colorLink'>Unsplash</a>
-                                    </p>
-                                </div>
-                            }
 
-                            {
-                                props.imgService == 'pexels' && fImg?.photos &&
-                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
-                                    <img
-                                        src={fImg.photos[0].src.original}
-                                        width={800}
-                                        height={450}
-                                        style={{ objectFit: "cover" }}
-                                        alt="Featured image"
-                                    />
-                                    <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
-                                        Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
-                                    </p>
-                                </div>
-                            }
-                            {
-                                (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') && fImg &&
-                                <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
-                                    <img
-                                        src={fImg}
-                                        width={800}
-                                        height={450}
-                                        style={{ objectFit: "cover" }}
-                                        alt="Featured image"
-                                    />
-                                    {/* <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
+                                props.imgService == 'unsplash' && props.fImg?.user?.links ?
+                                    <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+
+
+                                        <ImageSection
+                                            src={imgSrc}
+                                            url={props?.fImg?.user?.links?.html}
+                                            username={props?.fImg?.user?.name}
+                                            id={props.id}
+                                            setFImg={props.setFImg}
+                                            setReloadUnsplashRequest={setReloadUnsplashRequest}
+                                            service="Unsplash"
+                                            imgService={props.imgService}
+                                            referral="https://unsplash.com/?utm_source=Seopilot&utm_medium=referral"
+                                            featuredImgIndex={props.featuredImgIndex}
+                                            setFeaturedImgIndex={props.setFeaturedImgIndex}
+                                            setImgSrc={setImgSrc}
+                                            setImgService={props.setImgService}
+                                            topic={props.articleTopic}
+                                        />
+                                    </div>
+                                    :
+                                    props.imgService == 'pexels' && props.fImg?.photos ?
+                                        <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                            <ImageSection
+                                                src={props?.fImg?.photos[props.featuredImgIndex].src.original}
+                                                url={props?.fImg?.photos[props.featuredImgIndex].photographer_url}
+                                                username={props?.fImg?.photos[props.featuredImgIndex].photographer}
+                                                id={props.id}
+                                                setFImg={props.setFImg}
+                                                setReloadUnsplashRequest={setReloadUnsplashRequest}
+                                                service="Pexels"
+                                                imgService={props.imgService}
+                                                referral="https://www.pexels.com/"
+                                                featuredImgIndex={props.featuredImgIndex}
+                                                setFeaturedImgIndex={props.setFeaturedImgIndex}
+                                                setImgSrc={setImgSrc}
+                                                setImgService={props.setImgService}
+                                                topic={props.articleTopic}
+                                            />
+
+                                        </div>
+                                        :
+                                        (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') && props.fImg ?
+                                            <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+
+                                                <ImageSection
+                                                    src={props.fImg}
+                                                    id={props.id}
+                                                    setFImg={props.setFImg}
+                                                    setReloadUnsplashRequest={setReloadUnsplashRequest}
+                                                    imgService={props.imgService}
+                                                    featuredImgIndex={props.featuredImgIndex}
+                                                    setFeaturedImgIndex={props.setFeaturedImgIndex}
+                                                    setImgSrc={setImgSrc}
+                                                    setImgService={props.setImgService}
+                                                />
+                                                {/* <img
+                                                    src={props.fImg}
+                                                    width={800}
+                                                    height={450}
+                                                    style={{ objectFit: "cover" }}
+                                                    alt="Featured image"
+                                                /> */}
+                                                {/* <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
                                         Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
                                     </p> */}
-                                </div>
-                            }
+                                            </div>
+                                            : null
 
+                            }
 
 
                         </div>

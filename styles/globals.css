@@ -202,3 +202,31 @@ code[class*='language-'] {
   background-color: #b7b8c2;
   z-index: 10000000000 !important;
 }
+
+.featured_img_btn{
+  background-color: #EAEAEB;
+  border-radius: 5px;
+  color:#555555;
+  width: 40px;
+  height: auto;
+  padding: 7px;
+  cursor: pointer;
+}
+.featured_img_btn:hover{
+  background-color: #fff;
+  border-radius: 5px;
+  color: #000;
+}
+
+.img_btn{
+  background-color: #ececec !important;
+  color: #000 !important;
+}
+.img_btn:hover{
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.suggested_img:hover{
+  border: 5px solid #2979FF;
+}

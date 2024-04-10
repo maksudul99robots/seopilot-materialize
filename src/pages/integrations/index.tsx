@@ -423,7 +423,7 @@ const TableServerSide = () => {
                     }}
                 />
             </Card>
-            <GSCIntegrations />
+            {/* <GSCIntegrations /> */}
         </Box >
 
     )
