@@ -228,5 +228,5 @@ code[class*='language-'] {
 }
 
 .suggested_img:hover{
-  border: 5px solid #2979FF;
+  border: 5px solid #2979FF !important;
 }

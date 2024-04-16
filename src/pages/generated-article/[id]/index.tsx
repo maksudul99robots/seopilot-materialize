@@ -139,7 +139,8 @@ export default function Page() {
                                 setFImg(x);
 
                             } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
-                                setFImg(responseImg?.data?.featured_img)
+                                let x = JSON.parse(responseImg?.data?.featured_img)
+                                setFImg(x[responseImg.data.index])
                             } else {
                                 setFImg(res?.data?.featured_img)
                             }
@@ -263,7 +264,8 @@ export default function Page() {
                                             setFImg(x);
 
                                         } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
-                                            setFImg(responseImg?.data?.featured_img)
+                                            let x = JSON.parse(responseImg?.data?.featured_img)
+                                            setFImg(x[responseImg.data.index])
                                         } else {
                                             setFImg(res?.data?.featured_img)
                                         }

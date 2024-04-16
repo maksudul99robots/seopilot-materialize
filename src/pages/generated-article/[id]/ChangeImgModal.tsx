@@ -73,27 +73,90 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     },
 }));
 
+type indicesType =
+    {
+        unsplash: number,
+        pexels: number,
+        dallE2: number,
+        dallE3: 0,
+    }
+
 const ChangeImgModal = (props: any) => {
     // ** States
 
     const [loading, setLoading] = useState<boolean>(false)
     const [service, setService] = useState<string>(props.imgService)
     const [show, setShow] = useState<boolean>(false)
+    const [aiImgLoading, setAiImgLoading] = useState<boolean>(false)
     const [imgPrompt, setImgPrompt] = useState<string>('');
     const [originalResponse, setOriginalResponse] = useState<any>(null);
     const [images, setImages] = useState<any>([])
+    const [unsplashImages, setUnsplashImages] = useState<any>([])
+    const [pexelsImages, setPexelsImages] = useState<any>([])
+    const [dallE2Images, setDallE2Images] = useState<any>([])
+    const [dallE3Images, setDallE3Images] = useState<any>([])
+    const [selectedImg, setSelectedImg] = useState<any>(null)
+    const [indices, setIndices] = useState<any>({
+        unsplash: 0,
+        pexels: 0,
+        dallE2: 0,
+        dallE3: 0,
+    })
+
 
     const handleClose = () => {
         setShow(false)
+        setSelectedImg(null)
     }
 
+    useEffect(() => {
+        console.log(indices)
+        console.log(selectedImg)
+    }, [indices, selectedImg])
 
+    const getAllImages = async () => {
+        LoginRegistrationAPI.getAllImages({ id: props.id }).then((responseImg: any) => {
+            //store images into their respective states
+            // console.log("response:", responseImg)
+            responseImg.data?.map((imgObj: any, i: any) => {
+                if (imgObj.service == 'unsplash') {
+                    let x = JSON.parse(imgObj?.featured_img)
+                    setUnsplashImages(x)
+                    let index = indices;
+                    index.unsplash = imgObj.index
+                    setIndices(index)
+                } else if (imgObj.service == 'pexels') {
+                    let x = JSON.parse(imgObj?.featured_img)
+                    x = x.photos;
+                    setPexelsImages(x);
+                    let index = indices;
+                    index.pexels = imgObj.index
+                    setIndices(index)
+                } else if (imgObj.service == 'dall-e-2') {
+                    let x = JSON.parse(imgObj?.featured_img)
+                    setDallE2Images(x)
+                    let index = indices;
+                    index.dallE2 = imgObj.index
+                    setIndices(index)
+                } else {
+                    let x = JSON.parse(imgObj?.featured_img)
+                    setDallE3Images(x)
+                    let index = indices;
+                    index.dallE3 = imgObj.index
+                    setIndices(index)
+                }
+            })
+        }).catch((e: any) => {
+            console.log("error in regenerateFeaturedImg:", e)
+            setLoading(false)
+        })
+    }
 
     const submit = () => {
         setLoading(true)
         LoginRegistrationAPI.regenerateFeaturedImg({ service: service, id: props.id, img_prompt: imgPrompt }).then((responseImg: any) => {
             setLoading(false)
-            // console.log("responseImg:", responseImg.data)
+            console.log("responseImg:", responseImg.data)
             if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
                 let x = JSON.parse(responseImg?.data?.featured_img)
                 // props.setImgService(responseImg.data.service)
@@ -109,6 +172,7 @@ const ChangeImgModal = (props: any) => {
                 // console.log("got img from ai:", x)
                 props.setFImg(responseImg.data.featured_img);
                 props.setImgService(responseImg.data.service);
+                setService(responseImg.data.service)
                 setShow(false)
             }
             // setShow(false)
@@ -118,39 +182,73 @@ const ChangeImgModal = (props: any) => {
         })
     }
 
-    const changeImgIndex = (index: number) => {
-        LoginRegistrationAPI.updateIndexFeaturedImg({ index: index, id: props.id, service: service }).then(res => {
-            // console.log("res.data:", res.data)
+    useEffect(() => {
+        getAllImages()
+    }, [])
+
+    const changeImgIndex = () => {
+        LoginRegistrationAPI.updateIndexFeaturedImg({ index: selectedImg.index, id: props.id, service: service }).then(res => {
+            console.log("res.data:", res.data)
             // console.log("index:", index)
             if ((res.data.service == 'unsplash' || res.data.service == 'pexels')) {
                 // console.log("x:", x)
-                let x = originalResponse;
+                let x = res.data.featured_img;
+                x = JSON.parse(x)
                 if (res.data.service == 'unsplash') {
                     x = x[res.data.index]
                     props.setImgSrc('')
+
+                    let y = indices;
+                    y.unsplash = res.data.index;
+                    setIndices(y)
                 }
-                else
+                else {
                     props.setFeaturedImgIndex(res.data.index)
+                    let y = indices;
+                    y.pexels = res.data.index;
+                    setIndices(y)
+                }
+
                 // console.log("x:......", x)
                 props.setImgService(service)
                 props.setFImg(x);
-                setShow(false)
 
-
-                // if (responseImg.data.service == 'unsplash') {
-                //     x = x[responseImg.data.index]
-                //     props.setImgSrc('')
-                // }
-                // else {
-                //     props.setFeaturedImgIndex(responseImg.data.index)
-                // }
-                // props.setFImg(x);
+                handleClose()
 
             } else if (res.data.service == 'dall-e-3' || res.data.service == 'dall-e-2') {
-                props.setFImg(res?.data?.featured_img)
+                let x = res.data.featured_img;
+                x = JSON.parse(x)
+                props.setFImg(x[res.data.index])
+                props.setImgService(res.data.service)
+                if (res.data.service == 'dall-e-3') {
+                    let y = indices;
+                    y.dallE3 = res.data.index;
+                    setIndices(y)
+                } else {
+                    let y = indices;
+                    y.dallE2 = res.data.index;
+                    setIndices(y)
+                }
+
+                handleClose()
             }
         }).catch(e => {
+            console.log(e)
+        })
+    }
 
+    const changeImage = () => {
+
+    }
+
+    const getAIImage = () => {
+        setAiImgLoading(true)
+        LoginRegistrationAPI.generateAIImage({ img_prompt: imgPrompt, id: props.id, img_service: service }).then(res => {
+            getAllImages()
+            setAiImgLoading(false)
+        }).catch(e => {
+            console.log(e)
+            setAiImgLoading(false)
         })
     }
 
@@ -202,7 +300,7 @@ const ChangeImgModal = (props: any) => {
                     <div style={{ paddingLeft: "7%", paddingRight: "7%" }}>
 
                         <FormControl fullWidth sx={{
-                            width: "100%", marginBottom: "20px"
+                            width: "100%", marginBottom: "10px"
                         }}>
                             <InputLabel id='Image Service'>Image Service</InputLabel>
                             <Select
@@ -211,8 +309,9 @@ const ChangeImgModal = (props: any) => {
                                 label='Image Service'
                                 defaultValue={service}
                                 onChange={e => {
-                                    setImages([])
                                     setService(e.target.value);
+                                    setSelectedImg(null)
+                                    // submit();
                                 }}
 
                             >
@@ -223,23 +322,39 @@ const ChangeImgModal = (props: any) => {
 
                             </Select>
                         </FormControl>
-                        {images.length > 0 && (service == 'unsplash' || service == 'pexels') &&
-                            <Typography variant='body1' sx={{ fontSize: "14px", fontWeight: 400, marginBottom: "5px" }}>
+                        {(
+
+                            (service == 'dall-e-3' && dallE3Images.length > 0) ||
+                            (service == 'dall-e-2' && dallE2Images.length > 0) ||
+                            (service == 'pexels' && pexelsImages.length > 0) ||
+                            (service == 'unsplash' && unsplashImages.length > 0)) &&
+                            <Typography variant='body1' sx={{ fontSize: "14px", fontWeight: 400 }}>
                                 Select Featured image
                             </Typography>
                         }
-
-                        <Grid container spacing={1} sx={{ display: "flex", justifyContent: "center" }}>
+                        {/* unsplash */}
+                        <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start", marginTop: "5px" }}>
                             {
-                                images.length > 0 && (service == 'unsplash' || service == 'pexels') && images.map((img: any, i: number) => {
+                                unsplashImages.length > 0 && (service == 'unsplash') && unsplashImages.map((img: any, i: number) => {
+                                    // console.log("img:", service, i, img)
                                     return (
                                         <Grid item key={i}>
                                             <img height={150} width={150} src={
-                                                service == 'unsplash' ? img?.urls?.thumb : img?.src?.tiny
+                                                img?.urls?.thumb
 
-                                            } style={{ objectFit: "cover", cursor: "pointer" }} className='suggested_img'
+                                            } style={{
+                                                objectFit: "cover",
+                                                cursor: "pointer",
+                                                border:
+                                                    (selectedImg && selectedImg.service == 'unsplash' && i == selectedImg.index) ? "5px solid #2979FF" : props.imgService == 'unsplash' && i == indices.unsplash ? "5px solid #92B65D" : 'none'
+                                            }} className='suggested_img'
                                                 onClick={() => {
-                                                    changeImgIndex(i)
+                                                    // changeImgIndex(i)
+                                                    let x = {
+                                                        service: 'unsplash',
+                                                        index: i
+                                                    }
+                                                    setSelectedImg(x)
                                                 }}
                                             ></img>
                                         </Grid>
@@ -249,6 +364,115 @@ const ChangeImgModal = (props: any) => {
 
 
                         </Grid>
+                        {/* pexels */}
+                        <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start", marginTop: "1px" }}>
+                            {
+                                pexelsImages.length > 0 && (service == 'pexels') && pexelsImages.map((img: any, i: number) => {
+                                    // console.log("img:", service, i, img)
+                                    return (
+                                        <Grid item key={i}>
+                                            <img height={150} width={150} src={
+                                                img?.src?.tiny
+
+                                            } style={{
+                                                objectFit: "cover",
+                                                cursor: "pointer",
+                                                border:
+                                                    (selectedImg && selectedImg.service == 'pexels' && i == selectedImg.index) ? "5px solid #2979FF" :
+                                                        (!selectedImg && props.imgService == 'pexels' && i == indices.pexels) ? "5px solid  #92B65D" :
+                                                            'none'
+                                            }} className='suggested_img'
+                                                onClick={() => {
+                                                    // changeImgIndex(i)
+                                                    let x = {
+                                                        service: 'pexels',
+                                                        index: i
+                                                    }
+                                                    setSelectedImg(x)
+                                                }}
+                                            ></img>
+                                        </Grid>
+                                    )
+                                })
+                            }
+
+
+                        </Grid>
+                        {/* dall-e-2 */}
+                        {
+                            dallE2Images.length > 0 &&
+                            <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start" }}>
+                                {
+                                    dallE2Images.length > 0 && (service == 'dall-e-2') && dallE2Images.map((img: any, i: number) => {
+                                        // console.log("img:", service, i, img)
+                                        return (
+                                            <Grid item key={i}>
+                                                <img height={150} width={150} src={
+                                                    img
+                                                } style={{
+                                                    objectFit: "cover",
+                                                    cursor: "pointer",
+                                                    border:
+                                                        (selectedImg && selectedImg.service == 'dall-e-2' && i == selectedImg.index) ? "5px solid #2979FF" :
+                                                            (!selectedImg && props.imgService == 'dall-e-2' && i == indices.dallE2) ? "5px solid #92B65D" :
+                                                                'none'
+                                                }} className='suggested_img'
+                                                    onClick={() => {
+                                                        // changeImgIndex(i)
+                                                        let x = {
+                                                            service: 'dall-e-2',
+                                                            index: i
+                                                        }
+                                                        setSelectedImg(x)
+                                                    }}
+                                                ></img>
+                                            </Grid>
+                                        )
+                                    })
+                                }
+
+
+                            </Grid>
+                        }
+
+                        {/* dall-e-3 */}
+                        {
+                            dallE3Images.length > 0 &&
+
+                            <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start" }}>
+                                {
+                                    dallE3Images.length > 0 && (service == 'dall-e-3') && dallE3Images.map((img: any, i: number) => {
+                                        // console.log("img:", service, i, img)
+                                        return (
+                                            <Grid item key={i}>
+                                                <img height={150} width={150} src={
+                                                    img
+                                                } style={{
+                                                    objectFit: "cover",
+                                                    cursor: "pointer",
+                                                    border:
+                                                        (selectedImg && selectedImg.service == 'dall-e-3' && i == selectedImg.index) ? "5px solid #2979FF" :
+                                                            (!selectedImg && props.imgService == 'dall-e-3' && i == indices.dallE3) ? "5px solid #92B65D" :
+                                                                'none'
+                                                }} className='suggested_img'
+                                                    onClick={() => {
+                                                        // changeImgIndex(i)
+                                                        let x = {
+                                                            service: 'dall-e-3',
+                                                            index: i
+                                                        }
+                                                        setSelectedImg(x)
+                                                    }}
+                                                ></img>
+                                            </Grid>
+                                        )
+                                    })
+                                }
+
+
+                            </Grid>
+                        }
+
                         {
                             (service == 'dall-e-2' || service == 'dall-e-3') &&
 
@@ -261,6 +485,16 @@ const ChangeImgModal = (props: any) => {
                                     <Typography variant='body1' sx={{ fontSize: "13px" }}>For best results, provide detailed instructions. See <a href="https://community.openai.com/t/dalle3-prompt-tips-and-tricks-thread/498040" target='_blank'>URL</a> for more prompting tips.</Typography>
                                 </Box>
                                 <TextField multiline minRows={3} onChange={e => { setImgPrompt(e.target.value) }} value={imgPrompt} />
+                                <div style={{ display: "flex", justifyContent: "end", marginTop: "5px" }}>
+                                    <Button variant='outlined' size='medium' sx={{ mr: 0, width: "150px" }} disabled={aiImgLoading ? true : imgPrompt.length > 3 ? false : true}
+                                        onClick={getAIImage}
+                                        startIcon={aiImgLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
+
+                                    >
+                                        Get Image
+                                    </Button>
+                                </div>
+
                             </FormControl>
                         }
 
@@ -284,12 +518,11 @@ const ChangeImgModal = (props: any) => {
                 >
 
                     <div style={{ marginTop: "10px" }}>
-                        <Button variant='contained' sx={{ mr: 4 }} onClick={submit} disabled={loading} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
-                        } >
-                            Get Image
-                        </Button>
-                        <Button variant='outlined' color='secondary' onClick={handleClose}>
-                            Cancel
+                        <Button variant='contained' sx={{ mr: 0 }} disabled={loading || !selectedImg} startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+                        }
+                            onClick={changeImgIndex}
+                        >
+                            Change
                         </Button>
                     </div>
 

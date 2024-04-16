@@ -342,6 +342,12 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async getAllImages(data: any, url = "/get-all-imgs", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async generateAIImage(data: any, url = "/generate-ai-img", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
