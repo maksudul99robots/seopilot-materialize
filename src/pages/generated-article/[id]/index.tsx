@@ -250,34 +250,36 @@ export default function Page() {
                                     setArticleTopic(res?.data?.topic)
                                     setCreatedAt(res?.data?.createdAt)
                                     setUpdatedAt(res?.data?.updatedAt)
+                                    if (res?.data?.show_featured_image) {
+                                        LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
+                                            // console.log("responseImg:", responseImg.data)
+                                            if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
+                                                let x = JSON.parse(responseImg?.data?.featured_img)
+                                                // console.log("x:", x)
+                                                if (responseImg.data.service == 'unsplash')
+                                                    x = x[responseImg.data.index]
+                                                else
+                                                    setFeaturedImgIndex(responseImg.data.index)
+                                                // console.log("x:......", x)
+                                                setFImg(x);
 
-                                    LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
-                                        // console.log("responseImg:", responseImg.data)
-                                        if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
-                                            let x = JSON.parse(responseImg?.data?.featured_img)
-                                            // console.log("x:", x)
-                                            if (responseImg.data.service == 'unsplash')
-                                                x = x[responseImg.data.index]
-                                            else
-                                                setFeaturedImgIndex(responseImg.data.index)
-                                            // console.log("x:......", x)
-                                            setFImg(x);
+                                            } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
+                                                let x = JSON.parse(responseImg?.data?.featured_img)
+                                                setFImg(x[responseImg.data.index])
+                                            } else {
+                                                setFImg(res?.data?.featured_img)
+                                            }
+                                        }).catch(error => {
+                                            console.log("errors:", error)
+                                            if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
+                                                setFImg(JSON.parse(res?.data?.featured_img))
+                                            } else {
+                                                setFImg(res?.data?.featured_img)
+                                            }
 
-                                        } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
-                                            let x = JSON.parse(responseImg?.data?.featured_img)
-                                            setFImg(x[responseImg.data.index])
-                                        } else {
-                                            setFImg(res?.data?.featured_img)
-                                        }
-                                    }).catch(error => {
-                                        console.log("errors:", error)
-                                        if (res?.data?.featured_img && (res.data.img_service == 'unsplash' || res.data.img_service == 'pexels')) {
-                                            setFImg(JSON.parse(res?.data?.featured_img))
-                                        } else {
-                                            setFImg(res?.data?.featured_img)
-                                        }
+                                        })
+                                    }
 
-                                    })
 
                                     if (res.data.token_used) {
                                         let tokenUsed = JSON.parse(res.data.token_used)
