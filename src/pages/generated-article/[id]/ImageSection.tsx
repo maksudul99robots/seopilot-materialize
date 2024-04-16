@@ -49,7 +49,7 @@ const ImageWithButtons = (props: any) => {
                 </div>
             </div>
 
-            {hovered && (
+            {hovered && props.imgService != 'dall-e-2' && props.imgService != 'dall-e-3' && (
                 <div style={{
                     position: 'absolute', bottom: props.url && props.username && props.referral ? 35 : 5, right: 0, width: "100%",
                     backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
