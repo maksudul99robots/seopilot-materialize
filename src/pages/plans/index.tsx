@@ -150,12 +150,15 @@ const Pricing = () => {
             if (response.data.url) {
               window.location.href = response.data.url
             } else if (response.data == "subscription updated") {
-              LoginRegistrationAPI.updateUser({}).then(res => {
-                // console.log("res:", res)
-                auth.setUserDataWithToken(res)
-              }).catch(e => {
+              setTimeout(() => {
+                LoginRegistrationAPI.updateUser({}).then(res => {
+                  // console.log("res:", res)
+                  auth.setUserDataWithToken(res)
+                }).catch(e => {
 
-              })
+                })
+              }, 5000)
+
             }
           })
           .catch(error => console.log("error:", error));

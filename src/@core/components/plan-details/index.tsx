@@ -15,6 +15,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Types
 import { PricingPlanProps } from './types'
+import { useState } from 'react'
 
 // ** Styled Component for the wrapper of whole component
 const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -35,6 +36,7 @@ const BoxFeature = styled(Box)<BoxProps>(({ theme }) => ({
 const PlanDetails = (props: PricingPlanProps) => {
   // ** Props
   const { plan, data, index, makePayment } = props
+  const [loading, setLoading] = useState(false)
   // console.log("plan, data:", plan, data)
 
   const renderFeatures = () => {
@@ -117,9 +119,10 @@ const PlanDetails = (props: PricingPlanProps) => {
         fullWidth
         color={data?.currentPlan ? 'success' : 'primary'}
         variant={data?.popularPlan ? 'contained' : 'outlined'}
-        disabled={data?.currentPlan ? true : false}
+        disabled={data?.currentPlan || loading ? true : false}
 
         onClick={() => {
+          setLoading(true)
           if (data?.title == 'Passenger') {
             makePayment('passenger')
           }
@@ -130,6 +133,7 @@ const PlanDetails = (props: PricingPlanProps) => {
             makePayment('captain')
           }
         }}
+        startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
       >
         {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
         {/* {'Plan Coming Soon'} */}
