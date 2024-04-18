@@ -13,7 +13,7 @@ const LTDPlan = ({ plan }: any) => {
             <Card sx={{ mb: 10 }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
-                        Your current plan: Rockethub LTD-{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan == 'passenger' ? 'PASSENGER' : plan.plan == 'copilot' ? 'COPILOT' : plan.plan == 'captain' ? 'CAPTAIN' : ''}
+                        Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan == 'passenger' ? 'PASSENGER' : plan.plan == 'copilot' ? 'COPILOT' : plan.plan == 'captain' ? 'CAPTAIN' : ''}
                     </Typography>
                     <Typography variant='body1' sx={{ pl: 5, pb: 2 }}>
                         Features:
