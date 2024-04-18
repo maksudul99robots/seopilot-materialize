@@ -35,8 +35,8 @@ const BoxFeature = styled(Box)<BoxProps>(({ theme }) => ({
 
 const PlanDetails = (props: PricingPlanProps) => {
   // ** Props
-  const { plan, data, index, makePayment } = props
-  const [loading, setLoading] = useState(false)
+  const { plan, data, index, makePayment, loading, setLoading } = props
+
   // console.log("plan, data:", plan, data)
 
   const renderFeatures = () => {
@@ -122,7 +122,6 @@ const PlanDetails = (props: PricingPlanProps) => {
         disabled={data?.currentPlan || loading ? true : false}
 
         onClick={() => {
-          setLoading(true)
           if (data?.title == 'Passenger') {
             makePayment('passenger')
           }

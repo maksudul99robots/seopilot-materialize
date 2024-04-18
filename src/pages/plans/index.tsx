@@ -120,6 +120,7 @@ const Pricing = () => {
 
   // ** States
   const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e: ChangeEvent<{ checked: boolean }>) => {
     if (e.target.checked) {
@@ -144,9 +145,10 @@ const Pricing = () => {
     }).then((res: any) => {
       // console.log("res:", res)
       if (res.isConfirmed) {
+        setLoading(true)
         LoginRegistrationAPI.makePayment({ plan: plan })
           .then(response => {
-            console.log("response from makePayment:", response.data)
+            // console.log("response from makePayment:", response.data)
             if (response.data.url) {
               window.location.href = response.data.url
             } else if (response.data == "subscription updated") {
@@ -154,6 +156,7 @@ const Pricing = () => {
                 LoginRegistrationAPI.updateUser({}).then(res => {
                   // console.log("res:", res)
                   auth.setUserDataWithToken(res)
+
                 }).catch(e => {
 
                 })
@@ -174,7 +177,7 @@ const Pricing = () => {
       <CardContent>
         <PricingHeader plan={plan} handleChange={handleChange} />
         <LTDPlan plan={auth?.user?.plan} />
-        <PricingPlans plan={plan} data={pricings} makePayment={makePayment} />
+        <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} />
       </CardContent>
       {/* <PricingCTA /> */}
       {/* <CardContent>

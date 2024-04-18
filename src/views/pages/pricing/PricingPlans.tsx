@@ -11,18 +11,20 @@ interface Props {
   plan: string
   data: any[] | null
   makePayment: any
+  loading: boolean
+  setLoading: any
 }
 
 const PricingPlans = (props: Props) => {
   // ** Props
-  const { plan, data, makePayment } = props
+  const { plan, data, makePayment, loading, setLoading } = props
 
 
   return (
     <Grid container spacing={15}>
       {data?.map((item: PricingPlanType, index: number) => (
         <Grid item xs={12} md={4} key={item.title.toLowerCase()}>
-          <PlanDetails plan={plan} data={item} index={index} makePayment={makePayment} />
+          <PlanDetails plan={plan} data={item} index={index} makePayment={makePayment} setLoading={setLoading} loading={loading} />
         </Grid>
       ))}
     </Grid>

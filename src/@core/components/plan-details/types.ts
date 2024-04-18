@@ -19,6 +19,8 @@ export type PricingPlanProps = {
   data?: PricingPlanType,
   index?: number
   makePayment: any
+  loading: boolean
+  setLoading: any
 }
 
 export type PricingFaqType = {
