@@ -18,6 +18,7 @@ export type PricingPlanProps = {
   plan: string
   data?: PricingPlanType,
   index?: number
+  makePayment: any
 }
 
 export type PricingFaqType = {

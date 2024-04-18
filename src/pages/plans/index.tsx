@@ -23,6 +23,8 @@ import PricingHeader from 'src/views/pages/pricing/PricingHeader'
 import PricingFooter from 'src/views/pages/pricing/PricingFooter'
 import LTDPlan from 'src/views/pages/pricing/LTDplan'
 import { useAuth } from 'src/hooks/useAuth'
+import { LoginRegistrationAPI } from 'src/services/API'
+import Swal from 'sweetalert2'
 
 // ** Styled Components
 const CardContent = styled(MuiCardContent)<CardContentProps>(({ theme }) => ({
@@ -46,7 +48,9 @@ const Pricing = () => {
       imgHeight: 100,
       monthlyPrice: 19,
       // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
-      currentPlan: false,
+      currentPlan:
+        (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
+          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'passenger' ? true : false,
       popularPlan: true,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
@@ -71,7 +75,9 @@ const Pricing = () => {
       monthlyPrice: 49,
       title: 'Co-Pilot',
       popularPlan: true,
-      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
+      currentPlan:
+        (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
+          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
       yearlyPlan: { perMonth: 49, totalAnnual: 588 },
@@ -91,7 +97,9 @@ const Pricing = () => {
       monthlyPrice: 99,
       title: 'Captain',
       popularPlan: true,
-      currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'free' ? false : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? true : false,
+      currentPlan:
+        (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
+          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
       yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
@@ -111,7 +119,7 @@ const Pricing = () => {
 
 
   // ** States
-  const [plan, setPlan] = useState<'monthly' | 'annually'>('annually')
+  const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
 
   const handleChange = (e: ChangeEvent<{ checked: boolean }>) => {
     if (e.target.checked) {
@@ -120,13 +128,50 @@ const Pricing = () => {
       setPlan('monthly')
     }
   }
+  console.log("auth.user", auth.user)
+
+  const makePayment = (plan: string) => {
+    Swal.fire({
+      text: 'Are you sure you want to subscribe to this plan?',
+      icon: 'question',
+      showCancelButton: true,
+      cancelButtonText: 'Cancel',
+      // cancelButtonColor: "#2979FF",
+      confirmButtonText: 'Subscribe',
+      confirmButtonColor: "#2979FF",
+
+
+    }).then((res: any) => {
+      // console.log("res:", res)
+      if (res.isConfirmed) {
+        LoginRegistrationAPI.makePayment({ plan: plan })
+          .then(response => {
+            console.log("response from makePayment:", response.data)
+            if (response.data.url) {
+              window.location.href = response.data.url
+            } else if (response.data == "subscription updated") {
+              LoginRegistrationAPI.updateUser({}).then(res => {
+                // console.log("res:", res)
+                auth.setUserDataWithToken(res)
+              }).catch(e => {
+
+              })
+            }
+          })
+          .catch(error => console.log("error:", error));
+      }
+
+    })
+
+  };
+
 
   return (
     <Card>
       <CardContent>
         <PricingHeader plan={plan} handleChange={handleChange} />
         <LTDPlan plan={auth?.user?.plan} />
-        <PricingPlans plan={plan} data={pricings} />
+        <PricingPlans plan={plan} data={pricings} makePayment={makePayment} />
       </CardContent>
       {/* <PricingCTA /> */}
       {/* <CardContent>

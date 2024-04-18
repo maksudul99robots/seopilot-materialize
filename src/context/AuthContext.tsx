@@ -22,6 +22,7 @@ const defaultProvider: AuthValuesType = {
   loading: true,
   setUser: () => null,
   setUserData: () => null,
+  setUserDataWithToken: () => null,
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
@@ -433,6 +434,16 @@ const AuthProvider = ({ children }: Props) => {
 
     }
   }
+  const setUserDataWithToken = (res: any) => {
+    try {
+      window.localStorage.setItem('userData', JSON.stringify(res.data.userData))
+      window.localStorage.setItem("seo-pilot-token", res.data.accessToken);
+      setUser({ ...res.data.userData })
+      window.location.href = window.location.origin;
+    } catch (e) {
+
+    }
+  }
 
   const handleResetToken = () => {
     LoginRegistrationAPI.reloadToken().then((res) => {
@@ -451,6 +462,7 @@ const AuthProvider = ({ children }: Props) => {
     loading,
     setUser,
     setUserData,
+    setUserDataWithToken,
     setLoading,
     login: handleLogin,
     logout: handleLogout,

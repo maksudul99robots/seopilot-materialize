@@ -34,7 +34,7 @@ const BoxFeature = styled(Box)<BoxProps>(({ theme }) => ({
 
 const PlanDetails = (props: PricingPlanProps) => {
   // ** Props
-  const { plan, data, index } = props
+  const { plan, data, index, makePayment } = props
   // console.log("plan, data:", plan, data)
 
   const renderFeatures = () => {
@@ -117,10 +117,23 @@ const PlanDetails = (props: PricingPlanProps) => {
         fullWidth
         color={data?.currentPlan ? 'success' : 'primary'}
         variant={data?.popularPlan ? 'contained' : 'outlined'}
+        disabled={data?.currentPlan ? true : false}
+
+        onClick={() => {
+          if (data?.title == 'Passenger') {
+            makePayment('passenger')
+          }
+          else if (data?.title == 'Co-Pilot') {
+            makePayment('copilot')
+          }
+          if (data?.title == 'Captain') {
+            makePayment('captain')
+          }
+        }}
       >
         {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
-        {'Plan Coming Soon'}
-        {/* {data?.currentPlan ? 'Your Current Plan' : 'Upgrade'} */}
+        {/* {'Plan Coming Soon'} */}
+        {data?.currentPlan ? 'Your Current Plan' : 'Upgrade'}
       </Button>
     </BoxWrapper>
   )

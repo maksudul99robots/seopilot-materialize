@@ -348,6 +348,15 @@ export const LoginRegistrationAPI = {
     async generateAIImage(data: any, url = "/generate-ai-img", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async completeCalculation(data: any, url = "/complete-payment-calculation", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async makePayment(data: any, url = "/paymentMethods/stripe/charge", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getUser(data: any, url = "/get-user", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

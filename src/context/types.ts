@@ -58,6 +58,7 @@ export type AuthValuesType = {
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
   setUserData: (userData: any) => void
+  setUserDataWithToken: (userData: any) => void
   login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
   register: (params: RegisterParams, errorCallback?: ErrCallbackType) => void
   acceptInvitation: (params: AcceptInvitationParams, errorCallback?: ErrCallbackType) => void
