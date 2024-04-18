@@ -243,7 +243,7 @@ const CurrentPlanCard = ({ data }: { data: PricingPlanType[] }) => {
               Annually
             </InputLabel>
           </Box>
-          <PricingPlans data={data} plan={plan} />
+          <PricingPlans data={data} plan={plan} makePayment={() => { }} />
         </DialogContent>
       </Dialog>
     </>
