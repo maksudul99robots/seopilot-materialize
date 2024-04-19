@@ -21,6 +21,7 @@ export type PricingPlanProps = {
   makePayment: any
   loading: boolean
   setLoading: any
+  calcelPayment: any
 }
 
 export type PricingFaqType = {

@@ -35,7 +35,7 @@ const BoxFeature = styled(Box)<BoxProps>(({ theme }) => ({
 
 const PlanDetails = (props: PricingPlanProps) => {
   // ** Props
-  const { plan, data, index, makePayment, loading, setLoading } = props
+  const { plan, data, index, makePayment, loading, setLoading, calcelPayment } = props
 
   // console.log("plan, data:", plan, data)
 
@@ -115,29 +115,46 @@ const PlanDetails = (props: PricingPlanProps) => {
         </Box>
       </Box>
       <BoxFeature>{renderFeatures()}</BoxFeature>
-      <Button
-        fullWidth
-        color={data?.currentPlan ? 'success' : 'primary'}
-        variant={data?.popularPlan ? 'contained' : 'outlined'}
-        disabled={data?.currentPlan || loading ? true : false}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          // size='small'
+          sx={{ padding: "10px 15px ", fontSize: "12px" }}
+          color={data?.currentPlan ? 'success' : 'primary'}
+          variant={data?.popularPlan ? 'contained' : 'outlined'}
+          disabled={data?.currentPlan || loading ? true : false}
 
-        onClick={() => {
-          if (data?.title == 'Passenger') {
-            makePayment('passenger')
-          }
-          else if (data?.title == 'Co-Pilot') {
-            makePayment('copilot')
-          }
-          if (data?.title == 'Captain') {
-            makePayment('captain')
-          }
-        }}
-        startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
-      >
-        {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
-        {/* {'Plan Coming Soon'} */}
-        {data?.currentPlan ? 'Your Current Plan' : 'Upgrade'}
-      </Button>
+          onClick={() => {
+            if (data?.title == 'Passenger') {
+              makePayment('passenger')
+            }
+            else if (data?.title == 'Co-Pilot') {
+              makePayment('copilot')
+            }
+            if (data?.title == 'Captain') {
+              makePayment('captain')
+            }
+          }}
+          startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
+        >
+          {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
+          {/* {'Plan Coming Soon'} */}
+          {data?.currentPlan ? 'Your Plan' : 'Choose Plan'}
+        </Button>
+        {data?.currentPlan ?
+          <Button
+            sx={{ padding: "10px 15px", fontSize: "12px", marginLeft: "5px" }}
+            // size='small'
+            color={data?.currentPlan ? 'error' : 'primary'}
+            variant={data?.popularPlan ? 'contained' : 'outlined'}
+            onClick={() => {
+              calcelPayment()
+            }}
+          >Cancel Plan</Button>
+          : null
+
+        }
+      </div>
+
     </BoxWrapper>
   )
 }

@@ -357,6 +357,12 @@ export const LoginRegistrationAPI = {
     async getUser(data: any, url = "/get-user", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async downgradeInfo(data: any, url = "/paymentMethods/downgrade-info", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async cancelSubscription(data: any, url = "/paymentMethods-cancel/stripe/charge", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

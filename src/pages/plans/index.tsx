@@ -170,14 +170,60 @@ const Pricing = () => {
     })
 
   };
+  const calcelPayment = () => {
+    Swal.fire({
+      text: 'Are you sure you want to cancel subscription?',
+      icon: 'question',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      // cancelButtonColor: "#2979FF",
+      confirmButtonText: 'Yes',
+      confirmButtonColor: "#2979FF",
 
+
+    }).then((res: any) => {
+      // console.log("res:", res)
+      if (res.isConfirmed) {
+        setLoading(true)
+        LoginRegistrationAPI.cancelSubscription({})
+          .then(response => {
+            // console.log("response from makePayment:", response.data)
+            if (response.data.url) {
+              window.location.href = response.data.url
+            } else if (response.data == "subscription updated") {
+              setTimeout(() => {
+                LoginRegistrationAPI.updateUser({}).then(res => {
+                  // console.log("res:", res)
+                  auth.setUserDataWithToken(res)
+
+                }).catch(e => {
+
+                })
+              }, 5000)
+
+            }
+          })
+          .catch(error => console.log("error:", error));
+      }
+
+    })
+
+  };
+
+  useEffect(() => {
+    LoginRegistrationAPI.downgradeInfo({}).then(res => {
+      console.log("downgrade info:", res.data)
+    }).catch(e => {
+
+    })
+  }, [])
 
   return (
     <Card>
       <CardContent>
         <PricingHeader plan={plan} handleChange={handleChange} />
         <LTDPlan plan={auth?.user?.plan} />
-        <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} />
+        <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} calcelPayment={calcelPayment} />
       </CardContent>
       {/* <PricingCTA /> */}
       {/* <CardContent>
