@@ -3,9 +3,10 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import { Alert } from '@mui/material'
 
 
-const LTDPlan = ({ plan }: any) => {
+const LTDPlan = ({ plan, downOrCancel }: any) => {
 
     return (
 
@@ -33,6 +34,23 @@ const LTDPlan = ({ plan }: any) => {
                     If you’re in the market for new desktops, notebooks, or PDAs, there are a myriad of choices. Here’s a rundown
                     of some of the best systems available.
                 </Typography> */}
+                    {
+                        downOrCancel?.downgrade?.length > 0 ?
+                            <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
+                                {downOrCancel?.downgrade}
+                            </Alert>
+                            :
+                            null
+                    }
+                    {
+                        downOrCancel?.cancel?.length > 0 ?
+                            <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
+                                {downOrCancel?.cancel}
+                            </Alert>
+                            :
+                            null
+                    }
+
                 </CardContent>
                 {/* <CardActions className='card-action-dense'>
                 <Button>Read More</Button>

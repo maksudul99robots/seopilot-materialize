@@ -134,7 +134,7 @@ const PlanDetails = (props: PricingPlanProps) => {
               makePayment('captain')
             }
           }}
-          startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
+        // startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
         >
           {/* {data?.currentPlan ? 'Your Current Plan' : (index == 0 ? "Free" : 'Upgrade')} */}
           {/* {'Plan Coming Soon'} */}
@@ -146,6 +146,7 @@ const PlanDetails = (props: PricingPlanProps) => {
             // size='small'
             color={data?.currentPlan ? 'error' : 'primary'}
             variant={data?.popularPlan ? 'contained' : 'outlined'}
+            disabled={loading ? true : false}
             onClick={() => {
               calcelPayment()
             }}

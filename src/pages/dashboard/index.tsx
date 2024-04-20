@@ -35,15 +35,22 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        // console.log("userData", userData)
-        if (userData?.last_login) {
-            // console.log(new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z'), userData?.last_login, new Date(userData?.last_login), new Date('2023-11-26T11:11:18.360Z'))
-            if (new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z')) {
-                auth.logout()
-            }
-        } else {
-            // console.log("else!!!!!!!")
-        }
+        // // console.log("userData", userData)
+        // if (userData?.last_login) {
+        //     // console.log(new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z'), userData?.last_login, new Date(userData?.last_login), new Date('2023-11-26T11:11:18.360Z'))
+        //     if (new Date(userData?.last_login) < new Date('2023-11-26T11:11:18.360Z')) {
+        //         auth.logout()
+        //     }
+        // } else {
+        //     // console.log("else!!!!!!!")
+        // }
+
+        LoginRegistrationAPI.getUser({}).then(res => {
+            if (auth && auth?.user?.workspace_owner_info?.plan.stripe_price_id != res.data.userData.workspace_owner_info.plan.stripe_price_id)
+                auth.setUserDataWithToken(res)
+        }).catch(e => {
+
+        })
 
 
     })

@@ -121,6 +121,7 @@ const Pricing = () => {
   // ** States
   const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
   const [loading, setLoading] = useState(false)
+  const [downOrCancel, setDownOrCancel] = useState<any>(null)
 
   const handleChange = (e: ChangeEvent<{ checked: boolean }>) => {
     if (e.target.checked) {
@@ -153,7 +154,7 @@ const Pricing = () => {
               window.location.href = response.data.url
             } else if (response.data == "subscription updated") {
               setTimeout(() => {
-                LoginRegistrationAPI.updateUser({}).then(res => {
+                LoginRegistrationAPI.getUser({}).then(res => {
                   // console.log("res:", res)
                   auth.setUserDataWithToken(res)
 
@@ -192,7 +193,7 @@ const Pricing = () => {
               window.location.href = response.data.url
             } else if (response.data == "subscription updated") {
               setTimeout(() => {
-                LoginRegistrationAPI.updateUser({}).then(res => {
+                LoginRegistrationAPI.getUser({}).then(res => {
                   // console.log("res:", res)
                   auth.setUserDataWithToken(res)
 
@@ -213,6 +214,7 @@ const Pricing = () => {
   useEffect(() => {
     LoginRegistrationAPI.downgradeInfo({}).then(res => {
       console.log("downgrade info:", res.data)
+      setDownOrCancel(res.data)
     }).catch(e => {
 
     })
@@ -222,7 +224,7 @@ const Pricing = () => {
     <Card>
       <CardContent>
         <PricingHeader plan={plan} handleChange={handleChange} />
-        <LTDPlan plan={auth?.user?.plan} />
+        <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} />
         <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} calcelPayment={calcelPayment} />
       </CardContent>
       {/* <PricingCTA /> */}
