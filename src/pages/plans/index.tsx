@@ -50,7 +50,7 @@ const Pricing = () => {
       // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'passenger' ? true : false,
+          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'passenger' ? true : false,
       popularPlan: true,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
@@ -77,7 +77,7 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
+          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
       yearlyPlan: { perMonth: 49, totalAnnual: 588 },
@@ -99,7 +99,7 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
+          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
       yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
@@ -130,7 +130,7 @@ const Pricing = () => {
       setPlan('monthly')
     }
   }
-  // console.log("auth.user", auth.user)
+  console.log("auth.user", auth.user)
 
   const makePayment = (plan: string) => {
     Swal.fire({
