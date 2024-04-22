@@ -218,6 +218,14 @@ const Pricing = () => {
     }).catch(e => {
 
     })
+
+
+    LoginRegistrationAPI.getUser({}).then(res => {
+      if (auth && auth?.user?.workspace_owner_info?.plan.stripe_price_id != res.data.userData.workspace_owner_info.plan.stripe_price_id)
+        auth.setUserDataWithToken(res)
+    }).catch(e => {
+
+    })
   }, [])
 
   return (
