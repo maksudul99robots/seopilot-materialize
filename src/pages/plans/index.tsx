@@ -130,7 +130,7 @@ const Pricing = () => {
       setPlan('monthly')
     }
   }
-  console.log("auth.user", auth.user)
+  // console.log("auth.user", auth.user)
 
   const makePayment = (plan: string) => {
     Swal.fire({
