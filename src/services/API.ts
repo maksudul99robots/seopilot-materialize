@@ -363,6 +363,13 @@ export const LoginRegistrationAPI = {
     async cancelSubscription(data: any, url = "/paymentMethods-cancel/stripe/charge", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async generateIdeas(data: any, url = "/generate-ideas", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+
+    async getIdeaList(data: any, url = "/get-idea-list", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

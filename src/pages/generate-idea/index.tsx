@@ -3,6 +3,8 @@ import { useState } from "react"
 import { CustomRadioIconsProps } from "src/@core/components/custom-radio/types"
 import Icon from "src/@core/components/icon"
 import GetCountryList from "../create-article/CountryList"
+import { LoginRegistrationAPI } from "src/services/API"
+import { useRouter } from "next/router"
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -27,9 +29,18 @@ const GenerateIdeas = (props: any) => {
     const [audience, setAudience] = useState('')
     const [country, setCountry] = useState<string>('Default')
     const [loading, setLoading] = useState(false)
-
+    const router = useRouter()
     const submit = () => {
         setLoading(true)
+        // console.log(topic, language, country, audience)
+        // return
+        LoginRegistrationAPI.generateIdeas({ topic, language, country, audience }).then(res => {
+            setLoading(false)
+            router.push('/idea-list/' + res.data.id)
+        }).catch((e: any) => {
+            setLoading(false)
+            console.log("e:", e)
+        })
     }
     return (
         <Card>

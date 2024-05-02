@@ -71,7 +71,7 @@ const statusObj: StatusObj = {
 }
 
 
-import { LoginRegistrationAPI } from '../../services/API'
+import { LoginRegistrationAPI } from '../../../services/API'
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
@@ -81,7 +81,8 @@ import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import { makeid } from 'src/services/makeid'
-import sampleIdeas from './sample'
+import sampleIdeas from '../sample'
+import { number } from 'yup'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -103,6 +104,7 @@ const IdeaList = () => {
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([]);
+    const [topic, setTopic] = useState<string>('');
     const [retryLoading, setRetryLoading] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
@@ -135,8 +137,8 @@ const IdeaList = () => {
         {
             flex: 0.5,
             minWidth: 320,
-            field: 'topic',
-            headerName: 'Title',
+            field: 'keyword',
+            headerName: 'Keyword',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -175,35 +177,18 @@ const IdeaList = () => {
             flex: 0.1,
             minWidth: 90,
             headerName: 'Comp',
-            field: 'comp',
+            field: 'competition',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
                     <Typography variant='body2' sx={{ color: row.comp == 'high' ? "#EF4843" : "#F58F4F" }}>
-                        {row.comp.toUpperCase()}
+                        {row.competition.toUpperCase()}
                     </Typography>
                 )
 
             }
         },
-
-        {
-            flex: 0.175,
-            minWidth: 140,
-            field: 'monthly_searches',
-            headerName: 'Monthly Searches',
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <Typography variant='body2' sx={{ color: row.comp == 'high' ? "#EF4843" : "#F58F4F" }}>
-                        {row.ms}
-                    </Typography>
-                )
-
-            }
-        },
-
 
         {
             flex: 0.175,
@@ -223,14 +208,38 @@ const IdeaList = () => {
     ]
 
     useEffect(() => {
+        if (router.query.id) {
+            LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
+                console.log("res:", res.data)
+                setTopic(res.data.topic)
+                let finalArray: any[] = [];
+                if (res.data.keywords) {
+                    res.data.keywords.map((k: any, i: number) => {
+                        if (i < 5) {
+                            let x = {
+                                id: i,
+                                keyword: k.keyword,
+                                volume: k.avg_monthly_searches,
+                                competition: k.competition
+                            }
+                            finalArray.push(x);
+                        }
 
-        // LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-        //     loadServerRows
-        //     setMainData(res.data);
+                        if (i == 4) {
+                            setMainData(finalArray)
+                        }
+                    })
 
-        // })
-        setMainData(sampleIdeas())
-    }, [])
+                }
+
+            }).catch(e => {
+
+            })
+        }
+
+
+    }, [router.query.id])
+
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             // Swal.fire('401',
@@ -262,11 +271,11 @@ const IdeaList = () => {
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     // item.output?.toLowerCase().includes(queryLowered) ||
-                    item.topic?.toLowerCase().includes(queryLowered) ||
+                    item.keyword?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.source?.toLowerCase().includes(queryLowered) ||
-                    // item.user_id.toLowerCase().includes(queryLowered) ||
-                    item.createdAt.toString().toLowerCase().includes(queryLowered) //||
+                    item.volume?.toLowerCase().includes(queryLowered)
+                // item.user_id.toLowerCase().includes(queryLowered) ||
+                // item.createdAt.toString().toLowerCase().includes(queryLowered) //||
                 // item.updatedAt.toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
@@ -321,7 +330,7 @@ const IdeaList = () => {
                             variant: 'outlined'
                         },
                         toolbar: {
-                            title: "Generate Article Ideas",
+                            title: "Generate Article Ideas on : " + topic,
                             value: searchValue,
                             clearSearch: () => handleSearch(''),
                             onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
