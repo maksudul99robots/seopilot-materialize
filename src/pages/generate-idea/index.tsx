@@ -130,10 +130,12 @@ const GenerateIdeas = (props: any) => {
                         {/* </Grid> */}
 
                         {/* <Grid item xs={6} sm={6} sx={{ paddingLeft: "5px" }}> */}
-                        <FormControl fullWidth sx={{ paddingLeft: "5px" }}>
+                        {/* <Grid item xs={12} sm={6} sx={{ paddingLeft: "5px" }}> */}
+                        <FormControl fullWidth>
                             <InputLabel id='country-select'>Article Country</InputLabel>
                             <GetCountryList country={country} setCountry={setCountry} />
                         </FormControl>
+                        {/* </Grid> */}
                         {/* </Grid> */}
                     </Box>
                 </Grid>

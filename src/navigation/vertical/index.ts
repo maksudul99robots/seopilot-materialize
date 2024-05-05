@@ -28,20 +28,20 @@ const navigation = (): VerticalNavItemsType => {
         path: '/folders'
       },
       {
+        title: 'Article Cluster',
+        icon: 'icons8:idea',
+        path: '/generate-idea'
+      },
+      {
+        title: 'Idea Library',
+        icon: 'fluent-mdl2:folder-list-mirrored',
+        path: '/idea-list'
+      },
+      {
         title: 'Schedule',
         icon: 'fluent-mdl2:date-time-mirrored',
         path: '/schedule'
       },
-      // {
-      //   title: 'Keyword Research',
-      //   icon: 'icons8:idea',
-      //   path: '/generate-idea'
-      // },
-      // {
-      //   title: 'Idea Library',
-      //   icon: 'fluent-mdl2:folder-list-mirrored',
-      //   path: '/idea-list'
-      // },
       {
         sectionTitle: 'Workspace Settings'
       },
