@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 
 // ** Third Party Imports
-import { EditorState, ContentState, convertFromHTML, convertToRaw, Modifier, SelectionState } from 'draft-js'
+import { EditorState, ContentState, convertFromHTML, convertToRaw, Modifier, SelectionState, ContentBlock, genKey } from 'draft-js'
 import { convertToHTML, parseHTML } from 'draft-convert';
 import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 import { Button } from '@mui/material';
@@ -247,7 +247,7 @@ const EditorControlled = (props: any) => {
   }
 
   const replaceText = (newText) => {
-
+    // newText = "<ul><li>yudjshf</li></ul>"
     const selection = lastSelection;
     const contentState = lastCurrentState;
     const newContentState = Modifier.replaceText(
@@ -263,7 +263,47 @@ const EditorControlled = (props: any) => {
     );
 
     setValue(newEditorState);
+
   };
+
+
+  const replaceTextWithList = (newText, listType) => {
+    const selection = lastSelection;
+    const contentState = lastCurrentState;
+
+    // Split the new text into list items
+    // const listItems = newText.split('\n').filter(item => item.trim() !== '');
+
+    // Create a new ContentState with a list block
+    const listItemsBlocks = newText.map(item => {
+      return new ContentBlock({
+        key: genKey(),
+        type: listType,
+        text: item.trim(),
+      });
+    });
+
+    // Merge the list items blocks into a single list block
+    const listBlock = ContentState.createFromBlockArray(listItemsBlocks);
+
+    // Replace the text with the list block
+    const newContentState = Modifier.replaceWithFragment(
+      contentState,
+      selection,
+      listBlock.getBlockMap()
+    );
+
+    const newEditorState = EditorState.push(
+      value,
+      newContentState,
+      'replace-text'
+    );
+
+    setValue(newEditorState);
+  };
+
+
+
 
   const setSelectionAndState = () => {
     setLastSelection(value.getSelection())
@@ -305,7 +345,7 @@ const EditorControlled = (props: any) => {
     <div>
       <div className="custom-toolbar" style={{ ...toolbarPosition }}>
 
-        <ToolbarDropdown text={text} article_id={props.article_id} setReloadArticle={props.setReloadArticle} reloadArticle={props.reloadArticle} replaceText={replaceText} setSelectionAndState={setSelectionAndState} />
+        <ToolbarDropdown replaceTextWithList={replaceTextWithList} text={text} article_id={props.article_id} setReloadArticle={props.setReloadArticle} reloadArticle={props.reloadArticle} replaceText={replaceText} setSelectionAndState={setSelectionAndState} />
       </div>
 
       <ReactDraftWysiwyg

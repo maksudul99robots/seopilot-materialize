@@ -177,7 +177,7 @@ export default function ToolbarDropdown(props: any) {
                         handleClose={handleClose}
                     />
                 </MenuItem>
-                {/* <Divider sx={{ my: 0.5 }} />
+                <Divider sx={{ my: 0.5 }} />
                 <MenuItem color='#2979FF' onClick={() => {
                     // handleClose()
                 }} disableRipple>
@@ -187,9 +187,10 @@ export default function ToolbarDropdown(props: any) {
                         reloadArticle={props.reloadArticle}
                         article_id={props.article_id}
                         replaceText={props.replaceText}
+                        replaceTextWithList={props.replaceTextWithList}
                         handleClose={handleClose}
                     />
-                </MenuItem> */}
+                </MenuItem>
             </StyledMenu>
         </div>
     );

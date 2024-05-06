@@ -42,7 +42,7 @@ const Bulletize = (props: any) => {
   const [model, setModel] = useState<string>('gpt-4-1106-preview');
   const [text, setText] = useState(props.text)
   const [editedText, setEditedText] = useState(props.text)
-  const [output, setOutput] = useState('')
+  const [output, setOutput] = useState<any>([])
   const handleClose = () => {
     setShow(false)
   }
@@ -70,15 +70,19 @@ const Bulletize = (props: any) => {
       text: editedText,
       original_text: text,
       article_id: props.article_id,
-      type: 'shorten',
+      type: 'bulletize',
       // charLenth: finalLength,
-      length: length
+      // length: length
     }).then((res: any) => {
+
       setLoading(false)
       if (res.status == 200) {
         // router.reload();
+        // console.log("response :", res.data)
+        let o = JSON.parse(res.data)
+
         props.setReloadArticle(props.reloadArticle + 1)
-        setOutput(res.data)
+        setOutput(o)
         // handleClose()
       }
     }).catch(e => {
@@ -103,7 +107,7 @@ const Bulletize = (props: any) => {
         } else {
           setShow(true);
         }
-      }} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="carbon:cut-out" />}>Bulletize</Button>
+      }} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="fluent:text-bullet-list-ltr-20-regular" />}>Bulletize</Button>
 
       <Dialog
         fullWidth
@@ -134,7 +138,7 @@ const Bulletize = (props: any) => {
           </IconButton>
 
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Grid item sm={12} xs={12} sx={{ width: "49%", marginRight: "5px" }}>
+            <Grid item sm={12} xs={12} sx={{ width: "100%", marginRight: "5px" }}>
 
               <FormControl fullWidth>
                 <InputLabel id='country-select'>AI Model</InputLabel>
@@ -182,30 +186,27 @@ const Bulletize = (props: any) => {
           // }}
           />
           {
-            output != '' &&
-            <>
+            output.length > 0 &&
+            <div >
               <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "20px", marginBottom: "5px" }}>
                 <Typography variant='body1' sx={{ fontWeight: "500", fontSize: "18px" }}>
                   Output Text
                 </Typography>
-                <Icon icon="clarity:copy-line" style={{ cursor: "pointer" }} onClick={e => {
+                {/* <Icon icon="clarity:copy-line" style={{ cursor: "pointer" }} onClick={e => {
                   navigator.clipboard.writeText(output)
                   toast('Output Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
-                }} />
+                }} /> */}
               </Box>
-              <TextField
-                id="outlined-multiline-flexible"
-                // label="AI Output"
-                multiline
-                maxRows={10}
-                value={output}
-                sx={{ width: "100%", }}
-                onChange={(e) => {
-                  setOutput(e.target.value)
-                }}
-
-              />
-            </>
+              <div style={{ border: "1px solid #CACBD2", borderRadius: "10px" }}>
+                <ul>
+                  {output.map((o: any) => {
+                    return (
+                      <li>{o}</li>
+                    )
+                  })}
+                </ul>
+              </div>
+            </div>
 
           }
 
@@ -223,9 +224,9 @@ const Bulletize = (props: any) => {
           }}
         >
 
-          <Button variant='contained' startIcon={<Icon icon={loading ? "line-md:loading-twotone-loop" : "f7:wand-stars-inverse"}></Icon>} onClick={handleSubmit}>Shorten</Button>
+          <Button variant='contained' startIcon={<Icon icon={loading ? "line-md:loading-twotone-loop" : "f7:wand-stars-inverse"}></Icon>} onClick={handleSubmit}>Bulletize</Button>
           <Button variant='outlined' sx={{ marginLeft: "5px" }} onClick={e => {
-            props.replaceText(output)
+            props.replaceTextWithList(output, 'unordered-list-item')
           }}
             startIcon={<Icon icon="tabler:replace" />}
           >Replace</Button>
