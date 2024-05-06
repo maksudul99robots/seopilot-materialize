@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import Expand from './Expand';
 import Rephrase from './Rephrase';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+import Shorten from './Shorten';
+import Bulletize from './Bulletize';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -121,18 +123,19 @@ export default function ToolbarDropdown(props: any) {
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                onClick={() => {
-                    if (props.text.length > 800 || props.text.length < 20) {
-                        Swal.fire({
-                            // title: 'Selected Character Must be Within 20 to 800',
-                            text: 'Selected Character Must be Within 20 to 800',
-                            icon: 'warning',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: "#2979FF"
-                        })
-                        handleClose();
-                    }
-                }}
+            // onClick={(e) => {
+            //     console.log(e)
+            //     if (props.text.length > 800 || props.text.length < 20) {
+            //         Swal.fire({
+            //             // title: 'Selected Character Must be Within 20 to 800',
+            //             text: 'Selected Character Must be Within 20 to 800',
+            //             icon: 'warning',
+            //             confirmButtonText: 'OK',
+            //             confirmButtonColor: "#2979FF"
+            //         })
+            //         handleClose();
+            //     }
+            // }}
             >
                 <div onClick={() => {
                 }}>
@@ -142,6 +145,7 @@ export default function ToolbarDropdown(props: any) {
                             reloadArticle={props.reloadArticle}
                             article_id={props.article_id}
                             replaceText={props.replaceText}
+                            handleClose={handleClose}
 
                         />
                     </MenuItem>
@@ -157,9 +161,35 @@ export default function ToolbarDropdown(props: any) {
                         reloadArticle={props.reloadArticle}
                         article_id={props.article_id}
                         replaceText={props.replaceText}
-
+                        handleClose={handleClose}
                     />
                 </MenuItem>
+                <Divider sx={{ my: 0.5 }} />
+                <MenuItem color='#2979FF' onClick={() => {
+                    // handleClose()
+                }} disableRipple>
+                    <Shorten
+                        text={props.text}
+                        setReloadArticle={props.setReloadArticle}
+                        reloadArticle={props.reloadArticle}
+                        article_id={props.article_id}
+                        replaceText={props.replaceText}
+                        handleClose={handleClose}
+                    />
+                </MenuItem>
+                {/* <Divider sx={{ my: 0.5 }} />
+                <MenuItem color='#2979FF' onClick={() => {
+                    // handleClose()
+                }} disableRipple>
+                    <Bulletize
+                        text={props.text}
+                        setReloadArticle={props.setReloadArticle}
+                        reloadArticle={props.reloadArticle}
+                        article_id={props.article_id}
+                        replaceText={props.replaceText}
+                        handleClose={handleClose}
+                    />
+                </MenuItem> */}
             </StyledMenu>
         </div>
     );

@@ -140,8 +140,12 @@ export default function Page() {
                                     setFImg(x);
 
                                 } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
+
                                     let x = JSON.parse(responseImg?.data?.featured_img)
                                     setFImg(x[responseImg.data.index])
+
+
+
                                 } else {
                                     setFImg(res?.data?.featured_img)
                                 }
@@ -152,6 +156,11 @@ export default function Page() {
                                     setFImg(JSON.parse(res?.data?.featured_img))
                                 } else {
                                     setFImg(res?.data?.featured_img)
+                                }
+                                if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
+                                    toast.warning('Your given image prompt is not accepted by DALL-E. It responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."', {
+                                        autoClose: 5000,
+                                    })
                                 }
 
                             })
@@ -186,18 +195,18 @@ export default function Page() {
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
 
-                        if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
-                            // Swal.fire({
-                            //     title: 'Unable to Generate Image',
-                            //     text: 'Your given image prompt is not accepted by DALL-E. DALL-E responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."',
-                            //     icon: 'warning',
-                            //     confirmButtonText: 'OK',
-                            //     confirmButtonColor: "#2979FF"
-                            // })
-                            toast.warning('Your given image prompt is not accepted by DALL-E. It responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."', {
-                                autoClose: 5000,
-                            })
-                        }
+                        // if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
+                        //     // Swal.fire({
+                        //     //     title: 'Unable to Generate Image',
+                        //     //     text: 'Your given image prompt is not accepted by DALL-E. DALL-E responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."',
+                        //     //     icon: 'warning',
+                        //     //     confirmButtonText: 'OK',
+                        //     //     confirmButtonColor: "#2979FF"
+                        //     // })
+                        //     toast.warning('Your given image prompt is not accepted by DALL-E. It responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."', {
+                        //         autoClose: 5000,
+                        //     })
+                        // }
                         setAlreadyLoaded(true)
 
                     }, 1000)
@@ -266,8 +275,12 @@ export default function Page() {
                                                 setFImg(x);
 
                                             } else if (responseImg.data.service == 'dall-e-3' || responseImg.data.service == 'dall-e-2') {
+
                                                 let x = JSON.parse(responseImg?.data?.featured_img)
                                                 setFImg(x[responseImg.data.index])
+
+
+
                                             } else {
                                                 setFImg(res?.data?.featured_img)
                                             }
@@ -277,6 +290,11 @@ export default function Page() {
                                                 setFImg(JSON.parse(res?.data?.featured_img))
                                             } else {
                                                 setFImg(res?.data?.featured_img)
+                                            }
+                                            if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
+                                                toast.warning('Your given image prompt is not accepted by DALL-E. It responded with: "Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system."', {
+                                                    autoClose: 5000,
+                                                })
                                             }
 
                                         })

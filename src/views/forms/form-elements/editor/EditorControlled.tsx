@@ -247,9 +247,9 @@ const EditorControlled = (props: any) => {
   }
 
   const replaceText = (newText) => {
+
     const selection = lastSelection;
     const contentState = lastCurrentState;
-
     const newContentState = Modifier.replaceText(
       contentState,
       selection,
@@ -271,7 +271,7 @@ const EditorControlled = (props: any) => {
   }
 
   useEffect(() => {
-    if (text?.length > 20 && text?.length < 800) {
+    if (text?.length > 20 && text?.length < 3000) {
       setLastSelection(value.getSelection())
       setLastCurrentState(value.getCurrentContent())
     }

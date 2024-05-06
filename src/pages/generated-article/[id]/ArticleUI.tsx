@@ -41,7 +41,6 @@ import ImageSection from './ImageSection';
 
 export default function ArticleIU(props: any) {
 
-    // console.log("props.imgService and img", props.imgService, props.fImg)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -198,11 +197,13 @@ export default function ArticleIU(props: any) {
                         save={props.save}
                         download={download}
                         plainText={props.plainText}
-                        fImg={fImg}
+                        fImg={props.fImg}
                         listicleOutlines={props.listicleOutlines}
                         articleType={props.articleType}
                         numberedItem={props.numberedItem}
-                        imgService={props.imgService} />
+                        imgService={props.imgService}
+                        featuredImgIndex={props.featuredImgIndex}
+                    />
                     <SelectConnects timezone={props.timezone} html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} article_id={props.id} />
                 </Box>
             </Box >
