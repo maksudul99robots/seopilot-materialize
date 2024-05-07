@@ -130,7 +130,7 @@ const Bulletize = (props: any) => {
             <Typography variant='h5' sx={{ lineHeight: '2rem' }}>
               Bulletize Text
             </Typography>
-            <Typography variant='body2'>Bulletize your selected text. You can edit your text and choose your model and length of the text.</Typography>
+            <Typography variant='body2'>Bulletize your selected text. You can edit your text and choose your model.</Typography>
             {/* <Typography variant='body2'>Select a Site to Send Article</Typography> */}
           </Box>
           <IconButton size='small' onClick={handleClose} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
