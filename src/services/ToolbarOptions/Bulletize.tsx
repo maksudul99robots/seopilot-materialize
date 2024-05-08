@@ -41,6 +41,7 @@ const Bulletize = (props: any) => {
   const [finalLength, setFinalLength] = useState<number>((props.text?.length * 80) / 100);
   const [model, setModel] = useState<string>('gpt-4-1106-preview');
   const [text, setText] = useState(props.text)
+  const [summary, setSummary] = useState('')
   const [editedText, setEditedText] = useState(props.text)
   const [output, setOutput] = useState<any>([])
   const handleClose = () => {
@@ -79,10 +80,11 @@ const Bulletize = (props: any) => {
       if (res.status == 200) {
         // router.reload();
         // console.log("response :", res.data)
-        let o = JSON.parse(res.data)
+        let o = JSON.parse(res.data.list)
 
         props.setReloadArticle(props.reloadArticle + 1)
         setOutput(o)
+        setSummary(res.data.summary)
         // handleClose()
       }
     }).catch(e => {
@@ -226,7 +228,7 @@ const Bulletize = (props: any) => {
 
           <Button variant='contained' startIcon={<Icon icon={loading ? "line-md:loading-twotone-loop" : "f7:wand-stars-inverse"}></Icon>} onClick={handleSubmit}>Bulletize</Button>
           <Button variant='outlined' sx={{ marginLeft: "5px" }} onClick={e => {
-            props.replaceTextWithList(output, 'unordered-list-item')
+            props.replaceTextWithList(summary, output, 'unordered-list-item')
           }}
             startIcon={<Icon icon="tabler:replace" />}
           >Replace</Button>

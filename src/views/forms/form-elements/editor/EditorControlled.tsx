@@ -267,15 +267,54 @@ const EditorControlled = (props: any) => {
   };
 
 
-  const replaceTextWithList = (newText, listType) => {
+  // const replaceTextWithList = (newText, listType) => {
+  //   const selection = lastSelection;
+  //   const contentState = lastCurrentState;
+
+  //   // Split the new text into list items
+  //   // const listItems = newText.split('\n').filter(item => item.trim() !== '');
+
+  //   // Create a new ContentState with a list block
+  //   const listItemsBlocks = newText.map(item => {
+  //     return new ContentBlock({
+  //       key: genKey(),
+  //       type: listType,
+  //       text: item.trim(),
+  //     });
+  //   });
+
+  //   // Merge the list items blocks into a single list block
+  //   const listBlock = ContentState.createFromBlockArray(listItemsBlocks);
+
+  //   // Replace the text with the list block
+  //   const newContentState = Modifier.replaceWithFragment(
+  //     contentState,
+  //     selection,
+  //     listBlock.getBlockMap()
+  //   );
+
+  //   const newEditorState = EditorState.push(
+  //     value,
+  //     newContentState,
+  //     'replace-text'
+  //   );
+
+  //   setValue(newEditorState);
+  // };
+
+  const replaceTextWithList = (initialText, listItems, listType) => {
     const selection = lastSelection;
     const contentState = lastCurrentState;
 
-    // Split the new text into list items
-    // const listItems = newText.split('\n').filter(item => item.trim() !== '');
+    // Create a ContentBlock for the initial text
+    const initialBlock = new ContentBlock({
+      key: genKey(),
+      type: 'unstyled', // or any other appropriate type
+      text: initialText,
+    });
 
-    // Create a new ContentState with a list block
-    const listItemsBlocks = newText.map(item => {
+    // Create a new ContentState with the initial text block followed by the list block
+    const listItemsBlocks = listItems.map(item => {
       return new ContentBlock({
         key: genKey(),
         type: listType,
@@ -283,14 +322,14 @@ const EditorControlled = (props: any) => {
       });
     });
 
-    // Merge the list items blocks into a single list block
-    const listBlock = ContentState.createFromBlockArray(listItemsBlocks);
+    const blocks = [initialBlock, ...listItemsBlocks];
+    const contentStateWithTextAndList = ContentState.createFromBlockArray(blocks);
 
-    // Replace the text with the list block
+    // Replace the text with the initial text and list blocks
     const newContentState = Modifier.replaceWithFragment(
       contentState,
       selection,
-      listBlock.getBlockMap()
+      contentStateWithTextAndList.getBlockMap()
     );
 
     const newEditorState = EditorState.push(
@@ -301,7 +340,6 @@ const EditorControlled = (props: any) => {
 
     setValue(newEditorState);
   };
-
 
 
 

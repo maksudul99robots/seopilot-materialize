@@ -455,7 +455,8 @@ export default function CreateArticle(props: any) {
                         citation: citation,
                         folder_id: folder,
                         retryArticle: retryArticle,
-                        article_id: router.query.id
+                        article_id: router.query.id,
+                        no_of_citations: noOfCitations
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -528,7 +529,8 @@ export default function CreateArticle(props: any) {
                             citation: citation,
                             folder_id: folder,
                             retryArticle: retryArticle,
-                            article_id: router.query.id
+                            article_id: router.query.id,
+                            no_of_citations: noOfCitations
                         }
                     ).then(res => {
                         // console.log("res:", res);
@@ -1304,7 +1306,7 @@ export default function CreateArticle(props: any) {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <LightTooltip title={
+                                {/* <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
                                         System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
                                     </p>
@@ -1312,7 +1314,7 @@ export default function CreateArticle(props: any) {
                                     <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
                                         <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
                                     </div>
-                                </LightTooltip >
+                                </LightTooltip > */}
                             </Box>
 
 
