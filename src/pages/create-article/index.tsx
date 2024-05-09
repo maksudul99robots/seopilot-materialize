@@ -270,7 +270,9 @@ export default function CreateArticle(props: any) {
                     if (res.data.folder_id) {
                         setFolder(res.data.folder_id)
                     }
-
+                    if (res.data.no_of_citations) {
+                        setNoOfCitations(res.data.no_of_citations)
+                    }
                     // }
                 }
             }).catch(e => {
