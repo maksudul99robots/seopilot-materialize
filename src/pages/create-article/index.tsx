@@ -138,7 +138,7 @@ export default function CreateArticle(props: any) {
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
     const [citation, setCitation] = useState(false);
-    const [noOfCitations, setNoOfCitations] = useState('5-10');
+    const [noOfCitations, setNoOfCitations] = useState('1-10');
     const [introduction, setIntroduction] = useState(true);
     const [conclusion, setConclusion] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -1297,11 +1297,10 @@ export default function CreateArticle(props: any) {
                                             }}
                                         >
 
-                                            <MenuItem value="5-10">5-10</MenuItem>
-                                            <MenuItem value="10-15">10-15</MenuItem>
-                                            <MenuItem value="15-20">15-20</MenuItem>
-                                            <MenuItem value="20-25">20-25</MenuItem>
-                                            <MenuItem value="25+">25+</MenuItem>
+                                            <MenuItem value="1-10">Low (1-10)</MenuItem>
+                                            <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
+                                            <MenuItem value="20+">High (20+)</MenuItem>
+
 
                                         </Select>
                                     </FormControl>
