@@ -200,6 +200,7 @@ const Bulletize = (props: any) => {
                 }} /> */}
               </Box>
               <div style={{ border: "1px solid #CACBD2", borderRadius: "10px" }}>
+                <p style={{ paddingLeft: "15px" }}>{summary}</p>
                 <ul>
                   {output.map((o: any) => {
                     return (
