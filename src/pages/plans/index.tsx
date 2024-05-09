@@ -55,8 +55,8 @@ const Pricing = () => {
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
-        perMonth: 19,
-        totalAnnual: 288
+        perMonth: 15.8,
+        totalAnnual: 190
       },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
@@ -80,7 +80,7 @@ const Pricing = () => {
           (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
-      yearlyPlan: { perMonth: 49, totalAnnual: 588 },
+      yearlyPlan: { perMonth: 40.8, totalAnnual: 490 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
@@ -102,7 +102,7 @@ const Pricing = () => {
           (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
-      yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
+      yearlyPlan: { perMonth: 82.5, totalAnnual: 990 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
@@ -231,8 +231,8 @@ const Pricing = () => {
   return (
     <Card>
       <CardContent>
-        <PricingHeader plan={plan} handleChange={handleChange} />
-        <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} />
+        <PricingHeader plan={plan} handleChange={handleChange} planObj={auth?.user?.plan} downOrCancel={downOrCancel} />
+        {/* <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} /> */}
         <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} calcelPayment={calcelPayment} />
       </CardContent>
       {/* <PricingCTA /> */}
