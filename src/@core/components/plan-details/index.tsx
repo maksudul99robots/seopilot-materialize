@@ -124,15 +124,28 @@ const PlanDetails = (props: PricingPlanProps) => {
           disabled={data?.currentPlan || loading ? true : false}
 
           onClick={() => {
-            if (data?.title == 'Passenger') {
-              makePayment('passenger')
+            if (plan == 'monthly') {
+              if (data?.title == 'Passenger') {
+                makePayment('monthly - passenger')
+              }
+              else if (data?.title == 'Co-Pilot') {
+                makePayment('monthly - copilot')
+              }
+              if (data?.title == 'Captain') {
+                makePayment('monthly - captain')
+              }
+            } else {
+              if (data?.title == 'Passenger') {
+                makePayment('yearly - passenger')
+              }
+              else if (data?.title == 'Co-Pilot') {
+                makePayment('yearly - copilot')
+              }
+              if (data?.title == 'Captain') {
+                makePayment('yearly - captain')
+              }
             }
-            else if (data?.title == 'Co-Pilot') {
-              makePayment('copilot')
-            }
-            if (data?.title == 'Captain') {
-              makePayment('captain')
-            }
+
           }}
         // startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
         >

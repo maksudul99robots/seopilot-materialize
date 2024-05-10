@@ -66,8 +66,8 @@ const PricingHeader = (props: Props) => {
               '& svg': { mt: 2, mr: 1, color: 'text.disabled' }
             }}
           >
-            {/* <Icon icon='mdi:arrow-down-left' /> */}
-            {/* <CustomChip size='small' skin='light' color='primary' label='Save up to 10%' /> */}
+            <Icon icon='mdi:arrow-down-left' />
+            <CustomChip size='small' skin='light' color='primary' label='Save up to 16.7%' />
           </Box>
         )}
       </Box>
