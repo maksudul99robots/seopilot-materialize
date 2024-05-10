@@ -130,7 +130,7 @@ const Pricing = () => {
       setPlan('monthly')
     }
   }
-  console.log("auth.user", auth.user)
+  // console.log("auth.user", auth.user)
 
   const makePayment = (plan: string) => {
     Swal.fire({
@@ -221,7 +221,7 @@ const Pricing = () => {
 
 
     LoginRegistrationAPI.getUser({}).then(res => {
-      if (auth && auth?.user?.workspace_owner_info?.plan.stripe_price_id != res.data.userData.workspace_owner_info.plan.stripe_price_id)
+      if (auth && auth?.user?.workspace_owner_info?.plan.plan != res.data.userData.workspace_owner_info.plan.plan)
         auth.setUserDataWithToken(res)
     }).catch(e => {
 
