@@ -219,7 +219,7 @@ const Pricing = () => {
 
   useEffect(() => {
     LoginRegistrationAPI.downgradeInfo({}).then(res => {
-      console.log("downgrade info:", res.data)
+      // console.log("downgrade info:", res.data)
       setDownOrCancel(res.data)
     }).catch(e => {
 

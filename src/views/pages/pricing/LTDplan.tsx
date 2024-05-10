@@ -7,26 +7,33 @@ import { Alert } from '@mui/material'
 
 
 const LTDPlan = ({ plan, downOrCancel }: any) => {
-    console.log("plan:", plan)
+
+    let mainPlan = plan.plan == 'extension_only' ? 'extension_only' :
+        (plan.plan == 'passenger' || plan.plan == "monthly - passenger") ? 'passenger' :
+            (plan.plan == 'copilot' || plan.plan == "monthly - copilot") ? 'copilot' :
+                (plan.plan == 'captain' || plan.plan == "monthly - captain") ? 'captain' : ''
+
+
+
     return (
 
-        plan.plan == 'extension_only' || plan.plan == 'passenger' || plan.plan == 'copilot' || plan.plan == 'captain' || plan.plan == "monthly - passenger" || plan.plan == "monthly - copilot" || plan.plan == "monthly - captain" ?
+        mainPlan == 'extension_only' || mainPlan == 'passenger' || mainPlan == 'copilot' || mainPlan == 'captain' ?
             <Card sx={{ mb: 10, textAlign: "start" }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
-                        Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan.toUpperCase()}
+                        Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{mainPlan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan.toUpperCase()}
                     </Typography>
                     <Typography variant='body1' sx={{ pl: 5, pb: 2 }}>
                         Features:
                     </Typography>
                     <Typography variant='body2' sx={{ mb: 2, pl: 5 }}>
-                        {plan.plan == 'extension_only' ? 'Monthly 2 Articles' : plan.plan == 'passenger' ? 'Monthly 25 Articles' : 'Unlimited Articles'}<br />
+                        {mainPlan == 'extension_only' ? 'Monthly 2 Articles' : mainPlan == 'passenger' ? 'Monthly 25 Articles' : 'Unlimited Articles'}<br />
 
-                        {plan.plan == 'extension_only' ? '1 Site Connected' : plan.plan == 'passenger' ? '1 Site Connected' : plan.plan == 'copilot' ? '5 Sites Connected' : '25 Sites Connected'}<br />
+                        {mainPlan == 'extension_only' ? '1 Site Connected' : mainPlan == 'passenger' ? '1 Site Connected' : mainPlan == 'copilot' ? '5 Sites Connected' : '25 Sites Connected'}<br />
 
-                        {plan.plan == 'extension_only' ? '1 User' : plan.plan == 'passenger' ? '1 User' : plan.plan == 'copilot' ? '5 Users' : '25 Users'}<br />
+                        {mainPlan == 'extension_only' ? '1 User' : mainPlan == 'passenger' ? '1 User' : mainPlan == 'copilot' ? '5 Users' : '25 Users'}<br />
 
-                        {plan.plan == 'extension_only' ? '1 Workspace' : plan.plan == 'passenger' ? '1 Workspace' : plan.plan == 'copilot' ? '5 Workspaces' : '25 Workspaces'}<br />
+                        {mainPlan == 'extension_only' ? '1 Workspace' : mainPlan == 'passenger' ? '1 Workspace' : mainPlan == 'copilot' ? '5 Workspaces' : '25 Workspaces'}<br />
 
                         Extension Access (On Page SEO & Contact Info)
                     </Typography>
