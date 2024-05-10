@@ -11,7 +11,7 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
     return (
 
         plan.plan == 'extension_only' || plan.plan == 'passenger' || plan.plan == 'copilot' || plan.plan == 'captain' ?
-            <Card sx={{ mb: 10, textAlign: "start" }}>
+            <Card sx={{ mb: 10, textAlign: "left" }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
                         Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan == 'passenger' ? 'PASSENGER' : plan.plan == 'copilot' ? 'COPILOT' : plan.plan == 'captain' ? 'CAPTAIN' : ''}
