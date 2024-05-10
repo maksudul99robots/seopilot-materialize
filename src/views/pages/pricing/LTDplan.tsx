@@ -7,14 +7,14 @@ import { Alert } from '@mui/material'
 
 
 const LTDPlan = ({ plan, downOrCancel }: any) => {
-
+    console.log("plan:", plan)
     return (
 
-        plan.plan == 'extension_only' || plan.plan == 'passenger' || plan.plan == 'copilot' || plan.plan == 'captain' ?
-            <Card sx={{ mb: 10, textAlign: "left" }}>
+        plan.plan == 'extension_only' || plan.plan == 'passenger' || plan.plan == 'copilot' || plan.plan == 'captain' || plan.plan == "monthly - passenger" || plan.plan == "monthly - copilot" || plan.plan == "monthly - captain" ?
+            <Card sx={{ mb: 10, textAlign: "start" }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
-                        Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan == 'passenger' ? 'PASSENGER' : plan.plan == 'copilot' ? 'COPILOT' : plan.plan == 'captain' ? 'CAPTAIN' : ''}
+                        Your current plan: {plan?.token ? 'Rockethub LTD-' : null}{plan.plan == 'extension_only' ? 'EXTENSION-ONLY' : plan.plan.toUpperCase()}
                     </Typography>
                     <Typography variant='body1' sx={{ pl: 5, pb: 2 }}>
                         Features:
@@ -58,7 +58,7 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
             </Card>
             :
 
-            <Card sx={{ mb: 10 }}>
+            <Card sx={{ mb: 10, textAlign: "start" }}>
                 <CardContent>
                     <Typography variant='h6' sx={{ mb: 2, pl: 5 }}>
                         Your current plan: Free Trial

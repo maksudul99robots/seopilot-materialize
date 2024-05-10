@@ -237,7 +237,7 @@ const Pricing = () => {
   return (
     <Card>
       <CardContent>
-        <PricingHeader plan={plan} handleChange={handleChange} planObj={auth?.user?.plan} downOrCancel={downOrCancel} />
+        <PricingHeader plan={plan} handleChange={handleChange} planObj={auth?.user?.workspace_owner_info?.plan} downOrCancel={downOrCancel} />
         {/* <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} /> */}
         <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} calcelPayment={calcelPayment} />
       </CardContent>
