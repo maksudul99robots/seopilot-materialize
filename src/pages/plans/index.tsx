@@ -40,7 +40,7 @@ const CardContent = styled(MuiCardContent)<CardContentProps>(({ theme }) => ({
 const Pricing = () => {
 
   const auth = useAuth()
-
+  const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
   let pricings = [
     {
       imgWidth: 100,
@@ -50,7 +50,9 @@ const Pricing = () => {
       // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'passenger' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - passenger') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - passenger') ? true :
+              false,
       popularPlan: true,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
@@ -77,7 +79,9 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - copilot') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - copilot') ? true :
+              false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
       yearlyPlan: { perMonth: 40.8, totalAnnual: 490 },
@@ -99,7 +103,9 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - captain') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - captain') ? true :
+              false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
       yearlyPlan: { perMonth: 82.5, totalAnnual: 990 },
@@ -119,7 +125,7 @@ const Pricing = () => {
 
 
   // ** States
-  const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
+
   const [loading, setLoading] = useState(false)
   const [downOrCancel, setDownOrCancel] = useState<any>(null)
 
