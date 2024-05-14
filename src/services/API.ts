@@ -370,6 +370,9 @@ export const LoginRegistrationAPI = {
     async getIdeaList(data: any, url = "/get-idea-list", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async getClusters(data: any, url = "/get-clusters", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

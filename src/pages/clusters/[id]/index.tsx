@@ -71,7 +71,7 @@ const statusObj: StatusObj = {
 }
 
 
-// import { LoginRegistrationAPI } from 
+import { LoginRegistrationAPI } from '../../../services/API'
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
@@ -83,9 +83,19 @@ import Icon from 'src/@core/components/icon'
 import { makeid } from 'src/services/makeid'
 // import sampleIdeas from '../sample'
 import { number } from 'yup'
-import { LoginRegistrationAPI } from 'src/services/API'
 
-const Clusters = () => {
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: theme.palette.common.white,
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
+
+const ClusterIdea = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -128,19 +138,19 @@ const Clusters = () => {
             flex: 0.5,
             minWidth: 320,
             field: 'topic',
-            headerName: 'Topic',
+            headerName: 'Title',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
                 return (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            {/* <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.topic}
-                            </Typography> */}
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                                 {row.topic}
+                            </Typography>
+                            <Typography noWrap variant='subtitle2' sx={{ color: 'text.primary', fontWeight: 300 }}>
+                                {row.keywords}
                             </Typography>
                         </Box>
                     </Box>
@@ -148,16 +158,16 @@ const Clusters = () => {
             }
         },
         {
-            flex: 0.3,
+            flex: 0.1,
             minWidth: 90,
-            headerName: 'Target Audiance',
-            field: 'target_audience',
+            headerName: 'Volume',
+            field: 'volume',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Typography variant='body2' >
-                        {row.target_audience}
+                    <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F" }}>
+                        {row?.volume ? row.volume : 0}
                     </Typography>
                 )
 
@@ -166,30 +176,14 @@ const Clusters = () => {
         {
             flex: 0.1,
             minWidth: 90,
-            headerName: 'No. of ideas',
-            field: 'number_of_clusters',
+            headerName: 'Comp',
+            field: 'competition',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Typography variant='body2'>
-                        {row.number_of_clusters}
-                    </Typography>
-                )
-
-            }
-        },
-        {
-            flex: 0.2,
-            minWidth: 90,
-            headerName: 'Created',
-            field: 'createdAt',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <Typography variant='body2'>
-                        {getDateTime(row.createdAt)}
+                    <Typography variant='body2' sx={{ color: row.comp == 'high' ? "#EF4843" : "#F58F4F" }}>
+                        {row?.competition ? row.competition?.toUpperCase() : ''}
                     </Typography>
                 )
 
@@ -204,10 +198,8 @@ const Clusters = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='contained' size='small' onClick={e => {
-                        router.push(`/clusters/${row.id}`)
-                    }}>
-                        View
+                    <Button variant='contained' size='small'>
+                        Write
                     </Button >
                 )
 
@@ -216,36 +208,19 @@ const Clusters = () => {
     ]
 
     useEffect(() => {
-        LoginRegistrationAPI.getClusters({}).then(res => {
-            console.log("res:", res.data)
-            setMainData(res.data)
-            // setTopic(res.data.topic)
-            // let finalArray: any[] = [];
-            // if (res.data.keywords) {
-            //     res.data.keywords.map((k: any, i: number) => {
-            //         if (i < 5) {
-            //             let x = {
-            //                 id: i,
-            //                 keyword: k.keyword,
-            //                 volume: k.avg_monthly_searches,
-            //                 competition: k.competition
-            //             }
-            //             finalArray.push(x);
-            //         }
+        if (router.query.id) {
+            LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
+                console.log("res:", res.data)
+                setTopic(res.data.topic)
+                setMainData(res.data.idea_library)
 
-            //         if (i == 4) {
-            //             setMainData(finalArray)
-            //         }
-            //     })
+            }).catch(e => {
 
-            // }
-
-        }).catch(e => {
-
-        })
+            })
+        }
 
 
-    }, [])
+    }, [router.query.id])
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -278,13 +253,12 @@ const Clusters = () => {
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     // item.output?.toLowerCase().includes(queryLowered) ||
-                    item.topic?.toLowerCase().includes(queryLowered) ||
+                    item.keyword?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.number_of_clusters?.toLowerCase().includes(queryLowered) ||
-                    item.target_audience?.toLowerCase().includes(queryLowered) ||
-                    // item.user_id.toLowerCase().includes(queryLowered) ||
-                    item.createdAt.toString().toLowerCase().includes(queryLowered) ||
-                    item.updatedAt.toLowerCase().includes(queryLowered)
+                    item.volume?.toLowerCase().includes(queryLowered)
+                // item.user_id.toLowerCase().includes(queryLowered) ||
+                // item.createdAt.toString().toLowerCase().includes(queryLowered) //||
+                // item.updatedAt.toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
             setRows(loadServerRows(paginationModel.page, filteredData))
@@ -326,6 +300,7 @@ const Clusters = () => {
                     rowCount={total}
                     columns={columns}
                     // checkboxSelection
+
                     sortingMode='server'
                     paginationMode='server'
                     pageSizeOptions={[50]}
@@ -338,7 +313,7 @@ const Clusters = () => {
                             variant: 'outlined'
                         },
                         toolbar: {
-                            title: "Clusters",
+                            title: "Generate Article Ideas on : " + topic,
                             value: searchValue,
                             clearSearch: () => handleSearch(''),
                             onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
@@ -351,4 +326,4 @@ const Clusters = () => {
     )
 }
 
-export default Clusters
+export default ClusterIdea

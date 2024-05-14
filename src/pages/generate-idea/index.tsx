@@ -36,7 +36,7 @@ const GenerateIdeas = (props: any) => {
         // return
         LoginRegistrationAPI.generateIdeas({ topic, language, country, audience }).then(res => {
             setLoading(false)
-            router.push('/idea-list/' + res.data.id)
+            router.push('/clusters/' + res.data.id)
         }).catch((e: any) => {
             setLoading(false)
             console.log("e:", e)
