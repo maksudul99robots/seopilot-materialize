@@ -32,16 +32,16 @@ const navigation = (): VerticalNavItemsType => {
         icon: 'fluent-mdl2:date-time-mirrored',
         path: '/schedule'
       },
-      // {
-      //   title: 'Keyword Research',
-      //   icon: 'icons8:idea',
-      //   path: '/generate-idea'
-      // },
-      // {
-      //   title: 'Idea Library',
-      //   icon: 'fluent-mdl2:folder-list-mirrored',
-      //   path: '/idea-list'
-      // },
+      {
+        title: 'Generate Ideas',
+        icon: 'icons8:idea',
+        path: '/generate-idea'
+      },
+      {
+        title: 'Clusters',
+        icon: 'fluent-mdl2:folder-list-mirrored',
+        path: '/idea-list'
+      },
       {
         sectionTitle: 'Workspace Settings'
       },
