@@ -100,18 +100,18 @@ const PlanDetails = (props: PricingPlanProps) => {
               $
             </Typography>
             <Typography variant='h3' sx={{ fontWeight: 600, color: 'primary.main', lineHeight: 1.17 }}>
-              {plan === 'monthly' ? data?.monthlyPrice : data?.yearlyPlan.perMonth}
+              {plan === 'monthly' ? data?.monthlyPrice : data?.yearlyPlan.totalAnnual}
             </Typography>
             <Typography variant='body2' sx={{ mb: 1.6, fontWeight: 600, alignSelf: 'flex-end' }}>
-              /month
+              {plan === 'monthly' ? '/month' : '/year'}
             </Typography>
           </Box>
-          {plan !== 'monthly' && data?.monthlyPrice !== 0 ? (
+          {/* {plan !== 'monthly' && data?.monthlyPrice !== 0 ? (
             <Typography
               variant='caption'
               sx={{ top: 50, left: '50%', position: 'absolute', transform: 'translateX(-50%)' }}
             >{`USD ${data?.yearlyPlan.totalAnnual}/year`}</Typography>
-          ) : null}
+          ) : null} */}
         </Box>
       </Box>
       <BoxFeature>{renderFeatures()}</BoxFeature>
@@ -124,15 +124,28 @@ const PlanDetails = (props: PricingPlanProps) => {
           disabled={data?.currentPlan || loading ? true : false}
 
           onClick={() => {
-            if (data?.title == 'Passenger') {
-              makePayment('passenger')
+            if (plan == 'monthly') {
+              if (data?.title == 'Passenger') {
+                makePayment('monthly - passenger')
+              }
+              else if (data?.title == 'Co-Pilot') {
+                makePayment('monthly - copilot')
+              }
+              if (data?.title == 'Captain') {
+                makePayment('monthly - captain')
+              }
+            } else {
+              if (data?.title == 'Passenger') {
+                makePayment('yearly - passenger')
+              }
+              else if (data?.title == 'Co-Pilot') {
+                makePayment('yearly - copilot')
+              }
+              if (data?.title == 'Captain') {
+                makePayment('yearly - captain')
+              }
             }
-            else if (data?.title == 'Co-Pilot') {
-              makePayment('copilot')
-            }
-            if (data?.title == 'Captain') {
-              makePayment('captain')
-            }
+
           }}
         // startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" ></Icon> : null}
         >

@@ -40,7 +40,7 @@ const CardContent = styled(MuiCardContent)<CardContentProps>(({ theme }) => ({
 const Pricing = () => {
 
   const auth = useAuth()
-
+  const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
   let pricings = [
     {
       imgWidth: 100,
@@ -50,13 +50,15 @@ const Pricing = () => {
       // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'passenger' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - passenger') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - passenger') ? true :
+              false,
       popularPlan: true,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
-        perMonth: 19,
-        totalAnnual: 288
+        perMonth: 15.8,
+        totalAnnual: 190
       },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
@@ -77,10 +79,12 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'copilot' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - copilot') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - copilot') ? true :
+              false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
-      yearlyPlan: { perMonth: 49, totalAnnual: 588 },
+      yearlyPlan: { perMonth: 40.8, totalAnnual: 490 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
@@ -99,10 +103,12 @@ const Pricing = () => {
       popularPlan: true,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
-          (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'captain' ? true : false,
+          (plan == 'monthly' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'monthly - captain') ? true :
+            (plan == 'annually' && (!auth?.user?.workspace_owner_info?.plan?.token && auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'yearly - captain') ? true :
+              false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
-      yearlyPlan: { perMonth: 99, totalAnnual: 1188 },
+      yearlyPlan: { perMonth: 82.5, totalAnnual: 990 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
@@ -119,7 +125,7 @@ const Pricing = () => {
 
 
   // ** States
-  const [plan, setPlan] = useState<'monthly' | 'annually'>('monthly')
+
   const [loading, setLoading] = useState(false)
   const [downOrCancel, setDownOrCancel] = useState<any>(null)
 
@@ -130,7 +136,7 @@ const Pricing = () => {
       setPlan('monthly')
     }
   }
-  console.log("auth.user", auth.user)
+  // console.log("auth.user", auth.user)
 
   const makePayment = (plan: string) => {
     Swal.fire({
@@ -213,7 +219,7 @@ const Pricing = () => {
 
   useEffect(() => {
     LoginRegistrationAPI.downgradeInfo({}).then(res => {
-      console.log("downgrade info:", res.data)
+      // console.log("downgrade info:", res.data)
       setDownOrCancel(res.data)
     }).catch(e => {
 
@@ -221,7 +227,7 @@ const Pricing = () => {
 
 
     LoginRegistrationAPI.getUser({}).then(res => {
-      if (auth && auth?.user?.workspace_owner_info?.plan.stripe_price_id != res.data.userData.workspace_owner_info.plan.stripe_price_id)
+      if (auth && auth?.user?.workspace_owner_info?.plan.plan != res.data.userData.workspace_owner_info.plan.plan)
         auth.setUserDataWithToken(res)
     }).catch(e => {
 
@@ -231,8 +237,8 @@ const Pricing = () => {
   return (
     <Card>
       <CardContent>
-        <PricingHeader plan={plan} handleChange={handleChange} />
-        <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} />
+        <PricingHeader plan={plan} handleChange={handleChange} planObj={auth?.user?.workspace_owner_info?.plan} downOrCancel={downOrCancel} />
+        {/* <LTDPlan plan={auth?.user?.plan} downOrCancel={downOrCancel} /> */}
         <PricingPlans plan={plan} data={pricings} makePayment={makePayment} setLoading={setLoading} loading={loading} calcelPayment={calcelPayment} />
       </CardContent>
       {/* <PricingCTA /> */}

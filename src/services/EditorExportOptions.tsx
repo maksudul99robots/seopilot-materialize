@@ -123,14 +123,13 @@ export default function CustomizedMenus(props: any) {
 
 
     function copyToClip(str: any) {
-        // console.log("props.fImg?.photos:", props.fImg?.photos)
         str = insertH1AtTheBeginning(str, props.title);
         if (props.fImg?.urls?.full) {
 
             str = insertImageAfterFirstH1(str, props.fImg.urls.full)
         }
         if (props.fImg?.photos) {
-            str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+            str = insertImageAfterFirstH1(str, props.fImg.photos[props.featuredImgIndex].src.original)
         }
         if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
             str = insertImageAfterFirstH1(str, props.fImg)

@@ -138,6 +138,7 @@ export default function CreateArticle(props: any) {
     const [faq, setFaq] = useState(false);
     const [toc, setToc] = useState(false);
     const [citation, setCitation] = useState(false);
+    const [noOfCitations, setNoOfCitations] = useState('1-10');
     const [introduction, setIntroduction] = useState(true);
     const [conclusion, setConclusion] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -269,7 +270,9 @@ export default function CreateArticle(props: any) {
                     if (res.data.folder_id) {
                         setFolder(res.data.folder_id)
                     }
-
+                    if (res.data.no_of_citations) {
+                        setNoOfCitations(res.data.no_of_citations)
+                    }
                     // }
                 }
             }).catch(e => {
@@ -454,7 +457,8 @@ export default function CreateArticle(props: any) {
                         citation: citation,
                         folder_id: folder,
                         retryArticle: retryArticle,
-                        article_id: router.query.id
+                        article_id: router.query.id,
+                        no_of_citations: noOfCitations
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -527,7 +531,8 @@ export default function CreateArticle(props: any) {
                             citation: citation,
                             folder_id: folder,
                             retryArticle: retryArticle,
-                            article_id: router.query.id
+                            article_id: router.query.id,
+                            no_of_citations: noOfCitations
                         }
                     ).then(res => {
                         // console.log("res:", res);
@@ -1049,11 +1054,6 @@ export default function CreateArticle(props: any) {
                             </Grid>
                         </Box>
 
-
-
-
-
-
                         <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
                             Point of View of Article
 
@@ -1184,7 +1184,7 @@ export default function CreateArticle(props: any) {
                         {/* <Box > */}
 
 
-
+                        {/* Additional Settings starts*/}
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
                             <LightTooltip title={
@@ -1224,23 +1224,6 @@ export default function CreateArticle(props: any) {
                             </LightTooltip >
 
                         </Grid>
-                        {
-                            (model == 'gpt-4-1106-preview' || model == 'gpt-4') &&
-                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
-                                <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
-                                <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
-                                <LightTooltip title={
-                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
-                                    </p>
-                                } placement="top">
-                                    <div style={{ height: "100%" }}>
-                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                    </div>
-                                </LightTooltip >
-
-                            </Grid>
-                        }
 
                         {
                             articleType != 'listicle' &&
@@ -1260,6 +1243,8 @@ export default function CreateArticle(props: any) {
                             </Grid>
                         }
 
+
+
                         {
                             articleType == "listicle" ?
                                 <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
@@ -1277,6 +1262,64 @@ export default function CreateArticle(props: any) {
                                 : null
                         }
 
+                        {
+                            (model == 'gpt-4-1106-preview' || model == 'gpt-4') &&
+                            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip >
+
+                            </Grid>
+                        }
+
+
+                        <Grid item xs={12} sx={{ display: showAdditionalSettings && citation ? "flex" : "none" }}>
+                            <Box sx={{ width: "100%", display: showAdditionalSettings && citation ? "flex" : "none" }}>
+                                <Grid item sm={6} xs={6}>
+                                    <FormControl size='medium' fullWidth>
+                                        <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
+                                        <Select
+                                            fullWidth
+                                            placeholder='Select Number of Citations'
+                                            label='Select Number of Citations'
+                                            labelId='Select Number of Citations'
+                                            value={noOfCitations}
+                                            onChange={e => {
+
+                                                setNoOfCitations(e.target.value)
+
+                                            }}
+                                        >
+
+                                            <MenuItem value="1-10">Low (1-10)</MenuItem>
+                                            <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
+                                            <MenuItem value="20+">High (20+)</MenuItem>
+
+
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                {/* <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip > */}
+                            </Box>
+
+
+                        </Grid>
                         <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                             <Box sx={{ width: "100%", display: showAdditionalSettings ? "flex" : "none" }}>
                                 <Grid item sm={6} xs={6}>
@@ -1458,7 +1501,7 @@ export default function CreateArticle(props: any) {
                                 Add Another Link
                             </Button>
                         }
-
+                        {/* Additional Settings ends*/}
 
 
                     </Grid>

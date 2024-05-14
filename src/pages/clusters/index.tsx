@@ -71,7 +71,7 @@ const statusObj: StatusObj = {
 }
 
 
-import { LoginRegistrationAPI } from '../../../services/API'
+// import { LoginRegistrationAPI } from 
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
@@ -83,6 +83,7 @@ import Icon from 'src/@core/components/icon'
 import { makeid } from 'src/services/makeid'
 // import sampleIdeas from '../sample'
 import { number } from 'yup'
+import { LoginRegistrationAPI } from 'src/services/API'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

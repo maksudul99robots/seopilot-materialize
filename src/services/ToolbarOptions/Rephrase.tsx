@@ -109,6 +109,7 @@ const Rephrase = (props: any) => {
             confirmButtonText: 'OK',
             confirmButtonColor: "#2979FF"
           })
+          props.handleClose()
         } else {
           setShow(true);
         }

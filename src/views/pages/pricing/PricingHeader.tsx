@@ -14,15 +14,19 @@ import Icon from 'src/@core/components/icon'
 
 // ** Custom Component Import
 import CustomChip from 'src/@core/components/mui/chip'
+import LTDPlan from './LTDplan'
 
 interface Props {
   plan: string
   handleChange: (e: ChangeEvent<{ checked: boolean }>) => void
+  planObj: any
+  downOrCancel: any
+
 }
 
 const PricingHeader = (props: Props) => {
   // ** Props
-  const { plan, handleChange } = props
+  const { plan, handleChange, planObj, downOrCancel } = props
 
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
@@ -36,15 +40,19 @@ const PricingHeader = (props: Props) => {
         </Typography>
         <Typography variant='body2'>Choose the best plan to fit your needs.</Typography>
       </Box>
-      {/* <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+      {planObj &&
+        <LTDPlan plan={planObj} downOrCancel={downOrCancel} />
+      }
+
+      <Box sx={{ display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
         <InputLabel
           htmlFor='pricing-switch'
-          sx={{ fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem', color: 'text.secondary' }}
+          sx={{ fontWeight: 500, cursor: 'pointer', fontSize: '0.875rem', color: plan === 'monthly' ? "#2979FF" : "#9C9DA9" }}
         >
           Monthly
         </InputLabel>
-        <Switch color='secondary' id='pricing-switch' onChange={handleChange} checked={plan === 'annually'} />
-        <InputLabel htmlFor='pricing-switch' sx={{ fontWeight: 500, cursor: 'pointer', fontSize: '0.875rem' }}>
+        <Switch color='primary' id='pricing-switch' onChange={handleChange} checked={plan === 'annually'} />
+        <InputLabel htmlFor='pricing-switch' sx={{ fontWeight: 500, cursor: 'pointer', fontSize: '0.875rem', color: plan === 'annually' ? "#2979FF" : "#9C9DA9" }}>
           Annually
         </InputLabel>
         {!hidden && (
@@ -59,11 +67,11 @@ const PricingHeader = (props: Props) => {
             }}
           >
             <Icon icon='mdi:arrow-down-left' />
-            <CustomChip size='small' skin='light' color='primary' label='Save up to 10%' />
+            <CustomChip size='small' skin='light' color='primary' label='Save up to 16.7%' />
           </Box>
         )}
-      </Box> */}
-    </Box>
+      </Box>
+    </Box >
   )
 }
 
