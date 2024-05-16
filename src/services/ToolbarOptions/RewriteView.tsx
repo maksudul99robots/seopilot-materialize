@@ -68,7 +68,7 @@ const ListOfRewrites = (props: any) => {
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [tone, setTone] = useState('Clear, Knowledgeable and Confident')
     const [language, setLanguage] = useState('English')
-    const [model, setModel] = useState<string>('gpt-4-1106-preview');
+    const [model, setModel] = useState<string>('gpt-4o');
     const [text, setText] = useState(props.text)
     const [editedText, setEditedText] = useState(props.text)
     const [output, setOutput] = useState('')
@@ -126,7 +126,8 @@ const ListOfRewrites = (props: any) => {
                                         setModel(e.target.value)
                                     }}
                                 >
-                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommended)</MenuItem>
+                                    <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                                 </Select>

@@ -1,11 +1,9 @@
 import { FormControl, MenuItem, Select } from "@mui/material";
-// import { LoginRegistrationAPI } from "../API";
 import { useEffect, useState } from "react";
 import { LoginRegistrationAPI } from "src/services/API";
 
-const ModelDropdown = (props: any) => {
-
-
+const LengthDropdown = (props: any) => {
+    // console.log(props.settings[props.id].tone)
     return (
         <>
             <FormControl sx={{ m: 1, minWidth: 120, }} className="article_tbl_folder_dropdown">
@@ -13,19 +11,19 @@ const ModelDropdown = (props: any) => {
 
                     size="small"
                     sx={{ fontSize: "12px", padding: "0px" }}
-                    value={props.settings[props.id].model}
-                    onChange={e => props.handleChange(props.id, e.target.value, 'model')}
+                    value={props.settings[props.id].article_length}
+                    onChange={e => props.handleChange(props.id, e.target.value, 'article_length')}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}
                 >
-                    <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
-                    <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                    <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                    <MenuItem value='short' sx={{ fontSize: "12px" }}>Short</MenuItem>
+                    <MenuItem value='long' sx={{ fontSize: "12px" }}>Long</MenuItem>
+
+
                 </Select>
             </FormControl>
         </>
     )
 }
 
-export default ModelDropdown;
+export default LengthDropdown;

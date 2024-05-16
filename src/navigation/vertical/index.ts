@@ -28,12 +28,12 @@ const navigation = (): VerticalNavItemsType => {
         path: '/folders'
       },
       {
-        title: 'Article Cluster',
+        title: 'Create Cluster (Beta)',
         icon: 'icons8:idea',
         path: '/generate-idea'
       },
       {
-        title: 'Clusters',
+        title: 'My Clusters',
         icon: 'fluent-mdl2:folder-list-mirrored',
         path: '/clusters'
       },

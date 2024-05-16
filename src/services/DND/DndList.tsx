@@ -28,7 +28,7 @@ const DndList = ({ headings, setHeadings, editHeadingOnChange, addnewHeading, se
 
         }
     }
-
+    console.log(window.location.pathname.includes("create-article"))
 
     return (
         <DndContext
@@ -38,14 +38,14 @@ const DndList = ({ headings, setHeadings, editHeadingOnChange, addnewHeading, se
             <div style={{
                 width: "100%",
                 // borderBottom:"2px solid #BCBCBC",
-                padding: " 20px 5px 25px 20px",
+                padding: window.location.pathname.includes("create-article") ? " 20px 5px 25px 20px" : " 20px 5px 25px 0px",
 
             }}>
                 <div style={{
                     border: "1px solid #D8D8DD",
                     padding: "10px",
                     borderRadius: "10px",
-                    marginLeft: "4px",
+                    marginLeft: window.location.pathname.includes("create-article") ? "4px" : "0px",
                     marginRight: "-4px"
                 }}>
                     <Box sx={{ p: 3 }}>

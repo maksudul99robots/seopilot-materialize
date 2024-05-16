@@ -373,6 +373,12 @@ export const LoginRegistrationAPI = {
     async getClusters(data: any, url = "/get-clusters", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async generateSaasArticleFromIdea(data: any, url = "/generate-article-from-idea", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async saveIdeaLibrarySettings(data: any, url = "/save-idea-library-settings", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

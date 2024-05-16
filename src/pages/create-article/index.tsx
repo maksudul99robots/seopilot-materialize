@@ -129,7 +129,8 @@ export default function CreateArticle(props: any) {
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>('system');
-    const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
+    // const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
+    const [model, setModel] = useState<string>('gpt-4o'); //gpt-3.5-turbo-1106
     const [imgService, setImgService] = useState<string>('none');
     const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState('');
@@ -283,7 +284,7 @@ export default function CreateArticle(props: any) {
     }, [getArticleFromParams])
 
     useEffect(() => {
-        if (model == 'gpt-4-1106-preview' || model == 'gpt-4') {
+        if (model == 'gpt-4-1106-preview' || model == 'gpt-4' || model == 'gpt-4o') {
 
         } else {
             setCitation(false)
@@ -879,7 +880,8 @@ export default function CreateArticle(props: any) {
                                         setModel(e.target.value)
                                     }}
                                 >
-                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommended)</MenuItem>
+                                    <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                                 </Select>
@@ -1263,7 +1265,7 @@ export default function CreateArticle(props: any) {
                         }
 
                         {
-                            (model == 'gpt-4-1106-preview' || model == 'gpt-4') &&
+                            (model == 'gpt-4-1106-preview' || model == 'gpt-4' || model == 'gpt-4o') &&
                             <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                                 <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
                                 <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>

@@ -39,7 +39,7 @@ const Shorten = (props: any) => {
   const [show, setShow] = useState<boolean>(false)
   const [length, setLength] = useState<string>('1 paragraph');
   const [finalLength, setFinalLength] = useState<number>((props.text?.length * 80) / 100);
-  const [model, setModel] = useState<string>('gpt-4-1106-preview');
+  const [model, setModel] = useState<string>('gpt-4o');
   const [text, setText] = useState(props.text)
   const [editedText, setEditedText] = useState(props.text)
   const [output, setOutput] = useState('')
@@ -148,7 +148,8 @@ const Shorten = (props: any) => {
                     setModel(e.target.value)
                   }}
                 >
-                  <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO (Recommended)</MenuItem>
+                  <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                  <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
                   <MenuItem value='gpt-4'>GPT-4</MenuItem>
                   <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                 </Select>

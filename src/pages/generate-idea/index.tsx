@@ -54,7 +54,7 @@ const GenerateIdeas = (props: any) => {
             >
                 <Box sx={{ mb: 9, textAlign: 'center' }}>
                     <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                        Generate Article Ideas
+                        Create Article Cluster (Beta)
                     </Typography>
                     <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article ideas for you. SEO Pilot will generate 5 article ideas for you.</Typography>
                 </Box>
