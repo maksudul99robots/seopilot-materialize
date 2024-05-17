@@ -156,7 +156,7 @@ const ClusterIdea = () => {
     const columns: GridColDef[] = [
         {
             flex: 0.1,
-            minWidth: 320,
+            minWidth: 270,
             field: 'topic',
             headerName: 'Title',
             renderCell: (params: GridRenderCellParams) => {
@@ -194,8 +194,8 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.06,
-            minWidth: 90,
+            flex: 0.03,
+            minWidth: 70,
             headerName: 'Comp',
             field: 'competition',
             valueGetter: params => new Date(params.value),
@@ -266,7 +266,7 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.1,
+            flex: 0.08,
             minWidth: 90,
             headerName: 'Featured Image',
             field: 'img',
@@ -274,7 +274,7 @@ const ClusterIdea = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <SwitchesCustomized isChecked={settings[row.id].img} onClick={() =>
+                    <SwitchesCustomized isChecked={settings[row.id]?.img} onClick={() =>
                         handleChange(row.id, !settings[row.id].img, 'img')
                     } size="large" />
                 )
@@ -282,7 +282,7 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.05,
+            flex: 0.04,
             minWidth: 90,
             headerName: 'FAQ',
             field: 'faq',
@@ -290,7 +290,7 @@ const ClusterIdea = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <SwitchesCustomized isChecked={settings[row.id].faq} onClick={() =>
+                    <SwitchesCustomized isChecked={settings[row.id]?.faq} onClick={() =>
                         handleChange(row.id, !settings[row.id].faq, 'faq')
                     } size="large" />
                 )
@@ -299,7 +299,7 @@ const ClusterIdea = () => {
         },
 
         {
-            flex: 0.1,
+            flex: 0.18,
             minWidth: 120,
             field: 'Action',
             valueGetter: params => new Date(params.value),
@@ -309,25 +309,30 @@ const ClusterIdea = () => {
                     <>
                         {
                             settings[row.id].status == 'completed' ?
-                                <Button variant='contained' size='small' color='success' onClick={() => {
+                                <Button variant='contained' size='small' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22" }} onClick={() => {
                                     router.push('/generated-article/' + settings[row.id].article_id)
                                 }}>
                                     View
                                 </Button >
-                                : settings[row.id].status == 'error' || settings[row.id].status == 'idea' ?
-                                    <Button variant='contained' size='small' onClick={() => {
+                                : settings[row.id].status == 'idea' ?
+                                    <Button variant='contained' size='medium' onClick={() => {
                                         submit(settings[row.id], row)
-                                    }}>
+                                    }} sx={{ fontSize: "10px" }}>
                                         Write
-                                    </Button > :
-                                    <Button variant='contained' size='small' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
-                                        submit(settings[row.id], row)
-                                    }}>
-                                        Processing
-                                    </Button >
+                                    </Button > : settings[row.id].status == 'outlined' ?
+                                        <Button variant='contained' size='small' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                            submit(settings[row.id], row)
+                                        }} sx={{ fontSize: "10px" }}>
+                                            Processing
+                                        </Button > :
+                                        <Button variant='contained' size='small' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                            submit(settings[row.id], row)
+                                        }}>
+                                            Rewrite
+                                        </Button >
                         }
 
-                        <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status="idea" settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
+                        <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status={settings[row.id].status} settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
                     </>
 
                 )
@@ -394,10 +399,22 @@ const ClusterIdea = () => {
 
             })
     }
-    const updateList = (obj: any) => {
+
+    const checkStatus = (idea_id: number) => {
+        LoginRegistrationAPI.checkClusterIdeaStatus({ idea_id: idea_id }).then(res => {
+            if (res.data.status == 'completed') {
+                updateList()
+            }
+        }).catch(e => {
+
+        })
+    }
+
+
+    const updateList = () => {
 
         LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
-            console.log("res:.....", res.data)
+            // console.log("res:.....", res.data)
             setTopic(res.data.topic)
             if (res.data.idea_library) {
                 let x: any = {};
@@ -425,8 +442,8 @@ const ClusterIdea = () => {
                         outline_url: "",
                         outlines: il.raw_outline,
                         language: il.language,
-                        country: il.country
-
+                        country: il.country,
+                        status: il.status
                     }
                     if (i == res.data.idea_library.length - 1) {
                         setSettings(x);

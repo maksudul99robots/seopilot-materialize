@@ -114,21 +114,20 @@ export default function ActionDropdown(props: any) {
                 onClose={handleClose}
             >
 
-                {/* {
+                {
                     props.status == 'completed' &&
                     <MenuItem onClick={() => {
-                        let url = props.article_type ? `/generated-article/${props.article_id}` : `/article/${props.article_id}`;
-                        router.push(url)
+
                     }}
                         disabled={
-                            props.is_error ? props.is_error : (props.status == 'error') ? true : false
+                            props.status == 'outlined' ? true : false
                         }>
-                        <Icon icon="fluent:content-view-gallery-24-regular" />
-                        &nbsp;&nbsp;View
+                        <Icon icon="material-symbols-light:quick-phrases" />
+                        &nbsp;&nbsp;Rewrite
 
                     </MenuItem >
                 }
-                {
+                {/* {
                     props.status == 'idea' &&
                     <MenuItem className='add-icon-color' onClick={() => {
                         props.write(props.idea_id)
@@ -140,7 +139,7 @@ export default function ActionDropdown(props: any) {
                         &nbsp;&nbsp;Write
 
                     </MenuItem >
-                } */}
+                }
 
 
                 {
@@ -163,7 +162,7 @@ export default function ActionDropdown(props: any) {
                             &nbsp;&nbsp;Edit
                         </MenuItem>
                     </div>
-                }
+                } */}
 
                 <IdeaAdvancedSettings handleClose={handleClose} settings={props.settings} setSettings={props.setSettings} idea_id={props.idea_id} handleChange={props.handleChange} updateList={props.updateList} />
 

@@ -257,6 +257,7 @@ const IdeaAdvancedSettings = (props: any) => {
     props.handleChange(props.idea_id, imgPrompt, 'img_prompt')
     props.handleChange(props.idea_id, citation, 'citation')
     props.handleChange(props.idea_id, noOfCitations, 'no_of_citations')
+    // props.handleChange(props.idea_id, 'idea', 'status')
 
     LoginRegistrationAPI.saveIdeaLibrarySettings({
       article_type: articleType,
@@ -285,8 +286,8 @@ const IdeaAdvancedSettings = (props: any) => {
       idea_id: props.idea_id,
 
     }).then(res => {
-      console.log("topic != oldTopic || keywords != oldKeywords:", topic != oldTopic || keywords != oldKeywords)
-      if (topic != oldTopic || keywords != oldKeywords) {
+      console.log("topic != oldTopic || keywords != oldKeywords:", JSON.stringify(keywords) != JSON.stringify(oldKeywords), topic, oldTopic, keywords, oldKeywords)
+      if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
         props.updateList()
       }
       props.handleClose()

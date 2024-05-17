@@ -379,6 +379,9 @@ export const LoginRegistrationAPI = {
     async saveIdeaLibrarySettings(data: any, url = "/save-idea-library-settings", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async checkClusterIdeaStatus(data: any, url = "/check-cluster-idea-status", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

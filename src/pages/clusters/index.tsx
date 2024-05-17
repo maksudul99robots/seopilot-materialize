@@ -150,7 +150,7 @@ const Clusters = () => {
         {
             flex: 0.3,
             minWidth: 90,
-            headerName: 'Target Audiance',
+            headerName: 'Target Audience',
             field: 'target_audience',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
