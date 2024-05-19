@@ -155,8 +155,8 @@ const ClusterIdea = () => {
 
     const columns: GridColDef[] = [
         {
-            flex: 0.1,
-            minWidth: 270,
+            flex: 0.18,
+            minWidth: 300,
             field: 'topic',
             headerName: 'Title',
             renderCell: (params: GridRenderCellParams) => {
@@ -166,10 +166,10 @@ const ClusterIdea = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }} title={row.topic}>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
                                 {row.topic}
                             </Typography>
-                            <Typography noWrap variant='subtitle2' sx={{ color: 'text.primary', fontWeight: 300 }}>
+                            <Typography noWrap variant='subtitle2' sx={{ color: 'text.primary', fontWeight: 300, fontSize: "12px" }}>
                                 {row.keywords}
                             </Typography>
                         </Box>
@@ -212,20 +212,6 @@ const ClusterIdea = () => {
         {
             flex: 0.13,
             minWidth: 90,
-            headerName: 'Article Tone',
-            field: 'tone',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <ToneDropdown settings={settings} id={row.id} handleChange={handleChange} />
-                )
-
-            }
-        },
-        {
-            flex: 0.13,
-            minWidth: 90,
             headerName: 'AI Model',
             field: 'model',
             valueGetter: params => new Date(params.value),
@@ -237,6 +223,21 @@ const ClusterIdea = () => {
 
             }
         },
+        {
+            flex: 0.13,
+            minWidth: 90,
+            headerName: 'Article Tone',
+            field: 'tone',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <ToneDropdown settings={settings} id={row.id} handleChange={handleChange} />
+                )
+
+            }
+        },
+
         {
             flex: 0.13,
             minWidth: 90,
@@ -266,82 +267,66 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.08,
-            minWidth: 90,
-            headerName: 'Featured Image',
-            field: 'img',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <SwitchesCustomized isChecked={settings[row.id]?.img} onClick={() =>
-                        handleChange(row.id, !settings[row.id].img, 'img')
-                    } size="large" />
-                )
-
-            }
-        },
-        {
-            flex: 0.04,
-            minWidth: 90,
-            headerName: 'FAQ',
-            field: 'faq',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <SwitchesCustomized isChecked={settings[row.id]?.faq} onClick={() =>
-                        handleChange(row.id, !settings[row.id].faq, 'faq')
-                    } size="large" />
-                )
-
-            }
-        },
-
-        {
-            flex: 0.18,
-            minWidth: 120,
+            flex: 0.10,
+            minWidth: 110,
             field: 'Action',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <>
+                    <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
                         {
                             settings[row.id].status == 'completed' ?
-                                <Button variant='contained' size='small' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22" }} onClick={() => {
-                                    router.push('/generated-article/' + settings[row.id].article_id)
-                                }}>
-                                    View
+                                <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22" }} href={'/generated-article/' + settings[row.id].article_id}>
+                                    view
                                 </Button >
                                 : settings[row.id].status == 'idea' ?
                                     <Button variant='contained' size='medium' onClick={() => {
                                         submit(settings[row.id], row)
                                     }} sx={{ fontSize: "10px" }}>
                                         Write
-                                    </Button > : settings[row.id].status == 'outlined' ?
-                                        <Button variant='contained' size='small' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                    </Button > : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
+                                        <Button variant='contained' size='medium' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
                                             submit(settings[row.id], row)
                                         }} sx={{ fontSize: "10px" }}>
                                             Processing
                                         </Button > :
-                                        <Button variant='contained' size='small' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                        <Button variant='contained' size='medium' disabled sx={{ fontSize: "10px" }} onClick={() => {
                                             submit(settings[row.id], row)
                                         }}>
                                             Rewrite
                                         </Button >
                         }
-
-                        <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status={settings[row.id].status} settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
-                    </>
+                    </Box>
 
                 )
 
             }
-        }
+        },
+        {
+            flex: 0.04,
+            minWidth: 60,
+            headerName: '',
+            field: 'fasq',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status={settings[row.id].status} settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
+                )
+
+            }
+        },
     ]
 
     const submit = (data: any, row: any) => {
+        setSettings((prevSettings: any) => ({
+            ...prevSettings,
+            [row.id]: {
+                ...prevSettings[row.id],
+                status: 'initiated'
+            }
+        }))
         LoginRegistrationAPI.generateSaasArticleFromIdea({
             article_type: 'blog',
             topic: row.topic,
@@ -367,11 +352,16 @@ const ClusterIdea = () => {
             idea_id: row.id
         }).
             then(res => {
-                console.log("res:..........", res);
-                // setLoading(false)
-                // router.push("/generated-article/" + res.data.id)
+                setSettings((prevSettings: any) => ({
+                    ...prevSettings,
+                    [row.id]: {
+                        ...prevSettings[row.id],
+                        status: 'completed'
+                    }
+                }))
             }).catch(e => {
                 // setLoading(false)
+                updateList()
                 console.log("error:", e);
                 if (e?.response?.status == 400) {
                     Swal.fire({
