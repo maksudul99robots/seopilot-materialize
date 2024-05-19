@@ -127,12 +127,12 @@ const ListOfRewrites = (props: any) => {
                                     }}
                                 >
                                     <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                                    <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
+                                    <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
                                     <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                     <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                                </Select >
+                            </FormControl >
+                        </Grid >
                         <Grid item sm={12} xs={12} sx={{ width: "49%", marginLeft: "5px" }}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Point of View of Article</InputLabel>
@@ -156,7 +156,7 @@ const ListOfRewrites = (props: any) => {
                         </Grid>
 
 
-                    </Box>
+                    </Box >
 
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                         <Grid item sm={12} xs={12} sx={{ width: "49%", marginRight: "5px", marginTop: "20px" }}>
@@ -252,7 +252,7 @@ const ListOfRewrites = (props: any) => {
                             startAdornment: <InputAdornment position="start"></InputAdornment>,
                         }}
                     />
-                </DialogContent>
+                </DialogContent >
 
 
 
@@ -272,7 +272,7 @@ const ListOfRewrites = (props: any) => {
 
                 </DialogActions>
 
-            </Dialog>
+            </Dialog >
         </>
     )
 }

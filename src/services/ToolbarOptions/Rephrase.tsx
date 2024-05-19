@@ -159,7 +159,7 @@ const Rephrase = (props: any) => {
                   }}
                 >
                   <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                  <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
+                  <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
                   <MenuItem value='gpt-4'>GPT-4</MenuItem>
                   <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                 </Select>
