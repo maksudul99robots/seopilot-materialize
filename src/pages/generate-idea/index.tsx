@@ -5,6 +5,11 @@ import Icon from "src/@core/components/icon"
 import GetCountryList from "../create-article/CountryList"
 import { LoginRegistrationAPI } from "src/services/API"
 import { useRouter } from "next/router"
+// ** Custom Components Imports
+import CustomBadge from 'src/@core/components/mui/badge'
+
+// ** Types
+import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -21,6 +26,16 @@ interface IconType {
     icon: CustomRadioIconsProps['icon']
     iconProps: CustomRadioIconsProps['iconProps']
 }
+
+const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+        height: '18px',
+        minWidth: '18px',
+        transform: 'none',
+        position: 'relative',
+        transformOrigin: 'none'
+    }
+}))
 
 
 const GenerateIdeas = (props: any) => {
@@ -54,7 +69,7 @@ const GenerateIdeas = (props: any) => {
             >
                 <Box sx={{ mb: 9, textAlign: 'center' }}>
                     <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                        Create Article Cluster (Beta)
+                        Create Article Cluster <ListBadge color='info' sx={{ ml: 1 }} badgeContent='Beta' />
                     </Typography>
                     <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article ideas for you. SEO Pilot will generate 5 article ideas for you.</Typography>
                 </Box>

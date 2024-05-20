@@ -28,9 +28,11 @@ const navigation = (): VerticalNavItemsType => {
         path: '/folders'
       },
       {
-        title: 'Create Cluster (Beta)',
+        title: 'Create Cluster',
         icon: 'icons8:idea',
-        path: '/generate-idea'
+        path: '/generate-idea',
+        badgeColor: 'info',
+        badgeContent: "beta"
       },
       {
         title: 'My Clusters',

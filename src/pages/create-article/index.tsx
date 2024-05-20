@@ -37,6 +37,21 @@ import Link from 'next/link';
 import { checkIfDallEExists } from 'src/services/checkIfDallEExists';
 import { isAIModelAllowed } from 'src/services/isAIModelAllowed';
 import Folders from './Folders';
+import CustomBadge from 'src/@core/components/mui/badge'
+
+// ** Types
+import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
+
+
+const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+        height: '18px',
+        minWidth: '18px',
+        transform: 'none',
+        position: 'relative',
+        transformOrigin: 'none'
+    }
+}))
 // ** Demo Components Imports
 
 interface IconType {
@@ -1270,7 +1285,7 @@ export default function CreateArticle(props: any) {
                             (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o') &&
                             <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
                                 <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
-                                <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
+                                <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
                                 <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
                                         Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.

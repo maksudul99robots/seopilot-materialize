@@ -89,6 +89,7 @@ import PointOfViewDropdown from './PointOfViewDropdown'
 import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import LengthDropdown from './LengthDropdown'
 import ActionDropdown from './ActionDropdown'
+import Link from 'next/link'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -155,6 +156,30 @@ const ClusterIdea = () => {
 
     const columns: GridColDef[] = [
         {
+            flex: 0.05,
+            minWidth: 50,
+            field: 'icons',
+            headerName: '',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+
+                return (
+                    <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
+                        {
+                            settings[row.id].status == 'completed' ?
+
+                                <Icon icon="mdi:tick-circle" color='#2979FF' fontSize="20px"></Icon>
+                                : settings[row.id].status == 'idea' ?
+                                    <Icon icon="ic:outline-circle" color='#626477' fontSize="17px"></Icon>
+                                    : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
+                                        <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon> :
+                                        null
+                        }
+                    </Box >
+                )
+            }
+        },
+        {
             flex: 0.18,
             minWidth: 300,
             field: 'topic',
@@ -166,9 +191,12 @@ const ClusterIdea = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
-                                {row.topic}
-                            </Typography>
+                            <Link style={{ textDecoration: "none" }} href={'/generated-article/' + settings[row.id].article_id}>
+                                <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
+                                    {row.topic}
+                                </Typography>
+                            </Link>
+
                             <Typography noWrap variant='subtitle2' sx={{ color: 'text.primary', fontWeight: 300, fontSize: "12px" }}>
                                 {row.keywords}
                             </Typography>
@@ -267,8 +295,8 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.10,
-            minWidth: 110,
+            flex: 0.12,
+            minWidth: 120,
             field: 'Action',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
@@ -361,7 +389,14 @@ const ClusterIdea = () => {
                 }))
             }).catch(e => {
                 // setLoading(false)
-                updateList()
+                // updateList()
+                setSettings((prevSettings: any) => ({
+                    ...prevSettings,
+                    [row.id]: {
+                        ...prevSettings[row.id],
+                        status: 'idea'
+                    }
+                }))
                 console.log("error:", e);
                 if (e?.response?.status == 400) {
                     Swal.fire({
