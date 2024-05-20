@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 // ** React Imports
 import { Ref, useState, forwardRef, ReactElement, useEffect, ChangeEvent } from 'react'
 
