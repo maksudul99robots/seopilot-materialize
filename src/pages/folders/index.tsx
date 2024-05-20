@@ -47,6 +47,7 @@ import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/compo
 import FilterOptions from '../admin/articles/filterOptions/FilterOptions'
 import ActionDropdown from './ActionDropdown'
 import CreateFolder from './CreateFolder'
+import Link from 'next/link'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -94,8 +95,8 @@ const Folders = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                <Button variant='text' sx={{ textTransform: "none" }} href={`/articles?id=${row.id}`}>{row.name}</Button>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 500 }}>
+                                <Link style={{ textDecoration: "none", color: "#797A8B" }} href={`/articles?id=${row.id}`}>{row.name}</Link>
                             </Typography>
                         </Box>
                     </Box>
