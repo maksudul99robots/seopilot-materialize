@@ -361,8 +361,8 @@ const ClusterIdea = () => {
             keywords: row.keywords,
             article_length: data.article_length,
             tone: data.tone,
-            language: 'English',
-            country: 'USA',
+            language: data.language,
+            country: data.country,
             links: data.links,
             outlines: data.outlines,
             outline_source: data.outline_source,
@@ -376,7 +376,7 @@ const ClusterIdea = () => {
             extra_prompt: data.extra_prompt,
             img_prompt: data.citation,
             citation: data.citation,
-            folder_id: '',
+            folder_id: null,
             idea_id: row.id
         }).
             then(res => {
@@ -603,12 +603,114 @@ const ClusterIdea = () => {
     }
 
 
+    const writeAll = () => {
+        mainData?.map((d: any, i: number) => {
+            if (settings[d.id].status == 'idea') {
+                setSettings((prevSettings: any) => ({
+                    ...prevSettings,
+                    [d.id]: {
+                        ...prevSettings[d.id],
+                        status: 'initiated'
+                    }
+                }))
+                LoginRegistrationAPI.generateSaasArticleFromIdea({
+                    article_type: 'blog',
+                    topic: settings[d.id].topic,
+                    keywords: settings[d.id].keywords,
+                    article_length: settings[d.id].article_length,
+                    tone: settings[d.id].tone,
+                    language: settings[d.id].language,
+                    country: settings[d.id].country,
+                    links: settings[d.id].links,
+                    outlines: settings[d.id].outlines,
+                    outline_source: settings[d.id].outline_source,
+                    outline_url: settings[d.id].outline_url,
+                    faq: settings[d.id].faq,
+                    toc: true,
+                    model: settings[d.id].model,
+                    showFeaturedImg: settings[d.id].img,
+                    point_of_view: settings[d.id].point_of_view,
+                    img_service: settings[d.id].img_service,
+                    extra_prompt: settings[d.id].extra_prompt,
+                    img_prompt: settings[d.id].citation,
+                    citation: settings[d.id].citation,
+                    folder_id: '',
+                    idea_id: d.id
+                }).
+                    then(res => {
+                        setSettings((prevSettings: any) => ({
+                            ...prevSettings,
+                            [d.id]: {
+                                ...prevSettings[d.id],
+                                status: 'completed'
+                            }
+                        }))
+                    }).catch(e => {
+                        // setLoading(false)
+                        // updateList()
+                        setSettings((prevSettings: any) => ({
+                            ...prevSettings,
+                            [d.id]: {
+                                ...prevSettings[d.id],
+                                status: 'idea'
+                            }
+                        }))
+                        console.log("error:", e);
+                        if (e?.response?.status == 400) {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                      <h5>${e?.response?.data}</h5>
+                      `,
+                                icon: "error",
+                                // input: 'text',
+                                // inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            }).then(() => {
+                                router.push('/add-apikey')
+                            })
+                        } else {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                                icon: "error",
+                                // input: 'text',
+                                inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            })
+                        }
+
+                    })
+            }
+        })
+    }
+
 
 
     return (
         <Box >
 
             <Card>
+
+                <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
+                    <Typography variant='h6'>
+                        Generate Article Ideas on : {topic}
+                    </Typography>
+                    <Button variant='contained' size="medium" sx={{ pt: 3, pb: 3, pl: 4, pr: 4 }}
+                        onClick={
+                            () => {
+                                writeAll();
+
+                            }
+                        } startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : <Icon icon="f7:wand-stars-inverse" />}
+                        disabled={loading}
+
+
+                    >
+                        Write All
+                    </Button>
+                </Box>
+
                 <DataGrid
                     autoHeight
                     pagination
@@ -622,19 +724,19 @@ const ClusterIdea = () => {
                     pageSizeOptions={[50]}
                     paginationModel={paginationModel}
                     onSortModelChange={handleSortModel}
-                    slots={{ toolbar: ServerSideToolbar }}
+                    // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
-                    slotProps={{
-                        baseButton: {
-                            variant: 'outlined'
-                        },
-                        toolbar: {
-                            title: "Generate Article Ideas on : " + topic,
-                            value: searchValue,
-                            clearSearch: () => handleSearch(''),
-                            onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                        }
-                    }}
+                // slotProps={{
+                //     baseButton: {
+                //         variant: 'outlined'
+                //     },
+                //     toolbar: {
+                //         title: "Generate Article Ideas on : " + topic,
+                //         value: searchValue,
+                //         // clearSearch: () => handleSearch(''),
+                //         onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
+                //     }
+                // }}
                 />
             </Card>
         </Box>

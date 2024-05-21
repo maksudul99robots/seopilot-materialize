@@ -10,6 +10,7 @@ import CustomBadge from 'src/@core/components/mui/badge'
 
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
+import Swal from "sweetalert2"
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -49,13 +50,47 @@ const GenerateIdeas = (props: any) => {
         setLoading(true)
         // console.log(topic, language, country, audience)
         // return
-        LoginRegistrationAPI.generateIdeas({ topic, language, country, audience }).then(res => {
+        if (topic.length > 0 && audience.length > 0) {
+            LoginRegistrationAPI.generateIdeas({ topic, language, country, audience }).then(res => {
+                setLoading(false)
+                router.push('/clusters/' + res.data.id)
+            }).catch((e: any) => {
+                setLoading(false)
+                console.log("e:", e)
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+          <h5>${e?.response?.data}</h5>
+          `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+          <h5>Unable to Generate Article</h5>
+          `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                }
+            })
+        } else {
+
             setLoading(false)
-            router.push('/clusters/' + res.data.id)
-        }).catch((e: any) => {
-            setLoading(false)
-            console.log("e:", e)
-        })
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please insert the required fields.',
+                icon: 'error',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
+            })
+        }
+
     }
     return (
         <Card>

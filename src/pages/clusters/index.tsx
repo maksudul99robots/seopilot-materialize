@@ -217,7 +217,7 @@ const Clusters = () => {
 
     useEffect(() => {
         LoginRegistrationAPI.getClusters({}).then(res => {
-            console.log("res:", res.data)
+            // console.log("res:", res.data)
             setMainData(res.data)
             // setTopic(res.data.topic)
             // let finalArray: any[] = [];
@@ -240,8 +240,30 @@ const Clusters = () => {
 
             // }
 
-        }).catch(e => {
-
+        }).catch((e: any) => {
+            if (e?.response?.status == 400) {
+                Swal.fire({
+                    html: `<h3>Error</h3>
+          <h5>${e?.response?.data}</h5>
+          `,
+                    icon: "error",
+                    // input: 'text',
+                    // inputLabel: 'Please try again later.',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push('/add-apikey')
+                })
+            } else {
+                Swal.fire({
+                    html: `<h3>Error</h3>
+          <h5>Unable to Generate Article</h5>
+          `,
+                    icon: "error",
+                    // input: 'text',
+                    inputLabel: 'Please try again later.',
+                    confirmButtonColor: "#2979FF"
+                })
+            }
         })
 
 
