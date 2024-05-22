@@ -415,8 +415,6 @@ const ClusterIdea = () => {
                         // input: 'text',
                         // inputLabel: 'Please try again later.',
                         confirmButtonColor: "#2979FF"
-                    }).then(() => {
-                        router.push('/add-apikey')
                     })
                 } else {
                     Swal.fire({
@@ -673,8 +671,6 @@ const ClusterIdea = () => {
                                 // input: 'text',
                                 // inputLabel: 'Please try again later.',
                                 confirmButtonColor: "#2979FF"
-                            }).then(() => {
-                                router.push('/add-apikey')
                             })
                         } else {
                             Swal.fire({
