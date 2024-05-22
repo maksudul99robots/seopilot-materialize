@@ -36,7 +36,9 @@ const navigation = (): VerticalNavItemsType | any => {
       {
         title: 'My Clusters',
         icon: 'fluent-mdl2:folder-list-mirrored',
-        path: '/clusters'
+        path: '/clusters',
+        badgeColor: "info",
+        badgeContent: "beta"
       },
       {
         title: 'Schedule',

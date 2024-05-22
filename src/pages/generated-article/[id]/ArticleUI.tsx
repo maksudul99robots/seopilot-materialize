@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, InputAdornment, Link, TextField, Typography } from '@mui/material'
+import { Box, Button, Card, Grid, InputAdornment, Link, TextField, Typography, Tooltip, TooltipProps, styled, tooltipClasses } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
@@ -38,6 +38,19 @@ import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
 import { getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: "#fff",
+        color: 'rgba(0, 0, 0, 0.87)',
+        boxShadow: theme.shadows[1],
+        fontSize: 11,
+    },
+}));
+
+
 
 export default function ArticleIU(props: any) {
 
@@ -312,7 +325,19 @@ export default function ArticleIU(props: any) {
                                         Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
                                     </p> */}
                                             </div>
-                                            : null
+                                            :
+                                            // <LightTooltip title={
+                                            //     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            //         Add Featured Image in Your Article
+
+                                            //     </p>
+                                            // } placement="top">
+                                            //     <div style={{ height: "100%" }}>
+                                            //         <Icon icon="gg:add" className='add-icon-color' fontSize="30px" />
+                                            //     </div>
+                                            // </LightTooltip >
+                                            null
+
 
                             }
 

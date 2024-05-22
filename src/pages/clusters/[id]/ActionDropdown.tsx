@@ -113,20 +113,6 @@ export default function ActionDropdown(props: any) {
                 open={open}
                 onClose={handleClose}
             >
-
-                {
-                    props.status == 'completed' &&
-                    <MenuItem onClick={() => {
-
-                    }}
-                        disabled={
-                            props.status == 'outlined' ? true : false
-                        }>
-                        <Icon icon="material-symbols-light:quick-phrases" />
-                        &nbsp;&nbsp;Rewrite
-
-                    </MenuItem >
-                }
                 {/* {
                     props.status == 'idea' &&
                     <MenuItem className='add-icon-color' onClick={() => {

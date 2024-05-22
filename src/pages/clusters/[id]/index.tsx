@@ -172,8 +172,9 @@ const ClusterIdea = () => {
                                 : settings[row.id].status == 'idea' ?
                                     <Icon icon="ic:outline-circle" color='#626477' fontSize="17px"></Icon>
                                     : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
-                                        <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon> :
-                                        null
+                                        <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon>
+                                        :
+                                        <Icon icon="ep:warning-filled" color='#F58F4F' fontSize="19px"></Icon>
                         }
                     </Box >
                 )
@@ -191,12 +192,17 @@ const ClusterIdea = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Link style={{ textDecoration: "none" }} href={'/generated-article/' + settings[row.id].article_id}>
-                                <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
-                                    {row.topic}
-                                </Typography>
-                            </Link>
-
+                            {
+                                settings[row.id].status == 'completed' ?
+                                    <Link style={{ textDecoration: "none" }} href={'/generated-article/' + settings[row.id].article_id}>
+                                        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
+                                            {row.topic}
+                                        </Typography>
+                                    </Link> :
+                                    <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
+                                        {row.topic}
+                                    </Typography>
+                            }
                             <Typography noWrap variant='subtitle2' sx={{ color: 'text.primary', fontWeight: 300, fontSize: "12px" }}>
                                 {row.keywords}
                             </Typography>
@@ -214,8 +220,8 @@ const ClusterIdea = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F" }}>
-                        {row?.volume ? row.volume : 0}
+                    <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F", display: "flex", justifyContent: "end", textAlign: "right", width: "100%" }}>
+                        {row?.volume ? row.volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}
                     </Typography>
                 )
 
@@ -229,8 +235,10 @@ const ClusterIdea = () => {
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
+
+                console.log("row.comp:", row)
                 return (
-                    <Typography variant='body2' sx={{ color: row.comp == 'high' ? "#EF4843" : "#F58F4F" }}>
+                    <Typography variant='body2' sx={{ color: row.competition == 'HIGH' ? "#EF4843" : row.competition == 'LOW' ? "#03A61B" : "#F58F4F" }}>
                         {row?.competition ? row.competition?.toUpperCase() : ''}
                     </Typography>
                 )
@@ -319,10 +327,10 @@ const ClusterIdea = () => {
                                         }} sx={{ fontSize: "10px" }}>
                                             Processing
                                         </Button > :
-                                        <Button variant='contained' size='medium' disabled sx={{ fontSize: "10px" }} onClick={() => {
+                                        <Button variant='contained' size='medium' sx={{ fontSize: "10px" }} onClick={() => {
                                             submit(settings[row.id], row)
                                         }}>
-                                            Rewrite
+                                            Retry
                                         </Button >
                         }
                     </Box>

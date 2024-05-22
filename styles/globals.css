@@ -230,3 +230,19 @@ code[class*='language-'] {
 .suggested_img:hover{
   border: 5px solid #2979FF !important;
 }
+
+.idea-settings::-webkit-scrollbar{
+  background-color: #2979FF; /* Replace this with your desired background color */
+  color: #fff;
+  width: 10px;
+}
+.idea-settings::-webkit-scrollbar-thumb {
+  background-color: #2979FF !important;
+  border-radius: 4px;
+}
+.idea-settings::-webkit-scrollbar-thumb:hover {
+  background-color: #0086b3 !important;
+}
+.idea-settings::-webkit-scrollbar-track{
+  background: #bcb5b5;
+}
