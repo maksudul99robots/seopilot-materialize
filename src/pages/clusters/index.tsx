@@ -209,7 +209,7 @@ const Clusters = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='contained' size='small' onClick={e => {
+                    <Button variant='contained' size='medium' onClick={e => {
                         router.push(`/clusters/${row.id}`)
                     }}>
                         View Ideas
