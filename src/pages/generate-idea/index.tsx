@@ -156,7 +156,7 @@ const GenerateIdeas = (props: any) => {
                     <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
                         Create Article Cluster <ListBadge color='info' sx={{ ml: 1 }} badgeContent='Beta' />
                     </Typography>
-                    <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article ideas for you. SEO Pilot will generate 5 article ideas for you.</Typography>
+                    <Typography variant='body2'>Enter your keyword and SEO Pilot will research and present rank-worthy article ideas related to the topic. Then select the articles you want to generate and edit their settings.</Typography>
                 </Box>
 
                 <Grid container spacing={6}>
@@ -171,7 +171,7 @@ const GenerateIdeas = (props: any) => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField fullWidth label='Target Audience*' placeholder={'Career-focused youth in busy settings have minimal personal time for self-indulgence'} InputProps={{
+                        <TextField fullWidth label='Target Audience*' placeholder={'Fitness experts and physical therapists'} InputProps={{
                             startAdornment: <InputAdornment position="start"></InputAdornment>,
                         }}
                             name='Target Audience'

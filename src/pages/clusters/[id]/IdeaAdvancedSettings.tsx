@@ -426,7 +426,7 @@ const IdeaAdvancedSettings = (props: any) => {
         setShow(true);
       }} className='add-icon-color' >
         <Icon icon="material-symbols-light:settings-outline" />
-        &nbsp;&nbsp;Additional Settings
+        &nbsp;&nbsp;Article Settings
       </MenuItem>
 
       <Dialog

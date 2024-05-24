@@ -8,10 +8,11 @@ import { Alert } from '@mui/material'
 
 const LTDPlan = ({ plan, downOrCancel }: any) => {
 
-    let mainPlan = plan.plan == 'extension_only' ? 'extension_only' :
+    let mainPlan: any = plan.plan == 'extension_only' ? 'extension_only' :
         (plan.plan == 'passenger' || plan.plan == "monthly - passenger") ? 'passenger' :
             (plan.plan == 'copilot' || plan.plan == "monthly - copilot") ? 'copilot' :
-                (plan.plan == 'captain' || plan.plan == "monthly - captain") ? 'captain' : ''
+                (plan.plan == 'captain' || plan.plan == "monthly - captain") ? 'captain' :
+                    (plan.plan == 'free') ? 'free' : ''
 
 
 
@@ -34,8 +35,9 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
                         {mainPlan == 'extension_only' ? '1 User' : mainPlan == 'passenger' ? '1 User' : mainPlan == 'copilot' ? '5 Users' : '25 Users'}<br />
 
                         {mainPlan == 'extension_only' ? '1 Workspace' : mainPlan == 'passenger' ? '1 Workspace' : mainPlan == 'copilot' ? '5 Workspaces' : '25 Workspaces'}<br />
-
-                        Extension Access (On Page SEO & Contact Info)
+                        Folder<br></br>
+                        Article Cluster <br></br>
+                        {mainPlan == 'free' ? 'Extension Access (On Page SEO, Contact Info & PAA Section)' : 'Extension Full Access (On Page SEO, Contact Info, AI Writer & PAA Section)'}
                     </Typography>
                     {/* <Typography variant='body2'>
                     If you’re in the market for new desktops, notebooks, or PDAs, there are a myriad of choices. Here’s a rundown

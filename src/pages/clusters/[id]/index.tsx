@@ -189,6 +189,7 @@ const ClusterIdea = () => {
             minWidth: 50,
             field: 'icons',
             headerName: '',
+            sortable: false,
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -199,7 +200,7 @@ const ClusterIdea = () => {
 
                                 <Icon icon="mdi:tick-circle" color='#2979FF' fontSize="20px"></Icon>
                                 : settings[row.id].status == 'idea' ?
-                                    <Icon icon="ic:outline-circle" color='#626477' fontSize="17px"></Icon>
+                                    <Icon icon="zondicons:minus-outline" color='#626477' fontSize="17px"></Icon>
                                     : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
                                         <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon>
                                         :
@@ -268,7 +269,7 @@ const ClusterIdea = () => {
                 console.log("row.comp:", row)
                 return (
                     <Typography variant='body2' sx={{ color: row.competition == 'HIGH' ? "#EF4843" : row.competition == 'LOW' ? "#03A61B" : "#F58F4F" }}>
-                        {row?.competition ? row.competition?.toUpperCase() : ''}
+                        {row?.competition == "HIGH" || row?.competition == "LOW" ? row.competition?.toUpperCase() : row?.competition == "MEDIUM" ? 'MED' : ''}
                     </Typography>
                 )
 
@@ -279,6 +280,7 @@ const ClusterIdea = () => {
             minWidth: 90,
             headerName: 'AI Model',
             field: 'model',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -293,6 +295,7 @@ const ClusterIdea = () => {
             minWidth: 90,
             headerName: 'Article Tone',
             field: 'tone',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -308,6 +311,7 @@ const ClusterIdea = () => {
             minWidth: 90,
             headerName: 'Point of View',
             field: 'pov',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -322,6 +326,7 @@ const ClusterIdea = () => {
             minWidth: 90,
             headerName: 'Length',
             field: 'length',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -335,6 +340,7 @@ const ClusterIdea = () => {
             flex: 0.12,
             minWidth: 120,
             field: 'Action',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params

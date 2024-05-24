@@ -8,7 +8,7 @@ const ModelDropdown = (props: any) => {
 
     return (
         <>
-            <FormControl sx={{ m: 1, minWidth: 120, }} className="article_tbl_folder_dropdown">
+            <FormControl sx={{ m: 1, minWidth: 120, display: "flex", justifyContent: "start" }} className="article_tbl_folder_dropdown">
                 <Select
 
                     size="small"

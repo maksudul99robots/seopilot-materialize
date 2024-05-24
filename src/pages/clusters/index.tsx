@@ -204,6 +204,7 @@ const Clusters = () => {
             flex: 0.175,
             minWidth: 120,
             field: 'Action',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -211,7 +212,7 @@ const Clusters = () => {
                     <Button variant='contained' size='small' onClick={e => {
                         router.push(`/clusters/${row.id}`)
                     }}>
-                        View
+                        View Ideas
                     </Button >
                 )
 

@@ -28,11 +28,11 @@ const PointOfViewDropdown = (props: any) => {
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}
                 >
-                    <MenuItem value='Third Person (he, she, it, they)' sx={{ fontSize: "12px" }}>Third Person (he, she, it, they)</MenuItem>
+                    <MenuItem value='Third Person (he, she, it, they)' sx={{ fontSize: "12px" }}>3rd Person (he, she, it, they)</MenuItem>
                     {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                    <MenuItem value='Second Person (you, your, yours)' sx={{ fontSize: "12px" }}>Second Person (you, your, yours)</MenuItem>
-                    <MenuItem value='First Person Plural (we, us, our, ours)' sx={{ fontSize: "12px" }}>First Person Plural (we, us, our, ours)</MenuItem>
-                    <MenuItem value='First Person Singular (I, me, my, mine) ' sx={{ fontSize: "12px" }}>First Person Singular (I, me, my, mine)</MenuItem>
+                    <MenuItem value='Second Person (you, your, yours)' sx={{ fontSize: "12px" }}>2nd Person (you, your, yours)</MenuItem>
+                    <MenuItem value='First Person Plural (we, us, our, ours)' sx={{ fontSize: "12px" }}>1st Person Plural (we, us, our, ours)</MenuItem>
+                    <MenuItem value='First Person Singular (I, me, my, mine) ' sx={{ fontSize: "12px" }}>1st Person Singular (I, me, my, mine)</MenuItem>
                 </Select>
             </FormControl>
         </>

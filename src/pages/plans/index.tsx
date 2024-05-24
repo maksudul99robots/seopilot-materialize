@@ -67,6 +67,7 @@ const Pricing = () => {
         { text: "1 Workspace", show: true },
         { text: "1 Site Connected", show: true },
         { text: "Folders", show: true },
+        { text: "Article Cluster", show: true },
         { text: "Extension Access (Contact info & Ai Writer)", show: true }
       ]
 
@@ -92,6 +93,7 @@ const Pricing = () => {
         { text: "5 Workspaces", show: true },
         { text: "5 Sites Connected", show: true },
         { text: "Folders", show: true },
+        { text: "Article Cluster", show: true },
         { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     },
@@ -116,6 +118,7 @@ const Pricing = () => {
         { text: "25 Workspaces", show: true },
         { text: "25 Sites Connected", show: true },
         { text: "Folders", show: true },
+        { text: "Article Cluster", show: true },
         { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     }
