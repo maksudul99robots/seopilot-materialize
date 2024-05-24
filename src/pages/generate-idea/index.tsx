@@ -1,5 +1,5 @@
 import { Box, Button, Card, DialogActions, DialogContent, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Tooltip, TooltipProps, Typography, styled, tooltipClasses } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CustomRadioIconsProps } from "src/@core/components/custom-radio/types"
 import Icon from "src/@core/components/icon"
 import GetCountryList from "../create-article/CountryList"
@@ -11,6 +11,7 @@ import CustomBadge from 'src/@core/components/mui/badge'
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
 import Swal from "sweetalert2"
+import { useAuth } from "src/hooks/useAuth"
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -46,6 +47,55 @@ const GenerateIdeas = (props: any) => {
     const [country, setCountry] = useState<string>('Default')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
+    const auth = useAuth();
+
+    // useEffect(() => {
+    //     if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+
+    //     } else {
+    //         Swal.fire({
+    //             title: 'Access Denied',
+    //             text: 'Please Subscribe to Higher Plan to Get This Feature.',
+    //             icon: 'warning',
+    //             confirmButtonText: 'OK',
+    //             confirmButtonColor: "#2979FF"
+    //         }).then(() => {
+    //             router.push('/plan')
+    //         })
+    //         // 
+    //     }
+
+    // }, [])
+
+    useEffect(() => {
+
+        if (auth.user?.is_active) {
+            if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
+            } else {
+                Swal.fire({
+                    title: 'Access Denied',
+                    text: 'Please Subscribe to Higher Plan to Get Article Cluster Feature.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push('/plans')
+                })
+            }
+
+        } else {
+            Swal.fire({
+                title: 'Check Your Email',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
+            })
+            // 
+        }
+
+    }, [auth?.user])
+
     const submit = () => {
         setLoading(true)
         // console.log(topic, language, country, audience)

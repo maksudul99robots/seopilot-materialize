@@ -84,6 +84,7 @@ import { makeid } from 'src/services/makeid'
 // import sampleIdeas from '../sample'
 import { number } from 'yup'
 import { LoginRegistrationAPI } from 'src/services/API'
+import Link from 'next/link'
 
 const Clusters = () => {
     // ** States
@@ -139,9 +140,12 @@ const Clusters = () => {
                             {/* <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                                 {row.topic}
                             </Typography> */}
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.topic}
-                            </Typography>
+                            <Link style={{ textDecoration: "none" }} href={`/clusters/${row.id}`}>
+                                <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                                    {row.topic}
+                                </Typography>
+                            </Link>
+
                         </Box>
                     </Box>
                 )
@@ -216,78 +220,71 @@ const Clusters = () => {
     ]
 
     useEffect(() => {
-        LoginRegistrationAPI.getClusters({}).then(res => {
-            // console.log("res:", res.data)
-            setMainData(res.data)
-            // setTopic(res.data.topic)
-            // let finalArray: any[] = [];
-            // if (res.data.keywords) {
-            //     res.data.keywords.map((k: any, i: number) => {
-            //         if (i < 5) {
-            //             let x = {
-            //                 id: i,
-            //                 keyword: k.keyword,
-            //                 volume: k.avg_monthly_searches,
-            //                 competition: k.competition
-            //             }
-            //             finalArray.push(x);
-            //         }
 
-            //         if (i == 4) {
-            //             setMainData(finalArray)
-            //         }
-            //     })
+        if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+            LoginRegistrationAPI.getClusters({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data)
 
-            // }
-
-        }).catch((e: any) => {
-            if (e?.response?.status == 400) {
-                Swal.fire({
-                    html: `<h3>Error</h3>
-          <h5>${e?.response?.data}</h5>
-          `,
-                    icon: "error",
-                    // input: 'text',
-                    // inputLabel: 'Please try again later.',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push('/add-apikey')
-                })
-            } else {
-                Swal.fire({
-                    html: `<h3>Error</h3>
-          <h5>Unable to Generate Article</h5>
-          `,
-                    icon: "error",
-                    // input: 'text',
-                    inputLabel: 'Please try again later.',
-                    confirmButtonColor: "#2979FF"
-                })
-            }
-        })
-
+            }).catch((e: any) => {
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>${e?.response?.data}</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push('/add-apikey')
+                    })
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                }
+            })
+        }
 
     }, [])
 
     useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
 
+        if (auth.user?.is_active) {
+            if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
+            } else {
+                Swal.fire({
+                    title: 'Access Denied',
+                    text: 'Please Subscribe to Higher Plan to Get Article Cluster Feature.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push('/plans')
+                })
+            }
+
+        } else {
             Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
+                title: 'Check Your Email',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
             })
+            // 
         }
-    }, [auth?.user?.plan])
+
+    }, [auth?.user])
+
+
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 

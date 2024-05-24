@@ -246,3 +246,6 @@ code[class*='language-'] {
 .idea-settings::-webkit-scrollbar-track{
   background: #bcb5b5;
 }
+.MuiDataGrid-row{
+  cursor: default;
+}

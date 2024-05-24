@@ -118,6 +118,35 @@ const ClusterIdea = () => {
     const auth = useAuth()
     const router = useRouter()
 
+    // useEffect(() => {
+    //     if (auth.user?.is_active) {
+    //         if (auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+
+    //         } else {
+    //             Swal.fire({
+    //                 title: 'Access Denied',
+    //                 text: 'Please Subscribe to Higher Plan to Get This Feature.',
+    //                 icon: 'warning',
+    //                 confirmButtonText: 'OK',
+    //                 confirmButtonColor: "#2979FF"
+    //             }).then(() => {
+    //                 router.push('/plan')
+    //             })
+    //         }
+
+    //     } else {
+    //         Swal.fire({
+    //             title: 'Check Your Email',
+    //             text: 'Please Verify Your Account To get Full Access!',
+    //             icon: 'warning',
+    //             confirmButtonText: 'OK',
+    //             confirmButtonColor: "#2979FF"
+    //         })
+    //         // 
+    //     }
+
+    // }, [])
+
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
             // Swal.fire('401',
@@ -128,7 +157,7 @@ const ClusterIdea = () => {
 
             Swal.fire({
                 title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+                text: 'You don\'t have access to this page. Please Upgrade to enable Article Cluster Feature.',
                 icon: 'error',
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#2979FF",
@@ -136,7 +165,7 @@ const ClusterIdea = () => {
                 router.push("/")
             })
         }
-    }, [auth?.user?.plan])
+    }, [auth?.user])
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -536,7 +565,16 @@ const ClusterIdea = () => {
 
 
             }).catch(e => {
-
+                console.log("errror:", e)
+                Swal.fire({
+                    title: '404',
+                    text: 'Cluster doesn\'t exist',
+                    icon: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/clusters")
+                })
             })
         }
 
