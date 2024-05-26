@@ -71,16 +71,25 @@ const GenerateIdeas = (props: any) => {
 
         if (auth.user?.is_active) {
             if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
-            } else {
-                Swal.fire({
-                    title: 'Access Denied',
-                    text: 'Please Subscribe to Higher Plan to Get Article Cluster Feature.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push('/plans')
+
+                LoginRegistrationAPI.isAllowedToCreateCluster({}).then(res => {
+                    if (!res.data) {
+                        Swal.fire({
+                            title: 'Limit Reached',
+                            text: 'You\'ve reached your cluster limit.',
+                            icon: 'warning',
+                            confirmButtonText: 'CLOSE',
+                            confirmButtonColor: "#2979FF"
+                        }).then(() => {
+                            router.push('/plans')
+                        })
+                    }
+                }).catch(e => {
+
                 })
+
+            } else {
+
             }
 
         } else {

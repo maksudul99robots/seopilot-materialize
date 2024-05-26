@@ -243,6 +243,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async isAllowedToCreateCluster(data: any, url = "/is-user-allowed-to-create-cluster", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async getMyTeamObject(data: any, url = "/get-my-team-0bj", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
