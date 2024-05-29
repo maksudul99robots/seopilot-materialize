@@ -249,6 +249,7 @@ const ClusterIdea = () => {
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
+
                 return (
                     <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F", display: "flex", justifyContent: "end", textAlign: "right", width: "100%" }}>
                         {row?.volume ? row.volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}
@@ -266,7 +267,6 @@ const ClusterIdea = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
-                console.log("row.comp:", row)
                 return (
                     <Typography variant='body2' sx={{ color: row.competition == 'HIGH' ? "#EF4843" : row.competition == 'LOW' ? "#03A61B" : "#F58F4F" }}>
                         {row?.competition == "HIGH" || row?.competition == "LOW" ? row.competition?.toUpperCase() : row?.competition == "MEDIUM" ? 'MED' : ''}
