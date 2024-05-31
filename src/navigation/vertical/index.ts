@@ -45,16 +45,16 @@ const navigation = (): VerticalNavItemsType | any => {
         icon: 'fluent-mdl2:date-time-mirrored',
         path: '/schedule'
       },
-      {
-        sectionTitle: 'Research'
-      },
-      {
-        title: 'Idea Library',
-        icon: 'icons8:idea',
-        path: '/idea-list',
-        badgeColor: "info",
-        badgeContent: "beta"
-      },
+      // {
+      //   sectionTitle: 'Research'
+      // },
+      // {
+      //   title: 'Idea Library',
+      //   icon: 'icons8:idea',
+      //   path: '/idea-list',
+      //   badgeColor: "info",
+      //   badgeContent: "beta"
+      // },
       {
         sectionTitle: 'Workspace Settings'
       },
