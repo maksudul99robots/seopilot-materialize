@@ -85,6 +85,7 @@ import { makeid } from 'src/services/makeid'
 import { number } from 'yup'
 import { LoginRegistrationAPI } from 'src/services/API'
 import Link from 'next/link'
+import ActionDropdown from './ActionDropdown'
 
 const Clusters = () => {
     // ** States
@@ -99,6 +100,7 @@ const Clusters = () => {
     const [retryLoading, setRetryLoading] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
+    const [resetDataset, setResetDataset] = useState<number>(0);
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -217,6 +219,21 @@ const Clusters = () => {
                 )
 
             }
+        },
+        {
+            flex: 0.08,
+            minWidth: 50,
+            headerName: '',
+            field: 'empty',
+            sortable: false,
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <ActionDropdown resetDataset={resetDataset} setResetDataset={setResetDataset} cluster_id={row.id} />
+                )
+
+            }
         }
     ]
 
@@ -285,6 +302,17 @@ const Clusters = () => {
 
     }, [auth?.user])
 
+    useEffect(() => {
+        if (resetDataset > 0) {
+            // if (getArticleFromParams > 0) {
+            LoginRegistrationAPI.getClusters({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data)
+
+            })
+
+        }
+    }, [resetDataset])
 
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {

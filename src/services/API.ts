@@ -387,6 +387,9 @@ export const LoginRegistrationAPI = {
     async checkClusterIdeaStatus(data: any, url = "/check-cluster-idea-status", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async deleteCluster(data: any, url = "/delete-cluster", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
