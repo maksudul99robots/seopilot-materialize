@@ -375,6 +375,9 @@ export const LoginRegistrationAPI = {
     async getIdeaList(data: any, url = "/get-idea-list", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async getIdeasWithoutCluster(data: any, url = "/get-ideas-without-cluster", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
     async getClusters(data: any, url = "/get-clusters", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
@@ -382,6 +385,12 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
     async saveIdeaLibrarySettings(data: any, url = "/save-idea-library-settings", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async createNewIdea(data: any, url = "/create-new-idea", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async updateIdea(data: any, url = "/update-idea", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
     async checkClusterIdeaStatus(data: any, url = "/check-cluster-idea-status", source = undefined) {

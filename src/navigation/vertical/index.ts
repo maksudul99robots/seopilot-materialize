@@ -9,7 +9,7 @@ const navigation = (): VerticalNavItemsType | any => {
   let menus =
     [
       {
-        sectionTitle: 'Menu' //leaving  for now. Change later
+        sectionTitle: 'CONTENT'
       },
       {
         title: 'Create Article',
@@ -28,7 +28,7 @@ const navigation = (): VerticalNavItemsType | any => {
       },
       {
         title: 'Create Cluster',
-        icon: 'icons8:idea',
+        icon: 'vaadin:cluster',
         path: '/generate-idea',
         badgeColor: "info",
         badgeContent: "beta"
@@ -44,6 +44,16 @@ const navigation = (): VerticalNavItemsType | any => {
         title: 'Schedule',
         icon: 'fluent-mdl2:date-time-mirrored',
         path: '/schedule'
+      },
+      {
+        sectionTitle: 'Research'
+      },
+      {
+        title: 'Idea Library',
+        icon: 'icons8:idea',
+        path: '/idea-list',
+        badgeColor: "info",
+        badgeContent: "beta"
       },
       {
         sectionTitle: 'Workspace Settings'

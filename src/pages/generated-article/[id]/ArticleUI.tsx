@@ -258,7 +258,7 @@ export default function ArticleIU(props: any) {
                             {
 
                                 props.imgService == 'unsplash' && props.fImg?.user?.links ?
-                                    <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                    <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
 
 
                                         <ImageSection
@@ -280,7 +280,7 @@ export default function ArticleIU(props: any) {
                                     </div>
                                     :
                                     props.imgService == 'pexels' && props.fImg?.photos ?
-                                        <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                        <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
                                             <ImageSection
                                                 src={props?.fImg?.photos[props.featuredImgIndex].src.original}
                                                 url={props?.fImg?.photos[props.featuredImgIndex].photographer_url}
@@ -301,7 +301,7 @@ export default function ArticleIU(props: any) {
                                         </div>
                                         :
                                         (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') && props.fImg ?
-                                            <div style={{ width: "800px", height: "450px", marginBottom: "40px", }}>
+                                            <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
 
                                                 <ImageSection
                                                     src={props.fImg}

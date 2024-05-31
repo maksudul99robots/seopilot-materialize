@@ -15,7 +15,7 @@ import axios from 'axios'
 import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar'
-
+import Icon from 'src/@core/components/icon';
 // ** Types Imports
 import { ThemeColor } from 'src/@core/layouts/types'
 import { DataGridRowType } from 'src/@fake-db/types'
@@ -71,7 +71,7 @@ const statusObj: StatusObj = {
 }
 
 
-import { LoginRegistrationAPI } from '../../../services/API'
+// import { LoginRegistrationAPI } from 
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
@@ -79,23 +79,15 @@ import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
-import Icon from 'src/@core/components/icon'
 import { makeid } from 'src/services/makeid'
 // import sampleIdeas from '../sample'
 import { number } from 'yup'
+import { LoginRegistrationAPI } from 'src/services/API'
+import Link from 'next/link'
+import ActionDropdown from '../clusters/ActionDropdown'
+import IdeaAdvancedSettings from './IdeaAdvancedSettings'
 
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
-
-const IdeaList = () => {
+const Clusters = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -108,6 +100,7 @@ const IdeaList = () => {
     const [retryLoading, setRetryLoading] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
+    const [resetDataset, setResetDataset] = useState<number>(0);
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -137,8 +130,8 @@ const IdeaList = () => {
         {
             flex: 0.5,
             minWidth: 320,
-            field: 'keyword',
-            headerName: 'Keyword',
+            field: 'topic',
+            headerName: 'Topic',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -149,25 +142,28 @@ const IdeaList = () => {
                             {/* <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                                 {row.topic}
                             </Typography> */}
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.keyword}
-                            </Typography>
+                            <Link style={{ textDecoration: "none" }} href={`/clusters/${row.id}`}>
+                                <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                                    {row.topic}
+                                </Typography>
+                            </Link>
+
                         </Box>
                     </Box>
                 )
             }
         },
         {
-            flex: 0.1,
+            flex: 0.3,
             minWidth: 90,
-            headerName: 'Volume',
-            field: 'volume',
+            headerName: 'Target Audience',
+            field: 'target_audience',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F" }}>
-                        {row.volume}
+                    <Typography variant='body2' >
+                        {row.target_audience}
                     </Typography>
                 )
 
@@ -176,14 +172,30 @@ const IdeaList = () => {
         {
             flex: 0.1,
             minWidth: 90,
-            headerName: 'Comp',
-            field: 'competition',
+            headerName: 'No. of ideas',
+            field: 'number_of_clusters',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Typography variant='body2' sx={{ color: row.comp == 'high' ? "#EF4843" : "#F58F4F" }}>
-                        {row.competition.toUpperCase()}
+                    <Typography variant='body2'>
+                        {row.number_of_clusters}
+                    </Typography>
+                )
+
+            }
+        },
+        {
+            flex: 0.2,
+            minWidth: 90,
+            headerName: 'Created',
+            field: 'createdAt',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <Typography variant='body2'>
+                        {getDateTime(row.createdAt)}
                     </Typography>
                 )
 
@@ -194,13 +206,31 @@ const IdeaList = () => {
             flex: 0.175,
             minWidth: 120,
             field: 'Action',
+            sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='contained' size='small'>
-                        Write
+                    <Button variant='contained' size='medium' onClick={e => {
+                        router.push(`/clusters/${row.id}`)
+                    }}>
+                        View Ideas
                     </Button >
+                )
+
+            }
+        },
+        {
+            flex: 0.08,
+            minWidth: 50,
+            headerName: '',
+            field: 'empty',
+            sortable: false,
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <ActionDropdown resetDataset={resetDataset} setResetDataset={setResetDataset} cluster_id={row.id} />
                 )
 
             }
@@ -208,57 +238,83 @@ const IdeaList = () => {
     ]
 
     useEffect(() => {
-        if (router.query.id) {
-            LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
-                console.log("res:", res.data)
-                setTopic(res.data.topic)
-                let finalArray: any[] = [];
-                if (res.data.keywords) {
-                    res.data.keywords.map((k: any, i: number) => {
-                        if (i < 5) {
-                            let x = {
-                                id: i,
-                                keyword: k.keyword,
-                                volume: k.avg_monthly_searches,
-                                competition: k.competition
-                            }
-                            finalArray.push(x);
-                        }
 
-                        if (i == 4) {
-                            setMainData(finalArray)
-                        }
+        if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+            LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data.idea_library)
+
+            }).catch((e: any) => {
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>${e?.response?.data}</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push('/add-apikey')
                     })
-
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
                 }
-
-            }).catch(e => {
-
             })
         }
 
-
-    }, [router.query.id])
+    }, [])
 
     useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
 
+        if (auth.user?.is_active) {
+            if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
+            } else {
+                Swal.fire({
+                    title: 'Access Denied',
+                    text: 'Please Subscribe to Higher Plan to Get Article Cluster Feature.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push('/plans')
+                })
+            }
+
+        } else {
             Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            }).then(() => {
-                router.push("/")
+                title: 'Check Your Email',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
             })
+            // 
         }
-    }, [auth?.user?.plan])
+
+    }, [auth?.user])
+
+    useEffect(() => {
+        if (resetDataset > 0) {
+            // if (getArticleFromParams > 0) {
+            LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data.idea_library)
+
+
+            })
+
+        }
+    }, [resetDataset])
+
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 
@@ -271,12 +327,13 @@ const IdeaList = () => {
                 (item: any) =>
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     // item.output?.toLowerCase().includes(queryLowered) ||
-                    item.keyword?.toLowerCase().includes(queryLowered) ||
+                    item.topic?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.volume?.toLowerCase().includes(queryLowered)
-                // item.user_id.toLowerCase().includes(queryLowered) ||
-                // item.createdAt.toString().toLowerCase().includes(queryLowered) //||
-                // item.updatedAt.toLowerCase().includes(queryLowered)
+                    item.number_of_clusters?.toLowerCase().includes(queryLowered) ||
+                    item.target_audience?.toLowerCase().includes(queryLowered) ||
+                    // item.user_id.toLowerCase().includes(queryLowered) ||
+                    item.createdAt.toString().toLowerCase().includes(queryLowered) ||
+                    item.updatedAt.toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
             setRows(loadServerRows(paginationModel.page, filteredData))
@@ -309,7 +366,9 @@ const IdeaList = () => {
 
     return (
         <Box >
-
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
+                <IdeaAdvancedSettings isCreateIdea={true} settings={[]} />
+            </Box>
             <Card>
                 <DataGrid
                     autoHeight
@@ -318,6 +377,7 @@ const IdeaList = () => {
                     rowCount={total}
                     columns={columns}
                     // checkboxSelection
+                    rowSelection={false}
                     sortingMode='server'
                     paginationMode='server'
                     pageSizeOptions={[50]}
@@ -330,7 +390,7 @@ const IdeaList = () => {
                             variant: 'outlined'
                         },
                         toolbar: {
-                            title: "Generate Article Ideas on : " + topic,
+                            title: "Article Ideas",
                             value: searchValue,
                             clearSearch: () => handleSearch(''),
                             onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
@@ -343,4 +403,4 @@ const IdeaList = () => {
     )
 }
 
-export default IdeaList
+export default Clusters

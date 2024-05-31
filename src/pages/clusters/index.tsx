@@ -374,6 +374,7 @@ const Clusters = () => {
                     rowCount={total}
                     columns={columns}
                     // checkboxSelection
+                    rowSelection={false}
                     sortingMode='server'
                     paginationMode='server'
                     pageSizeOptions={[50]}

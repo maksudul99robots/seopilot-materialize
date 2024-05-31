@@ -508,6 +508,7 @@ const TableServerSide = () => {
                     pageSizeOptions={[50]}
                     paginationModel={paginationModel}
                     onSortModelChange={handleSortModel}
+                    rowSelection={false}
                     // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
                 // slotProps={{

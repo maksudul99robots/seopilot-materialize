@@ -20,8 +20,8 @@ const ImageWithButtons = (props: any) => {
             onMouseLeave={handleMouseLeave}>
             <img
                 src={props.src}
-                width={800}
-                height={450}
+                width={950}
+                height={534}
                 style={{ objectFit: "cover" }}
                 alt="Featured image"
             />
