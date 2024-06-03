@@ -62,12 +62,13 @@ const Pricing = () => {
       },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
-        { text: "25 Articles / Month", show: true },
+        { text: "30 Articles / Month", show: true },
         { text: "1 User", show: true },
         { text: "1 Workspace", show: true },
         { text: "1 Site Connected", show: true },
+        { text: "1 Article Cluster", show: true },
         { text: "Folders", show: true },
-        { text: "Article Cluster", show: true },
+        { text: "Schedule Post", show: true },
         { text: "Extension Access (Contact info & Ai Writer)", show: true }
       ]
 
@@ -92,8 +93,9 @@ const Pricing = () => {
         { text: "5 Users", show: true },
         { text: "5 Workspaces", show: true },
         { text: "5 Sites Connected", show: true },
+        { text: "5 Article Clusters", show: true },
         { text: "Folders", show: true },
-        { text: "Article Cluster", show: true },
+        { text: "Schedule Post", show: true },
         { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     },
@@ -117,8 +119,9 @@ const Pricing = () => {
         { text: "25 Users", show: true },
         { text: "25 Workspaces", show: true },
         { text: "25 Sites Connected", show: true },
+        { text: "25 Article Clusters", show: true },
         { text: "Folders", show: true },
-        { text: "Article Cluster", show: true },
+        { text: "Schedule Post", show: true },
         { text: "Extension Access (Contact Info & Ai Writer)", show: true }
       ]
     }

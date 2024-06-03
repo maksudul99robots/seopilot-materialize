@@ -28,15 +28,16 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
                         Features:
                     </Typography>
                     <Typography variant='body2' sx={{ mb: 2, pl: 5 }}>
-                        {mainPlan == 'extension_only' ? 'Monthly 2 Articles' : mainPlan == 'passenger' ? 'Monthly 25 Articles' : 'Unlimited Articles'}<br />
+                        {mainPlan == 'extension_only' ? 'Monthly 2 Articles' : mainPlan == 'passenger' ? 'Monthly 30 Articles' : 'Unlimited Articles'}<br />
 
                         {mainPlan == 'extension_only' ? '1 Site Connected' : mainPlan == 'passenger' ? '1 Site Connected' : mainPlan == 'copilot' ? '5 Sites Connected' : '25 Sites Connected'}<br />
 
                         {mainPlan == 'extension_only' ? '1 User' : mainPlan == 'passenger' ? '1 User' : mainPlan == 'copilot' ? '5 Users' : '25 Users'}<br />
 
                         {mainPlan == 'extension_only' ? '1 Workspace' : mainPlan == 'passenger' ? '1 Workspace' : mainPlan == 'copilot' ? '5 Workspaces' : '25 Workspaces'}<br />
+
+                        {mainPlan == 'extension_only' ? '1 Article Cluster ' : mainPlan == 'passenger' ? '1 Article Cluster' : mainPlan == 'copilot' ? '5 Article Clusters' : '25 Article Clusters'}<br />
                         Folder<br></br>
-                        Article Cluster <br></br>
                         {mainPlan == 'free' ? 'Extension Access (On Page SEO, Contact Info & PAA Section)' : 'Extension Full Access (On Page SEO, Contact Info, AI Writer & PAA Section)'}
                     </Typography>
                     {/* <Typography variant='body2'>
@@ -83,6 +84,10 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
                         1 User<br />
 
                         1 Workspace<br />
+
+                        Folders<br />
+
+                        Schedule Post<br />
 
                         Extension Access (On Page SEO & Contact Info)
                     </Typography>
