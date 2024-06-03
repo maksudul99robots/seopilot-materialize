@@ -217,7 +217,7 @@ export default function ArticleIU(props: any) {
                         imgService={props.imgService}
                         featuredImgIndex={props.featuredImgIndex}
                     />
-                    <SelectConnects timezone={props.timezone} html={props.html} title={props.articleTopic} fImg={fImg} imgService={props.imgService} article_id={props.id} />
+                    <SelectConnects timezone={props.timezone} html={props.html} title={props.articleTopic} fImg={props.fImg} imgService={props.imgService} article_id={props.id} />
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>

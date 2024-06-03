@@ -194,19 +194,41 @@ const SelectConnects = (props: any) => {
     return tempContainer.innerHTML;
   }
 
+  function insertImageAtStart(htmlString: string, imgSrc: string) {
+    // Create a temporary container element
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = htmlString;
+
+    // Create an img element
+    const imgElement = document.createElement('img');
+    imgElement.style.width = "100%";
+    imgElement.src = imgSrc;
+
+    // Insert the img element at the beginning
+    tempContainer.insertBefore(imgElement, tempContainer.firstChild);
+
+    // Return the modified HTML
+    return tempContainer.innerHTML;
+  }
+
 
   function getHtmlFromDocument(str: string) {
     // str = getHtmlFromDocument(str)
-    str = insertH1AtTheBeginning(str, props.title);
+    // str = insertH1AtTheBeginning(str, props.title);
+    // console.log("props.fImg:", props.fImg)
+    // console.log("props.fImg?.urls?.full:", props.fImg?.urls?.full)
+    // console.log("props.fImg.photos[0].src.original", props.fImg?.photos[0].src.original)
+    // console.log("props.fImg?.urls?.full:",props.fImg?.urls?.full)
+
     if (props.fImg?.urls?.full) {
 
-      str = insertImageAfterFirstH1(str, props.fImg.urls.full)
+      str = insertImageAtStart(str, props.fImg.urls.full)
     }
     if (props.fImg?.photos) {
-      str = insertImageAfterFirstH1(str, props.fImg.photos[0].src.original)
+      str = insertImageAtStart(str, props.fImg.photos[0].src.original)
     }
     if (props.imgService == 'dall-e-3' || props.imgService == 'dall-e-2') {
-      str = insertImageAfterFirstH1(str, props.fImg)
+      str = insertImageAtStart(str, props.fImg)
     }
 
     if (props.articleType == 'listicle' && props.listicleOutlines?.length > 0) {
@@ -245,11 +267,14 @@ const SelectConnects = (props: any) => {
       }
 
     }
-
+    // console.log("str:", str)
     return str
   }
 
   const handleSubmit = () => {
+    // getHtmlFromDocument(props.html)
+    // return
+
     setLoading(true)
     headers.set("Content-Type", "application/json")
     // headers.set('Access-Control-Allow-Origin', '*')
