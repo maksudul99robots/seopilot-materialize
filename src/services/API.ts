@@ -384,6 +384,9 @@ export const LoginRegistrationAPI = {
     async generateSaasArticleFromIdea(data: any, url = "/generate-article-from-idea", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async generateSaasArticleFromIdeaOnIdeaPage(data: any, url = "/generate-article-from-idea-on-ideapg", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
     async saveIdeaLibrarySettings(data: any, url = "/save-idea-library-settings", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
@@ -397,6 +400,9 @@ export const LoginRegistrationAPI = {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
     async deleteCluster(data: any, url = "/delete-cluster", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async deleteIdea(data: any, url = "/delete-idea", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
 

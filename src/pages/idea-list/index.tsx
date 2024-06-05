@@ -84,10 +84,10 @@ import { makeid } from 'src/services/makeid'
 import { number } from 'yup'
 import { LoginRegistrationAPI } from 'src/services/API'
 import Link from 'next/link'
-import ActionDropdown from '../clusters/ActionDropdown'
+import ActionDropdown from './ActionDropdown'
 import IdeaAdvancedSettings from './IdeaAdvancedSettings'
 
-const Clusters = () => {
+const IdeaList = () => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -154,38 +154,6 @@ const Clusters = () => {
             }
         },
         {
-            flex: 0.3,
-            minWidth: 90,
-            headerName: 'Target Audience',
-            field: 'target_audience',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <Typography variant='body2' >
-                        {row.target_audience}
-                    </Typography>
-                )
-
-            }
-        },
-        {
-            flex: 0.1,
-            minWidth: 90,
-            headerName: 'No. of ideas',
-            field: 'number_of_clusters',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <Typography variant='body2'>
-                        {row.number_of_clusters}
-                    </Typography>
-                )
-
-            }
-        },
-        {
             flex: 0.2,
             minWidth: 90,
             headerName: 'Created',
@@ -201,7 +169,6 @@ const Clusters = () => {
 
             }
         },
-
         {
             flex: 0.175,
             minWidth: 120,
@@ -212,9 +179,9 @@ const Clusters = () => {
                 const { row } = params
                 return (
                     <Button variant='contained' size='medium' onClick={e => {
-                        router.push(`/clusters/${row.id}`)
+                        submit(row)
                     }}>
-                        View Ideas
+                        Write
                     </Button >
                 )
 
@@ -230,7 +197,13 @@ const Clusters = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <ActionDropdown resetDataset={resetDataset} setResetDataset={setResetDataset} cluster_id={row.id} />
+                    <ActionDropdown
+                        resetDataset={resetDataset}
+                        setResetDataset={setResetDataset}
+                        idea_id={row.id}
+                        updateList={updateList}
+                        data={row}
+                    />
                 )
 
             }
@@ -362,12 +335,86 @@ const Clusters = () => {
         fetchTableData(sort, value, sortColumn)
     }
 
+    const submit = (row: any) => {
+        LoginRegistrationAPI.generateSaasArticleFromIdeaOnIdeaPage({
+            article_type: 'blog',
+            topic: row.topic,
+            keywords: row.keywords,
+            article_length: row.article_length,
+            tone: row.tone,
+            language: row.language,
+            country: row.country,
+            links: row.links,
+            outlines: row.outlines,
+            outline_source: row.outline_source,
+            outline_url: row.outline_url,
+            faq: row.faq,
+            toc: true,
+            model: row.model,
+            showFeaturedImg: row.img,
+            point_of_view: row.point_of_view,
+            img_service: row.img_service,
+            extra_prompt: row.extra_prompt,
+            img_prompt: row.citation,
+            citation: row.citation,
+            folder_id: row.folder_id,
+            idea_id: row.id
+        }).
+            then(res => {
+                console.log("res:", res)
+                Swal.fire({
+                    title: 'Success',
+                    text: 'You can see the article on My Articles page. Click ok to see the current status.',
+                    icon: 'success',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: "#2979FF",
+                }).then(() => {
+                    router.push(`/generated-article/${parseInt(row.article_id)}`)
+                })
+            }).catch(e => {
 
+                console.log("error:", e);
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+              <h5>${e?.response?.data}</h5>
+              `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+              <h5>Unable to Generate Article</h5>
+              `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                }
+
+            })
+    }
+
+    const updateList = () => {
+
+        LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
+            // console.log("res:", res.data)
+            setMainData(res.data.idea_library)
+
+
+        })
+
+
+    }
 
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <IdeaAdvancedSettings isCreateIdea={true} settings={[]} />
+                <IdeaAdvancedSettings isCreateIdea={true} settings={[]} updateList={updateList} />
             </Box>
             <Card>
                 <DataGrid
@@ -403,4 +450,4 @@ const Clusters = () => {
     )
 }
 
-export default Clusters
+export default IdeaList

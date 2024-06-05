@@ -216,30 +216,6 @@ const IdeaAdvancedSettings = (props: any) => {
     return csv;
   }
   const handleSubmit = () => {
-    console.log({
-      article_type: articleType,
-      topic: topic,
-      keywords: convertArrayToCsvKeywords(keywords),
-      article_length: articleLength,
-      tone: tone,
-      language: language,
-      country: country,
-      links: convertArrayToCSV(links),
-      outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-      outline_source: outlineSource,
-      outline_url: outlineURL,
-      faq: faq,
-      toc: toc,
-      model: model,
-      showFeaturedImg: showFeaturedImg,
-      point_of_view: pointOfView,
-      img_service: showFeaturedImg ? imgService : null,
-      extra_prompt: extraPrompt,
-      img_prompt: imgPrompt,
-      citation: citation,
-      article_id: '',
-      no_of_citations: noOfCitations
-    })
 
     props.handleChange(props.idea_id, topic, 'topic')
     props.handleChange(props.idea_id, convertArrayToCsvKeywords(keywords), 'keywords')
@@ -288,7 +264,6 @@ const IdeaAdvancedSettings = (props: any) => {
       idea_id: props.idea_id,
 
     }).then(res => {
-      console.log("topic != oldTopic || keywords != oldKeywords:", JSON.stringify(keywords) != JSON.stringify(oldKeywords), topic, oldTopic, keywords, oldKeywords)
       if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
         props.updateList()
       }

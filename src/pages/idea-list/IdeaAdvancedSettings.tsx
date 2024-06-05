@@ -41,6 +41,7 @@ import DndList from 'src/services/DND/DndList'
 import GetCountryList from 'src/pages/create-article/CountryList'
 import { isValidURL } from 'src/services/URLChecker'
 import { LoginRegistrationAPI } from 'src/services/API'
+import Folders from './Folders'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -115,6 +116,22 @@ const data: CustomRadioIconsData[] = [
 ]
 
 
+const convertArrayToCsvKeywords = (keywordArray: any) => {
+  let csvKeywords = '';
+  if (keywordArray.length > 0) {
+    for (let i = 0; i < keywordArray.length; i++) {
+      if (csvKeywords == '') {
+        csvKeywords = keywordArray[i];
+      } else {
+        csvKeywords = csvKeywords + ',' + keywordArray[i];
+      }
+    }
+
+  }
+
+  return csvKeywords;
+}
+
 const IdeaAdvancedSettings = (props: any) => {
   // ** States
   const [show, setShow] = useState<boolean>(false)
@@ -122,35 +139,37 @@ const IdeaAdvancedSettings = (props: any) => {
   const [numberOfLinks, setNumberOfLinks] = useState([1]);
   //Values
   const [articleType, setArticleType] = useState('blog')
-  const [topic, setTopic] = useState(props?.settings[props?.idea_id]?.topic ? props.settings[props.idea_id].topic : '')
-  const [oldTopic, setOldTopic] = useState(props?.settings[props?.idea_id]?.topic ? props.settings[props.idea_id].topic : '')
-  const [keywords, setKeywords] = useState<any>(separateString(props?.settings[props?.idea_id]?.keywords ?? []));
-  const [oldKeywords, setOldKeywords] = useState<any>(separateString(props?.settings[props?.idea_id]?.keywords ?? []));
-  const [tone, setTone] = useState(props?.settings[props?.idea_id]?.tone ?? 'Clear, Knowledgeable and Confident');
-  const [language, setLanguage] = useState(props?.settings[props?.idea_id]?.language ?? 'English');
-  const [links, setLinks] = useState<Array<string>>(separateString(props?.settings[props?.idea_id]?.links ?? ''));
-  const [country, setCountry] = useState<string>(props?.settings[props?.idea_id]?.country ?? 'Default');
-  const [articleLength, setArticleLength] = useState<string>(props?.settings[props?.idea_id]?.article_length ?? 'short');
+  const [topic, setTopic] = useState(props?.data?.topic ? props?.data?.topic : '')
+  const [oldTopic, setOldTopic] = useState(props?.data?.topic ? props?.data?.topic : '')
+  const [keywords, setKeywords] = useState<any>(separateString(props?.data?.keywords ? props?.data?.keywords : []));
+  const [oldKeywords, setOldKeywords] = useState<any>(separateString(props?.data?.keywords ? props?.data?.keywords : []));
+  const [tone, setTone] = useState(props?.data?.tone ?? 'Clear, Knowledgeable and Confident');
+  const [language, setLanguage] = useState(props?.data?.language ?? 'English');
+  const [links, setLinks] = useState<Array<string>>(separateString(props?.data?.links ?? ''));
+  const [country, setCountry] = useState<string>(props?.data?.country ?? 'Default');
+  const [articleLength, setArticleLength] = useState<string>(props?.data?.article_length ?? 'short');
   const [headings, setHeadings] = useState<any>([]);
   const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
   const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
-  const [outlineSource, setOutlineSource] = useState<string>(props?.settings[props?.idea_id]?.outline_source ?? 'system');
-  const [model, setModel] = useState<string>(props?.settings[props?.idea_id]?.model ?? 'gpt-4o'); //gpt-3.5-turbo-1106
-  const [imgService, setImgService] = useState<string>(props?.settings[props?.idea_id]?.img_service ?? 'unsplash');
-  const [pointOfView, setPointOfView] = useState<string>(props?.settings[props?.idea_id]?.point_of_view ?? 'Third Person (he, she, it, they)');
-  const [outlineURL, setOutlineURL] = useState(props?.settings[props?.idea_id]?.outline_url ?? '');
-  const [imgPrompt, setImgPrompt] = useState(props?.settings[props?.idea_id]?.img_prompt ?? '');
+  const [outlineSource, setOutlineSource] = useState<string>(props?.data?.outline_source ?? 'system');
+  const [model, setModel] = useState<string>(props?.data?.model ?? 'gpt-4o'); //gpt-3.5-turbo-1106
+  const [imgService, setImgService] = useState<string>(props?.data?.img_service ?? 'unsplash');
+  const [pointOfView, setPointOfView] = useState<string>(props?.data?.point_of_view ?? 'Third Person (he, she, it, they)');
+  const [outlineURL, setOutlineURL] = useState(props?.data?.outline_url ?? '');
+  const [imgPrompt, setImgPrompt] = useState(props?.data?.img_prompt ?? '');
   const [showOutline, setShowOutline] = useState(false);
-  const [faq, setFaq] = useState(props?.settings[props.idea_id]?.faq ?? false);
-  const [toc, setToc] = useState(props?.settings[props.idea_id]?.toc ?? true);
-  const [citation, setCitation] = useState(props?.settings[props.idea_id]?.citation ?? false);
-  const [noOfCitations, setNoOfCitations] = useState(props?.settings[props.idea_id]?.no_of_citations ?? 0);
-  const [introduction, setIntroduction] = useState(props?.settings[props.idea_id]?.introduction ?? true);
-  const [conclusion, setConclusion] = useState(props?.settings[props.idea_id]?.conclusion ?? true);
+  const [faq, setFaq] = useState(props?.data?.faq ?? false);
+  const [toc, setToc] = useState(props?.data?.toc ?? true);
+  const [citation, setCitation] = useState(props?.data?.citation ?? false);
+  const [noOfCitations, setNoOfCitations] = useState(props?.data?.no_of_citations ?? '1-10');
+  const [introduction, setIntroduction] = useState(props?.data?.introduction ?? true);
+  const [conclusion, setConclusion] = useState(props?.data?.conclusion ?? true);
   const [loading, setLoading] = useState(false);
   const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
   const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
   const [showFeaturedImg, setShowFeaturedImg] = useState(true);
+  const [disabled, setDisabled] = useState(props?.data?.topic ? false : true);
+  const [folder, setFolder] = useState<string | number>(props?.data?.folder_id ? props?.data?.folder_id : '')
   const [imgServiceList, setImgServiceList] = useState<any>([
     {
       value: 'none',
@@ -182,21 +201,15 @@ const IdeaAdvancedSettings = (props: any) => {
 
   // console.log("props.settings[props.idea_id]:", props.settings[props.idea_id])
 
-  const convertArrayToCsvKeywords = (keywordArray: any) => {
-    let csvKeywords = '';
-    if (keywordArray.length > 0) {
-      for (let i = 0; i < keywordArray.length; i++) {
-        if (csvKeywords == '') {
-          csvKeywords = keywordArray[i];
-        } else {
-          csvKeywords = csvKeywords + ',' + keywordArray[i];
-        }
-      }
 
+  useEffect(() => {
+    if (topic.length > 0 && disabled) {
+      setDisabled(false)
     }
-
-    return csvKeywords;
-  }
+    if (topic.length == 0 && !disabled) {
+      setDisabled(true)
+    }
+  }, [topic])
 
 
   const convertArrayToCSV = (array: any) => {
@@ -215,52 +228,88 @@ const IdeaAdvancedSettings = (props: any) => {
     return csv;
   }
   const handleSubmit = () => {
-    console.log({
-      article_type: articleType,
-      topic: topic,
-      keywords: convertArrayToCsvKeywords(keywords),
-      article_length: articleLength,
-      tone: tone,
-      language: language,
-      country: country,
-      links: convertArrayToCSV(links),
-      outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-      outline_source: outlineSource,
-      outline_url: outlineURL,
-      faq: faq,
-      toc: toc,
-      model: model,
-      showFeaturedImg: showFeaturedImg,
-      point_of_view: pointOfView,
-      img_service: showFeaturedImg ? imgService : null,
-      extra_prompt: extraPrompt,
-      img_prompt: imgPrompt,
-      citation: citation,
-      article_id: '',
-      no_of_citations: noOfCitations
-    })
+    // console.log({
+    //   article_type: articleType,
+    //   topic: topic,
+    //   keywords: convertArrayToCsvKeywords(keywords),
+    //   article_length: articleLength,
+    //   tone: tone,
+    //   language: language,
+    //   country: country,
+    //   links: convertArrayToCSV(links),
+    //   outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+    //   outline_source: outlineSource,
+    //   outline_url: outlineURL,
+    //   faq: faq,
+    //   toc: toc,
+    //   model: model,
+    //   showFeaturedImg: showFeaturedImg,
+    //   point_of_view: pointOfView,
+    //   img_service: showFeaturedImg ? imgService : null,
+    //   extra_prompt: extraPrompt,
+    //   img_prompt: imgPrompt,
+    //   citation: citation,
+    //   article_id: '',
+    //   no_of_citations: noOfCitations
+    // })
+    if (props.isCreateIdea) {
+      LoginRegistrationAPI.createNewIdea({
+        article_type: articleType,
+        topic: topic,
+        keywords: convertArrayToCsvKeywords(keywords),
+        article_length: articleLength,
+        tone: tone,
+        language: language,
+        country: country,
+        links: convertArrayToCSV(links),
+        outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+        outline_source: outlineSource,
+        outline_url: outlineURL,
+        faq: faq,
+        toc: toc,
+        model: model,
+        showFeaturedImg: showFeaturedImg,
+        point_of_view: pointOfView,
+        img_service: showFeaturedImg ? imgService : null,
+        extra_prompt: extraPrompt,
+        img_prompt: imgPrompt,
+        citation: citation,
+        article_id: '',
+        no_of_citations: noOfCitations,
+        cluster_id: null,
+        idea_id: props.idea_id,
+        folder_id: folder
 
-    // props.handleChange(props.idea_id, topic, 'topic')
-    // props.handleChange(props.idea_id, convertArrayToCsvKeywords(keywords), 'keywords')
-    // props.handleChange(props.idea_id, articleLength, 'article_length')
-    // props.handleChange(props.idea_id, tone, 'tone')
-    // props.handleChange(props.idea_id, language, 'language')
-    // props.handleChange(props.idea_id, convertArrayToCSV(links), 'links')
-    // props.handleChange(props.idea_id, headings.length > 0 ? JSON.stringify(headings) : null, 'outlines')
-    // props.handleChange(props.idea_id, outlineSource, 'outline_source')
-    // props.handleChange(props.idea_id, outlineURL, 'outline_url')
-    // props.handleChange(props.idea_id, faq, 'faq')
-    // props.handleChange(props.idea_id, toc, 'toc')
-    // props.handleChange(props.idea_id, model, 'model')
-    // props.handleChange(props.idea_id, pointOfView, 'point_of_view')
-    // props.handleChange(props.idea_id, imgService, 'img_service')
-    // props.handleChange(props.idea_id, extraPrompt, 'extra_prompt')
-    // props.handleChange(props.idea_id, imgPrompt, 'img_prompt')
-    // props.handleChange(props.idea_id, citation, 'citation')
-    // props.handleChange(props.idea_id, noOfCitations, 'no_of_citations')
-    // props.handleChange(props.idea_id, 'idea', 'status')
+      }).then(res => {
+        if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
+          props.updateList()
+        }
+        handleClose()
+      }).catch(e => {
+        console.log("inside catch", e)
+        Swal.fire({
+          // title: 'Error',
+          text: 'Unable to create article idea!',
+          icon: 'error',
+          confirmButtonText: 'DELETE',
+          // showCancelButton: true,
+          // confirmButtonColor: "#BB2124",
+          // cancelButtonText: "CANCEL"
+        }).then(res => {
+          handleClose()
 
-    LoginRegistrationAPI.createNewIdea({
+        })
+      })
+
+    } else {
+      saveSubmit()
+    }
+
+
+  }
+
+  const saveSubmit = () => {
+    LoginRegistrationAPI.saveIdeaLibrarySettings({
       article_type: articleType,
       topic: topic,
       keywords: convertArrayToCsvKeywords(keywords),
@@ -285,9 +334,9 @@ const IdeaAdvancedSettings = (props: any) => {
       no_of_citations: noOfCitations,
       cluster_id: null,
       idea_id: props.idea_id,
+      folder_id: folder
 
     }).then(res => {
-      console.log("topic != oldTopic || keywords != oldKeywords:", JSON.stringify(keywords) != JSON.stringify(oldKeywords), topic, oldTopic, keywords, oldKeywords)
       if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
         props.updateList()
       }
@@ -295,9 +344,9 @@ const IdeaAdvancedSettings = (props: any) => {
     }).catch(e => {
 
     })
-
-
   }
+
+
 
   const handleArticleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
     if (typeof prop === 'string') {
@@ -413,12 +462,44 @@ const IdeaAdvancedSettings = (props: any) => {
 
       // Trim each part to remove leading and trailing whitespaces
       const trimmedParts = parts.map((part: any) => part.trim());
-      console.log("trimmedParts:", trimmedParts);
+      // console.log("trimmedParts:", trimmedParts);
       return trimmedParts;
     }
     return []
   }
 
+  useEffect(() => {
+    if (props.isCreateIdea) {
+      setTopic('')
+      setOldTopic('')
+      setKeywords([])
+      setOldKeywords([])
+      setTone('Clear, Knowledgeable and Confident')
+      setLanguage('English')
+      setCountry('Default')
+      setArticleLength('short')
+      setHeadings([])
+      setTempURLHeadings([])
+      setTempUserHeadings([])
+      setOutlineSource('system')
+      setModel('gpt-4o')
+      setImgService('unsplash')
+      setPointOfView('Third Person (he, she, it, they)')
+      setOutlineURL('')
+      setImgPrompt('')
+      setShowOutline(false)
+      setFaq(false)
+      setToc(true)
+      setCitation(false)
+      setNoOfCitations('1-10')
+      setIntroduction(true)
+      setConclusion(true)
+      setExtraPrompt('')
+      setShowFeaturedImg(true)
+      setShowAdditionalSettings(false)
+      setFetchOutlineLoading(false)
+    }
+  }, [])
 
   return (
     <>
@@ -477,6 +558,28 @@ const IdeaAdvancedSettings = (props: any) => {
             </IconButton>
 
 
+            <Grid item sm={12} xs={12} sx={{ marginBottom: "10px" }} >
+
+              <Box sx={{ display: "flex", justifyContent: "space-between", }}>
+                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                  Select Folder
+                  {/* <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            For improved quality GPT-4-Turbo is recommanded.
+                                            <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                        </div>
+                                    </LightTooltip > */}
+                </Typography>
+
+                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+              </Box>
+              <Folders folder={folder} setFolder={setFolder} folder_id={props?.data?.folder_id} />
+            </Grid>
             <Grid item sm={12} xs={12} >
 
               <FormControl fullWidth>
@@ -1066,11 +1169,13 @@ const IdeaAdvancedSettings = (props: any) => {
               <Icon icon={loading ? "line-md:loading-twotone-loop" : "icons8:idea"}></Icon>
               :
               <Icon icon={loading ? "line-md:loading-twotone-loop" : "ic:outline-save"}></Icon>
-          } onClick={handleSubmit}>
+          } onClick={
+            handleSubmit
+          } disabled={disabled}>
             {
               props.isCreateIdea ?
                 'Create Idea' :
-                save
+                "save"
             }
 
 
