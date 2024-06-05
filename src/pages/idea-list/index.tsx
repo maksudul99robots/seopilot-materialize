@@ -170,8 +170,8 @@ const IdeaList = () => {
             }
         },
         {
-            flex: 0.175,
-            minWidth: 120,
+            flex: 0.1,
+            minWidth: 70,
             field: 'Action',
             sortable: false,
             valueGetter: params => new Date(params.value),
