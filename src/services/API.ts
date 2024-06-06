@@ -405,6 +405,10 @@ export const LoginRegistrationAPI = {
     async deleteIdea(data: any, url = "/delete-idea", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async researchKeyword(data: any, url = "/research-keyword", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+
 
 
 

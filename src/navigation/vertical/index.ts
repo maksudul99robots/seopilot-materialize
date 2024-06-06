@@ -27,9 +27,17 @@ const navigation = (): VerticalNavItemsType | any => {
         path: '/folders'
       },
       {
+        title: 'Schedule',
+        icon: 'fluent-mdl2:date-time-mirrored',
+        path: '/schedule'
+      },
+      {
+        sectionTitle: 'Research'
+      },
+      {
         title: 'Create Cluster',
         icon: 'vaadin:cluster',
-        path: '/generate-idea',
+        path: '/create-cluster',
         badgeColor: "info",
         badgeContent: "beta"
       },
@@ -41,13 +49,13 @@ const navigation = (): VerticalNavItemsType | any => {
         badgeContent: "beta"
       },
       {
-        title: 'Schedule',
-        icon: 'fluent-mdl2:date-time-mirrored',
-        path: '/schedule'
+        title: 'Keyword Research',
+        icon: 'ri:menu-search-line',
+        path: '/keyword-research',
+        badgeColor: "info",
+        badgeContent: "beta"
       },
-      {
-        sectionTitle: 'Research'
-      },
+
       {
         title: 'Idea Library',
         icon: 'icons8:idea',
