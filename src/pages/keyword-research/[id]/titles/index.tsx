@@ -118,7 +118,7 @@ const Titles = () => {
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-    const [mainData, setMainData] = useState<any>(dummy);
+    const [mainData, setMainData] = useState<any>([]);
     const [primaryKeyword, setPrimaryKeyword] = useState<string>('digital marketing');
     const [loading, setLoading] = useState(false)
     const [settings, setSettings] = useState<any>({})
@@ -213,7 +213,27 @@ const Titles = () => {
                 return (
                     <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
 
-                        <Button variant='contained' size='medium' sx={{ fontSize: "10px", }} startIcon={<Icon icon="ph:plus"></Icon>}>
+                        <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' sx={{ fontSize: "10px", }} startIcon={<Icon icon="ph:plus"></Icon>}
+                            onClick={() => {
+                                LoginRegistrationAPI.addToIdeaLibrary({ title_id: row.id, title: row.title, keyword_id: router.query.id }).then(res => {
+                                    Swal.fire({
+                                        title: 'Success',
+                                        text: 'Added To Idea Library',
+                                        icon: 'success',
+                                        confirmButtonText: 'Ok',
+                                        confirmButtonColor: "#2979FF",
+                                    })
+                                }).catch(e => {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Unable to add to Idea Library',
+                                        icon: 'error',
+                                        confirmButtonText: 'Close',
+                                        confirmButtonColor: "#2979FF",
+                                    })
+                                })
+                            }}
+                        >
                             Add to Idea Library
                         </Button >
 
@@ -351,12 +371,18 @@ const Titles = () => {
     }
 
     useEffect(() => {
-        // if (router.query.id) {
-        setMainData(dummy)
-        // }
+        if (router.query.id) {
+            console.log("router.query.id:", router.query.id)
+            LoginRegistrationAPI.getTitleForKeyword({ keyword_research_id: router.query.id }).then(res => {
+                setMainData(res.data.titles)
+                setPrimaryKeyword(res.data.keyword)
+            }).catch(e => {
+
+            })
+        }
 
 
-    }, [])
+    }, [router.query.id])
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -512,17 +538,18 @@ const Titles = () => {
                 <Box sx={{ display: "flex", justifyContent: "start", margin: "20px" }}>
                     <Icon icon="ep:back" className='add-icon-color' style={{ alignItems: "center", marginTop: "5px", marginRight: "20px" }}
                         onClick={() => {
+                            router.back()
                             // Get the current URL
-                            const currentUrl = window.location.href;
+                            // const currentUrl = window.location.href;
 
-                            // Remove the "/title" part from the URL
-                            const newUrl = currentUrl.replace(/\/titles\/?$/, '');
+                            // // Remove the "/title" part from the URL
+                            // const newUrl = currentUrl.replace(/\/titles\/?$/, '');
 
-                            console.log(currentUrl, newUrl)
-                            // Navigate to the new URL
-                            if (currentUrl !== newUrl) {
-                                router.push(newUrl);
-                            }
+                            // console.log(currentUrl, newUrl)
+                            // // Navigate to the new URL
+                            // if (currentUrl !== newUrl) {
+                            //     router.push(newUrl);
+                            // }
                         }}
                     ></Icon>
                     <Typography variant='h6'>

@@ -32,36 +32,38 @@ const navigation = (): VerticalNavItemsType | any => {
         path: '/schedule'
       },
       {
-        sectionTitle: 'Research'
+        sectionTitle: 'Research',
+        badgeColor: "info",
+        badgeContent: "beta"
       },
       {
         title: 'Create Cluster',
         icon: 'vaadin:cluster',
         path: '/create-cluster',
-        badgeColor: "info",
-        badgeContent: "beta"
+        // badgeColor: "info",
+        // badgeContent: "beta"
       },
       {
         title: 'My Clusters',
         icon: 'fluent-mdl2:folder-list-mirrored',
         path: '/clusters',
-        badgeColor: "info",
-        badgeContent: "beta"
+        // badgeColor: "info",
+        // badgeContent: "beta"
       },
       {
         title: 'Keyword Research',
         icon: 'ri:menu-search-line',
         path: '/keyword-research',
-        badgeColor: "info",
-        badgeContent: "beta"
+        // badgeColor: "info",
+        // badgeContent: "beta"
       },
 
       {
         title: 'Idea Library',
         icon: 'icons8:idea',
         path: '/idea-list',
-        badgeColor: "info",
-        badgeContent: "beta"
+        // badgeColor: "info",
+        // badgeContent: "beta"
       },
       {
         sectionTitle: 'Workspace Settings'

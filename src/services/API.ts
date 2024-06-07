@@ -408,6 +408,18 @@ export const LoginRegistrationAPI = {
     async researchKeyword(data: any, url = "/research-keyword", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async getReserchKeywods(data: any, url = "/get-research-keywords", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getPrimaryResearch(data: any, url = "/get-primary-research", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getTitleForKeyword(data: any, url = "/get-title-for-keyword", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async addToIdeaLibrary(data: any, url = "/add-to-idea-library", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

@@ -120,7 +120,7 @@ const Researches = () => {
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
+    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 })
     const [mainData, setMainData] = useState<any>([]);
     const [primaryKeyword, setPrimaryKeyword] = useState<string>('digital marketing');
     const [loading, setLoading] = useState(false)
@@ -238,14 +238,14 @@ const Researches = () => {
             flex: 0.02,
             minWidth: 90,
             headerName: 'Volume',
-            field: 'avg_monthly_searches',
+            field: 'volume',
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
                 return (
-                    <Typography variant='body2' sx={{ color: row.avg_monthly_searches > 1000 ? "#EF4843" : "#F58F4F", display: "flex", justifyContent: "end", textAlign: "right", width: "100%" }}>
-                        {row?.avg_monthly_searches ? row.avg_monthly_searches.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}
+                    <Typography variant='body2' sx={{ color: row.volume > 1000 ? "#EF4843" : "#F58F4F", display: "flex", justifyContent: "end", textAlign: "right", width: "100%" }}>
+                        {row?.volume ? row.volume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0}
                     </Typography>
                 )
 
@@ -279,7 +279,7 @@ const Researches = () => {
                 return (
                     <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
 
-                        <Button variant='contained' size='medium' sx={{ fontSize: "10px", }} href={'/generated-article/' + row.id}>
+                        <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' sx={{ fontSize: "10px", }} href={'/generated-article/' + row.id}>
                             Suggested Titles
                         </Button >
 
@@ -384,55 +384,19 @@ const Researches = () => {
 
     const updateList = () => {
 
-        LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
-            // console.log("res:.....", res.data)
-            if (res.data.idea_library) {
-                let x: any = {};
-                res.data.idea_library.map((il: any, i: number) => {
-
-                    x[il.id] = {
-                        topic: il.topic,
-                        tone: il.tone,
-                        point_of_view: il.point_of_view,
-                        model: il.model,
-                        article_length: il.article_length,
-                        img: il.show_featured_image,
-                        faq: il.faq,
-                        introduction: true,
-                        conclusion: true,
-                        toc: il.toc,
-                        img_service: il.img_service,
-                        citation: il.citation,
-                        extra_prompt: il.extra_prompt,
-                        img_prompt: il.img_prompt,
-                        no_of_citations: il.no_of_citations,
-                        keywords: il.keywords,
-                        links: il.links,
-                        outline_source: il.outline_source,
-                        outline_url: "",
-                        outlines: il.raw_outline,
-                        language: il.language,
-                        country: il.country,
-                        status: il.status
-                    }
-                    if (i == res.data.idea_library.length - 1) {
-                        setSettings(x);
-                    }
-                })
-            }
-            setMainData(res.data.idea_library)
-
-
-        }).catch(e => {
-            console.log(e)
-        })
 
 
     }
 
     useEffect(() => {
         if (router.query.id) {
-            setMainData(dummy)
+            LoginRegistrationAPI.getReserchKeywods({ primary_research_id: router.query.id }).then((res: any) => {
+                setMainData(res.data.kr)
+                setPrimaryKeyword(res.data.pk)
+            }).catch(e => {
+
+            })
+            // setMainData(dummy)
         }
 
 
@@ -457,31 +421,72 @@ const Researches = () => {
             })
         }
     }, [auth?.user?.plan])
-    const fetchTableData = (useCallback(
+    // const fetchTableData = (useCallback(
+    //     async (sort: SortType, q: string, column: string) => {
+
+    //         const queryLowered = q.toLowerCase()
+    //         const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
+
+    //         const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
+    //         // console.log("dataAsc, sort, q, column", dataAsc, sort, q, column)
+    //         const filteredData = dataToFilter.filter(
+    //             (item: any) =>
+    //                 // item.id.toString().toLowerCase().includes(queryLowered) ||
+    //                 // item.output?.toLowerCase().includes(queryLowered) ||
+    //                 item.keyword?.toLowerCase().includes(queryLowered) ||
+    //                 // item.is_error.toLowerCase().includes(queryLowered) ||
+    //                 item.volume?.toLowerCase().includes(queryLowered) ||
+    //                 item.competition?.toLowerCase().includes(queryLowered)
+    //             // item.user_id.toLowerCase().includes(queryLowered) ||
+    //             // item.createdAt.toString().toLowerCase().includes(queryLowered) //||
+    //             // item.updatedAt.toLowerCase().includes(queryLowered)
+    //         )
+    //         setTotal(filteredData.length);
+    //         setRows(loadServerRows(paginationModel.page, filteredData))
+    //     },
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    //     [paginationModel, mainData]
+    // ))
+
+    const fetchTableData = useCallback(
         async (sort: SortType, q: string, column: string) => {
+            const queryLowered = q.toLowerCase();
 
-            const queryLowered = q.toLowerCase()
-            const dataAsc = mainData.sort((a: any, b: any) => (a[column] < b[column] ? -1 : 1))
+            // Function to compare values with special handling for 'volume' as integer
+            const compare = (a: any, b: any) => {
+                if (column === 'volume') {
+                    const volumeA = parseInt(a.volume, 10);
+                    const volumeB = parseInt(b.volume, 10);
 
-            const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse()
-            // console.log("dataAsc, sort, q, column", dataAsc, sort, q, column)
+                    if (isNaN(volumeA) && isNaN(volumeB)) return 0;
+                    if (isNaN(volumeA)) return 1;
+                    if (isNaN(volumeB)) return -1;
+                    return volumeA - volumeB;
+                } else {
+                    return a[column] < b[column] ? -1 : 1;
+                }
+            };
+
+            // Sort data
+            const dataAsc = [...mainData].sort(compare);
+
+            // Reverse if descending order
+            const dataToFilter = sort === 'asc' ? dataAsc : dataAsc.reverse();
+
+            // Filter data
             const filteredData = dataToFilter.filter(
                 (item: any) =>
-                    // item.id.toString().toLowerCase().includes(queryLowered) ||
-                    // item.output?.toLowerCase().includes(queryLowered) ||
                     item.keyword?.toLowerCase().includes(queryLowered) ||
-                    // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.volume?.toLowerCase().includes(queryLowered)
-                // item.user_id.toLowerCase().includes(queryLowered) ||
-                // item.createdAt.toString().toLowerCase().includes(queryLowered) //||
-                // item.updatedAt.toLowerCase().includes(queryLowered)
-            )
+                    item.volume?.toLowerCase().includes(queryLowered) ||
+                    item.competition?.toLowerCase().includes(queryLowered)
+            );
+
             setTotal(filteredData.length);
-            setRows(loadServerRows(paginationModel.page, filteredData))
+            setRows(loadServerRows(paginationModel.page, filteredData));
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [paginationModel, mainData]
-    ))
+    );
 
     useEffect(() => {
         fetchTableData(sort, searchValue, sortColumn)
@@ -591,7 +596,23 @@ const Researches = () => {
 
             <Card>
 
-                <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
+                <Box sx={{ display: "flex", justifyContent: "start", margin: "20px" }}>
+                    <Icon icon="ep:back" className='add-icon-color' style={{ alignItems: "center", marginTop: "5px", marginRight: "20px" }}
+                        onClick={() => {
+                            router.back()
+                            // Get the current URL
+                            // const currentUrl = window.location.href;
+
+                            // // Remove the "/title" part from the URL
+                            // const newUrl = currentUrl.replace(/\/titles\/?$/, '');
+
+                            // console.log(currentUrl, newUrl)
+                            // // Navigate to the new URL
+                            // if (currentUrl !== newUrl) {
+                            //     router.push(newUrl);
+                            // }
+                        }}
+                    ></Icon>
                     <Typography variant='h6'>
                         Keyword Research on : {primaryKeyword}
                     </Typography>

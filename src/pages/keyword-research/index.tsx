@@ -208,36 +208,36 @@ const IdeaList = () => {
     useEffect(() => {
 
         if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
-            // LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
-            //     // console.log("res:", res.data)
-            //     setMainData(res.data.idea_library)
+            LoginRegistrationAPI.getPrimaryResearch({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data)
 
-            // }).catch((e: any) => {
-            //     if (e?.response?.status == 400) {
-            //         Swal.fire({
-            //             html: `<h3>Error</h3>
-            //           <h5>${e?.response?.data}</h5>
-            //           `,
-            //             icon: "error",
-            //             // input: 'text',
-            //             // inputLabel: 'Please try again later.',
-            //             confirmButtonColor: "#2979FF"
-            //         }).then(() => {
-            //             router.push('/add-apikey')
-            //         })
-            //     } else {
-            //         Swal.fire({
-            //             html: `<h3>Error</h3>
-            //           <h5>Unable to Generate Article</h5>
-            //           `,
-            //             icon: "error",
-            //             // input: 'text',
-            //             inputLabel: 'Please try again later.',
-            //             confirmButtonColor: "#2979FF"
-            //         })
-            //     }
-            // })
-            setMainData(dummy)
+            }).catch((e: any) => {
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>${e?.response?.data}</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push('/add-apikey')
+                    })
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                }
+            })
+            // setMainData(dummy)
         }
 
     }, [])
@@ -273,14 +273,35 @@ const IdeaList = () => {
 
     useEffect(() => {
         if (resetDataset > 0) {
-            // if (getArticleFromParams > 0) {
-            // LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
-            //     // console.log("res:", res.data)
-            //     setMainData(res.data.idea_library)
+            LoginRegistrationAPI.getPrimaryResearch({}).then(res => {
+                // console.log("res:", res.data)
+                setMainData(res.data)
 
-
-            // })
-            setMainData(dummy)
+            }).catch((e: any) => {
+                if (e?.response?.status == 400) {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>${e?.response?.data}</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        // inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push('/add-apikey')
+                    })
+                } else {
+                    Swal.fire({
+                        html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                        icon: "error",
+                        // input: 'text',
+                        inputLabel: 'Please try again later.',
+                        confirmButtonColor: "#2979FF"
+                    })
+                }
+            })
         }
     }, [resetDataset])
 
@@ -331,79 +352,16 @@ const IdeaList = () => {
         fetchTableData(sort, value, sortColumn)
     }
 
-    const submit = (row: any) => {
-        LoginRegistrationAPI.generateSaasArticleFromIdeaOnIdeaPage({
-            article_type: 'blog',
-            topic: row.topic,
-            keywords: row.keywords,
-            article_length: row.article_length,
-            tone: row.tone,
-            language: row.language,
-            country: row.country,
-            links: row.links,
-            outlines: row.outlines,
-            outline_source: row.outline_source,
-            outline_url: row.outline_url,
-            faq: row.faq,
-            toc: true,
-            model: row.model,
-            showFeaturedImg: row.img,
-            point_of_view: row.point_of_view,
-            img_service: row.img_service,
-            extra_prompt: row.extra_prompt,
-            img_prompt: row.citation,
-            citation: row.citation,
-            folder_id: row.folder_id,
-            idea_id: row.id
-        }).
-            then(res => {
-                console.log("res:", res)
-                Swal.fire({
-                    title: 'Success',
-                    text: 'You can see the article on My Articles page. Click ok to see the current status.',
-                    icon: 'success',
-                    confirmButtonText: 'Ok',
-                    confirmButtonColor: "#2979FF",
-                }).then(() => {
-                    router.push(`/generated-article/${parseInt(row.article_id)}`)
-                })
-            }).catch(e => {
-
-                console.log("error:", e);
-                if (e?.response?.status == 400) {
-                    Swal.fire({
-                        html: `<h3>Error</h3>
-              <h5>${e?.response?.data}</h5>
-              `,
-                        icon: "error",
-                        // input: 'text',
-                        // inputLabel: 'Please try again later.',
-                        confirmButtonColor: "#2979FF"
-                    })
-                } else {
-                    Swal.fire({
-                        html: `<h3>Error</h3>
-              <h5>Unable to Generate Article</h5>
-              `,
-                        icon: "error",
-                        // input: 'text',
-                        inputLabel: 'Please try again later.',
-                        confirmButtonColor: "#2979FF"
-                    })
-                }
-
-            })
-    }
 
     const updateList = () => {
 
-        // LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
-        //     // console.log("res:", res.data)
-        //     setMainData(res.data.idea_library)
+        LoginRegistrationAPI.getPrimaryResearch({}).then(res => {
+            // console.log("res:", res.data)
+            setMainData(res.data)
 
 
-        // })
-        setMainData(dummy)
+        })
+        // setMainData(dummy)
 
     }
 

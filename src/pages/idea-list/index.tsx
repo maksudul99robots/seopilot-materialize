@@ -139,14 +139,11 @@ const IdeaList = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            {/* <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
                                 {row.topic}
-                            </Typography> */}
-                            <Link style={{ textDecoration: "none" }} href={`/clusters/${row.id}`}>
-                                <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                    {row.topic}
-                                </Typography>
-                            </Link>
+                            </Typography>
+
 
                         </Box>
                     </Box>

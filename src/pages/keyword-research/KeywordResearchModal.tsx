@@ -101,9 +101,10 @@ const KeywordResearch = (props: any) => {
         if (keyword.length > 0) {
             LoginRegistrationAPI.researchKeyword({ keyword, language, country }).then(res => {
                 setLoading(false)
-                router.push('/keyword-research/' + res.data.id)
+                router.push('/keyword-research/' + res.data.primary_research_id)
             }).catch((e: any) => {
                 setLoading(false)
+                setShow(false);
                 console.log("e:", e)
                 if (e?.response?.status == 400) {
                     Swal.fire({
@@ -118,7 +119,7 @@ const KeywordResearch = (props: any) => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-          <h5>Unable to Generate Article</h5>
+          <h5>Keyword Research Faild. Please Communicate to Our Support Team.</h5>
           `,
                         icon: "error",
                         // input: 'text',
