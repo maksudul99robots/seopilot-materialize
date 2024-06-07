@@ -117,7 +117,7 @@ const TableServerSide = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }} title={row.topic}>
                                 {
                                     (!row.is_error && row.status != 'error') ?
                                         <Link className='article_urls' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}>{row.topic}</Link>

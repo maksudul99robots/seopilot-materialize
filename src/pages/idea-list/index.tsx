@@ -140,7 +140,7 @@ const IdeaList = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }} title={row.topic}>
                                 {row.topic}
                             </Typography>
 
