@@ -36,16 +36,17 @@ const navigation = (): VerticalNavItemsType | any => {
         badgeColor: "info",
         badgeContent: "beta"
       },
+      // {
+      //   title: 'Create Cluster',
+      //   icon: 'vaadin:cluster',
+      //   path: '/create-cluster',
+      //   // badgeColor: "info",
+      //   // badgeContent: "beta"
+      // },
       {
-        title: 'Create Cluster',
+        title: 'Article Clusters',
+        // icon: 'fluent-mdl2:folder-list-mirrored',
         icon: 'vaadin:cluster',
-        path: '/create-cluster',
-        // badgeColor: "info",
-        // badgeContent: "beta"
-      },
-      {
-        title: 'My Clusters',
-        icon: 'fluent-mdl2:folder-list-mirrored',
         path: '/clusters',
         // badgeColor: "info",
         // badgeContent: "beta"

@@ -86,6 +86,7 @@ import { number } from 'yup'
 import { LoginRegistrationAPI } from 'src/services/API'
 import Link from 'next/link'
 import ActionDropdown from './ActionDropdown'
+import KeywordResearch from './KeywordResearchModal'
 
 const Clusters = () => {
     // ** States
@@ -365,7 +366,9 @@ const Clusters = () => {
 
     return (
         <Box >
-
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
+                <KeywordResearch />
+            </Box>
             <Card>
                 <DataGrid
                     autoHeight
