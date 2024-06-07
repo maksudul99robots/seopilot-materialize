@@ -279,7 +279,9 @@ const Researches = () => {
                 return (
                     <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
 
-                        <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' sx={{ fontSize: "10px", }} href={'/generated-article/' + row.id}>
+                        <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' sx={{ fontSize: "10px", }} onClick={() => {
+                            router.push('/keyword-research/' + row.id + '/titles')
+                        }} >
                             Suggested Titles
                         </Button >
 

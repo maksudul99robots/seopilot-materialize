@@ -45,6 +45,7 @@ code[class*='language-'] {
   color: #2979FF !important;
   cursor: pointer;
   border: 1px solid #2979FF !important;
+  background-color: #fff !important;
 }
 
 .close-icon-style{

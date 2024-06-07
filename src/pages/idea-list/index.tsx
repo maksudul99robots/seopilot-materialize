@@ -153,6 +153,22 @@ const IdeaList = () => {
         {
             flex: 0.2,
             minWidth: 90,
+            headerName: 'Keyword',
+            field: 'keywords',
+            valueGetter: params => new Date(params.value),
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+                return (
+                    <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                        {row.keywords}
+                    </Typography>
+                )
+
+            }
+        },
+        {
+            flex: 0.2,
+            minWidth: 90,
             headerName: 'Created',
             field: 'createdAt',
             valueGetter: params => new Date(params.value),
@@ -175,7 +191,7 @@ const IdeaList = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='contained' size='medium' onClick={e => {
+                    <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' onClick={e => {
                         submit(row)
                     }}>
                         Write

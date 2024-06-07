@@ -196,7 +196,9 @@ const IdeaList = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='contained' size='medium' href={`/keyword-research/${row.id}`}>
+                    <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' onClick={() => {
+                        router.push(`/keyword-research/${row.id}`)
+                    }}>
                         View
                     </Button >
                 )

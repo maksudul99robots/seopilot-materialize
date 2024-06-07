@@ -419,7 +419,7 @@ const ClusterIdea = () => {
             extra_prompt: data.extra_prompt,
             img_prompt: data.citation,
             citation: data.citation,
-            folder_id: null,
+            folder_id: data.folder_id,
             idea_id: row.id
         }).
             then(res => {
@@ -559,7 +559,8 @@ const ClusterIdea = () => {
                             outlines: il.raw_outline,
                             language: il.language,
                             country: il.country,
-                            status: il.status
+                            status: il.status,
+                            folder_id: il.folder_id
 
                         }
                         if (i == res.data.idea_library.length - 1) {

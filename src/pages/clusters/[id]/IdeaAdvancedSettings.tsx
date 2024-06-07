@@ -41,6 +41,7 @@ import DndList from 'src/services/DND/DndList'
 import GetCountryList from 'src/pages/create-article/CountryList'
 import { isValidURL } from 'src/services/URLChecker'
 import { LoginRegistrationAPI } from 'src/services/API'
+import Folders from './Folders'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -152,6 +153,7 @@ const IdeaAdvancedSettings = (props: any) => {
   const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
   const [showAdditionalSettings, setShowAdditionalSettings] = useState(false);
   const [showFeaturedImg, setShowFeaturedImg] = useState(true);
+  const [folder, setFolder] = useState<string | number>(props.settings[props.idea_id].folder_id)
   const [imgServiceList, setImgServiceList] = useState<any>([
     {
       value: 'none',
@@ -235,6 +237,7 @@ const IdeaAdvancedSettings = (props: any) => {
     props.handleChange(props.idea_id, imgPrompt, 'img_prompt')
     props.handleChange(props.idea_id, citation, 'citation')
     props.handleChange(props.idea_id, noOfCitations, 'no_of_citations')
+    props.handleChange(props.idea_id, folder, 'folder_id')
     // props.handleChange(props.idea_id, 'idea', 'status')
 
     LoginRegistrationAPI.saveIdeaLibrarySettings({
@@ -262,6 +265,7 @@ const IdeaAdvancedSettings = (props: any) => {
       no_of_citations: noOfCitations,
       cluster_id: props.cluster_id,
       idea_id: props.idea_id,
+      folder_id: folder
 
     }).then(res => {
       if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
@@ -438,6 +442,19 @@ const IdeaAdvancedSettings = (props: any) => {
             <IconButton size='small' onClick={handleClose} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
               <Icon icon='mdi:close' />
             </IconButton>
+
+            <Grid item sm={12} xs={12} sx={{ marginBottom: "10px" }} >
+
+              <Box sx={{ display: "flex", justifyContent: "space-between", }}>
+                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                  Select Folder
+                </Typography>
+
+                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+              </Box>
+              <Folders folder={folder} setFolder={setFolder} folder_id={props?.folder_id} />
+            </Grid>
 
 
             <Grid item sm={12} xs={12} >
