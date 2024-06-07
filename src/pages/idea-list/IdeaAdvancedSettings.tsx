@@ -340,7 +340,7 @@ const IdeaAdvancedSettings = (props: any) => {
       if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
         props.updateList()
       }
-      props.handleClose()
+      handleClose()
     }).catch(e => {
 
     })
@@ -510,13 +510,13 @@ const IdeaAdvancedSettings = (props: any) => {
             setShow(true);
           }} startIcon={<Icon icon="ph:plus"></Icon>}>Create Idea</Button>
           :
-          <MenuItem onClick={() => {
+          <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={() => {
 
             setShow(true);
-          }} className='add-icon-color' >
-            <Icon icon="material-symbols-light:settings-outline" />
-            &nbsp;&nbsp;Article Settings
-          </MenuItem>
+          }} sx={{ fontSize: "12px", padding: "5px", marginRight: "5px" }}>
+
+            Edit
+          </Button>
       }
 
 

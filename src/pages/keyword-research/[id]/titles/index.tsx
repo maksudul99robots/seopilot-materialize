@@ -84,6 +84,18 @@ import { makeid } from 'src/services/makeid'
 // import sampleIdeas from '../sample'
 import { number } from 'yup'
 import Link from 'next/link'
+import CustomBadge from 'src/@core/components/mui/badge'
+import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
+
+const ListBadge: any = styled(CustomBadge)<CustomBadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+        height: '18px',
+        minWidth: '18px',
+        transform: 'none',
+        position: 'relative',
+        transformOrigin: 'none'
+    }
+}))
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -96,19 +108,6 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     },
 }));
 
-let dummy =
-    [
-        { "id": 1, "title": "The Ultimate Guide to Digital Marketing: Strategies, Tools, and Trends" },
-        { "id": 2, "title": "Top Digital Marketing Techniques to Boost Your Online Presence" },
-        { "id": 3, "title": "Digital Marketing 101: Everything You Need to Know" },
-        { "id": 4, "title": "How to Master Digital Marketing: Tips for Beginners" },
-        { "id": 5, "title": "The Future of Digital Marketing: Trends to Watch in 2024" },
-        { "id": 6, "title": "Digital Marketing Strategies for Small Businesses" },
-        { "id": 7, "title": "Essential Digital Marketing Tools to Transform Your Business" },
-        { "id": 8, "title": "Advanced Digital Marketing Tactics for Experienced Marketers" },
-        { "id": 9, "title": "Digital Marketing vs. Traditional Marketing: Which is Right for You?" },
-        { "id": 10, "title": "Building a Successful Digital Marketing Campaign: A Step-by-Step Guide" }
-    ]
 
 const Titles = () => {
     // ** States
@@ -126,34 +125,6 @@ const Titles = () => {
     const auth = useAuth()
     const router = useRouter()
 
-    // useEffect(() => {
-    //     if (auth.user?.is_active) {
-    //         if (auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
-
-    //         } else {
-    //             Swal.fire({
-    //                 title: 'Access Denied',
-    //                 text: 'Please Subscribe to Higher Plan to Get This Feature.',
-    //                 icon: 'warning',
-    //                 confirmButtonText: 'OK',
-    //                 confirmButtonColor: "#2979FF"
-    //             }).then(() => {
-    //                 router.push('/plan')
-    //             })
-    //         }
-
-    //     } else {
-    //         Swal.fire({
-    //             title: 'Check Your Email',
-    //             text: 'Please Verify Your Account To get Full Access!',
-    //             icon: 'warning',
-    //             confirmButtonText: 'OK',
-    //             confirmButtonColor: "#2979FF"
-    //         })
-    //         // 
-    //     }
-
-    // }, [])
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -191,11 +162,19 @@ const Titles = () => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
 
                             <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
                                 {row.title}
                             </Typography>
+                            {
+                                row.status == 'idea' ?
+                                    <ListBadge color='info' sx={{ ml: 5 }} badgeContent='Added to Idea Library' />
+                                    :
+                                    row.status == 'completed' ?
+                                        <ListBadge color='success' sx={{ ml: 5 }} badgeContent='Article Generated' />
+                                        : null
+                            }
 
                         </Box>
                     </Box>
@@ -222,6 +201,13 @@ const Titles = () => {
                                         icon: 'success',
                                         confirmButtonText: 'Ok',
                                         confirmButtonColor: "#2979FF",
+                                    }).then(() => {
+                                        LoginRegistrationAPI.getTitleForKeyword({ keyword_research_id: router.query.id }).then(res => {
+                                            setMainData(res.data.titles)
+                                            setPrimaryKeyword(res.data.keyword)
+                                        }).catch(e => {
+                                            console.log("e", e)
+                                        })
                                     })
                                 }).catch(e => {
                                     Swal.fire({
@@ -233,6 +219,7 @@ const Titles = () => {
                                     })
                                 })
                             }}
+                            disabled={row.status !== 'suggested'}
                         >
                             Add to Idea Library
                         </Button >
@@ -372,7 +359,6 @@ const Titles = () => {
 
     useEffect(() => {
         if (router.query.id) {
-            console.log("router.query.id:", router.query.id)
             LoginRegistrationAPI.getTitleForKeyword({ keyword_research_id: router.query.id }).then(res => {
                 setMainData(res.data.titles)
                 setPrimaryKeyword(res.data.keyword)
@@ -539,17 +525,6 @@ const Titles = () => {
                     <Icon icon="ep:back" className='add-icon-color' style={{ alignItems: "center", marginTop: "5px", marginRight: "20px" }}
                         onClick={() => {
                             router.back()
-                            // Get the current URL
-                            // const currentUrl = window.location.href;
-
-                            // // Remove the "/title" part from the URL
-                            // const newUrl = currentUrl.replace(/\/titles\/?$/, '');
-
-                            // console.log(currentUrl, newUrl)
-                            // // Navigate to the new URL
-                            // if (currentUrl !== newUrl) {
-                            //     router.push(newUrl);
-                            // }
                         }}
                     ></Icon>
                     <Typography variant='h6'>

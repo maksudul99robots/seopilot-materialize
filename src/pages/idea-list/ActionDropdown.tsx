@@ -71,7 +71,7 @@ export default function ActionDropdown(props: any) {
     const deleteIdea = () => {
         Swal.fire({
             // title: 'Error',
-            title: "Are you sure you want to delete this Article Idea?",
+            text: "Are you sure you want to delete this Article Idea?",
             icon: 'warning',
             confirmButtonText: 'DELETE',
             showCancelButton: true,
@@ -125,13 +125,7 @@ export default function ActionDropdown(props: any) {
                         &nbsp;&nbsp;Delete
                     </MenuItem>
                 </div>
-                <IdeaAdvancedSettings
-                    handleClose={handleClose}
-                    data={props.data}
-                    idea_id={props.idea_id}
-                    updateList={props.updateList}
-                    isCreateIdea={false}
-                />
+
 
 
             </StyledMenu>

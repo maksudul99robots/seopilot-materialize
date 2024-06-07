@@ -183,19 +183,29 @@ const IdeaList = () => {
             }
         },
         {
-            flex: 0.1,
-            minWidth: 70,
+            flex: 0.12,
+            minWidth: 100,
             field: 'Action',
             sortable: false,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <Button variant='outlined' color='secondary' className='outlined-btn-color' size='medium' onClick={e => {
-                        submit(row)
-                    }}>
-                        Write
-                    </Button >
+                    <>
+
+                        <IdeaAdvancedSettings
+                            data={row}
+                            idea_id={row.id}
+                            updateList={updateList}
+                            isCreateIdea={false}
+                        />
+                        <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={e => {
+                            submit(row)
+                        }} sx={{ fontSize: "12px", padding: "5px", marginRight: "5px" }}>
+                            Write
+                        </Button >
+                    </>
+
                 )
 
             }
