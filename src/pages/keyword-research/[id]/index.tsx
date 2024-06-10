@@ -119,7 +119,7 @@ const Researches = () => {
     const [sort, setSort] = useState<SortType>('desc')
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
-    const [sortColumn, setSortColumn] = useState<string>('createdAt')
+    const [sortColumn, setSortColumn] = useState<string>('volume')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 50 })
     const [mainData, setMainData] = useState<any>([]);
     const [primaryKeyword, setPrimaryKeyword] = useState<string>('digital marketing');
