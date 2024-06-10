@@ -219,6 +219,7 @@ const TableServerSide = () => {
             field: 'action',
             sortable: false,
             headerName: 'Action',
+            disableColumnMenu: true,
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
 

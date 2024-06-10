@@ -143,6 +143,7 @@ const Folders = () => {
             minWidth: 110,
             field: 'action',
             sortable: false,
+            disableColumnMenu: true,
             headerName: 'Action',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;

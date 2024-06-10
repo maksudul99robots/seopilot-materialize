@@ -208,6 +208,7 @@ const Clusters = () => {
             minWidth: 120,
             field: 'Action',
             sortable: false,
+            disableColumnMenu: true,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -227,6 +228,7 @@ const Clusters = () => {
             headerName: '',
             field: 'empty',
             sortable: false,
+            disableColumnMenu: true,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params

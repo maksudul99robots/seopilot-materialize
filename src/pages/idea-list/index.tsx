@@ -187,6 +187,7 @@ const IdeaList = () => {
             minWidth: 100,
             field: 'Action',
             sortable: false,
+            disableColumnMenu: true,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
@@ -216,6 +217,7 @@ const IdeaList = () => {
             headerName: '',
             field: 'empty',
             sortable: false,
+            disableColumnMenu: true,
             valueGetter: params => new Date(params.value),
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
