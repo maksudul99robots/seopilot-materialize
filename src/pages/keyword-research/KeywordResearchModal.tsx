@@ -2,7 +2,7 @@ import { Box, Button, Card, DialogActions, DialogContent, Fade, FadeProps, FormC
 import { ReactElement, Ref, forwardRef, useEffect, useState } from "react"
 import { CustomRadioIconsProps } from "src/@core/components/custom-radio/types"
 import Icon from "src/@core/components/icon"
-import GetCountryList from "../create-article/CountryList"
+import GetCountryList from "./CountryList";
 import { LoginRegistrationAPI } from "src/services/API"
 import { useRouter } from "next/router"
 // ** Custom Components Imports
@@ -50,7 +50,7 @@ const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
 const KeywordResearch = (props: any) => {
     const [keyword, setkeyword] = useState('')
     const [language, setLanguage] = useState('English')
-    const [country, setCountry] = useState<string>('Default')
+    const [country, setCountry] = useState<string>('2840')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const auth = useAuth();
