@@ -47,7 +47,7 @@ export default function Page() {
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
-    const [contentStatus, setContentStatus] = useState<string>('incomplete');
+    // const [contentStatus, setContentStatus] = useState<string>('incomplete');
     const router = useRouter()
 
     useEffect(() => {
@@ -190,9 +190,9 @@ export default function Page() {
                             setListicleOutlines(lo)
                             // console.log(lo)
                         }
-                        if (res.data.content_status) {
-                            setContentStatus(res.data.content_status)
-                        }
+                        // if (res.data.content_status) {
+                        //     setContentStatus(res.data.content_status)
+                        // }
 
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
@@ -326,9 +326,9 @@ export default function Page() {
                                     setNumberedItem(res.data.numbered_items)
                                     setArticleType(res.data.article_type)
                                     setImgService(res.data.img_service)
-                                    if (res.data.content_status) {
-                                        setContentStatus(res.data.content_status)
-                                    }
+                                    // if (res.data.content_status) {
+                                    //     setContentStatus(res.data.content_status)
+                                    // }
 
 
                                 }, 3000)
@@ -468,8 +468,8 @@ export default function Page() {
                         setReloadArticle={setReloadArticle}
                         featuredImgIndex={featuredImgIndex}
                         setFeaturedImgIndex={setFeaturedImgIndex}
-                        contentStatus={contentStatus}
-                        setContentStatus={setContentStatus}
+                    // contentStatus={contentStatus}
+                    // setContentStatus={setContentStatus}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

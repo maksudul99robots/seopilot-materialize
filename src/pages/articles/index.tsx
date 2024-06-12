@@ -237,46 +237,46 @@ const TableServerSide = () => {
                 )
             }
         },
-        {
-            flex: 0.07,
-            minWidth: 140,
-            field: 'content_status',
-            headerName: 'Content Status',
-            renderCell: (params: GridRenderCellParams) => {
-                const status = contentStatusObj[params.row?.content_status == 'incomplete' ? 2 : params.row?.content_status == 'outlined' ? 3 : 1]
-                return (
+        // {
+        //     flex: 0.07,
+        //     minWidth: 140,
+        //     field: 'content_status',
+        //     headerName: 'Content Status',
+        //     renderCell: (params: GridRenderCellParams) => {
+        //         const status = contentStatusObj[params.row?.content_status == 'incomplete' ? 2 : params.row?.content_status == 'outlined' ? 3 : 1]
+        //         return (
 
-                    <>
-                        {
-                            status.title == 'Error' ?
+        //             <>
+        //                 {
+        //                     status.title == 'Error' ?
 
-                                <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-                                    <div>
-                                        <CustomChip
-                                            size='small'
-                                            skin='light'
-                                            color={status.color}
-                                            label={status.title}
-                                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-                                        />
-                                    </div>
-                                </LightTooltip >
-                                :
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
-                        }
-                    </>
+        //                         <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+        //                             <div>
+        //                                 <CustomChip
+        //                                     size='small'
+        //                                     skin='light'
+        //                                     color={status.color}
+        //                                     label={status.title}
+        //                                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
+        //                                 />
+        //                             </div>
+        //                         </LightTooltip >
+        //                         :
+        //                         <CustomChip
+        //                             size='small'
+        //                             skin='light'
+        //                             color={status.color}
+        //                             label={status.title}
+        //                             sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+        //                         />
+        //                 }
+        //             </>
 
 
 
-                )
-            }
-        },
+        //         )
+        //     }
+        // },
         {
             flex: 0.09,
             minWidth: 110,

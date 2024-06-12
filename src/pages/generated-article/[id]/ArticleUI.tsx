@@ -53,7 +53,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function ArticleIU(props: any) {
-    console.log("content status:", props.contentStatus)
+    // console.log("content status:", props.contentStatus)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -201,19 +201,14 @@ export default function ArticleIU(props: any) {
 
                 </Box>
                 <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {/* <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography sx={{ fontWeight: "600" }}>Content Status:</Typography>
                         <FormControl sx={{ marginX: "5px" }}>
-                            {/* <InputLabel id='content-status'>Content Status</InputLabel> */}
                             <Select
                                 placeholder='Content Status'
-                                // label='Content Status'
-                                // labelId='content-status'
-
                                 value={props.contentStatus}
                                 sx={{ height: "38px", backgroundColor: "#fff", width: "100%" }}
                                 onChange={(e: any) => {
-                                    // console.log()
                                     if (e.target.value && e.target.value != props.contentStatus) {
                                         props.setContentStatus(e.target.value)
                                         LoginRegistrationAPI.updateContentStatus({ id: props.id, content_status: e.target.value }).then((res) => {
@@ -251,7 +246,7 @@ export default function ArticleIU(props: any) {
                                 </MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
 
                     <CustomizedMenus
                         id={props.id}
