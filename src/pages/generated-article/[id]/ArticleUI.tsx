@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, InputAdornment, Link, TextField, Typography, Tooltip, TooltipProps, styled, tooltipClasses } from '@mui/material'
+import { Box, Button, Card, Grid, InputAdornment, Link, TextField, Typography, Tooltip, TooltipProps, styled, tooltipClasses, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
@@ -53,7 +53,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function ArticleIU(props: any) {
-
+    console.log("content status:", props.contentStatus)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -201,6 +201,58 @@ export default function ArticleIU(props: any) {
 
                 </Box>
                 <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography sx={{ fontWeight: "600" }}>Content Status:</Typography>
+                        <FormControl sx={{ marginX: "5px" }}>
+                            {/* <InputLabel id='content-status'>Content Status</InputLabel> */}
+                            <Select
+                                placeholder='Content Status'
+                                // label='Content Status'
+                                // labelId='content-status'
+
+                                value={props.contentStatus}
+                                sx={{ height: "38px", backgroundColor: "#fff", width: "100%" }}
+                                onChange={(e: any) => {
+                                    // console.log()
+                                    if (e.target.value && e.target.value != props.contentStatus) {
+                                        props.setContentStatus(e.target.value)
+                                        LoginRegistrationAPI.updateContentStatus({ id: props.id, content_status: e.target.value }).then((res) => {
+                                            Swal.fire({
+                                                title: 'Success',
+                                                text: 'Marked as ' + e.target.value + " !",
+                                                icon: 'success',
+                                                confirmButtonText: 'Close',
+                                                confirmButtonColor: "#2979FF",
+                                            })
+                                        }).catch((error: any) => {
+                                            Swal.fire(
+                                                'Error',
+                                                'Unable to changes content status',
+                                                'error'
+                                            )
+                                        })
+                                    }
+
+                                }}
+                            >
+                                <MenuItem value='incomplete'>
+                                    <Box sx={{ display: "flex", }}>
+                                        <Box sx={{ height: "10px", width: "10px", backgroundColor: "#2979FF", borderRadius: "50%", marginRight: "10px", marginTop: "8px", display: "flex", alignItems: "center" }}>
+                                        </Box>
+                                        <Typography>INCOMPLETE</Typography>
+                                    </Box>
+                                </MenuItem>
+                                <MenuItem value='complete'>
+                                    <Box sx={{ display: "flex", }}>
+                                        <Box sx={{ height: "10px", width: "10px", backgroundColor: "#72E128", borderRadius: "50%", marginRight: "10px", marginTop: "8px", display: "flex", alignItems: "center" }}>
+                                        </Box>
+                                        <Typography>COMPLETE</Typography>
+                                    </Box>
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
                     <CustomizedMenus
                         id={props.id}
                         title={props.articleTopic}

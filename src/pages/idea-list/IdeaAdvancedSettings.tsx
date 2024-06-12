@@ -199,6 +199,17 @@ const IdeaAdvancedSettings = (props: any) => {
     // props.handleClose();
   }
 
+  useEffect(() => {
+    if (props?.data?.raw_outline) {
+
+      let h = JSON.parse(props.data.raw_outline);
+      if (typeof (h) == 'object') {
+        setHeadings(h)
+      }
+
+    }
+  }, [props?.data?.raw_outline])
+
   // console.log("props.settings[props.idea_id]:", props.settings[props.idea_id])
 
 
@@ -337,9 +348,10 @@ const IdeaAdvancedSettings = (props: any) => {
       folder_id: folder
 
     }).then(res => {
-      if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
-        props.updateList()
-      }
+      // if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
+      //   props.updateList()
+      // }
+      props.updateList()
       handleClose()
     }).catch(e => {
 

@@ -30,6 +30,14 @@ interface StatusObj {
     }
 }
 
+
+const contentStatusObj: StatusObj = {
+    1: { title: 'Complete', color: 'success' },
+    2: { title: 'Incomplete', color: 'primary' },
+    3: { title: 'Outlined', color: 'info' },
+    4: { title: 'idea', color: 'secondary' }
+}
+
 type CustomRowType = {
     id: number,
     user_id: number,
@@ -128,8 +136,8 @@ const IdeaList = () => {
 
     const columns: GridColDef[] = [
         {
-            flex: 0.5,
-            minWidth: 320,
+            flex: 0.45,
+            minWidth: 300,
             field: 'topic',
             headerName: 'Topic',
             renderCell: (params: GridRenderCellParams) => {
@@ -167,7 +175,47 @@ const IdeaList = () => {
             }
         },
         {
-            flex: 0.2,
+            flex: 0.07,
+            minWidth: 140,
+            field: 'content_status',
+            headerName: 'Content Status',
+            renderCell: (params: GridRenderCellParams) => {
+                const status = contentStatusObj[params.row?.content_status == 'incomplete' ? 2 : params.row?.content_status == 'outlined' ? 3 : params.row?.content_status == 'idea' ? 4 : 1]
+                return (
+
+                    <>
+                        {
+                            status.title == 'Error' ?
+
+                                // <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+                                <div>
+                                    <CustomChip
+                                        size='small'
+                                        skin='light'
+                                        color={status.color}
+                                        label={status.title}
+                                        sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
+                                    />
+                                </div>
+                                // </LightTooltip >
+                                :
+                                <CustomChip
+                                    size='small'
+                                    skin='light'
+                                    color={status.color}
+                                    label={status.title}
+                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                                />
+                        }
+                    </>
+
+
+
+                )
+            }
+        },
+        {
+            flex: 0.15,
             minWidth: 90,
             headerName: 'Created',
             field: 'createdAt',
@@ -212,8 +260,8 @@ const IdeaList = () => {
             }
         },
         {
-            flex: 0.08,
-            minWidth: 50,
+            flex: 0.06,
+            minWidth: 20,
             headerName: '',
             field: 'empty',
             sortable: false,
@@ -386,7 +434,7 @@ const IdeaList = () => {
             idea_id: row.id
         }).
             then(res => {
-                console.log("res:", res)
+                // console.log("res:", res)
                 Swal.fire({
                     title: 'Success',
                     text: 'You can see the article on My Articles page. Click ok to see the current status.',

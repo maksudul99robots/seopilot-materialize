@@ -420,6 +420,9 @@ export const LoginRegistrationAPI = {
     async addToIdeaLibrary(data: any, url = "/add-to-idea-library", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async updateContentStatus(data: any, url = "/update-article-content-status", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
