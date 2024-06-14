@@ -48,6 +48,7 @@ export default function Page() {
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
     const [status, setStatus] = useState<string>('');
+    const [schedule, setSchedule] = useState<string | null | undefined>(null)
     const router = useRouter()
 
     useEffect(() => {
@@ -197,7 +198,8 @@ export default function Page() {
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
-
+                        if (res.data.schedule)
+                            setSchedule(res.data.schedule)
                         // if ((res.data.img_service == 'dall-e-3' || res.data.img_service == 'dall-e-2') && !res?.data?.featured_img) {
                         //     // Swal.fire({
                         //     //     title: 'Unable to Generate Image',
@@ -330,7 +332,8 @@ export default function Page() {
                                     //     setContentStatus(res.data.content_status)
                                     // }
                                     setStatus(res.data.status)
-
+                                    if (res.data.schedule)
+                                        setSchedule(res.data.schedule)
                                 }, 3000)
                             } else {
                                 Swal.fire({
@@ -470,6 +473,7 @@ export default function Page() {
                         setFeaturedImgIndex={setFeaturedImgIndex}
                         status={status}
                         setStatus={setStatus}
+                        schedule={schedule}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

@@ -38,6 +38,8 @@ import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
 import { getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
+import { CustomMadeChips } from 'src/services/CustomMadeChips';
+import { getDateTime } from 'src/services/DateTimeFormatter';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -196,6 +198,15 @@ export default function ArticleIU(props: any) {
 
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
                 <Box sx={{ width: "50%" }}>
+                    {props.schedule &&
+                        <div style={{ display: "flex", justifyContent: "start" }}>
+                            <Typography variant='subtitle1' sx={{ width: "15%", marginBottom: "10px" }}>
+                                Publish Date:
+                            </Typography>
+                            <CustomMadeChips name={getDateTime(props.schedule)} color='#339900' backgroundColor="#e2fdd4" width="28%" height="80%" />
+                        </div>
+                    }
+
                     <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
                         Last Updated: {props.updatedAt}
                     </Typography>
