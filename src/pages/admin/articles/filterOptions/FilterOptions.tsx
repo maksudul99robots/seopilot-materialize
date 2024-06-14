@@ -56,8 +56,9 @@ const FilterOptions = (props: any) => {
                         }}
                     >
                         <MenuItem value='all'>All</MenuItem>
-                        {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                        <MenuItem value='completed'>Completed</MenuItem>
+                        <MenuItem value='completed'>Generated</MenuItem>
+                        <MenuItem value='scheduled'>Scheduled</MenuItem>
+                        <MenuItem value='published'>Published</MenuItem>
                         <MenuItem value='error'>Error</MenuItem>
                     </Select>
                 </FormControl>

@@ -38,7 +38,7 @@ const UseBgColor = () => {
     },
     successLight: {
       color: theme.palette.success.main,
-      backgroundColor: hexToRGBA(theme.palette.success.main, 0.12)
+      backgroundColor: hexToRGBA(theme.palette.success.main, 0.08)
     },
     errorFilled: {
       color: theme.palette.error.contrastText,

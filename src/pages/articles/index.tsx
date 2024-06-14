@@ -15,27 +15,21 @@ import CustomChip from 'src/@core/components/mui/chip'
 import { ThemeColor } from 'src/@core/layouts/types'
 
 
-interface StatusObj {
-    [key: number]: {
-        title: string
-        color: ThemeColor
-    }
-}
+
 
 
 type SortType = 'asc' | 'desc' | undefined | null
 
 
 
-const statusObj: StatusObj = {
-    1: { title: 'Generated', color: 'success' },
-    2: { title: 'On Process', color: 'info' },
-    3: { title: 'Error', color: 'error' }
-}
-const contentStatusObj: StatusObj = {
-    1: { title: 'Complete', color: 'success' },
-    2: { title: 'Incomplete', color: 'primary' },
-    3: { title: 'Outlined', color: 'info' }
+const statusObj: any = {
+    1: { title: 'Generated', color: '#424242', backgroundColor: "#E0E0E0" },
+    2: { title: 'On Process', color: '#ffcc00', backgroundColor: "#fff6dd" },
+    3: { title: 'Error', color: '#FD7E7B', backgroundColor: "#F8E2E2" },
+    4: { title: 'Published', color: '#339900', backgroundColor: "#e2fdd4" },
+    5: { title: 'Scheduled', color: '#26C6F9', backgroundColor: "#DEF1F7" },
+    6: { title: 'Review Required', color: '#4a0c92', backgroundColor: "#dcc5f7" },
+    7: { title: 'Ready to Publish', color: '#2979FF', backgroundColor: "#d7e2ff" }
 }
 
 
@@ -53,6 +47,7 @@ import FilterOptions from '../admin/articles/filterOptions/FilterOptions'
 import FolderDropdown from 'src/services/FolderDropdown/FolderDropdown'
 import Link from 'next/link'
 import ActionDropdown from './ActionDropdown'
+import { CustomMadeChips } from 'src/services/CustomMadeChips'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -198,12 +193,16 @@ const TableServerSide = () => {
             )
         },
         {
-            flex: 0.07,
+            flex: 0.09,
             minWidth: 140,
-            field: 'is_error',
+            field: 'status',
             headerName: 'Status',
             renderCell: (params: GridRenderCellParams) => {
-                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 : params.row?.status == 'outlined' || params.row?.status == 'initiated' ? 2 : 1]
+                const status = statusObj[params.row.is_error || params.row?.status == 'error' ? 3 :
+                    params.row?.status == 'outlined' || params.row?.status == 'initiated' || params.row?.status == 'outlined-process' ? 2 :
+                        params.row?.status == 'published' ? 4 : params.row?.status == 'scheduled' ? 5 :
+                            params.row?.status == 'review' ? 6 : params.row?.status == 'ready_to_publish' ? 7 : 1
+                ]
                 return (
 
                     <>
@@ -211,24 +210,11 @@ const TableServerSide = () => {
                             status.title == 'Error' ?
 
                                 <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-                                    <div>
-                                        <CustomChip
-                                            size='small'
-                                            skin='light'
-                                            color={status.color}
-                                            label={status.title}
-                                            sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-                                        />
-                                    </div>
+
+                                    <CustomMadeChips name={status.title} color={status.color} backgroundColor={status.backgroundColor} />
                                 </LightTooltip >
                                 :
-                                <CustomChip
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
+                                <CustomMadeChips name={status.title} color={status.color} backgroundColor={status.backgroundColor} />
                         }
                     </>
 

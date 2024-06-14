@@ -47,7 +47,7 @@ export default function Page() {
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
-    // const [contentStatus, setContentStatus] = useState<string>('incomplete');
+    const [status, setStatus] = useState<string>('');
     const router = useRouter()
 
     useEffect(() => {
@@ -193,7 +193,7 @@ export default function Page() {
                         // if (res.data.content_status) {
                         //     setContentStatus(res.data.content_status)
                         // }
-
+                        setStatus(res.data.status)
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
@@ -329,7 +329,7 @@ export default function Page() {
                                     // if (res.data.content_status) {
                                     //     setContentStatus(res.data.content_status)
                                     // }
-
+                                    setStatus(res.data.status)
 
                                 }, 3000)
                             } else {
@@ -468,8 +468,8 @@ export default function Page() {
                         setReloadArticle={setReloadArticle}
                         featuredImgIndex={featuredImgIndex}
                         setFeaturedImgIndex={setFeaturedImgIndex}
-                    // contentStatus={contentStatus}
-                    // setContentStatus={setContentStatus}
+                        status={status}
+                        setStatus={setStatus}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

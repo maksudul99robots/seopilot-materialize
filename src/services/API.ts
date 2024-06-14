@@ -305,7 +305,7 @@ export const LoginRegistrationAPI = {
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
 
-    async saveSchadule(data: any, url = "/save-schedule", source = undefined) {
+    async saveSchedule(data: any, url = "/save-schedule", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
         // return
         // return await axios.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
@@ -420,7 +420,7 @@ export const LoginRegistrationAPI = {
     async addToIdeaLibrary(data: any, url = "/add-to-idea-library", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
-    async updateContentStatus(data: any, url = "/update-article-content-status", source = undefined) {
+    async updateArticleStatus(data: any, url = "/update-article-status", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
 

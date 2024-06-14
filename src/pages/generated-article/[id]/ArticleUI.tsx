@@ -79,6 +79,18 @@ export default function ArticleIU(props: any) {
         links_score: 0,
         length_score: 0
     });
+    const [statusDropdown, setStatusDropdown] = useState<any>([])
+
+    useEffect(() => {
+        if (props.status == 'completed') {
+            setStatusDropdown(['completed', 'review'])
+        } else if (props.status == 'review' || props.status == 'ready_to_publish') {
+            setStatusDropdown(['review', 'ready_to_publish'])
+        } else {
+            setStatusDropdown([props.status])
+        }
+
+    }, [props.status])
 
     const auth = useAuth()
 
@@ -201,20 +213,20 @@ export default function ArticleIU(props: any) {
 
                 </Box>
                 <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
-                    {/* <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography sx={{ fontWeight: "600" }}>Content Status:</Typography>
                         <FormControl sx={{ marginX: "5px" }}>
                             <Select
                                 placeholder='Content Status'
-                                value={props.contentStatus}
+                                value={props.status}
                                 sx={{ height: "38px", backgroundColor: "#fff", width: "100%" }}
                                 onChange={(e: any) => {
                                     if (e.target.value && e.target.value != props.contentStatus) {
-                                        props.setContentStatus(e.target.value)
-                                        LoginRegistrationAPI.updateContentStatus({ id: props.id, content_status: e.target.value }).then((res) => {
+                                        props.setStatus(e.target.value)
+                                        LoginRegistrationAPI.updateArticleStatus({ id: props.id, status: e.target.value }).then((res) => {
                                             Swal.fire({
                                                 title: 'Success',
-                                                text: 'Marked as ' + e.target.value + " !",
+                                                text: e.target.value == 'review' ? 'Marked as REVIEW REQUIRED' : 'Marked as READY TO PUBLISH' + " !",
                                                 icon: 'success',
                                                 confirmButtonText: 'Close',
                                                 confirmButtonColor: "#2979FF",
@@ -222,7 +234,7 @@ export default function ArticleIU(props: any) {
                                         }).catch((error: any) => {
                                             Swal.fire(
                                                 'Error',
-                                                'Unable to changes content status',
+                                                'Unable to changes status',
                                                 'error'
                                             )
                                         })
@@ -230,7 +242,35 @@ export default function ArticleIU(props: any) {
 
                                 }}
                             >
-                                <MenuItem value='incomplete'>
+                                {statusDropdown.map((s: any) => {
+                                    return <MenuItem value={s}>
+                                        <Box sx={{ display: "flex", }}>
+                                            <Box sx={{
+                                                height: "10px",
+                                                width: "10px",
+                                                backgroundColor:
+                                                    s == 'completed' ? "#BFC4CC" :
+                                                        s == 'review' ? "#41C9E2" :
+                                                            s == 'published' ? "#72E128" :
+                                                                s == 'ready_to_publish' ? "#2979FF" : "#3ABEF9",
+                                                borderRadius: "50%",
+                                                marginRight: "10px",
+                                                marginTop: "8px",
+                                                display: "flex",
+                                                alignItems: "center"
+                                            }}>
+                                            </Box>
+                                            <Typography>{
+                                                s == 'completed' ? 'GENERATED' :
+                                                    s == 'review' ? 'REVIEW REQUIRED' :
+                                                        s == 'published' ? 'PUBLISHED' :
+                                                            s == 'scheduled' ? 'SCHEDULED' :
+                                                                s == 'ready_to_publish' ? 'READY TO PUBLISH' : ''
+                                            }</Typography>
+                                        </Box>
+                                    </MenuItem>
+                                })}
+                                {/* <MenuItem value='incomplete'>
                                     <Box sx={{ display: "flex", }}>
                                         <Box sx={{ height: "10px", width: "10px", backgroundColor: "#2979FF", borderRadius: "50%", marginRight: "10px", marginTop: "8px", display: "flex", alignItems: "center" }}>
                                         </Box>
@@ -243,10 +283,10 @@ export default function ArticleIU(props: any) {
                                         </Box>
                                         <Typography>COMPLETE</Typography>
                                     </Box>
-                                </MenuItem>
+                                </MenuItem> */}
                             </Select>
                         </FormControl>
-                    </Box> */}
+                    </Box>
 
                     <CustomizedMenus
                         id={props.id}

@@ -23,19 +23,11 @@ import { DataGridRowType } from 'src/@fake-db/types'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
-interface StatusObj {
-    [key: number]: {
-        title: string
-        color: ThemeColor
-    }
-}
 
+const contentStatusObj: any = {
 
-const contentStatusObj: StatusObj = {
-    1: { title: 'Complete', color: 'success' },
-    2: { title: 'Incomplete', color: 'primary' },
-    3: { title: 'Outlined', color: 'info' },
-    4: { title: 'idea', color: 'secondary' }
+    1: { title: 'idea', color: '#6D788D', backgroundColor: "#E6E8EA" },
+    2: { title: 'Outlined', color: '#26C6F9', backgroundColor: "#DEF1F7" },
 }
 
 type CustomRowType = {
@@ -72,13 +64,6 @@ const renderClient = (params: GridRenderCellParams) => {
     }
 }
 
-const statusObj: StatusObj = {
-    1: { title: 'Success', color: 'success' },
-    2: { title: 'Processing', color: 'info' },
-    3: { title: 'Error', color: 'error' }
-}
-
-
 // import { LoginRegistrationAPI } from 
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
 import { useAuth } from 'src/hooks/useAuth'
@@ -94,6 +79,7 @@ import { LoginRegistrationAPI } from 'src/services/API'
 import Link from 'next/link'
 import ActionDropdown from './ActionDropdown'
 import IdeaAdvancedSettings from './IdeaAdvancedSettings'
+import { CustomMadeChips } from 'src/services/CustomMadeChips'
 
 const IdeaList = () => {
     // ** States
@@ -174,46 +160,41 @@ const IdeaList = () => {
 
             }
         },
-        // {
-        //     flex: 0.07,
-        //     minWidth: 140,
-        //     field: 'content_status',
-        //     headerName: 'Content Status',
-        //     renderCell: (params: GridRenderCellParams) => {
-        //         const status = contentStatusObj[params.row?.content_status == 'incomplete' ? 2 : params.row?.content_status == 'outlined' ? 3 : params.row?.content_status == 'idea' ? 4 : 1]
-        //         return (
+        {
+            flex: 0.07,
+            minWidth: 140,
+            field: 'status',
+            headerName: 'Status',
+            renderCell: (params: GridRenderCellParams) => {
+                const status = contentStatusObj[params.row?.status == 'outlined' ? 2 : params.row?.status == 'idea' ? 1 : 1]
+                return (
+                    <CustomMadeChips name={status.title} color={status.color} backgroundColor={status.backgroundColor} />
+                    // <>
+                    //     {
+                    //         status.title == 'Error' ?
 
-        //             <>
-        //                 {
-        //                     status.title == 'Error' ?
-
-        //                         // <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-        //                         <div>
-        //                             <CustomChip
-        //                                 size='small'
-        //                                 skin='light'
-        //                                 color={status.color}
-        //                                 label={status.title}
-        //                                 sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-        //                             />
-        //                         </div>
-        //                         // </LightTooltip >
-        //                         :
-        //                         <CustomChip
-        //                             size='small'
-        //                             skin='light'
-        //                             color={status.color}
-        //                             label={status.title}
-        //                             sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-        //                         />
-        //                 }
-        //             </>
+                    //             // <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
+                    //             <div>
+                    //                 <CustomChip
+                    //                     size='small'
+                    //                     skin='light'
+                    //                     color={status.color}
+                    //                     label={status.title}
+                    //                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
+                    //                 />
+                    //                 {/* <CustomMadeChips name={status.title} color="#FD7E7B" backgroundColor="#F8E2E2" /> */}
+                    //             </div>
+                    //             // </LightTooltip >
+                    //             :
+                    //             <CustomMadeChips name={status.title} color="#6D788D" backgroundColor="#E6E8EA" />
+                    //     }
+                    // </>
 
 
 
-        //         )
-        //     }
-        // },
+                )
+            }
+        },
         {
             flex: 0.15,
             minWidth: 90,
@@ -375,11 +356,9 @@ const IdeaList = () => {
                     // item.output?.toLowerCase().includes(queryLowered) ||
                     item.topic?.toLowerCase().includes(queryLowered) ||
                     // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.number_of_clusters?.toLowerCase().includes(queryLowered) ||
-                    item.target_audience?.toLowerCase().includes(queryLowered) ||
+                    item.keywords?.toLowerCase().includes(queryLowered) ||
                     // item.user_id.toLowerCase().includes(queryLowered) ||
-                    item.createdAt.toString().toLowerCase().includes(queryLowered) ||
-                    item.updatedAt.toLowerCase().includes(queryLowered)
+                    item.createdAt.toString().toLowerCase().includes(queryLowered)
             )
             setTotal(filteredData.length);
             setRows(loadServerRows(paginationModel.page, filteredData))

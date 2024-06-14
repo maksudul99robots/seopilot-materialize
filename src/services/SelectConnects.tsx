@@ -286,9 +286,18 @@ const SelectConnects = (props: any) => {
       body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(props.html), status: status })
     }).then(res => {
       // console.log(res);
+
       setShow(false)
       setLoading(false)
       if (res.status == 201) {
+        LoginRegistrationAPI.saveSchedule({
+          article_id: props.article_id,
+          date_time: new Date(),
+          site: connectSelected.id,
+          post_status: status,
+          article_content: getHtmlFromDocument(props.html),
+          status: 'success'
+        })
         Swal.fire({
           title: 'Success!',
           text: 'The article is posted successfully',
@@ -297,6 +306,14 @@ const SelectConnects = (props: any) => {
           confirmButtonColor: "#2979FF"
         })
       } else {
+        LoginRegistrationAPI.saveSchedule({
+          article_id: props.article_id,
+          date_time: new Date(),
+          site: connectSelected.id,
+          post_status: status,
+          article_content: getHtmlFromDocument(props.html),
+          status: 'error'
+        })
         Swal.fire({
           title: 'Error!',
           text: 'Unable to publish article to WordPress. Please check your credentials.',
@@ -310,7 +327,14 @@ const SelectConnects = (props: any) => {
       console.log(e)
       setShow(false)
       setLoading(false)
-
+      LoginRegistrationAPI.saveSchedule({
+        article_id: props.article_id,
+        date_time: new Date(),
+        site: connectSelected.id,
+        post_status: status,
+        article_content: getHtmlFromDocument(props.html),
+        status: 'error'
+      })
       Swal.fire({
         title: 'Error!',
         text: 'Unable to publish article to WordPress',
@@ -325,13 +349,13 @@ const SelectConnects = (props: any) => {
   }
   const handleScheduleSubmit = () => {
     setLoading(true)
-    LoginRegistrationAPI.saveSchadule({
+    LoginRegistrationAPI.saveSchedule({
       article_id: props.article_id,
       date_time: dateTime,
       site: connectSelected.id,
       post_status: status,
-      article_content: getHtmlFromDocument(props.html)
-
+      article_content: getHtmlFromDocument(props.html),
+      status: 'initiated'
     }).then(res => {
       setLoading(false)
       handleCloseSchedule()
@@ -539,19 +563,6 @@ const SelectConnects = (props: any) => {
 
           {/* </CopyToClipboard> */}
           <Divider sx={{ my: 0.5 }} />
-          {/* <CopyToClipboard text={
-                    getFormatedHtml(props.html)
-
-
-                }
-                    onCopy={() => {
-                        // props.setCopied(true)
-
-                        getHtmlFromDocument(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
-                        // setTimeout(() => {
-                        //     props.setCopied(false)
-                        // }, 5000)
-                    }}> */}
           <MenuItem onClick={() => {
             setShowSchedule(true)
             handleDDClose()
