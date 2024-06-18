@@ -36,10 +36,10 @@ const WorkspaceList = (props: any) => {
     }
 
     return (
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <Typography variant='button' sx={{ marginRight: "10px" }}>Current Workspace: </Typography>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant='button' sx={{ marginLeft: "10px", fontSize: "10px", textAlign: "start" }}>Current Workspace: </Typography>
             <>
-                <Button variant='outlined' color='secondary' className='outlined-btn-color' aria-controls='simple-menu' aria-haspopup='true' onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
+                <Button variant='outlined' sx={{ marginLeft: "10px", marginBottom: "5px" }} color='secondary' size='small' className='outlined-btn-color' aria-controls='simple-menu' aria-haspopup='true' onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
                     {props.cw}
                 </Button>
                 <Menu onClose={e => { setAnchorEl(null) }} keepMounted id='simple-menu' anchorEl={anchorEl} open={Boolean(anchorEl)} sx={{ maxHeight: "500px" }}>

@@ -33,8 +33,9 @@ const defaultProvider: AuthValuesType = {
   verifyEmail: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
   resetToken: () => Promise.resolve(),
-  impersonate: () => Promise.resolve()
-
+  impersonate: () => Promise.resolve(),
+  articleStatus: null,
+  updateArticleStatus: () => null
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -46,6 +47,7 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
+  const [articleStatus, setArticleStatus] = useState<any>(defaultProvider.articleStatus)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [extensionId, setExtensionId] = useState<string | null | undefined>('');
   // ** Hooks
@@ -457,6 +459,11 @@ const AuthProvider = ({ children }: Props) => {
     })
   }
 
+  const updateArticleStatus = (params: any) => {
+    console.log("params:", params);
+    setArticleStatus(params)
+  }
+
   const values = {
     user,
     loading,
@@ -473,7 +480,9 @@ const AuthProvider = ({ children }: Props) => {
     verifyEmail: handleVerifyEmail,
     updateUser: handleUpdateUser,
     resetToken: handleResetToken,
-    impersonate: handleImpersonation
+    impersonate: handleImpersonation,
+    articleStatus,
+    updateArticleStatus: updateArticleStatus
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

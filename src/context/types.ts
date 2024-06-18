@@ -67,4 +67,6 @@ export type AuthValuesType = {
   updateUser: (params: UpdateUserParams, errorCallback?: ErrCallbackType) => void
   resetToken: (params: {}, errorCallback?: ErrCallbackType) => void
   impersonate: (params: any, errorCallback?: ErrCallbackType) => void
+  articleStatus: any,
+  updateArticleStatus: any
 }

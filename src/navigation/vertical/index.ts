@@ -107,6 +107,11 @@ const navigation = (): VerticalNavItemsType | any => {
         icon: 'mdi:currency-usd',
         path: '/plans'
       },
+      {
+        title: 'Sign Out',
+        icon: 'material-symbols:logout-sharp',
+        path: '/go-to-login-page'
+      },
 
     ];
 

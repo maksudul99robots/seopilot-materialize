@@ -198,19 +198,14 @@ export default function ArticleIU(props: any) {
 
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
                 <Box sx={{ width: "50%" }}>
-                    {props.schedule &&
-                        <div style={{ display: "flex", justifyContent: "start" }}>
-                            <Typography variant='subtitle1' sx={{ width: "15%", marginBottom: "10px" }}>
-                                Publish Date:
-                            </Typography>
-                            <CustomMadeChips name={getDateTime(props.schedule)} color='#339900' backgroundColor="#e2fdd4" width="28%" height="80%" />
-                        </div>
+                    {props.schedule ?
+                        <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
+                            Publish Date: {getDateTime(props.schedule)}
+                        </Typography>
+                        : <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
+                            Last Updated: {getDateTime(props.updatedAt)}
+                        </Typography>
                     }
-
-                    <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
-                        Last Updated: {props.updatedAt}
-                    </Typography>
-
                     <Typography variant='subtitle2' sx={{}}>
                         Word Count: {props.wordCount} words
                         {
@@ -224,7 +219,7 @@ export default function ArticleIU(props: any) {
 
                 </Box>
                 <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {/* <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography sx={{ fontWeight: "600" }}>Content Status:</Typography>
                         <FormControl sx={{ marginX: "5px" }}>
                             <Select
@@ -281,23 +276,9 @@ export default function ArticleIU(props: any) {
                                         </Box>
                                     </MenuItem>
                                 })}
-                                {/* <MenuItem value='incomplete'>
-                                    <Box sx={{ display: "flex", }}>
-                                        <Box sx={{ height: "10px", width: "10px", backgroundColor: "#2979FF", borderRadius: "50%", marginRight: "10px", marginTop: "8px", display: "flex", alignItems: "center" }}>
-                                        </Box>
-                                        <Typography>INCOMPLETE</Typography>
-                                    </Box>
-                                </MenuItem>
-                                <MenuItem value='complete'>
-                                    <Box sx={{ display: "flex", }}>
-                                        <Box sx={{ height: "10px", width: "10px", backgroundColor: "#72E128", borderRadius: "50%", marginRight: "10px", marginTop: "8px", display: "flex", alignItems: "center" }}>
-                                        </Box>
-                                        <Typography>COMPLETE</Typography>
-                                    </Box>
-                                </MenuItem> */}
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
 
                     <CustomizedMenus
                         id={props.id}

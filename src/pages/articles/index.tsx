@@ -82,6 +82,7 @@ const TableServerSide = () => {
     const [workspaces, setWorkspaces] = useState<any>([])
     const [team, setTeam] = useState<any>({})
     const [resetDataset, setResetDataset] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(false);
     function loadServerRows(currentPage: number, data: any) {
         // console.log(data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize))
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -90,16 +91,23 @@ const TableServerSide = () => {
     useEffect(() => {
         if (resetDataset > 0) {
             if (getArticleFromParams > 0) {
+                setLoading(true)
                 LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
                     loadServerRows
                     setMainData(res.data);
+                    setLoading(false)
 
+                }).catch(e => {
+                    setLoading(false)
                 })
             } else {
+                setLoading(true)
                 LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
                     loadServerRows
                     setMainData(res.data);
 
+                }).catch(e => {
+                    setLoading(false)
                 })
             }
         }
@@ -441,10 +449,13 @@ const TableServerSide = () => {
             setExistingFolder(id)
             setGetArticleFromParams(getArticleFromParams + 1);
         } else {
+            setLoading(true)
             LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
                 loadServerRows
                 setMainData(res.data);
-
+                setLoading(false)
+            }).catch(e => {
+                setLoading(false)
             })
         }
         LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {
@@ -466,10 +477,13 @@ const TableServerSide = () => {
     useEffect(() => {
 
         if (getArticleFromParams > 0) {
+            setLoading(true)
             LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
                 loadServerRows
                 setMainData(res.data);
-
+                setLoading(false)
+            }).catch(e => {
+                setLoading(false)
             })
         }
 
@@ -545,6 +559,7 @@ const TableServerSide = () => {
                     rowSelection={false}
                     // slots={{ toolbar: ServerSideToolbar }}
                     onPaginationModelChange={setPaginationModel}
+                    loading={loading}
                 // slotProps={{
                 //     baseButton: {
                 //         variant: 'outlined'

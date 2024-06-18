@@ -50,11 +50,15 @@ export default function Page() {
     const [status, setStatus] = useState<string>('');
     const [schedule, setSchedule] = useState<string | null | undefined>(null)
     const router = useRouter()
+    const auth = useAuth()
 
     useEffect(() => {
         if (router.query.id)
             setCallTracker(true)
 
+        return () => {
+            auth.updateArticleStatus(null)
+        }
 
     }, [router.query.id])
 
@@ -195,6 +199,7 @@ export default function Page() {
                         //     setContentStatus(res.data.content_status)
                         // }
                         setStatus(res.data.status)
+                        auth.updateArticleStatus(res.data.status)
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
@@ -332,6 +337,7 @@ export default function Page() {
                                     //     setContentStatus(res.data.content_status)
                                     // }
                                     setStatus(res.data.status)
+                                    auth.updateArticleStatus(res.data.status)
                                     if (res.data.schedule)
                                         setSchedule(res.data.schedule)
                                 }, 3000)
