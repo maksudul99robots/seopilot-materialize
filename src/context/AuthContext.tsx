@@ -460,7 +460,7 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   const updateArticleStatus = (params: any) => {
-    console.log("params:", params);
+    // console.log("params:", params);
     setArticleStatus(params)
   }
 

@@ -24,12 +24,12 @@ type SortType = 'asc' | 'desc' | undefined | null
 
 const statusObj: any = {
     1: { title: 'Generated', color: '#424242', backgroundColor: "#E0E0E0" },
-    2: { title: 'On Process', color: '#ffcc00', backgroundColor: "#fff6dd" },
-    3: { title: 'Error', color: '#FD7E7B', backgroundColor: "#F8E2E2" },
-    4: { title: 'Published', color: '#339900', backgroundColor: "#e2fdd4" },
-    5: { title: 'Scheduled', color: '#26C6F9', backgroundColor: "#DEF1F7" },
-    6: { title: 'Review Required', color: '#4a0c92', backgroundColor: "#dcc5f7" },
-    7: { title: 'Ready to Publish', color: '#2979FF', backgroundColor: "#d7e2ff" }
+    2: { title: 'On Process', color: '#2979FF', backgroundColor: "#DEF1F7" },
+    3: { title: 'Error', color: '#C61F1F', backgroundColor: "#F8D3D3" },
+    4: { title: 'Published', color: '#72E128', backgroundColor: "#e2fdd4" },
+    5: { title: 'Scheduled', color: '#C9DD19', backgroundColor: "#F7FBD8" },
+    6: { title: 'Review Required', color: '#FA701C', backgroundColor: "#FEE5D6" },
+    7: { title: 'Ready to Publish', color: '#ECDB23', backgroundColor: "#FCF8D7" }
 }
 
 

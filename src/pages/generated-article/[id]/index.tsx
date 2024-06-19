@@ -199,7 +199,10 @@ export default function Page() {
                         //     setContentStatus(res.data.content_status)
                         // }
                         setStatus(res.data.status)
-                        auth.updateArticleStatus(res.data.status)
+                        auth.updateArticleStatus({
+                            status: res.data.status,
+                            id: router.query.id
+                        })
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
@@ -337,7 +340,10 @@ export default function Page() {
                                     //     setContentStatus(res.data.content_status)
                                     // }
                                     setStatus(res.data.status)
-                                    auth.updateArticleStatus(res.data.status)
+                                    auth.updateArticleStatus({
+                                        status: res.data.status,
+                                        id: router.query.id
+                                    })
                                     if (res.data.schedule)
                                         setSchedule(res.data.schedule)
                                 }, 3000)
