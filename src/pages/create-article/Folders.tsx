@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { LoginRegistrationAPI } from "src/services/API"
 
 const Folders = (props: any) => {
+    console.log("props.sx", props.sx)
     const [folders, setFolders] = useState<any>([])
     useEffect(() => {
         LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {
@@ -14,9 +15,10 @@ const Folders = (props: any) => {
             console.log("unable to get Folders")
         })
     }, [])
+
     return (
         <>
-            <FormControl fullWidth sx={{ marginBottom: "10px" }}>
+            <FormControl fullWidth sx={props.sx}>
                 <InputLabel id='country-select'>Folder</InputLabel>
                 <Select
                     fullWidth

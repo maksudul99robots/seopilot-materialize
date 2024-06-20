@@ -256,3 +256,8 @@ code[class*='language-'] {
   background-color: #fff !important;
   border: 1px solid #E9E9EC;
 }
+
+#event-due-date{
+  height:3px;
+  font-size: 12px;
+}

@@ -81,6 +81,14 @@ const navigation = (): VerticalNavItemsType | any => {
         path: '/integrations'
       },
       {
+        sectionTitle: 'My Tasks'
+      },
+      {
+        title: 'My Tasks',
+        icon: 'fluent-mdl2:task-list',
+        path: '/my-tasks'
+      },
+      {
         sectionTitle: 'Account Settings'
       },
       {

@@ -203,6 +203,9 @@ export default function Page() {
                             status: res.data.status,
                             id: router.query.id
                         })
+                        if (res.data.assignedTo) {
+                            auth.UpdateAssignedTo(res.data.assignedTo)
+                        }
                         // if(res.data.numbered_items){
                         setNumberedItem(res.data.numbered_items)
                         setArticleType(res.data.article_type)
@@ -344,6 +347,9 @@ export default function Page() {
                                         status: res.data.status,
                                         id: router.query.id
                                     })
+                                    if (res.data.assignedTo) {
+                                        auth.UpdateAssignedTo(res.data.assignedTo)
+                                    }
                                     if (res.data.schedule)
                                         setSchedule(res.data.schedule)
                                 }, 3000)

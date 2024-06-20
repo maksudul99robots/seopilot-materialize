@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material'
+import { Alert, Box, Button, Card, CardContent, Dialog, DialogActions, DialogContent, Divider, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputAdornment, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography, styled } from '@mui/material'
 // ** MUI Imports
 import Icon from 'src/@core/components/icon'
 import Switch from '@mui/material/Switch'
@@ -41,6 +41,7 @@ import CustomBadge from 'src/@core/components/mui/badge'
 
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
+import AssignUsers from './AssignUsers';
 
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
@@ -187,7 +188,7 @@ export default function CreateArticle(props: any) {
     const auth = useAuth();
     const router = useRouter()
     const [retryArticle, setRetryArticle] = useState(false)
-
+    const [user, setUser] = useState(auth?.user?.id);
     const [existingArticle, setExistingArticle] = useState<any>(null);
 
     useEffect(() => {
@@ -475,7 +476,8 @@ export default function CreateArticle(props: any) {
                         folder_id: folder,
                         retryArticle: retryArticle,
                         article_id: router.query.id,
-                        no_of_citations: noOfCitations
+                        no_of_citations: noOfCitations,
+                        user: user
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -549,7 +551,8 @@ export default function CreateArticle(props: any) {
                             folder_id: folder,
                             retryArticle: retryArticle,
                             article_id: router.query.id,
-                            no_of_citations: noOfCitations
+                            no_of_citations: noOfCitations,
+                            user: user
                         }
                     ).then(res => {
                         // console.log("res:", res);
@@ -848,25 +851,7 @@ export default function CreateArticle(props: any) {
 
                     <Grid container spacing={6}>
                         <Grid item sm={12} xs={12}>
-                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
-                                    Select Folder
-                                    {/* <LightTooltip title={
-                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            For improved quality GPT-4-Turbo is recommanded.
-                                            <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
-                                        </p>
-                                    } placement="top">
-                                        <div style={{ height: "100%" }}>
-                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                        </div>
-                                    </LightTooltip > */}
-                                </Typography>
 
-                                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-                            </Box>
-                            <Folders folder={folder} setFolder={setFolder} />
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                 <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
                                     Select AI Model
@@ -1191,6 +1176,17 @@ export default function CreateArticle(props: any) {
                                 : null
                         }
 
+                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: "flex", marginBottom: "20px" }}>
+                            Article Operations
+                        </Typography>
+                        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
+
+                        <Grid item xs={12} sx={{ padding: "0px 0px 0px 20px !important" }}>
+                            <Folders folder={folder} setFolder={setFolder} sx={{ marginBottom: "20px" }} />
+                            <AssignUsers user={user} setUser={setUser} />
+                        </Grid>
+
+
 
                         <Grid item xs={12} className='add-icon-color'>
                             <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
@@ -1200,6 +1196,7 @@ export default function CreateArticle(props: any) {
 
                         </Grid>
                         {/* <Box > */}
+
 
 
                         {/* Additional Settings starts*/}

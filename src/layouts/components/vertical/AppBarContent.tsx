@@ -181,8 +181,8 @@ const AppBarContent = (props: Props) => {
           {
             auth.articleStatus &&
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <AssignedTo />
-              <div style={{ marginLeft: "10px", marginRight: "10px" }}>|</div>
+              {auth.assignedTo && <AssignedTo assignedTo={auth.assignedTo} updaateAssignedTo={auth.UpdateAssignedTo} />}
+
               <ArticleStatus articleStatus={auth.articleStatus} updateArticleStatus={auth.updateArticleStatus} />
             </Box>
           }

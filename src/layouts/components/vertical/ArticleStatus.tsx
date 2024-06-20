@@ -6,7 +6,7 @@ import Swal from "sweetalert2"
 
 export const ArticleStatus = (props: any) => {
     const [statusDropdown, setStatusDropdown] = useState<any>([])
-    console.log("props.articleStatus:", props.articleStatus)
+    // console.log("props.articleStatus:", props.articleStatus)
     useEffect(() => {
         if (props.articleStatus.status == 'completed') {
             setStatusDropdown(['completed', 'review'])
@@ -18,13 +18,13 @@ export const ArticleStatus = (props: any) => {
 
     }, [props])
     return (
-        <>
-            <Typography sx={{ fontWeight: "600" }}>Article Status:</Typography>
-            <FormControl sx={{ marginX: "10px" }}>
+        <Box sx={{}}>
+            <Typography sx={{ fontWeight: "600", fontSize: "12px" }}>Article Status:</Typography>
+            <FormControl sx={{ marginRight: "10px" }}>
                 <Select
                     placeholder='Article Status'
                     value={props.articleStatus.status}
-                    sx={{ height: "30px", backgroundColor: "#fff", width: "100%", fontSize: "11px" }}
+                    sx={{ height: "30px", backgroundColor: "#fff", width: "100%", fontSize: "12px" }}
                     onChange={(e: any) => {
                         if (e.target.value && e.target.value != "") {
                             // props.setStatus(e.target.value)
@@ -65,12 +65,13 @@ export const ArticleStatus = (props: any) => {
                                                         s == 'scheduled' ? "#D4E725" : "",
                                     borderRadius: "50%",
                                     marginRight: "10px",
-                                    marginTop: "8px",
+                                    marginTop: "4px",
                                     display: "flex",
-                                    alignItems: "center"
+                                    alignItems: "center",
+
                                 }}>
                                 </Box>
-                                <Typography>{
+                                <Typography sx={{ fontSize: "12px" }}>{
                                     s == 'completed' ? 'GENERATED' :
                                         s == 'review' ? 'REVIEW REQUIRED' :
                                             s == 'published' ? 'PUBLISHED' :
@@ -96,6 +97,6 @@ export const ArticleStatus = (props: any) => {
                                 </MenuItem> */}
                 </Select>
             </FormControl>
-        </>
+        </Box>
     )
 }

@@ -35,7 +35,9 @@ const defaultProvider: AuthValuesType = {
   resetToken: () => Promise.resolve(),
   impersonate: () => Promise.resolve(),
   articleStatus: null,
-  updateArticleStatus: () => null
+  updateArticleStatus: () => null,
+  assignedTo: null,
+  UpdateAssignedTo: () => null
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -47,6 +49,7 @@ type Props = {
 const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
+  const [assignedTo, setAssignedTo] = useState<UserDataType | null>(defaultProvider.user)
   const [articleStatus, setArticleStatus] = useState<any>(defaultProvider.articleStatus)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [extensionId, setExtensionId] = useState<string | null | undefined>('');
@@ -463,6 +466,10 @@ const AuthProvider = ({ children }: Props) => {
     // console.log("params:", params);
     setArticleStatus(params)
   }
+  const UpdateAssignedTo = (params: any) => {
+    // console.log("params:", params);
+    setAssignedTo(params)
+  }
 
   const values = {
     user,
@@ -482,7 +489,9 @@ const AuthProvider = ({ children }: Props) => {
     resetToken: handleResetToken,
     impersonate: handleImpersonation,
     articleStatus,
-    updateArticleStatus: updateArticleStatus
+    updateArticleStatus: updateArticleStatus,
+    assignedTo,
+    UpdateAssignedTo: UpdateAssignedTo
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

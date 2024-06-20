@@ -423,6 +423,12 @@ export const LoginRegistrationAPI = {
     async updateArticleStatus(data: any, url = "/update-article-status", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async assignArticle(data: any, url = "/assign-article", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getMyTasks(data: any, url = "/get-my-tasks", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
