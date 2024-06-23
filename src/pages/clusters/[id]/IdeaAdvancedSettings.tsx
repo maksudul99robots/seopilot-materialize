@@ -1,5 +1,4 @@
-// @ts-nocheck
-
+//@ts-ignore
 // ** React Imports
 import { Ref, useState, forwardRef, ReactElement, useEffect, ChangeEvent } from 'react'
 
@@ -116,6 +115,36 @@ const data: CustomRadioIconsData[] = [
 ]
 
 
+interface PickerProps {
+  label?: string
+  error?: boolean
+  registername?: string
+}
+interface DefaultStateType {
+  url: string
+  title: string
+  allDay: boolean
+  calendar: string
+  description: string
+  endDate: Date | string
+  startDate: Date | string
+  guests: string[] | string | undefined
+}
+const defaultState: DefaultStateType = {
+  url: '',
+  title: '',
+  guests: [],
+  allDay: false,
+  description: '',
+  endDate: new Date(),
+  calendar: 'Business',
+  startDate: new Date()
+}
+import DatePicker from 'react-datepicker'
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import { useAuth } from 'src/hooks/useAuth'
+import AssignUsers from 'src/pages/create-article/AssignUsers'
+
 const IdeaAdvancedSettings = (props: any) => {
   // ** States
   const [show, setShow] = useState<boolean>(false)
@@ -176,8 +205,10 @@ const IdeaAdvancedSettings = (props: any) => {
       display: 'Dall-E-2'
     }
   ]);
+  const auth = useAuth();
   const [extraPrompt, setExtraPrompt] = useState<string>('')
-
+  const [user, setUser] = useState(auth?.user?.id);
+  const [dateTime, setDateTime] = useState<Date>(new Date());
   const handleClose = () => {
     setShow(false);
     props.handleClose();
@@ -396,6 +427,26 @@ const IdeaAdvancedSettings = (props: any) => {
     return trimmedParts;
   }
 
+  const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
+    return (
+      <TextField
+        inputRef={ref}
+        fullWidth
+        {...props}
+        label={props.label || ''}
+        sx={{ width: '100%' }}
+        error={props.error}
+      />
+    )
+  })
+
+  const [values, setValues] = useState<DefaultStateType>(defaultState)
+  const handleStartDate = (date: Date) => {
+    if (date > values.endDate) {
+      setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
+    }
+  }
+
 
   return (
     <>
@@ -443,58 +494,69 @@ const IdeaAdvancedSettings = (props: any) => {
               <Icon icon='mdi:close' />
             </IconButton>
 
-            <Grid item sm={12} xs={12} sx={{ marginBottom: "10px" }} >
+            <Grid item sm={12} xs={12}>
+              <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", marginBottom: "35px", fontWeight: 500, marginTop: "10px", borderBottom: "1px solid #dbe0e3" }}>
+                Article Optimization
 
-              <Box sx={{ display: "flex", justifyContent: "space-between", }}>
-                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
-                  Select Folder
-                </Typography>
+              </Typography>
 
-                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-              </Box>
-              <Folders folder={folder} setFolder={setFolder} folder_id={props?.folder_id} />
             </Grid>
+            <Grid container spacing={6}>
+              <Grid item sm={6} xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id='country-select'>Article Tone</InputLabel>
+                  <Select
+                    fullWidth
+                    placeholder='Article Tone'
+                    label='Article Tone'
+                    labelId='Article Tone'
+                    value={tone ? tone : 'Clear, Knowledgeable and Confident'}
+                    onChange={e => {
+                      setTone(e.target.value)
+                    }}
+                  >
+                    <MenuItem value='Clear, Knowledgeable and Confident'>SEO Optimized (Clear, Knowledgeable and Confident)</MenuItem>
+                    <MenuItem value='Informative, Friendly, Casual'>Informative, Friendly, Casual</MenuItem>
+                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
+                    <MenuItem value='Excited'>Excited</MenuItem>
+                    <MenuItem value='Empathetic'>Empathetic</MenuItem>
+                    <MenuItem value='Professional'>Professional</MenuItem>
+                    <MenuItem value='Friendly'>Friendly</MenuItem>
+                    <MenuItem value='Formal'>Formal</MenuItem>
+                    <MenuItem value='Casual'>Casual</MenuItem>
+                    <MenuItem value='Humorous'>Humorous</MenuItem>
+                  </Select>
+                </FormControl>
 
 
-            <Grid item sm={12} xs={12} >
-
-              <FormControl fullWidth>
-                <InputLabel id='country-select'>AI Model</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='AI Model'
-                  label='AI Model'
-                  labelId='AI Model'
-                  value={model}
-                  onChange={e => {
-                    setModel(e.target.value)
-                  }}
-                >
-                  <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                  <MenuItem value='gpt-4-1106-preview'>GPT-4-TURBO</MenuItem>
-                  <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                  <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sx={{ marginTop: "20px", marginBottom: "20px" }}>
-              <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
-                setTopic(e.target.value)
-              }} value={topic} InputProps={{
-                startAdornment: <InputAdornment position="start"></InputAdornment>,
-              }}
-                name='topic'
-              />
-            </Grid>
-            <Grid item xs={12}>
-
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
-                  Target Keywords
+              </Grid>
+              <Grid item sm={6} xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel id='country-select'>Point of View of Article</InputLabel>
+                  <Select
+                    fullWidth
+                    placeholder='Point of View of Article'
+                    label='Point of View of Article'
+                    labelId='Point of View of Article'
+                    defaultValue={pointOfView}
+                    onChange={e => {
+                      setPointOfView(e.target.value)
+                    }}
+                  >
+                    <MenuItem value='Third Person (he, she, it, they)'>Third Person (he, she, it, they)</MenuItem>
+                    {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
+                    <MenuItem value='Second Person (you, your, yours)'>Second Person (you, your, yours)</MenuItem>
+                    <MenuItem value='First Person Plural (we, us, our, ours)'>First Person Plural (we, us, our, ours)</MenuItem>
+                    <MenuItem value='First Person Singular (I, me, my, mine)'>First Person Singular (I, me, my, mine)</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant='body1' sx={{ paddingBottom: "10px", fontSize: "22px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", display: "flex", borderBottom: "1px solid #dbe0e3" }}>
+                  Language & Country
                   <LightTooltip title={
                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                      The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
+                      If the country ID is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
                     </p>
                   } placement="top">
                     <div style={{ height: "100%" }}>
@@ -502,79 +564,11 @@ const IdeaAdvancedSettings = (props: any) => {
                     </div>
                   </LightTooltip >
                 </Typography>
-                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-              </Box>
+              </Grid>
 
-              <TagsInput
-                value={keywords}
-                onChange={setKeywords}
-                name="Keywords"
-              />
-              {/* <em>press enter to add new tag</em> */}
-              <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword</FormHelperText>
-            </Grid>
-            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "10px" }}>
-              Article Length
-            </Typography>
-            <Grid container spacing={6} sx={{}}>
-              {articleLengthObj.map((item, index) => (
-                <CustomRadioIcons
-                  key={index}
-                  data={articleLengthObj[index]}
-                  selected={articleLength}
-                  icon={articleILngthIcons[index].icon}
-                  name='custom-radios-icons'
-                  handleChange={handleArticleChange}
-                  gridProps={{ sm: 6, xs: 12 }}
-                  iconProps={articleILngthIcons[index].iconProps}
+              {/* <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}> */}
 
-                />
-              ))}
-            </Grid>
-            <Grid item sm={12} xs={12} sx={{ marginTop: "20px" }}>
-              <FormControl fullWidth>
-                <InputLabel id='country-select'>Article Tone</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Article Tone'
-                  label='Article Tone'
-                  labelId='Article Tone'
-                  value={tone ? tone : 'Clear, Knowledgeable and Confident'}
-                  onChange={e => {
-                    setTone(e.target.value)
-                  }}
-                >
-                  <MenuItem value='Clear, Knowledgeable and Confident'>SEO Optimized (Clear, Knowledgeable and Confident)</MenuItem>
-                  <MenuItem value='Informative, Friendly, Casual'>Informative, Friendly, Casual</MenuItem>
-                  {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                  <MenuItem value='Excited'>Excited</MenuItem>
-                  <MenuItem value='Empathetic'>Empathetic</MenuItem>
-                  <MenuItem value='Professional'>Professional</MenuItem>
-                  <MenuItem value='Friendly'>Friendly</MenuItem>
-                  <MenuItem value='Formal'>Formal</MenuItem>
-                  <MenuItem value='Casual'>Casual</MenuItem>
-                  <MenuItem value='Humorous'>Humorous</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "15px", display: "flex" }}>
-              Language & Country
-              <LightTooltip title={
-                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                  If the country ID is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
-                </p>
-              } placement="top">
-                <div style={{ height: "100%" }}>
-                  <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                </div>
-              </LightTooltip >
-            </Typography>
-
-
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-
-              <Grid item sm={6} xs={12} sx={{ width: "50%", paddingRight: "5px" }}>
+              <Grid item sm={6} xs={12} >
 
                 <FormControl fullWidth>
                   <InputLabel id='country-select'>Article Language</InputLabel>
@@ -611,417 +605,448 @@ const IdeaAdvancedSettings = (props: any) => {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} sm={6} sx={{ width: "50%", paddingRight: "5px" }}>
+              <Grid item xs={12} sm={6} sx={{ paddingLeft: "0px" }}>
                 <FormControl fullWidth>
                   <InputLabel id='country-select'>Article Country</InputLabel>
                   <GetCountryList country={country} setCountry={setCountry} />
                 </FormControl>
               </Grid>
-            </Box>
+              {/* </Box> */}
 
-            <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "15px", display: "flex" }}>
-              Point of View of Article
+              {/* <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
+                            Point of View of Article
 
-            </Typography>
-            <Grid item sm={12} xs={12} sx={{ marginTop: "15px" }}>
-              <FormControl fullWidth>
-                <InputLabel id='country-select'>Point of View of Article</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Point of View of Article'
-                  label='Point of View of Article'
-                  labelId='Point of View of Article'
-                  defaultValue={pointOfView}
-                  onChange={e => {
-                    setPointOfView(e.target.value)
-                  }}
-                >
-                  <MenuItem value='Third Person (he, she, it, they)'>Third Person (he, she, it, they)</MenuItem>
-                  {/* <MenuItem value='gpt-3.5-turbo-16k-0613'>GPT-3.5-TURBO-16k</MenuItem> */}
-                  <MenuItem value='Second Person (you, your, yours)'>Second Person (you, your, yours)</MenuItem>
-                  <MenuItem value='First Person Plural (we, us, our, ours)'>First Person Plural (we, us, our, ours)</MenuItem>
-                  <MenuItem value='First Person Singular (I, me, my, mine)'>First Person Singular (I, me, my, mine)</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {
-              articleType != 'listicle' &&
-              <>
-                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", display: "flex" }}>
-                  Outline Source
-                  <LightTooltip title={
-                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                      <b>System Generated Outline</b>- Based on the given inputs, SEO Pilot will programmatically generate an outline and produce the article.
-                      <br></br>
-                      <b>Create Your Own Outline</b>- Allows you to specify the outline. Add, edit, remove, and re-order headings.
-                      <br></br>
-                      <b>Get Outline From a URL</b>- the system will scrape the given URL to extract all Headings to form an outline. Thereafter, you can add, edit, remove, and re-order headings.
+                        </Typography> */}
 
 
-                    </p>
-                  } placement="top">
-                    <div style={{ height: "100%" }}>
-                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                    </div>
-                  </LightTooltip >
-                </Typography>
-                <Grid container spacing={4} sx={{}}>
-                  {data.map((item, index) => (
-                    <CustomRadioIcons
-                      key={index}
-                      data={data[index]}
-                      selected={outlineSource}
-                      icon={icons[index].icon}
-                      name='custom-radios-icons'
-                      handleChange={handleChange}
-                      gridProps={{ sm: 4, xs: 12 }}
-                      iconProps={icons[index].iconProps}
-
-                    />
-                  ))}
-                </Grid>
-              </>
-            }
+              {
+                articleType != 'listicle' &&
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", display: "flex" }}>
+                      Outline Source
+                      <LightTooltip title={
+                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                          <b>System Generated Outline</b>- Based on the given inputs, SEO Pilot will programmatically generate an outline and produce the article.
+                          <br></br>
+                          <b>Create Your Own Outline</b>- Allows you to specify the outline. Add, edit, remove, and re-order headings.
+                          <br></br>
+                          <b>Get Outline From a URL</b>- the system will scrape the given URL to extract all Headings to form an outline. Thereafter, you can add, edit, remove, and re-order headings.
 
 
+                        </p>
+                      } placement="top">
+                        <div style={{ height: "100%" }}>
+                          <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                        </div>
+                      </LightTooltip >
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container spacing={4} sx={{}}>
+                      {data.map((item, index) => (
 
-            {
-              outlineSource == 'url' &&
-              <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+                        <CustomRadioIcons
+                          key={index}
+                          data={data[index]}
+                          selected={outlineSource}
+                          icon={icons[index].icon}
+                          name='custom-radios-icons'
+                          handleChange={handleChange}
+                          gridProps={{ sm: 4, xs: 12 }}
+                          iconProps={icons[index].iconProps}
 
-                <TextField fullWidth label='Insert URL' sx={{ marginRight: "10px" }} placeholder='https://example.com' onChange={e => {
-                  setOutlineURL(e.target.value)
-                }} value={outlineURL} InputProps={{
-                  startAdornment: <InputAdornment position="start"></InputAdornment>,
-                }}
-                />
-                <Button variant='outlined' size="medium" sx={{ pt: 3, pb: 3, pl: 4, pr: 4, width: fetchOutlineLoading ? "200px" : '150px' }}
-                  disabled={isValidURL(outlineURL) ? false : true}
-                  onClick={() => fetchOutline()}
-                  startIcon={fetchOutlineLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null
-                  }
-                >
-                  Get Outline
-                </Button>
-              </Grid>
-            }
-
-            {
-              (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
-
-              <DndList
-                headings={headings}
-                setHeadings={setHeadings}
-                editHeadingOnChange={editHeadingOnChange}
-                removeHeadings={removeHeadings}
-                changeHeadingTag={changeHeadingTag}
-                addnewHeading={addnewHeading}
-              />
-            }
-
-            <Grid item xs={12} className='add-icon-color' sx={{ marginTop: "20px" }} >
-              <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
-                <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "18px" }} className='add-icon-color'>Advanced Settings</Typography>
-                {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
-              </div>
-
-            </Grid>
-            {/* <Box > */}
-
-
-            {/* Additional Settings starts*/}
-            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "10px" }}>
-              <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
-              <LightTooltip title={
-                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                  By default, Introduction sections are always included. You can turn off Introduction by disabling this option.
-                </p>
-              } placement="top">
-                <div style={{ height: "100%" }}>
-                  <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                </div>
-              </LightTooltip >
-
-            </Grid>
-            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
-              <SwitchesCustomized label="Include Conclusion" isChecked={conclusion} onClick={() => setConclusion(!conclusion)} />
-              <LightTooltip title={
-                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                  By default, Conclusion sections are always included. You can turn off Conclusions by disabling this option.
-                </p>
-              } placement="top">
-                <div style={{ height: "100%" }}>
-                  <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                </div>
-              </LightTooltip >
-
-            </Grid>
-            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
-              <SwitchesCustomized label="Table of Contents (TOC)" isChecked={toc} onClick={() => setToc(!toc)} />
-              <LightTooltip title={
-                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                  The table of contents will be added to the top of the article under the title.
-                </p>
-              } placement="top">
-                <div style={{ height: "100%" }}>
-                  <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                </div>
-              </LightTooltip >
-
-            </Grid>
-
-            {
-              articleType != 'listicle' &&
-              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
-                <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
-                <LightTooltip title={
-                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                    System will include Frequently Asked Questions (FAQ) at the end of the article.
-                  </p>
-                } placement="top">
-                  <div style={{ height: "100%" }}>
-                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                  </div>
-                </LightTooltip >
-
-
-              </Grid>
-            }
-
-
-            {
-              (model == 'gpt-4-1106-preview' || model == 'gpt-4' || model == 'gpt-4o') &&
-              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
-                <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
-                <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
-                <LightTooltip title={
-                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                    Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
-                  </p>
-                } placement="top">
-                  <div style={{ height: "100%" }}>
-                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                  </div>
-                </LightTooltip >
-
-              </Grid>
-            }
-
-
-            <Grid item xs={12} sx={{ display: showAdditionalSettings && citation ? "flex" : "none", marginTop: "20px" }}>
-              <Box sx={{ width: "100%", display: showAdditionalSettings && citation ? "flex" : "none" }}>
-                <Grid item sm={6} xs={6} sx={{ width: "50%" }}>
-                  <FormControl size='medium' fullWidth>
-                    <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
-                    <Select
-                      fullWidth
-                      placeholder='Select Number of Citations'
-                      label='Select Number of Citations'
-                      labelId='Select Number of Citations'
-                      value={noOfCitations}
-                      onChange={e => {
-
-                        setNoOfCitations(e.target.value)
-
-                      }}
-                    >
-
-                      <MenuItem value="1-10">Low (1-10)</MenuItem>
-                      <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
-                      <MenuItem value="20+">High (20+)</MenuItem>
-
-
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Box>
-
-
-            </Grid>
-            <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "20px" }}>
-              <Box sx={{ width: "100%", display: showAdditionalSettings ? "flex" : "none" }}>
-                <Grid item sm={6} xs={6} sx={{ width: "50%" }}>
-                  <FormControl size='medium' fullWidth>
-                    <InputLabel id='img-service'>Select Image Service</InputLabel>
-                    <Select
-                      fullWidth
-                      placeholder='Select Image Service'
-                      label='Select Image Service'
-                      labelId='Select Image Service'
-                      value={imgService}
-                      onChange={e => {
-                        if (e.target.value == 'none') {
-                          setImgService(e.target.value)
-                          setShowFeaturedImg(false)
-                        } else {
-                          setImgService(e.target.value)
-                          setShowFeaturedImg(true)
-                        }
-
-                      }}
-                    >
-                      {
-                        imgServiceList.map((imgS: any, k: number) => {
-                          return (
-                            <MenuItem key={k} value={imgS.value}>{imgS.display}</MenuItem>
-                          )
-                        })
-                      }
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <LightTooltip title={
-                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                    System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
-                  </p>
-                } placement="top">
-                  <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
-                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                  </div>
-                </LightTooltip >
-              </Box>
-
-
-            </Grid>
-
-            {
-              showAdditionalSettings && (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
-              <>
-                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                  Image Prompt for DALL-E*
-                  <LightTooltip title={
-                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                      Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> We recommend DALL-E-3 because it produces significantly better images than DALL-E-2.
-                    </p>
-                  } placement="top">
-                    <div style={{ height: "100%" }}>
-                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                    </div>
-                  </LightTooltip >
-
-
-                </Typography>
-                <TextField
-                  fullWidth
-                  placeholder="Visualize a piece of futuristic technology, like ‘a holographic communication device’."
-                  multiline
-                  rows={2}
-                  // maxRows={4}
-                  value={imgPrompt}
-                  onChange={e => {
-                    setImgPrompt(e.target.value)
-                  }}
-                  onKeyDown={(e: KeyboardEvent) => {
-                    e.stopPropagation();
-                  }}
-                />
-
-              </>
-
-            }
-            {
-              articleType != 'listicle' && showAdditionalSettings &&
-              <>
-                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                  Extra Section Prompt
-                  <LightTooltip title={
-                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                      Additional information that will be applied to EVERY section. You must not give instructions like “Write 1500 words” or anything similar because it will be applied individually to each section, not the whole article at once.
-                    </p>
-                  } placement="top">
-                    <div style={{ height: "100%" }}>
-                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                    </div>
-                  </LightTooltip >
-
-
-                </Typography>
-                <TextField
-                  fullWidth
-                  placeholder='ONLY provide a prompt that you’d like to apply to EVERY section. Keep it short. Do NOT give article-level or global prompt like “Write 1500 words”. Example1: Avoid transitional phrases. Example2: Do not use the word “However”.'
-                  multiline
-                  rows={2}
-                  // maxRows={4}
-                  value={extraPrompt}
-                  onChange={e => {
-                    setExtraPrompt(e.target.value)
-                  }}
-                  sx={{}}
-                />
-
-              </>
-
-            }
-
-
-            {/* </Box> */}
-            {
-              articleType != 'listicle' &&
-              <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
-                Links
-                <LightTooltip title={
-                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                    Add links in the article. You can add multiple links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as link in the article.
-                  </p>
-                } placement="top">
-                  <div style={{ height: "100%" }}>
-                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                  </div>
-                </LightTooltip >
-
-
-              </Typography>
-            }
-
-
-            {
-              articleType != 'listicle' && numberOfLinks.map((link, index) => {
-                return (
-                  <Box sx={{ display: "flex", marginTop: "20px" }}>
-                    <Grid item xs={11} sx={{ display: showAdditionalSettings ? "block" : "none", width: "100%" }}>
-                      <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
-                        // console.log(e.target.value)
-                        const newArray = [...links];
-                        newArray[index] = e.target.value
-                        setLinks(newArray);
-                      }} InputProps={{
-                        startAdornment: <InputAdornment position="start"></InputAdornment>,
-                      }} />
+                        />
+                      ))}
                     </Grid>
-                    <Grid item sx={{ display: showAdditionalSettings ? "flex" : "none", alignItems: "center", justifyContent: "start", marginLeft: "5px" }}>
-                      <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
-                        if (index != 0) {
-                          const newArray = [...numberOfLinks];
-                          newArray.splice(index, 1);
-                          setNumberOfLinks(newArray);
+                  </Grid>
 
-                          const newLinks = [...links];
-                          newLinks.splice(index, 1);
-                          setLinks(newLinks);
+                </>
+              }
+
+
+
+              {
+                outlineSource == 'url' &&
+                <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between", marginTop: "0px" }}>
+
+                  <TextField fullWidth label='Insert URL' sx={{ marginRight: "10px" }} placeholder='https://example.com' onChange={e => {
+                    setOutlineURL(e.target.value)
+                  }} value={outlineURL} InputProps={{
+                    startAdornment: <InputAdornment position="start"></InputAdornment>,
+                  }}
+                  />
+                  <Button variant='outlined' size="medium" sx={{ pt: 3, pb: 3, pl: 4, pr: 4, width: fetchOutlineLoading ? "200px" : '150px' }}
+                    disabled={isValidURL(outlineURL) ? false : true}
+                    onClick={() => fetchOutline()}
+                    startIcon={fetchOutlineLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+                    }
+                  >
+                    Get Outline
+                  </Button>
+                </Grid>
+              }
+
+              {
+                (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
+                <Grid item xs={12}>
+                  <DndList
+                    headings={headings}
+                    setHeadings={setHeadings}
+                    editHeadingOnChange={editHeadingOnChange}
+                    removeHeadings={removeHeadings}
+                    changeHeadingTag={changeHeadingTag}
+                    addnewHeading={addnewHeading}
+                  />
+                </Grid>
+
+              }
+              <Grid item xs={12}>
+                <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", borderBottom: "1px solid #dbe0e3" }}>
+                  Article Operations
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6} >
+                <Folders folder={folder} setFolder={setFolder} />
+              </Grid>
+              <Grid item xs={6}>
+                <AssignUsers user={user} setUser={setUser} />
+
+              </Grid>
+
+              <Grid item xs={6}>
+                <DatePickerWrapper >
+                  <DatePicker
+                    // style={{ height: "30px" }}
+                    selectsStart
+                    id='create-due-date'
+                    selected={dateTime}
+                    minDate={new Date()}
+                    showTimeSelect={true}
+                    dateFormat={'MM-dd-yyyy hh:mm a'}
+                    customInput={<PickersComponent label='Due date' registername='Due date' />}
+                    onChange={(date: Date) => {
+                      setDateTime(date)
+                      // console.log("date:", date)
+
+                    }}
+
+                    onSelect={handleStartDate}
+                  />
+                </DatePickerWrapper>
+              </Grid>
+
+              <Grid item xs={12} className='add-icon-color' sx={{ marginTop: "20px" }} >
+                <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
+                  <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} className='add-icon-color'>Advanced Settings</Typography>
+                  {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
+                </div>
+
+              </Grid>
+              {/* <Box > */}
+
+
+              {/* Additional Settings starts*/}
+              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "10px" }}>
+                <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
+                <LightTooltip title={
+                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                    By default, Introduction sections are always included. You can turn off Introduction by disabling this option.
+                  </p>
+                } placement="top">
+                  <div style={{ height: "100%" }}>
+                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                  </div>
+                </LightTooltip >
+
+              </Grid>
+              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
+                <SwitchesCustomized label="Include Conclusion" isChecked={conclusion} onClick={() => setConclusion(!conclusion)} />
+                <LightTooltip title={
+                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                    By default, Conclusion sections are always included. You can turn off Conclusions by disabling this option.
+                  </p>
+                } placement="top">
+                  <div style={{ height: "100%" }}>
+                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                  </div>
+                </LightTooltip >
+
+              </Grid>
+              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
+                <SwitchesCustomized label="Table of Contents (TOC)" isChecked={toc} onClick={() => setToc(!toc)} />
+                <LightTooltip title={
+                  <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                    The table of contents will be added to the top of the article under the title.
+                  </p>
+                } placement="top">
+                  <div style={{ height: "100%" }}>
+                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                  </div>
+                </LightTooltip >
+
+              </Grid>
+
+              {
+                articleType != 'listicle' &&
+                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
+                  <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
+                  <LightTooltip title={
+                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                      System will include Frequently Asked Questions (FAQ) at the end of the article.
+                    </p>
+                  } placement="top">
+                    <div style={{ height: "100%" }}>
+                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                    </div>
+                  </LightTooltip >
+
+
+                </Grid>
+              }
+
+
+              {
+                (model == 'gpt-4-1106-preview' || model == 'gpt-4' || model == 'gpt-4o') &&
+                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "5px" }}>
+                  <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                  <Typography sx={{ display: "flex", alignItems: "center", fontStyle: 'italic', fontSize: "14px", marginRight: "5px" }}>(Beta)</Typography>
+                  <LightTooltip title={
+                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                      Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                    </p>
+                  } placement="top">
+                    <div style={{ height: "100%" }}>
+                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                    </div>
+                  </LightTooltip >
+
+                </Grid>
+              }
+
+
+              <Grid item xs={12} sx={{ display: showAdditionalSettings && citation ? "flex" : "none", marginTop: "20px" }}>
+                <Box sx={{ width: "100%", display: showAdditionalSettings && citation ? "flex" : "none" }}>
+                  <Grid item sm={6} xs={6} sx={{ width: "50%" }}>
+                    <FormControl size='medium' fullWidth>
+                      <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
+                      <Select
+                        fullWidth
+                        placeholder='Select Number of Citations'
+                        label='Select Number of Citations'
+                        labelId='Select Number of Citations'
+                        value={noOfCitations}
+                        onChange={e => {
+
+                          setNoOfCitations(e.target.value)
+
+                        }}
+                      >
+
+                        <MenuItem value="1-10">Low (1-10)</MenuItem>
+                        <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
+                        <MenuItem value="20+">High (20+)</MenuItem>
+
+
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Box>
+
+
+              </Grid>
+              <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none", marginTop: "0px" }}>
+                <Box sx={{ width: "100%", display: showAdditionalSettings ? "flex" : "none" }}>
+                  <Grid item sm={6} xs={6} sx={{ width: "50%" }}>
+                    <FormControl size='medium' fullWidth>
+                      <InputLabel id='img-service'>Select Image Service</InputLabel>
+                      <Select
+                        fullWidth
+                        placeholder='Select Image Service'
+                        label='Select Image Service'
+                        labelId='Select Image Service'
+                        value={imgService}
+                        onChange={e => {
+                          if (e.target.value == 'none') {
+                            setImgService(e.target.value)
+                            setShowFeaturedImg(false)
+                          } else {
+                            setImgService(e.target.value)
+                            setShowFeaturedImg(true)
+                          }
+
+                        }}
+                      >
+                        {
+                          imgServiceList.map((imgS: any, k: number) => {
+                            return (
+                              <MenuItem key={k} value={imgS.value}>{imgS.display}</MenuItem>
+                            )
+                          })
                         }
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <LightTooltip title={
+                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                      System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
+                    </p>
+                  } placement="top">
+                    <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
+                      <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                    </div>
+                  </LightTooltip >
+                </Box>
 
-                      }} />
 
-                    </Grid>
-                  </Box>
+              </Grid>
 
-                )
-              })
+              {
+                showAdditionalSettings && (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
+                <Grid item xs={12}>
+                  <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", display: showAdditionalSettings ? "flex" : "none" }}>
+                    Image Prompt for DALL-E*
+                    <LightTooltip title={
+                      <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                        Please insert appropriate prompt for the featured image of your article. This prompt will be sent to Dall-E to fetch your desired featured image. <br></br> <strong>Note:</strong> We recommend DALL-E-3 because it produces significantly better images than DALL-E-2.
+                      </p>
+                    } placement="top">
+                      <div style={{ height: "100%" }}>
+                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                      </div>
+                    </LightTooltip >
 
 
-            }
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder="Visualize a piece of futuristic technology, like ‘a holographic communication device’."
+                    multiline
+                    rows={2}
+                    // maxRows={4}
+                    value={imgPrompt}
+                    onChange={e => {
+                      setImgPrompt(e.target.value)
+                    }}
+                    onKeyDown={(e: KeyboardEvent) => {
+                      e.stopPropagation();
+                    }}
+                  />
 
-            {
-              articleType != 'listicle' &&
-              <Button variant='text' size="large" sx={{ mr: 2, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
-                const newArray = [...numberOfLinks];
-                newArray.push(1);
-                setNumberOfLinks(newArray);
-              }} startIcon={<Icon icon="gg:add" />}>
-                Add Another Link
-              </Button>
-            }
+                </Grid>
+
+              }
+              {
+                articleType != 'listicle' && showAdditionalSettings &&
+                <Grid item xs={12}>
+                  <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", display: showAdditionalSettings ? "flex" : "none" }}>
+                    Extra Section Prompt
+                    <LightTooltip title={
+                      <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                        Additional information that will be applied to EVERY section. You must not give instructions like “Write 1500 words” or anything similar because it will be applied individually to each section, not the whole article at once.
+                      </p>
+                    } placement="top">
+                      <div style={{ height: "100%" }}>
+                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                      </div>
+                    </LightTooltip >
+
+
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    placeholder='ONLY provide a prompt that you’d like to apply to EVERY section. Keep it short. Do NOT give article-level or global prompt like “Write 1500 words”. Example1: Avoid transitional phrases. Example2: Do not use the word “However”.'
+                    multiline
+                    rows={2}
+                    // maxRows={4}
+                    value={extraPrompt}
+                    onChange={e => {
+                      setExtraPrompt(e.target.value)
+                    }}
+                    sx={{}}
+                  />
+
+                </Grid>
+
+              }
+
+
+              {/* </Box> */}
+              {
+                articleType != 'listicle' &&
+                <Grid item xs={12}>
+                  <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", display: showAdditionalSettings ? "flex" : "none" }}>
+                    Links
+                    <LightTooltip title={
+                      <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                        Add links in the article. You can add multiple links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as link in the article.
+                      </p>
+                    } placement="top">
+                      <div style={{ height: "100%" }}>
+                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                      </div>
+                    </LightTooltip >
+
+
+                  </Typography>
+                </Grid>
+              }
+
+
+              {
+                articleType != 'listicle' && numberOfLinks.map((link, index) => {
+                  return (
+                    <>
+                      <Grid item xs={11} sx={{ display: showAdditionalSettings ? "block" : "none", width: "100%" }}>
+                        <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
+                          // console.log(e.target.value)
+                          const newArray = [...links];
+                          newArray[index] = e.target.value
+                          setLinks(newArray);
+                        }} InputProps={{
+                          startAdornment: <InputAdornment position="start"></InputAdornment>,
+                        }} />
+                      </Grid>
+                      <Grid item xs={1}>
+                        <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
+                          if (index != 0) {
+                            const newArray = [...numberOfLinks];
+                            newArray.splice(index, 1);
+                            setNumberOfLinks(newArray);
+
+                            const newLinks = [...links];
+                            newLinks.splice(index, 1);
+                            setLinks(newLinks);
+                          }
+
+                        }} />
+
+                      </Grid>
+                    </>
+
+                  )
+                })
+
+
+              }
+
+              {
+                articleType != 'listicle' &&
+                <Grid item xs={5} sx={{ paddingTop: "0 px !important;" }}>
+                  <Button variant='text' size="large" sx={{ mr: 2, p: 2, mt: 0, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
+                    const newArray = [...numberOfLinks];
+                    newArray.push(1);
+                    setNumberOfLinks(newArray);
+                  }} startIcon={<Icon icon="gg:add" />}>
+                    Add Another Link
+                  </Button>
+                </Grid>
+
+              }
+
+            </Grid>
+
             {/* Additional Settings ends*/}
 
           </Box>

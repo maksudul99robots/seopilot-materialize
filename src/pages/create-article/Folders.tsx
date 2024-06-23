@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { LoginRegistrationAPI } from "src/services/API"
 
 const Folders = (props: any) => {
-    console.log("props.sx", props.sx)
+    // console.log("props.sx", props.sx)
     const [folders, setFolders] = useState<any>([])
     useEffect(() => {
         LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {

@@ -24,6 +24,34 @@ const Transition = forwardRef(function Transition(
 ) {
     return <Fade ref={ref} {...props} />
 })
+import DatePicker from 'react-datepicker'
+import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+
+interface PickerProps {
+    label?: string
+    error?: boolean
+    registername?: string
+}
+interface DefaultStateType {
+    url: string
+    title: string
+    allDay: boolean
+    calendar: string
+    description: string
+    endDate: Date | string
+    startDate: Date | string
+    guests: string[] | string | undefined
+}
+const defaultState: DefaultStateType = {
+    url: '',
+    title: '',
+    guests: [],
+    allDay: false,
+    description: '',
+    endDate: new Date(),
+    calendar: 'Business',
+    startDate: new Date()
+}
 // interface Links {
 //     links: string[];
 //   }
@@ -42,6 +70,7 @@ import CustomBadge from 'src/@core/components/mui/badge'
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
 import AssignUsers from './AssignUsers';
+import { getDateTime } from 'src/services/DateTimeFormatter';
 
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
@@ -190,6 +219,7 @@ export default function CreateArticle(props: any) {
     const [retryArticle, setRetryArticle] = useState(false)
     const [user, setUser] = useState(auth?.user?.id);
     const [existingArticle, setExistingArticle] = useState<any>(null);
+    const [dateTime, setDateTime] = useState<Date>(new Date());
 
     useEffect(() => {
         const { id, edit_article } = router.query;
@@ -415,7 +445,7 @@ export default function CreateArticle(props: any) {
     const submit = async () => {
         // check if AI model allowed
         const isModelAllowed = await isAIModelAllowed(model, allModels);
-        console.log("isModelAllowed", isModelAllowed)
+        // console.log("isModelAllowed", isModelAllowed)
         if (!isModelAllowed) {
             Swal.fire({
                 title: 'Error!',
@@ -477,7 +507,8 @@ export default function CreateArticle(props: any) {
                         retryArticle: retryArticle,
                         article_id: router.query.id,
                         no_of_citations: noOfCitations,
-                        user: user
+                        user: user,
+                        due_date: dateTime
                     }).
                         then(res => {
                             // console.log("res:", res);
@@ -552,7 +583,8 @@ export default function CreateArticle(props: any) {
                             retryArticle: retryArticle,
                             article_id: router.query.id,
                             no_of_citations: noOfCitations,
-                            user: user
+                            user: user,
+                            due_date: dateTime
                         }
                     ).then(res => {
                         // console.log("res:", res);
@@ -819,6 +851,24 @@ export default function CreateArticle(props: any) {
     }
 
 
+    const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
+        return (
+            <TextField
+                inputRef={ref}
+                fullWidth
+                {...props}
+                label={props.label || ''}
+                sx={{ width: '100%' }}
+                error={props.error}
+            />
+        )
+    })
+    const [values, setValues] = useState<DefaultStateType>(defaultState)
+    const handleStartDate = (date: Date) => {
+        if (date > values.endDate) {
+            setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
+        }
+    }
 
     return (
         // <Card>
@@ -850,25 +900,28 @@ export default function CreateArticle(props: any) {
                     </Box>
 
                     <Grid container spacing={6}>
-                        <Grid item sm={12} xs={12}>
+                        <Grid item xs={12}>
+                            {/* <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}> */}
+                            <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "0px", marginBottom: "0px", display: "flex", borderBottom: "1px solid #dbe0e3" }}>
+                                Basic Settings
+                                {/* <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        For improved quality GPT-4-Turbo is recommanded.
+                                        <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                    </div>
+                                </LightTooltip > */}
+                            </Typography>
+                            {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                            {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                            {/* </Box> */}
+                        </Grid>
+                        <Grid item sm={6} xs={6}>
 
-                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
-                                    Select AI Model
-                                    <LightTooltip title={
-                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            For improved quality GPT-4-Turbo is recommanded.
-                                            <p>We support Citation feature only for GPT-4 & GPT-4-Turbo (Go to ADVANCED SETTINGS to enable Citation)</p>
-                                        </p>
-                                    } placement="top">
-                                        <div style={{ height: "100%" }}>
-                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                        </div>
-                                    </LightTooltip >
-                                </Typography>
-                                {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                                {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-                            </Box>
+
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>AI Model</InputLabel>
                                 <Select
@@ -888,7 +941,7 @@ export default function CreateArticle(props: any) {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6} sx={{}}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Type</InputLabel>
                                 <Select
@@ -920,7 +973,7 @@ export default function CreateArticle(props: any) {
                         <Grid item xs={12}>
 
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginTop: "0px", marginBottom: "10px", display: "flex" }}>
+                                <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
                                     Target Keywords
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -946,7 +999,7 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px" }}>
+                        <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginLeft: "25px", marginTop: "10px", marginBottom: "10px" }}>
                             Article Length
                         </Typography>
                         <Grid container spacing={6} sx={{ paddingLeft: "25px" }}>
@@ -966,12 +1019,15 @@ export default function CreateArticle(props: any) {
                         </Grid>
 
 
-
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
-                            Article Tone
-
-                        </Typography>
                         <Grid item sm={12} xs={12}>
+                            <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", marginBottom: "10px", fontWeight: 500, marginTop: "10px", borderBottom: "1px solid #dbe0e3" }}>
+                                Article Optimization
+
+                            </Typography>
+
+                        </Grid>
+
+                        <Grid item sm={6} xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Tone</InputLabel>
                                 <Select
@@ -996,72 +1052,10 @@ export default function CreateArticle(props: any) {
                                     <MenuItem value='Humorous'>Humorous</MenuItem>
                                 </Select>
                             </FormControl>
+
+
                         </Grid>
-
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "15px", display: "flex" }}>
-                            Language & Country
-                            <LightTooltip title={
-                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                    If the country ID is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
-                                </p>
-                            } placement="top">
-                                <div style={{ height: "100%" }}>
-                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                </div>
-                            </LightTooltip >
-                        </Typography>
-                        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
-
-                            <Grid item sm={6} xs={12} sx={{ paddingLeft: "25px", paddingRight: "5px" }}>
-
-                                <FormControl fullWidth>
-                                    <InputLabel id='country-select'>Article Language</InputLabel>
-                                    <Select
-                                        fullWidth
-                                        placeholder='Article Language'
-                                        label='Article Language'
-                                        labelId='English'
-                                        value={language ? language : 'English'}
-                                        onChange={e => {
-                                            setLanguage(e.target.value)
-                                        }}
-                                    >
-                                        <MenuItem value='English'>English</MenuItem>
-                                        <MenuItem value='French'>French</MenuItem>
-                                        <MenuItem value='German'>German</MenuItem>
-                                        <MenuItem value='Spanish'>Spanish</MenuItem>
-                                        <MenuItem value='Arabic'>Arabic</MenuItem>
-                                        <MenuItem value='Japanese'>Japanese</MenuItem>
-                                        <MenuItem value='Chinese'>Chinese</MenuItem>
-                                        <MenuItem value='Mandarin Chinese'>Mandarin Chinese</MenuItem>
-                                        <MenuItem value='Russian'>Russian</MenuItem>
-                                        <MenuItem value='Romanian'>Romanian</MenuItem>
-                                        <MenuItem value='Dutch'>Dutch</MenuItem>
-                                        <MenuItem value='Portuguese'>Portuguese</MenuItem>
-                                        <MenuItem value='Swedish'>Swedish</MenuItem>
-                                        <MenuItem value='Hindi'>Hindi</MenuItem>
-                                        <MenuItem value='Bengali'>Bengali</MenuItem>
-                                        <MenuItem value='Italian'>Italian</MenuItem>
-                                        <MenuItem value='Malay'>Malay</MenuItem>
-
-
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-
-                            <Grid item xs={12} sm={6} sx={{ paddingLeft: "5px" }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id='country-select'>Article Country</InputLabel>
-                                    <GetCountryList country={country} setCountry={setCountry} />
-                                </FormControl>
-                            </Grid>
-                        </Box>
-
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
-                            Point of View of Article
-
-                        </Typography>
-                        <Grid item sm={12} xs={12}>
+                        <Grid item sm={6} xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Point of View of Article</InputLabel>
                                 <Select
@@ -1082,6 +1076,73 @@ export default function CreateArticle(props: any) {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        <Grid xs={12}>
+                            <Typography variant='body1' sx={{ paddingBottom: "10px", fontSize: "22px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex", borderBottom: "1px solid #dbe0e3" }}>
+                                Language & Country
+                                <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        If the country ID is set to "Default," the article will be intended for a global audience, encompassing all countries worldwide.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                    </div>
+                                </LightTooltip >
+                            </Typography>
+                        </Grid>
+
+                        {/* <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}> */}
+
+                        <Grid item sm={6} xs={12} >
+
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>Article Language</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='Article Language'
+                                    label='Article Language'
+                                    labelId='English'
+                                    value={language ? language : 'English'}
+                                    onChange={e => {
+                                        setLanguage(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value='English'>English</MenuItem>
+                                    <MenuItem value='French'>French</MenuItem>
+                                    <MenuItem value='German'>German</MenuItem>
+                                    <MenuItem value='Spanish'>Spanish</MenuItem>
+                                    <MenuItem value='Arabic'>Arabic</MenuItem>
+                                    <MenuItem value='Japanese'>Japanese</MenuItem>
+                                    <MenuItem value='Chinese'>Chinese</MenuItem>
+                                    <MenuItem value='Mandarin Chinese'>Mandarin Chinese</MenuItem>
+                                    <MenuItem value='Russian'>Russian</MenuItem>
+                                    <MenuItem value='Romanian'>Romanian</MenuItem>
+                                    <MenuItem value='Dutch'>Dutch</MenuItem>
+                                    <MenuItem value='Portuguese'>Portuguese</MenuItem>
+                                    <MenuItem value='Swedish'>Swedish</MenuItem>
+                                    <MenuItem value='Hindi'>Hindi</MenuItem>
+                                    <MenuItem value='Bengali'>Bengali</MenuItem>
+                                    <MenuItem value='Italian'>Italian</MenuItem>
+                                    <MenuItem value='Malay'>Malay</MenuItem>
+
+
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} sx={{ paddingLeft: "0px" }}>
+                            <FormControl fullWidth>
+                                <InputLabel id='country-select'>Article Country</InputLabel>
+                                <GetCountryList country={country} setCountry={setCountry} />
+                            </FormControl>
+                        </Grid>
+                        {/* </Box> */}
+
+                        {/* <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "-5px", display: "flex" }}>
+                            Point of View of Article
+
+                        </Typography> */}
+
 
                         {
                             articleType != 'listicle' &&
@@ -1175,22 +1236,49 @@ export default function CreateArticle(props: any) {
                                 </Grid>
                                 : null
                         }
+                        <Grid item xs={12}>
+                            <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "20px", marginBottom: "10px", borderBottom: "1px solid #dbe0e3" }}>
+                                Article Operations
+                            </Typography>
+                        </Grid>
 
-                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: "flex", marginBottom: "20px" }}>
-                            Article Operations
-                        </Typography>
                         {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
 
-                        <Grid item xs={12} sx={{ padding: "0px 0px 0px 20px !important" }}>
-                            <Folders folder={folder} setFolder={setFolder} sx={{ marginBottom: "20px" }} />
-                            <AssignUsers user={user} setUser={setUser} />
+                        <Grid item xs={6} >
+                            <Folders folder={folder} setFolder={setFolder} />
                         </Grid>
+                        <Grid item xs={6}>
+                            <AssignUsers user={user} setUser={setUser} />
+
+                        </Grid>
+                        <Grid item xs={6}>
+                            <DatePickerWrapper >
+                                <DatePicker
+                                    // style={{ height: "30px" }}
+                                    selectsStart
+                                    id='create-due-date'
+                                    selected={dateTime}
+                                    minDate={new Date()}
+                                    showTimeSelect={true}
+                                    dateFormat={'MM-dd-yyyy hh:mm a'}
+                                    customInput={<PickersComponent label='Due date' registername='Due date' />}
+                                    onChange={(date: Date) => {
+                                        setDateTime(date)
+                                        // console.log("date:", date)
+
+                                    }}
+
+                                    onSelect={handleStartDate}
+                                />
+                            </DatePickerWrapper>
+                        </Grid>
+
 
 
 
                         <Grid item xs={12} className='add-icon-color'>
                             <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
-                                <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "18px" }} className='add-icon-color'>Advanced Settings</Typography>
+                                <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} className='add-icon-color'>Advanced Settings</Typography>
                                 {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
                             </div>
 
@@ -1418,7 +1506,7 @@ export default function CreateArticle(props: any) {
                         {
                             articleType != 'listicle' && showAdditionalSettings &&
                             <>
-                                <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
                                     Extra Section Prompt
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1474,7 +1562,7 @@ export default function CreateArticle(props: any) {
                             articleType != 'listicle' && numberOfLinks.map((link, index) => {
                                 return (
                                     <>
-                                        <Grid item sm={11} xs={12} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
+                                        <Grid item sm={11} xs={11} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
                                             <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
                                                 // console.log(e.target.value)
                                                 const newArray = [...links];

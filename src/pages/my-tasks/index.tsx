@@ -143,27 +143,6 @@ const MyTasks = () => {
                 )
             }
         },
-
-        {
-            flex: 0.14,
-            headerName: 'Folder',
-            field: 'folder_id',
-            disableColumnMenu: true,
-            sortable: false,
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => (
-                <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                    <FolderDropdown
-                        article_id={params.row.source ? params.row.id : `${parseInt(params.row.id)}`}
-                        folder_id={params.row.folder_id}
-                        folders={folders}
-                        setResetDataset={setResetDataset}
-                        resetDataset={resetDataset}
-                        source={params.row.source ? params.row.source : 'https://app.seopilot.io'}
-                    />
-                </Typography>
-            )
-        },
         {
             flex: 0.09,
             type: 'date',
@@ -234,106 +213,6 @@ const MyTasks = () => {
 
                 )
             }
-        },
-        // {
-        //     flex: 0.07,
-        //     minWidth: 140,
-        //     field: 'content_status',
-        //     headerName: 'Content Status',
-        //     renderCell: (params: GridRenderCellParams) => {
-        //         const status = contentStatusObj[params.row?.content_status == 'incomplete' ? 2 : params.row?.content_status == 'outlined' ? 3 : 1]
-        //         return (
-
-        //             <>
-        //                 {
-        //                     status.title == 'Error' ?
-
-        //                         <LightTooltip title={<p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>ChatGPT API failed to respond, it may be that the ChatGPT API service is unavailable or overloaded. Please Check Your Current API Limits. Try generating your article again.<br></br> Go to <a href="https://status.openai.com/" target="_blank">This Link</a> to see current status of the service.</p>} placement="top">
-        //                             <div>
-        //                                 <CustomChip
-        //                                     size='small'
-        //                                     skin='light'
-        //                                     color={status.color}
-        //                                     label={status.title}
-        //                                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' }, cursor: "pointer" }}
-        //                                 />
-        //                             </div>
-        //                         </LightTooltip >
-        //                         :
-        //                         <CustomChip
-        //                             size='small'
-        //                             skin='light'
-        //                             color={status.color}
-        //                             label={status.title}
-        //                             sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-        //                         />
-        //                 }
-        //             </>
-
-
-
-        //         )
-        //     }
-        // },
-        {
-            flex: 0.09,
-            minWidth: 110,
-            field: 'action',
-            sortable: false,
-            headerName: 'Action',
-            disableColumnMenu: true,
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params;
-                return (
-                    <>
-                        {/* <ActionDropdown
-
-                            workspaces={workspaces}
-                            article_id={row.article_type ? parseInt(row.id) - 50000 : row.id}
-                            status={row.status}
-                            article_type={row.article_type}
-                            retryLoading={retryLoading[row.id]}
-                            is_error={row.is_error}
-                            resetDataset={resetDataset}
-                            setResetDataset={setResetDataset}
-                            regenerateArticle={regenerateArticle}
-                            team={team}
-                        /> */}
-                        {/* {
-                            row.status == 'error' ?
-                                <>
-                                    <Button variant='outlined' onClick={e => {
-                                        regenerateArticle(row.id)
-                                    }} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
-                                        Retry
-                                    </Button >
-                                    <Button variant='outlined' sx={{ marginLeft: "5px" }} href={`/create-article?id=${parseInt(row.id) - 50000}&edit_article=true`} disabled={!row.article_type || retryLoading[row.id] == true} endIcon={retryLoading[row.id] == true ? <Icon icon="line-md:loading-twotone-loop" /> : null}>
-                                        Edit
-                                    </Button >
-                                </>
-
-                                :
-                                row.status == 'outlined' ?
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`}
-                                        disabled={
-                                            row.is_error ? row.is_error : false
-                                        }>
-                                        View
-                                    </Button >
-                                    :
-                                    <Button variant='outlined' href={row.article_type ? `/generated-article/${parseInt(row.id) - 50000}` : `/article/${row.id}`} disabled={
-                                        row.is_error ? row.is_error : false
-                                    }>
-                                        View
-                                    </Button >
-                        } */}
-                    </>
-
-                )
-
-            }
-
-
         }
     ]
     const regenerateArticle = (id: number) => {
@@ -507,14 +386,11 @@ const MyTasks = () => {
 
     return (
         <Box >
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <Button variant='contained' href='/create-article'>+ Create Article</Button>
-            </Box>
 
             <Card>
                 <Box sx={{ display: "flex", justifyContent: "space-between", margin: "20px" }}>
                     <Typography variant='h6'>
-                        Articles
+                        My Tasks
                         {
                             router.query.id &&
                             <Typography variant='body2'>Folder: {folderName}</Typography>

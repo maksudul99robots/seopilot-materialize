@@ -15,7 +15,7 @@ const AssignUsers = (props: any) => {
     }, [])
     return (
         <>
-            <FormControl fullWidth sx={{ marginBottom: "10px" }}>
+            <FormControl fullWidth sx={props.sx}>
                 <InputLabel id='country-select'>Assign To</InputLabel>
                 <Select
                     fullWidth
