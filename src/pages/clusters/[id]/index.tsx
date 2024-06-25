@@ -366,11 +366,11 @@ const ClusterIdea = () => {
                                         </Button >
                                         <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
                                     </>
-                                    : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
-                                        <><Button variant='contained' size='medium' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                    : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
+                                        <><Button variant='contained' size='medium' disabled onClick={() => {
                                             submit(settings[row.id], row)
                                         }} sx={{ fontSize: "10px", marginRight: "3px" }}>
-                                            Processing
+                                            <Icon icon="line-md:loading-twotone-loop"></Icon>
                                         </Button >
                                             <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
                                         </> :
