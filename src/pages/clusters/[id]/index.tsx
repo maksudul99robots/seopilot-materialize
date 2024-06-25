@@ -202,7 +202,7 @@ const ClusterIdea = () => {
                                 <Icon icon="mdi:tick-circle" color='#2979FF' fontSize="20px"></Icon>
                                 : settings[row.id].status == 'idea' ?
                                     <Icon icon="zondicons:minus-outline" color='#626477' fontSize="17px"></Icon>
-                                    : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
+                                    : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
                                         <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon>
                                         :
                                         <Icon icon="ep:warning-filled" color='#F58F4F' fontSize="19px"></Icon>
@@ -369,8 +369,8 @@ const ClusterIdea = () => {
                                     : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
                                         <><Button variant='contained' size='medium' disabled onClick={() => {
                                             submit(settings[row.id], row)
-                                        }} sx={{ fontSize: "10px", marginRight: "3px" }}>
-                                            <Icon icon="line-md:loading-twotone-loop"></Icon>
+                                        }} sx={{ fontSize: "10px", marginRight: "3px", padding: "0px" }}>
+                                            <Icon icon="line-md:loading-twotone-loop" style={{ height: "20px" }}></Icon>
                                         </Button >
                                             <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
                                         </> :
