@@ -12,7 +12,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Swal from 'sweetalert2'
 
 const WorkspaceList = (props: any) => {
-    console.log("workspace props:", props)
+    // console.log("workspace props:", props)
     // ** State
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [cw, setCw] = useState('');
