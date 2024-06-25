@@ -66,7 +66,14 @@ const navigation = (): VerticalNavItemsType | any => {
         // badgeColor: "info",
         // badgeContent: "beta"
       },
-
+      {
+        sectionTitle: 'My Tasks'
+      },
+      {
+        title: 'My Tasks',
+        icon: 'fluent-mdl2:task-list',
+        path: '/my-tasks'
+      },
       {
         sectionTitle: 'Workspace Settings'
       },
@@ -80,14 +87,7 @@ const navigation = (): VerticalNavItemsType | any => {
         icon: 'carbon:plug',
         path: '/integrations'
       },
-      {
-        sectionTitle: 'My Tasks'
-      },
-      {
-        title: 'My Tasks',
-        icon: 'fluent-mdl2:task-list',
-        path: '/my-tasks'
-      },
+
       {
         sectionTitle: 'Account Settings'
       },
@@ -226,6 +226,11 @@ const navigation = (): VerticalNavItemsType | any => {
           title: 'Plans',
           icon: 'mdi:currency-usd',
           path: '/plans'
+        },
+        {
+          title: 'Sign Out',
+          icon: 'material-symbols:logout-sharp',
+          path: '/go-to-login-page'
         },
 
       ];

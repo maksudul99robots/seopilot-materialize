@@ -16,6 +16,19 @@ const Folders = (props: any) => {
             console.log("unable to get Folders")
         })
     }, [])
+
+    // useEffect(() => {
+    //     LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {
+    //         setFolders(res.data);
+    //         if (props.folder_id) {
+    //             props.setFolder(props.folder_id)
+    //         } else if (res.data[0]) {
+    //             props.setFolder(res.data[0].id)
+    //         }
+    //     }).catch(e => {
+    //         console.log("unable to get Folders")
+    //     })
+    // }, [])
     return (
         <>
             <FormControl fullWidth sx={{ marginBottom: "10px" }}>

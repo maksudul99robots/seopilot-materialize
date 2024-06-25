@@ -7,14 +7,13 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
 import Fade, { FadeProps } from '@mui/material/Fade'
-import GetCountryList from './CountryList'
 import { LoginRegistrationAPI } from 'src/services/API'
 import { useRouter } from 'next/router'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import DndList from 'src/services/DND/DndList'
 import { isValidURL } from 'src/services/URLChecker'
-import { number, object } from 'yup'
+// import IconButton from '@mui/material/IconButton'
 // import CustomRadioIcons from 'src/components/CustomRadioIcons'
 import CustomRadioIcons from 'src/@core/components/custom-radio/icons'
 import { makeid } from 'src/services/makeid'
@@ -64,13 +63,16 @@ import DndForListicle from 'src/services/DND/DNDForListicle';
 import Link from 'next/link';
 import { checkIfDallEExists } from 'src/services/checkIfDallEExists';
 import { isAIModelAllowed } from 'src/services/isAIModelAllowed';
-import Folders from './Folders';
+
 import CustomBadge from 'src/@core/components/mui/badge'
 
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
-import AssignUsers from './AssignUsers';
+
 import { getDateTime } from 'src/services/DateTimeFormatter';
+import GetCountryList from 'src/pages/create-article/CountryList';
+import Folders from 'src/pages/create-article/Folders';
+import AssignUsers from 'src/pages/create-article/AssignUsers';
 
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
@@ -155,44 +157,46 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 
-export default function CreateArticle(props: any) {
+export default function CreateArticleUI(props: any) {
+    console.log("props:", props)
     // ** States
     const [show, setShow] = useState<boolean>(false)
 
     const [numberOfLinks, setNumberOfLinks] = useState([1]);
     //Values
     const [articleType, setArticleType] = useState('blog')
-    const [topic, setTopic] = useState('')
-    const [keywords, setKeywords] = useState<any>([])
-    const [tone, setTone] = useState('Clear, Knowledgeable and Confident')
-    const [language, setLanguage] = useState('English')
-    const [links, setLinks] = useState<Array<string>>([])
-    // const [country, setCountry] = useState<string>('United States of America (USA)')
-    const [country, setCountry] = useState<string>('Default')
-    const [articleLength, setArticleLength] = useState<string>('short')
+    const [topic, setTopic] = useState(props?.data?.topic ? props?.data?.topic : '')
+    const [oldTopic, setOldTopic] = useState(props?.data?.topic ? props?.data?.topic : '')
+    const [keywords, setKeywords] = useState<any>(separateString(props?.data?.keywords ? props?.data?.keywords : []));
+    const [oldKeywords, setOldKeywords] = useState<any>(separateString(props?.data?.keywords ? props?.data?.keywords : []));
+    const [tone, setTone] = useState(props?.data?.tone ?? 'Clear, Knowledgeable and Confident');
+    const [language, setLanguage] = useState(props?.data?.language ?? 'English');
+    const [links, setLinks] = useState<Array<string>>(separateString(props?.data?.links ?? ''));
+    const [country, setCountry] = useState<string>(props?.data?.country ?? 'Default');
+    const [articleLength, setArticleLength] = useState<string>(props?.data?.article_length ?? 'short');
     const [headings, setHeadings] = useState<any>([]);
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
-    const [outlineSource, setOutlineSource] = useState<string>('system');
-    // const [model, setModel] = useState<string>('gpt-4-1106-preview'); //gpt-3.5-turbo-1106
-    const [model, setModel] = useState<string>('gpt-4o'); //gpt-3.5-turbo-1106
-    const [imgService, setImgService] = useState<string>('none');
-    const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
-    const [outlineURL, setOutlineURL] = useState('');
-    const [imgPrompt, setImgPrompt] = useState('');
+    const [outlineSource, setOutlineSource] = useState<string>(props?.data?.outline_source ?? 'system');
+    const [model, setModel] = useState<string>(props?.data?.model ?? 'gpt-4o'); //gpt-3.5-turbo-1106
+    const [imgService, setImgService] = useState<string>(props?.data?.img_service ?? 'unsplash');
+    const [pointOfView, setPointOfView] = useState<string>(props?.data?.point_of_view ?? 'Third Person (he, she, it, they)');
+    const [outlineURL, setOutlineURL] = useState(props?.data?.outline_url ?? '');
+    const [imgPrompt, setImgPrompt] = useState(props?.data?.img_prompt ?? '');
     const [showOutline, setShowOutline] = useState(false);
-    const [faq, setFaq] = useState(false);
-    const [toc, setToc] = useState(false);
-    const [citation, setCitation] = useState(false);
-    const [noOfCitations, setNoOfCitations] = useState('1-10');
-    const [introduction, setIntroduction] = useState(true);
-    const [conclusion, setConclusion] = useState(true);
+    const [faq, setFaq] = useState(props?.data?.faq ?? false);
+    const [toc, setToc] = useState(props?.data?.toc ?? true);
+    const [citation, setCitation] = useState(props?.data?.citation ?? false);
+    const [noOfCitations, setNoOfCitations] = useState(props?.data?.no_of_citations ?? '1-10');
+    const [introduction, setIntroduction] = useState(props?.data?.introduction ?? true);
+    const [conclusion, setConclusion] = useState(props?.data?.conclusion ?? true);
     const [loading, setLoading] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(true);
-    const [showFeaturedImg, setShowFeaturedImg] = useState(false);
+    const [showFeaturedImg, setShowFeaturedImg] = useState(true);
+    const [disabled, setDisabled] = useState(props?.data?.topic ? false : true);
+    const [folder, setFolder] = useState<string | number>(props?.data?.folder_id ? props?.data?.folder_id : '')
     const [numberedItem, setNumberedItem] = useState(false);
-    const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [imgServiceList, setImgServiceList] = useState<any>([
         {
             value: 'none',
@@ -205,225 +209,48 @@ export default function CreateArticle(props: any) {
         {
             value: 'pexels',
             display: 'Pexels'
+        },
+        {
+            value: 'dall-e-3',
+            display: 'Dall-E-3'
+        },
+        {
+            value: 'dall-e-2',
+            display: 'Dall-E-2'
         }
     ]);
-    const [allModels, setAllModels] = useState<any>([]);
-    const [apiKey, setApiKey] = useState<string | null>('')
+    const auth = useAuth()
     const [extraPrompt, setExtraPrompt] = useState<string>('')
-    const [folder, setFolder] = useState<string | number>('')
-    const [isAllowedToCreateArticle, setIsAllowedToCreateArticle] = useState<boolean>(false)
-    // const [articleType, setArticleType] = useState('blog')
-    const [getArticleFromParams, setGetArticleFromParams] = useState(0); //if updated, useEffect will trigger to get article
-    const auth = useAuth();
-    const router = useRouter()
-    const [retryArticle, setRetryArticle] = useState(false)
-    const [user, setUser] = useState(auth?.user?.id);
-    const [existingArticle, setExistingArticle] = useState<any>(null);
+    const [user, setUser] = useState(props?.data?.assign_user);
     const [dateTime, setDateTime] = useState<Date>(new Date());
-
-    useEffect(() => {
-        const { id, edit_article } = router.query;
-
-        if (id) {
-            setExistingArticle(id)
-            setGetArticleFromParams(getArticleFromParams + 1);
-        }
-        if (edit_article && edit_article == "true") {
-            console.log("edit_article:", edit_article)
-            setRetryArticle(true)
-        }
-    }, [router.query])
-    useEffect(() => {
-
-        if (getArticleFromParams > 0) {
-            LoginRegistrationAPI.getSaasArticleWithoutStatus({ id: existingArticle }).then(async (res) => {
-                if (res.status == 212) {
-                    setArticleType(res.data.article_type)
-                    setArticleLength(res.data.article_length)
-                    setCountry(res.data.country)
-                    setLanguage(res.data.language)
-                    setTone(res.data.tone)
-                    if (res.data.keywords) {
-                        const keywordArray = separateString(res.data.keywords);
-                        setKeywords(keywordArray)
-                    }
-
-                    setTopic(res.data.topic)
-                    setOutlineSource(res.data.outline_source)
-                    if (res.data.outline_url) {
-                        setOutlineURL(res.data.outline_url)
-                        if (res.data.raw_outline) {
-                            let h = JSON.parse(res.data.raw_outline);
-                            if (typeof (h) == 'object') {
-                                setHeadings(h)
-                            }
-                        }
-                    }
-                    if (res.data.outline_source == 'user') {
-                        if (res.data.raw_outline) {
-                            let h = JSON.parse(res.data.raw_outline);
-                            if (typeof (h) == 'object') {
-                                setHeadings(h)
-                            }
-                            setShowOutline(true)
-                        }
-
-                    }
-                    setToc(res.data.toc)
-                    setFaq(res.data.faq)
-
-                    const resultArray = separateString(res.data.links);
-                    setLinks(resultArray)
-                    let x: any = [];
-                    resultArray.map((l, i) => {
-                        if (l) {
-
-                            x.push(1)
-                            setNumberOfLinks(x);
-                        }
-
-                    })
-                    setShowFeaturedImg(res.data.show_featured_image)
-                    setModel(res.data.model)
-                    setPointOfView(res.data.point_of_view)
-                    if (res.data.listicle_outlines) {
-                        let lo = JSON.parse(res.data.listicle_outlines)
-                        setListicleOutlines(lo)
-
-                        // console.log(lo)
-                    }
-
-                    // if(res.data.numbered_items){
-                    setNumberedItem(res.data.numbered_items)
-                    if (!res.data.show_featured_image)
-                        setImgService('none')
-                    else {
-                        setImgService(res.data.img_service)
-                    }
-                    if (res.data.extra_prompt) {
-                        setExtraPrompt(res.data.extra_prompt)
-                    } else {
-                        setExtraPrompt('')
-                    }
-                    if (res.data.img_prompt) {
-                        setImgPrompt(res.data.img_prompt)
-                    } else {
-                        setImgPrompt('')
-                    }
-
-                    if (res.data.citation) {
-                        setCitation(true);
-                    }
-                    if (res.data.folder_id) {
-                        setFolder(res.data.folder_id)
-                    }
-                    if (res.data.no_of_citations) {
-                        setNoOfCitations(res.data.no_of_citations)
-                    }
-                    // }
-                }
-            }).catch(e => {
-                console.log(e);
-            })
-        }
-
-    }, [getArticleFromParams])
-
-    useEffect(() => {
-
-        if (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o') {
-
-        } else {
-            setCitation(false)
-        }
-
-    }, [model])
-
-    useEffect(() => {
-        if (auth.user?.is_active) {
-            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
-                // console.log(res);
-                if (res.status == 200) {
-                    setApiKey(res.data.apikey)
-                } else {
-                    setApiKey('none')
-                }
-                // setApikey(res.data.apikey)
-                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
-            }).catch(e => {
-                // console.log(e);
-                setApiKey('none')
-            })
-
-            LoginRegistrationAPI.getAIModels({}).then(res => {
-                if (res.status == 200) {
-                    setAllModels(res.data.models.data)
-                    let checkDallEExists = checkIfDallEExists(res.data.models.data);
-                    // console.log("checkDallEExists", checkDallEExists)
-                    if (checkDallEExists) {
-
-                        let x = [...imgServiceList]
-                        checkDallEExists.map((dallE: any, i: number) => {
-                            x.push({
-                                value: dallE.id,
-                                display: dallE.id == 'dall-e-3' ? "Dall-E-3" : "Dall-E-2"
-                            });
-                            if (i == checkDallEExists?.length - 1) {
-                                setImgServiceList(x);
-                            }
-                        })
-
-
-                    }
-                } else {
-
-                }
-            }).catch(e => {
-                console.log(e);
-                // if (e?.response?.status == 401) {
-                Swal.fire({
-                    title: 'Error',
-                    text: e.response.data,
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push("/add-apikey")
-                })
-                // }else{}
-            })
-
-            LoginRegistrationAPI.isAllowedToCreateArticle({}).then(res => {
-                setIsAllowedToCreateArticle(res.data)
-            }).catch(e => {
-                console.log(e)
-            })
-
-        } else {
-            Swal.fire({
-                title: 'Check Your Email',
-                text: 'Please Verify Your Account To get Full Access!',
-                icon: 'warning',
-                confirmButtonText: 'OK',
-                confirmButtonColor: "#2979FF"
-            })
-            // router.push('/')
-        }
-
-
-
-    }, [])
-
-
-    function separateString(str: string) {
-        // Split the string by commas
-        const parts = str.split(',');
-
-        // Trim each part to remove leading and trailing whitespaces
-        const trimmedParts = parts.map((part: any) => part.trim());
-        // console.log("trimmedParts:", trimmedParts);
-        return trimmedParts;
+    const handleClose = () => {
+        setShow(false);
+        // props.handleClose();
+        props.toggleDrawer()
     }
+
+    useEffect(() => {
+        if (props?.data?.raw_outline) {
+
+            let h = JSON.parse(props.data.raw_outline);
+            if (typeof (h) == 'object') {
+                setHeadings(h)
+            }
+
+        }
+    }, [props?.data?.raw_outline])
+
+    // console.log("props.settings[props.idea_id]:", props.settings[props.idea_id])
+
+
+    useEffect(() => {
+        if (topic.length > 0 && disabled) {
+            setDisabled(false)
+        }
+        if (topic.length == 0 && !disabled) {
+            setDisabled(true)
+        }
+    }, [topic])
 
 
     const convertArrayToCSV = (array: any) => {
@@ -442,203 +269,6 @@ export default function CreateArticle(props: any) {
         return csv;
     }
 
-    const submit = async () => {
-        // check if AI model allowed
-        const isModelAllowed = await isAIModelAllowed(model, allModels);
-        // console.log("isModelAllowed", isModelAllowed)
-        if (!isModelAllowed) {
-            Swal.fire({
-                title: 'Error!',
-                text: `Your Selected Model ${model} is Not Accessible from Your API Key. Try Another AI Model.`,
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF"
-            })
-            return ''
-        }
-        if (topic == '') {
-            Swal.fire({
-                title: '',
-                text: `Please Enter Article Topic.`,
-                icon: 'warning',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF"
-            })
-            return ''
-        }
-
-        // return
-        if (isAllowedToCreateArticle) {
-            if (articleType != 'listicle') {
-                if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Please Set Image Prompt.',
-                        icon: 'error',
-                        confirmButtonText: 'Close',
-                        confirmButtonColor: "#2979FF"
-                    })
-                    return;
-                } else {
-
-                    setLoading(true)
-                    LoginRegistrationAPI.generateSaasArticle({
-                        article_type: articleType,
-                        topic: topic,
-                        keywords: convertArrayToCsvKeywords(keywords),
-                        article_length: articleLength,
-                        tone: tone,
-                        language: language,
-                        country: country,
-                        links: convertArrayToCSV(links),
-                        outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-                        outline_source: outlineSource,
-                        outline_url: outlineURL,
-                        faq: faq,
-                        toc: toc,
-                        model: model,
-                        showFeaturedImg: showFeaturedImg,
-                        point_of_view: pointOfView,
-                        img_service: showFeaturedImg ? imgService : null,
-                        extra_prompt: extraPrompt,
-                        img_prompt: imgPrompt,
-                        citation: citation,
-                        folder_id: folder,
-                        retryArticle: retryArticle,
-                        article_id: router.query.id,
-                        no_of_citations: noOfCitations,
-                        user: user,
-                        due_date: dateTime
-                    }).
-                        then(res => {
-                            // console.log("res:", res);
-                            setLoading(false)
-                            router.push("/generated-article/" + res.data.id)
-                        }).catch(e => {
-                            setLoading(false)
-                            console.log("error:", e);
-                            if (e.response.status == 400) {
-                                Swal.fire({
-                                    html: `<h3>Error</h3>
-                          <h5>${e.response.data}</h5>
-                          `,
-                                    icon: "error",
-                                    // input: 'text',
-                                    // inputLabel: 'Please try again later.',
-                                    confirmButtonColor: "#2979FF"
-                                }).then(() => {
-                                    router.push('/add-apikey')
-                                })
-                            } else {
-                                Swal.fire({
-                                    html: `<h3>Error</h3>
-                          <h5>Unable to Generate Article</h5>
-                          `,
-                                    icon: "error",
-                                    // input: 'text',
-                                    inputLabel: 'Please try again later.',
-                                    confirmButtonColor: "#2979FF"
-                                })
-                            }
-
-                        })
-                }
-            } else {
-                if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Please Set Image Prompt.',
-                        icon: 'error',
-                        confirmButtonText: 'Close',
-                        confirmButtonColor: "#2979FF"
-                    })
-                    return;
-                } else {
-
-                    LoginRegistrationAPI.generateListicles(
-                        {
-                            article_type: articleType,
-                            topic: topic,
-                            keywords: convertArrayToCsvKeywords(keywords),
-                            article_length: articleLength,
-                            tone: tone,
-                            language: language,
-                            country: country,
-                            links: convertArrayToCSV(links),
-                            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
-                            outline_source: outlineSource,
-                            outline_url: outlineURL,
-                            faq: faq,
-                            toc: toc,
-                            model: model,
-                            showFeaturedImg: showFeaturedImg,
-                            point_of_view: pointOfView,
-                            listicle_outlines: listicleOutlines,
-                            numbered_items: numberedItem,
-                            img_service: showFeaturedImg ? imgService : null,
-                            extra_prompt: extraPrompt,
-                            img_prompt: imgPrompt,
-                            citation: citation,
-                            folder_id: folder,
-                            retryArticle: retryArticle,
-                            article_id: router.query.id,
-                            no_of_citations: noOfCitations,
-                            user: user,
-                            due_date: dateTime
-                        }
-                    ).then(res => {
-                        // console.log("res:", res);
-                        setLoading(false)
-                        router.push("/generated-article/" + res.data.id)
-                    }).catch(e => {
-                        setLoading(false)
-                        console.log("error:", e);
-                        if (e.response.status == 400) {
-                            Swal.fire({
-                                html: `<h3>Error</h3>
-                      <h5>${e.response.data}</h5>
-                      `,
-                                icon: "error",
-                                // input: 'text',
-                                // inputLabel: 'Please try again later.',
-                                confirmButtonColor: "#2979FF"
-                            }).then(() => {
-                                router.push('/add-apikey')
-                            })
-                        } else {
-                            Swal.fire({
-                                html: `<h3>Error</h3>
-                      <h5>Unable to Generate Article</h5>
-                      `,
-                                icon: "error",
-                                // input: 'text',
-                                inputLabel: 'Please try again later.',
-                                confirmButtonColor: "#2979FF"
-                            })
-                        }
-
-                    })
-                }
-
-
-            }
-        } else {
-            Swal.fire({
-                title: 'Please Upgrade',
-                text: 'You Have Reached Your Limit. Please Subscribe to Higher Plan to Increase Your Plan Limit.',
-                icon: 'warning',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF"
-            })
-        }
-
-
-        // }
-
-    }
-
-
-
     const convertArrayToCsvKeywords = (keywordArray: any) => {
         let csvKeywords = '';
         if (keywordArray.length > 0) {
@@ -655,6 +285,150 @@ export default function CreateArticle(props: any) {
         return csvKeywords;
     }
 
+    const handleSubmit = () => {
+        // console.log({
+        //   article_type: articleType,
+        //   topic: topic,
+        //   keywords: convertArrayToCsvKeywords(keywords),
+        //   article_length: articleLength,
+        //   tone: tone,
+        //   language: language,
+        //   country: country,
+        //   links: convertArrayToCSV(links),
+        //   outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+        //   outline_source: outlineSource,
+        //   outline_url: outlineURL,
+        //   faq: faq,
+        //   toc: toc,
+        //   model: model,
+        //   showFeaturedImg: showFeaturedImg,
+        //   point_of_view: pointOfView,
+        //   img_service: showFeaturedImg ? imgService : null,
+        //   extra_prompt: extraPrompt,
+        //   img_prompt: imgPrompt,
+        //   citation: citation,
+        //   article_id: '',
+        //   no_of_citations: noOfCitations
+        // })
+        if (props.isCreateIdea) {
+            LoginRegistrationAPI.createNewIdea({
+                article_type: articleType,
+                topic: topic,
+                keywords: convertArrayToCsvKeywords(keywords),
+                article_length: articleLength,
+                tone: tone,
+                language: language,
+                country: country,
+                links: convertArrayToCSV(links),
+                outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                outline_source: outlineSource,
+                outline_url: outlineURL,
+                faq: faq,
+                toc: toc,
+                model: model,
+                showFeaturedImg: showFeaturedImg,
+                point_of_view: pointOfView,
+                img_service: showFeaturedImg ? imgService : null,
+                extra_prompt: extraPrompt,
+                img_prompt: imgPrompt,
+                citation: citation,
+                article_id: '',
+                no_of_citations: noOfCitations,
+                cluster_id: null,
+                idea_id: props.idea_id,
+                folder_id: folder
+
+            }).then(res => {
+                // if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
+                props.updateList()
+                // }
+                handleClose()
+            }).catch(e => {
+                console.log("inside catch", e)
+                Swal.fire({
+                    // title: 'Error',
+                    text: 'Unable to create article idea!',
+                    icon: 'error',
+                    confirmButtonText: 'DELETE',
+                    // showCancelButton: true,
+                    // confirmButtonColor: "#BB2124",
+                    // cancelButtonText: "CANCEL"
+                }).then(res => {
+                    handleClose()
+
+                })
+            })
+
+        } else {
+            saveSubmit()
+        }
+
+
+    }
+
+    const saveSubmit = () => {
+        LoginRegistrationAPI.saveIdeaLibrarySettings({
+            article_type: articleType,
+            topic: topic,
+            keywords: convertArrayToCsvKeywords(keywords),
+            article_length: articleLength,
+            tone: tone,
+            language: language,
+            country: country,
+            links: convertArrayToCSV(links),
+            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+            outline_source: outlineSource,
+            outline_url: outlineURL,
+            faq: faq,
+            toc: toc,
+            model: model,
+            showFeaturedImg: showFeaturedImg,
+            point_of_view: pointOfView,
+            img_service: showFeaturedImg ? imgService : null,
+            extra_prompt: extraPrompt,
+            img_prompt: imgPrompt,
+            citation: citation,
+            article_id: props?.data?.article_id,
+            no_of_citations: noOfCitations,
+            cluster_id: null,
+            idea_id: props.idea_id,
+            folder_id: folder,
+            assign_user: user,
+            due_date: dateTime
+
+        }).then(res => {
+            // if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
+            //   props.updateList()
+            // }
+            props.updateList()
+            handleClose()
+        }).catch(e => {
+
+        })
+    }
+
+    const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
+        return (
+            <TextField
+                inputRef={ref}
+                fullWidth
+                {...props}
+                label={props.label || ''}
+                sx={{ width: '100%' }}
+                error={props.error}
+            />
+        )
+    })
+
+
+
+    const handleArticleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
+        if (typeof prop === 'string') {
+            setArticleLength(prop)
+        } else {
+            setArticleLength((prop.target as HTMLInputElement).value)
+        }
+    }
 
     //DND settings
     const editHeadingOnChange = (index: number, heading: string) => {
@@ -694,78 +468,18 @@ export default function CreateArticle(props: any) {
 
     //DND settings ends
 
-    // DND for Listicles
-    const editListicleOutlineChange = (index: number, heading: string, listicleItem: string) => {
-
-        let obj = JSON.parse(listicleOutlines[index])
-        if (listicleItem == 'title')
-            obj.title = heading;
-        else if (listicleItem == 'url') {
-            obj.url = heading;
-        }
-        listicleOutlines[index] = JSON.stringify(obj)
-        // let newArr = [...listicleOutlines];
-        // setListicleOutlines(newArr);
-        // updateCsvHeadings(index, heading.slice(0))
-
-    }
-    const changeListicleOutlineTag = (index: number, tag: string) => {
-        let obj = JSON.parse(listicleOutlines[index])
-        obj.tag = tag;
-        listicleOutlines[index] = JSON.stringify(obj)
-        let newArr = [...listicleOutlines];
-        let uniqueArr = [...new Set(newArr)];
-        setListicleOutlines(uniqueArr);
-
-    }
-    const changeListicleOutlineImgSrc = (index: number, imgSrc: string) => {
-        let obj = JSON.parse(listicleOutlines[index])
-        obj.imgSrc = imgSrc;
-        listicleOutlines[index] = JSON.stringify(obj)
-        let newArr = [...listicleOutlines];
-        let uniqueArr = [...new Set(newArr)];
-        setListicleOutlines(uniqueArr);
-
-    }
-    const changeListicleOutlineImgSrcUrl = (index: number, imgSrc: string) => {
-        let obj = JSON.parse(listicleOutlines[index])
-        obj.imgSrcUrl = imgSrc;
-        listicleOutlines[index] = JSON.stringify(obj)
-        // let newArr = [...listicleOutlines];
-        // let uniqueArr = [...new Set(newArr)];
-        // setListicleOutlines(uniqueArr);
-
-    }
-    const removeListicleOutline = (index: number) => {
-        let newArr = [...listicleOutlines];
-        setListicleOutlines(newArr);
-        newArr = [...listicleOutlines]
-        newArr.splice(index, 1);
-
-
-        let uniqueArr = [...new Set(newArr)];
-        setListicleOutlines(uniqueArr);
-
-    }
-    const addnewListicleOutline = () => {
-        let newArr = [...listicleOutlines];
-        setListicleOutlines(newArr);
-        newArr = [...listicleOutlines];
-
-        let obj = {
-            id: makeid(5),
-            tag: 'H2',
-            title: '',
-            url: '',
-            imgSrc: 'none',
-            imgSrcUrl: ''
-        }
-        newArr.push(JSON.stringify(obj));
-        let uniqueArr = [...new Set(newArr)];
-        setListicleOutlines(uniqueArr);
+    const fotmatAndSetHeadings = (headingsOutline: any) => {
+        let tempHeading: any = [];
+        headingsOutline.map((h: any, i: number) => {
+            let x = h.tagName + ':';
+            x = x + h.textContent;
+            tempHeading.push(x)
+            if (i == fotmatAndSetHeadings.length - 1) {
+                setHeadings(tempHeading)
+            }
+        })
     }
 
-    // DND for Listicles ends
     const fetchOutline = () => {
         setFetchOutlineLoading(true)
         LoginRegistrationAPI.fetchOutline({ url: outlineURL }).then((res: any) => {
@@ -786,34 +500,6 @@ export default function CreateArticle(props: any) {
             })
         })
     }
-
-    const fotmatAndSetHeadings = (headingsOutline: any) => {
-        let tempHeading: any = [];
-        headingsOutline.map((h: any, i: number) => {
-            let x = h.tagName + ':';
-            x = x + h.textContent;
-            tempHeading.push(x)
-            if (i == fotmatAndSetHeadings.length - 1) {
-                setHeadings(tempHeading)
-            }
-        })
-    }
-
-    useEffect(() => {
-        // console.log("headings:", headings)
-        if (outlineSource == 'user') {
-            setTempUserHeadings(headings)
-        } else if (outlineSource == 'url') {
-            setTempURLHeadings(headings)
-        }
-    }, [headings])
-    // useEffect(() => {
-    //     console.log("articleType:", articleType)
-
-    // }, [articleType])
-
-
-
 
 
     const handleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
@@ -842,61 +528,87 @@ export default function CreateArticle(props: any) {
             setOutlineSource((prop.target as HTMLInputElement).value)
         }
     }
-    const handleArticleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
-        if (typeof prop === 'string') {
-            setArticleLength(prop)
-        } else {
-            setArticleLength((prop.target as HTMLInputElement).value)
+
+    function separateString(str: string) {
+        // Split the string by commas
+        if (str && str != '') {
+            const parts = str?.split(',');
+
+            // Trim each part to remove leading and trailing whitespaces
+            const trimmedParts = parts.map((part: any) => part.trim());
+            // console.log("trimmedParts:", trimmedParts);
+            return trimmedParts;
         }
+        return []
     }
 
+    useEffect(() => {
+        if (props.isCreateIdea) {
+            setTopic('')
+            setOldTopic('')
+            setKeywords([])
+            setOldKeywords([])
+            setTone('Clear, Knowledgeable and Confident')
+            setLanguage('English')
+            setCountry('Default')
+            setArticleLength('short')
+            setHeadings([])
+            setTempURLHeadings([])
+            setTempUserHeadings([])
+            setOutlineSource('system')
+            setModel('gpt-4o')
+            setImgService('unsplash')
+            setPointOfView('Third Person (he, she, it, they)')
+            setOutlineURL('')
+            setImgPrompt('')
+            setShowOutline(false)
+            setFaq(false)
+            setToc(true)
+            setCitation(false)
+            setNoOfCitations('1-10')
+            setIntroduction(true)
+            setConclusion(true)
+            setExtraPrompt('')
+            setShowFeaturedImg(true)
+            setShowAdditionalSettings(false)
+            setFetchOutlineLoading(false)
+        }
+    }, [])
 
-    const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
-        return (
-            <TextField
-                inputRef={ref}
-                fullWidth
-                {...props}
-                label={props.label || ''}
-                sx={{ width: '100%' }}
-                error={props.error}
-            />
-        )
-    })
+
     const [values, setValues] = useState<DefaultStateType>(defaultState)
     const handleStartDate = (date: Date) => {
         if (date > values.endDate) {
             setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
         }
     }
-
     return (
         // <Card>
         <>
-            {
-                (apiKey == 'none') &&
-                <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
-                    You Have to Add API Key to Generate Article. <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Click Here to Add API Key</Link>.
 
-                </Alert>
-
-            }
-
-
-            <Box sx={{ padding: "0px" }}>
+            <Box sx={{ padding: "0px", backgroundColor: "#F7F7F9" }}>
                 <DialogContent
                     sx={{
                         position: 'relative',
-                        pb: theme => `${theme.spacing(10)} !important`,
-                        px: theme => [`${theme.spacing(15)} !important`, `${theme.spacing(35)} !important`],
-                        pt: theme => [`${theme.spacing(15)} !important`, `${theme.spacing(15.5)} !important`]
+                        pb: theme => `${theme.spacing(5)} !important`,
+                        px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(20)} !important`],
+                        pt: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(15.5)} !important`],
+                        marginLeft: "20px"
                     }}
                 >
-                    <Box sx={{ mb: 9, textAlign: 'center' }}>
-                        <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                            Create Article
+                    <IconButton size='small' onClick={() => {
+                        props.toggleDrawer()
+                    }} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+                        <Icon icon='mdi:close' />
+                    </IconButton>
+                    <Box sx={{ mb: 10, textAlign: 'center' }}>
+                        <Typography variant='h5' sx={{ lineHeight: '2rem' }}>
+                            {props.isCreateIdea ?
+                                'Create Article Idea'
+                                : 'Edit Article Settings'}
                         </Typography>
-                        <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article for you.</Typography>
+                        <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article idea for you.</Typography>
+                        {/* <Typography variant='body2'>Select a Site to Send Article</Typography> */}
                     </Box>
 
                     <Grid container spacing={6}>
@@ -1125,7 +837,7 @@ export default function CreateArticle(props: any) {
                                 {
                                     articleType != 'listicle' &&
                                     <>
-                                        <Typography variant='body1' sx={{ fontSize: "22px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
+                                        <Typography variant='body1' sx={{ fontSize: "22px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "10px", display: "flex" }}>
                                             Outline Source
                                             <LightTooltip title={
                                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1186,33 +898,17 @@ export default function CreateArticle(props: any) {
 
                                 {
                                     (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
+                                    <Grid item xs={12}>
+                                        <DndList
+                                            headings={headings}
+                                            setHeadings={setHeadings}
+                                            editHeadingOnChange={editHeadingOnChange}
+                                            removeHeadings={removeHeadings}
+                                            changeHeadingTag={changeHeadingTag}
+                                            addnewHeading={addnewHeading}
+                                        />
+                                    </Grid>
 
-                                    <DndList
-                                        headings={headings}
-                                        setHeadings={setHeadings}
-                                        editHeadingOnChange={editHeadingOnChange}
-                                        removeHeadings={removeHeadings}
-                                        changeHeadingTag={changeHeadingTag}
-                                        addnewHeading={addnewHeading}
-                                    />
-                                }
-
-                                {
-                                    articleType == 'listicle' ?
-                                        <Grid item xs={12}>
-                                            {/* <ListicleInputComponent listicleOutlines={listicleOutlines} setListicleOutlines={setListicleOutlines} /> */}
-                                            <DndForListicle
-                                                listicleOutlines={listicleOutlines}
-                                                setListicleOutlines={setListicleOutlines}
-                                                editListicleOutlineChange={editListicleOutlineChange}
-                                                removeListicleOutline={removeListicleOutline}
-                                                changeListicleOutlineTag={changeListicleOutlineTag}
-                                                addnewListicleOutline={addnewListicleOutline}
-                                                changeListicleOutlineImgSrc={changeListicleOutlineImgSrc}
-                                                changeListicleOutlineImgSrcUrl={changeListicleOutlineImgSrcUrl}
-                                            />
-                                        </Grid>
-                                        : null
                                 }
                             </Grid>
                         </Card>
@@ -1564,12 +1260,11 @@ export default function CreateArticle(props: any) {
 
                             </Grid>
                         </Card>
-                        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
 
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12}>
-                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginBottom: "00px" }}>
+                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "20px", marginBottom: "10px" }}>
                                         Content Operations
                                     </Typography>
                                 </Grid>
@@ -1604,6 +1299,9 @@ export default function CreateArticle(props: any) {
                                 </Grid>
                             </Grid>
                         </Card>
+                        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
+
+
 
 
                     </Grid>
@@ -1611,19 +1309,21 @@ export default function CreateArticle(props: any) {
 
 
 
-                </DialogContent >
+                </DialogContent>
                 <DialogActions
                     sx={{
                         justifyContent: 'end',
-                        px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(32)} !important`],
-                        pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(10)} !important`]
+                        px: theme => [`${theme.spacing(5)} !important`, `${theme.spacing(20)} !important`],
+                        pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(10)} !important`],
+                        marginLeft: "20px"
                     }}
+
                 >
-                    <Button variant='contained' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
+                    <Button variant='contained' size="large" sx={{ mr: 0, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }}
                         onClick={
                             () => {
                                 if (auth.user?.is_active) {
-                                    submit()
+                                    handleSubmit()
                                 } else {
                                     Swal.fire({
                                         title: 'Verify Your Account',
@@ -1640,7 +1340,11 @@ export default function CreateArticle(props: any) {
 
 
                     >
-                        Create Article
+                        {
+                            props.isCreateIdea ?
+                                'Create Idea' :
+                                "save"
+                        }
                     </Button>
                     {/* <Button variant='outlined' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} color='secondary' >
                         Cancel

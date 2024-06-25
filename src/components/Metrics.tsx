@@ -32,7 +32,7 @@ const Metrics = (props: any) => {
     return (
         <Box sx={{}}>
 
-            <Box sx={{ borderRadius: "10px", border: "1px solid #E9E9EC", padding: "10px", marginTop: "5px" }}>
+            <Box sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", padding: "10px", marginTop: "5px" }}>
                 <Box>
 
                     <ReactSpeedometer
@@ -46,7 +46,7 @@ const Metrics = (props: any) => {
                         valueTextFontSize="23px"
                     />
                 </Box>
-                <Box sx={{ backgroundColor: "#F7F7F9", padding: "5px", borderRadius: "10px" }}>
+                <Box sx={{ backgroundColor: "#F7F7F9", padding: "5px", borderRadius: "4px" }}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
                         <LightTooltip title={
                             props.titleScore.msg

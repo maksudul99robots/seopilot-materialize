@@ -7,8 +7,8 @@ const Folders = (props: any) => {
     useEffect(() => {
         LoginRegistrationAPI.getFolders({ get_count: false }).then((res) => {
             setFolders(res.data);
-            if (props.folder_id) {
-                props.setFolder(props.folder_id)
+            if (props.folder) {
+                props.setFolder(props.folder)
             } else if (res.data[0]) {
                 props.setFolder(res.data[0].id)
             }

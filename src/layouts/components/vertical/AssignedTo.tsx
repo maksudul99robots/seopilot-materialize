@@ -67,30 +67,84 @@ export const AssignedTo = (props: any) => {
         }
     }
     return <Box sx={{ padding: "5px 10px 5px 5px", marginRight: "10px", display: "flex", alignItems: "center", borderRight: "1px solid #E9E9EC" }}>
-        <Box>
-            <Box sx={{ display: "flex", }}>
-                {/* <Typography sx={{ fontWeight: "400", fontSize: "11px" }}>Assigned to:</Typography>
+        {/* <Box> */}
+        <Box sx={{ display: "flex", }}>
+            {/* <Typography sx={{ fontWeight: "400", fontSize: "11px" }}>Assigned to:</Typography>
                 <Typography sx={{ fontWeight: "500", fontSize: "11px" }}>&nbsp;{props.assignedTo.user.first_name} {props.assignedTo.user.last_name}</Typography> */}
 
-                <FormControl fullWidth sx={{ marginBottom: "10px", marginTop: "5px", }}>
-                    <InputLabel id="assigned">Assigned To</InputLabel>
-                    <Select
-                        fullWidth
-                        placeholder='Assigned To'
-                        label='Assigned To dsl'
-                        labelId='assigned'
-                        value={
-                            userId
-                        }
-                        sx={{ height: "35px", fontSize: "12px" }}
-                        onChange={e => {
-                            console.log("e:", e.target)
+            <FormControl fullWidth sx={{ marginBottom: "0px", marginTop: "0px", marginRight: "5px" }}>
+                <InputLabel id="assigned">Assigned To</InputLabel>
+                <Select
+                    fullWidth
+                    placeholder='Assigned To'
+                    label='Assigned To dsl'
+                    labelId='assigned'
+                    value={
+                        userId
+                    }
+                    sx={{ height: "35px", fontSize: "12px" }}
+                    onChange={e => {
+                        console.log("e:", e.target)
+                        LoginRegistrationAPI.assignArticle({
+                            assigned_to: e.target.value,
+                            article_id: props.assignedTo.article_id,
+                            due_date: dateTime
+                        }).then(res => {
+                            setUserId(e.target.value)
+                            props.updaateAssignedTo(res.data)
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'User Assigned Successfully!',
+                                icon: 'success',
+                                confirmButtonText: 'Close',
+                                confirmButtonColor: "#2979FF",
+                            })
+                        }).catch(e => {
+                            Swal.fire(
+                                'Error',
+                                'Unable to changes status',
+                                'error'
+                            )
+                        })
+
+                    }}
+                >
+                    {
+                        users.map((u: any) => {
+                            return <MenuItem sx={{ fontSize: "12px" }} value={u?.user.id}>{u?.user?.first_name.toUpperCase()} {u?.user?.last_name.toUpperCase()}</MenuItem>
+                        })
+                    }
+
+                </Select>
+            </FormControl>
+        </Box>
+        <Box sx={{ display: "flex" }}>
+            {/* <Typography sx={{ fontWeight: "400", fontSize: "11px" }}>Due Date:</Typography>
+                <Typography sx={{ fontWeight: "500", fontSize: "11px" }}>&nbsp;{getDateTime(props.assignedTo.due_date)}</Typography> */}
+            <DatePickerWrapper >
+                <DatePicker
+                    // style={{ height: "30px" }}
+                    selectsStart
+                    id='event-due-date'
+                    selected={dateTime}
+                    minDate={new Date()}
+                    showTimeSelect={true}
+                    dateFormat={'MM-dd-yyyy hh:mm a'}
+                    customInput={<PickersComponent label='Due date' registername='Due date' />}
+                    onChange={(date: Date) => {
+                        setDateTime(date)
+                        // console.log("date:", date)
+
+                    }}
+                    onCalendarClose={() => {
+
+                        if (getDateTime(props.assignedTo.due_date) != getDateTime(dateTime)) {
                             LoginRegistrationAPI.assignArticle({
-                                assigned_to: e.target.value,
+                                assigned_to: userId,
                                 article_id: props.assignedTo.article_id,
                                 due_date: dateTime
                             }).then(res => {
-                                setUserId(e.target.value)
+                                // console.log(res)
                                 props.updaateAssignedTo(res.data)
                                 Swal.fire({
                                     title: 'Success',
@@ -106,68 +160,14 @@ export const AssignedTo = (props: any) => {
                                     'error'
                                 )
                             })
-
-                        }}
-                    >
-                        {
-                            users.map((u: any) => {
-                                return <MenuItem sx={{ fontSize: "12px" }} value={u?.user.id}>{u?.user?.first_name.toUpperCase()} {u?.user?.last_name.toUpperCase()}</MenuItem>
-                            })
                         }
 
-                    </Select>
-                </FormControl>
-            </Box>
-            <Box sx={{ display: "flex" }}>
-                {/* <Typography sx={{ fontWeight: "400", fontSize: "11px" }}>Due Date:</Typography>
-                <Typography sx={{ fontWeight: "500", fontSize: "11px" }}>&nbsp;{getDateTime(props.assignedTo.due_date)}</Typography> */}
-                <DatePickerWrapper >
-                    <DatePicker
-                        // style={{ height: "30px" }}
-                        selectsStart
-                        id='event-due-date'
-                        selected={dateTime}
-                        minDate={new Date()}
-                        showTimeSelect={true}
-                        dateFormat={'MM-dd-yyyy hh:mm a'}
-                        customInput={<PickersComponent label='Due date' registername='Due date' />}
-                        onChange={(date: Date) => {
-                            setDateTime(date)
-                            // console.log("date:", date)
-
-                        }}
-                        onCalendarClose={() => {
-
-                            if (getDateTime(props.assignedTo.due_date) != getDateTime(dateTime)) {
-                                LoginRegistrationAPI.assignArticle({
-                                    assigned_to: userId,
-                                    article_id: props.assignedTo.article_id,
-                                    due_date: dateTime
-                                }).then(res => {
-                                    // console.log(res)
-                                    props.updaateAssignedTo(res.data)
-                                    Swal.fire({
-                                        title: 'Success',
-                                        text: 'User Assigned Successfully!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Close',
-                                        confirmButtonColor: "#2979FF",
-                                    })
-                                }).catch(e => {
-                                    Swal.fire(
-                                        'Error',
-                                        'Unable to changes status',
-                                        'error'
-                                    )
-                                })
-                            }
-
-                        }}
-                        onSelect={handleStartDate}
-                    />
-                </DatePickerWrapper>
-            </Box>
+                    }}
+                    onSelect={handleStartDate}
+                />
+            </DatePickerWrapper>
         </Box>
+        {/* </Box> */}
         {/* <div style={{ marginLeft: "10px", marginRight: "10px" }}>|</div> */}
 
     </Box>

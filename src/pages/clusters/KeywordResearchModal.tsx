@@ -60,43 +60,12 @@ const KeywordResearch = (props: any) => {
 
     useEffect(() => {
 
-        if (auth.user?.is_active) {
-            if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
 
-                LoginRegistrationAPI.isAllowedToCreateCluster({}).then(res => {
-                    if (!res.data) {
-                        Swal.fire({
-                            title: 'Limit Reached',
-                            text: 'You\'ve reached your cluster limit.',
-                            icon: 'warning',
-                            confirmButtonText: 'CLOSE',
-                            confirmButtonColor: "#2979FF"
-                        }).then(() => {
-                            router.push('/plans')
-                        })
-                    }
-                }).catch(e => {
-
-                })
-
-            } else {
-
-            }
-
-        } else {
-            Swal.fire({
-                title: 'Check Your Email',
-                text: 'Please Verify Your Account To get Full Access!',
-                icon: 'warning',
-                confirmButtonText: 'OK',
-                confirmButtonColor: "#2979FF"
-            })
-            // 
-        }
 
     }, [auth?.user])
 
     const submit = () => {
+
         setLoading(true)
         // console.log(topic, language, country, audience)
         // return
@@ -153,8 +122,44 @@ const KeywordResearch = (props: any) => {
         <>
 
             <Button variant='contained' onClick={() => {
+                if (auth.user?.is_active) {
+                    if (auth?.user?.workspace_owner_info?.plan?.plan != 'free' && auth?.user?.workspace_owner_info?.plan?.plan != 'extension_only') {
 
-                setShow(true);
+                        LoginRegistrationAPI.isAllowedToCreateCluster({}).then(res => {
+                            if (!res.data) {
+                                Swal.fire({
+                                    title: 'Limit Reached',
+                                    text: 'You\'ve reached your cluster limit.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'CLOSE',
+                                    confirmButtonColor: "#2979FF"
+                                }).then(() => {
+                                    router.push('/plans')
+                                })
+                            } else {
+                                setShow(true);
+                            }
+                        }).catch(e => {
+
+                        })
+                        return ''
+                    } else {
+                        setShow(true);
+                    }
+
+                } else {
+                    Swal.fire({
+                        title: 'Check Your Email',
+                        text: 'Please Verify Your Account To get Full Access!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#2979FF"
+                    })
+                    // 
+                    return ''
+                }
+
+
             }} startIcon={<Icon icon="ph:plus"></Icon>}>Create Cluster</Button>
             <Dialog
                 fullWidth

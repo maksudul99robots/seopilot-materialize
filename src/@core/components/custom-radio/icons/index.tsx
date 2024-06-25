@@ -25,7 +25,7 @@ const CustomRadioIcons = (props: CustomRadioIconsProps) => {
             p: 4,
             height: '100%',
             display: 'flex',
-            borderRadius: 1,
+            borderRadius: .4,
             cursor: 'pointer',
             position: 'relative',
             alignItems: 'center',
@@ -39,7 +39,7 @@ const CustomRadioIcons = (props: CustomRadioIconsProps) => {
           {icon ? <Icon icon={icon} {...iconProps} /> : null}
           {title ? (
             typeof title === 'string' ? (
-              <Typography variant='h6' sx={{ fontWeight: 500, ...(content ? { mb: 1 } : { my: 'auto' }) }}>{title}</Typography>
+              <Typography variant='h6' sx={{ fontWeight: 500, ...(content ? { mb: 1, textAlign: "center" } : { my: 'auto', textAlign: "center" }) }}>{title}</Typography>
             ) : (
               title
             )

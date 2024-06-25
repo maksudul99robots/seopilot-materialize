@@ -80,6 +80,7 @@ import Link from 'next/link'
 import ActionDropdown from './ActionDropdown'
 import IdeaAdvancedSettings from './IdeaAdvancedSettings'
 import { CustomMadeChips } from 'src/services/CustomMadeChips'
+import IdeaLibraryDrawer from 'src/services/SidebarForIdeaLibrary'
 
 const IdeaList = () => {
     // ** States
@@ -223,12 +224,16 @@ const IdeaList = () => {
                 return (
                     <>
 
-                        <IdeaAdvancedSettings
+                        {/* <IdeaAdvancedSettings
                             data={row}
                             idea_id={row.id}
                             updateList={updateList}
                             isCreateIdea={false}
-                        />
+                        /> */}
+                        <IdeaLibraryDrawer data={row}
+                            idea_id={row.id}
+                            updateList={updateList}
+                            isCreateIdea={false} />
                         <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={e => {
                             submit(row)
                         }} sx={{ fontSize: "12px", padding: "5px", marginRight: "5px" }}>
@@ -466,7 +471,8 @@ const IdeaList = () => {
     return (
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <IdeaAdvancedSettings isCreateIdea={true} settings={[]} updateList={updateList} />
+                {/* <IdeaAdvancedSettings isCreateIdea={true} settings={[]} updateList={updateList} /> */}
+                <IdeaLibraryDrawer isCreateIdea={true} settings={[]} updateList={updateList} />
             </Box>
             <Card>
                 <DataGrid

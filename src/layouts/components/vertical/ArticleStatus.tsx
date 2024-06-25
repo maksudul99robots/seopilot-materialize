@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select, Typography } from "@mui/material"
+import { FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import { LoginRegistrationAPI } from "src/services/API"
@@ -19,12 +19,14 @@ export const ArticleStatus = (props: any) => {
     }, [props])
     return (
         <Box sx={{}}>
-            <Typography sx={{ fontWeight: "600", fontSize: "12px" }}>Article Status:</Typography>
             <FormControl sx={{ marginRight: "10px" }}>
+                <InputLabel id="Article Status">Article Status</InputLabel>
                 <Select
                     placeholder='Article Status'
+                    label='Article Statusgdfg'
+                    labelId='Article Status'
                     value={props.articleStatus.status}
-                    sx={{ height: "30px", backgroundColor: "#fff", width: "100%", fontSize: "12px" }}
+                    sx={{ height: "32px", backgroundColor: "#fff", width: "100%", fontSize: "12px" }}
                     onChange={(e: any) => {
                         if (e.target.value && e.target.value != "") {
                             // props.setStatus(e.target.value)

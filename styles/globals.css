@@ -169,6 +169,7 @@ code[class*='language-'] {
 .MuiCard-root{
   box-shadow: none !important;
   border: 1px solid #E9E9EC;
+  border-radius: 4px !important;
 }
 
 .rdw-dropdown-optionwrapper{
@@ -255,9 +256,24 @@ code[class*='language-'] {
 .MuiToolbar-root {
   background-color: #fff !important;
   border: 1px solid #E9E9EC;
+  border-radius: 4px !important;
 }
 
 #event-due-date{
-  height:3px;
+  height:1px;
   font-size: 12px;
+}
+
+.MuiDrawer-paperAnchorRight{
+  width: 50vw;
+}
+
+.custom-drawer{
+  z-index: 1100000;
+}
+.MuiButton-root{
+  border-radius: 3px !important;
+}
+.MuiInputBase-root{
+  border-radius: 3px !important;
 }

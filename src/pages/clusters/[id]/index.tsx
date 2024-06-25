@@ -90,6 +90,7 @@ import SwitchesCustomized from 'src/components/SwitchesCustomized'
 import LengthDropdown from './LengthDropdown'
 import ActionDropdown from './ActionDropdown'
 import Link from 'next/link'
+import ClusterDrawer from 'src/services/SidebarForCluster'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -349,25 +350,38 @@ const ClusterIdea = () => {
                     <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
                         {
                             settings[row.id].status == 'completed' ?
-                                <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22" }} href={'/generated-article/' + settings[row.id].article_id}>
-                                    view
-                                </Button >
+                                <>
+                                    <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22", marginRight: "3px" }} href={'/generated-article/' + settings[row.id].article_id}>
+                                        view
+                                    </Button >
+                                    <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                </>
+
                                 : settings[row.id].status == 'idea' ?
-                                    <Button variant='contained' size='medium' onClick={() => {
-                                        submit(settings[row.id], row)
-                                    }} sx={{ fontSize: "10px" }}>
-                                        Write
-                                    </Button > : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
-                                        <Button variant='contained' size='medium' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                    <>
+                                        <Button variant='contained' size='medium' onClick={() => {
                                             submit(settings[row.id], row)
-                                        }} sx={{ fontSize: "10px" }}>
-                                            Processing
-                                        </Button > :
-                                        <Button variant='contained' size='medium' sx={{ fontSize: "10px" }} onClick={() => {
-                                            submit(settings[row.id], row)
-                                        }}>
-                                            Retry
+                                        }} sx={{ fontSize: "10px", marginRight: "3px" }}>
+                                            Write
                                         </Button >
+                                        <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                    </>
+                                    : settings[row.id].status == 'outlined' || settings[row.id].status == 'initiated' ?
+                                        <><Button variant='contained' size='medium' disabled startIcon={<Icon icon="line-md:loading-twotone-loop"></Icon>} onClick={() => {
+                                            submit(settings[row.id], row)
+                                        }} sx={{ fontSize: "10px", marginRight: "3px" }}>
+                                            Processing
+                                        </Button >
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                        </> :
+                                        <>
+                                            <Button variant='contained' size='medium' sx={{ fontSize: "10px", marginRight: "3px" }} onClick={() => {
+                                                submit(settings[row.id], row)
+                                            }}>
+                                                Retry
+                                            </Button >
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} /></>
+
                         }
                     </Box>
 
@@ -375,20 +389,21 @@ const ClusterIdea = () => {
 
             }
         },
-        {
-            flex: 0.04,
-            minWidth: 60,
-            headerName: '',
-            field: 'fasq',
-            valueGetter: params => new Date(params.value),
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
-                return (
-                    <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status={settings[row.id].status} settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
-                )
+        // {
+        //     flex: 0.04,
+        //     minWidth: 60,
+        //     headerName: '',
+        //     field: 'fasq',
+        //     valueGetter: params => new Date(params.value),
+        //     renderCell: (params: GridRenderCellParams) => {
+        //         const { row } = params
+        //         return (
+        //             // <ActionDropdown loading={loading} setLoading={setLoading} idea_id={row.id} status={settings[row.id].status} settings={settings} setSettings={setSettings} handleChange={handleChange} updateList={updateList} />
 
-            }
-        },
+        //         )
+
+        //     }
+        // },
     ]
 
     const submit = (data: any, row: any) => {
@@ -510,7 +525,11 @@ const ClusterIdea = () => {
                         outlines: il.raw_outline,
                         language: il.language,
                         country: il.country,
-                        status: il.status
+                        status: il.status,
+                        folder_id: il.folder_id,
+                        assign_user: il.assign_user,
+                        due_date: il.due_date,
+                        article_id: il.article_id
                     }
                     if (i == res.data.idea_library.length - 1) {
                         setSettings(x);
@@ -530,7 +549,7 @@ const ClusterIdea = () => {
     useEffect(() => {
         if (router.query.id) {
             LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
-                console.log("res:", res.data)
+                // console.log("res:", res.data)
                 setTopic(res.data.topic)
                 if (res.data.idea_library) {
                     let x: any = {};
@@ -561,8 +580,9 @@ const ClusterIdea = () => {
                             language: il.language,
                             country: il.country,
                             status: il.status,
-                            folder_id: il.folder_id
-
+                            folder_id: il.folder_id,
+                            assign_user: il.assign_user,
+                            due_date: il.due_date
                         }
                         if (i == res.data.idea_library.length - 1) {
                             setSettings(x);

@@ -14,6 +14,7 @@ import { LoginRegistrationAPI } from 'src/services/API';
 import { useRouter } from 'next/router';
 import IdeaAdvancedSettings from './IdeaAdvancedSettings';
 import { Box } from '@mui/material';
+import ClusterDrawer from 'src/services/SidebarForCluster';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -150,8 +151,8 @@ export default function ActionDropdown(props: any) {
                     </div>
                 } */}
 
-                <IdeaAdvancedSettings handleClose={handleClose} settings={props.settings} setSettings={props.setSettings} idea_id={props.idea_id} handleChange={props.handleChange} updateList={props.updateList} />
-
+                {/* <IdeaAdvancedSettings handleClose={handleClose} settings={props.settings} setSettings={props.setSettings} idea_id={props.idea_id} handleChange={props.handleChange} updateList={props.updateList} /> */}
+                <ClusterDrawer handleClose={handleClose} settings={props.settings} setSettings={props.setSettings} idea_id={props.idea_id} handleChange={props.handleChange} updateList={props.updateList} />
 
             </StyledMenu>
         </div>

@@ -44,7 +44,7 @@ const DndList = ({ headings, setHeadings, editHeadingOnChange, addnewHeading, se
                 <div style={{
                     border: "1px solid #D8D8DD",
                     padding: "10px",
-                    borderRadius: "10px",
+                    borderRadius: "4px",
                     marginLeft: window.location.pathname.includes("create-article") ? "4px" : "0px",
                     marginRight: "-4px"
                 }}>
