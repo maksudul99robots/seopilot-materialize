@@ -149,9 +149,9 @@ const navigation = (): VerticalNavItemsType | any => {
           path: '/folders'
         },
         {
-          title: 'Schedule',
+          title: 'Calendar',
           icon: 'fluent-mdl2:date-time-mirrored',
-          path: '/schedule'
+          path: '/calendar'
         },
         {
           sectionTitle: 'Research',

@@ -2,6 +2,7 @@ import { Box, LinearProgress, Tooltip, TooltipProps, Typography, styled, tooltip
 import ReactSpeedometer from "react-d3-speedometer"
 import ProgressBar from "@ramonak/react-progress-bar";
 import { useEffect, useState } from "react";
+import MetricsTabs from "./MetricsTabs";
 
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -59,7 +60,7 @@ const Metrics = (props: any) => {
 
                         <Box sx={{ width: "75%" }}>
 
-                            <ProgressBar completed={(title).toFixed(0)} bgColor="#2979FF" />
+                            <ProgressBar completed={(title).toFixed(0)} bgColor="#2979FF" borderRadius="4px" />
 
 
                         </Box>
@@ -83,7 +84,7 @@ const Metrics = (props: any) => {
 
 
                 </Box>
-
+                <MetricsTabs />
             </Box>
         </Box >
 

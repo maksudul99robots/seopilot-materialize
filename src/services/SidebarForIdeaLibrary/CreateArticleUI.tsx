@@ -1264,7 +1264,7 @@ export default function CreateArticleUI(props: any) {
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12}>
-                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "20px", marginBottom: "10px" }}>
+                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "10px", marginBottom: "10px" }}>
                                         Content Operations
                                     </Typography>
                                 </Grid>

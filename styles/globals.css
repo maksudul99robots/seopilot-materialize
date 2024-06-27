@@ -277,3 +277,16 @@ code[class*='language-'] {
 .MuiInputBase-root{
   border-radius: 3px !important;
 }
+.keyword-unused{
+  border-radius: 5px !important;
+  color: #808688;
+  background-color: #EBEBED;
+  width: fit-content;
+  padding: 5px;
+
+}
+.keyword-used{
+  border-radius: 10px;
+  color: #41A667;
+  background-color: #BEE4C7;
+}
