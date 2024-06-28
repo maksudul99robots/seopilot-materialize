@@ -3,7 +3,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
-import { HeadingsKeywords } from './HeadingsKeywords';
+import { KeywordSuggestions } from './KeywordSuggestions';
+import { SerpSuggestions } from './SerpSuggestions';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -21,6 +22,7 @@ function CustomTabPanel(props: TabPanelProps) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
+            style={{ padding: "0px" }}
             {...other}
         >
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -36,7 +38,7 @@ function a11yProps(index: number) {
     };
 }
 
-export default function MetricsTabs() {
+export default function MetricsTabs(props: any) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -47,20 +49,17 @@ export default function MetricsTabs() {
         <Box sx={{ width: '100%', fontSize: "12px" }}>
             {/* <Typography variant='body1'>Keywords</Typography> */}
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ fontSize: "12px !important;" }}>
-                    <Tab label="Headings" {...a11yProps(0)} sx={{ fontSize: "12px !important;" }} />
-                    <Tab label="Article" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
+                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ fontSize: "12px !important;", padding: "0px" }}>
+                    <Tab label="Terms" {...a11yProps(0)} sx={{ fontSize: "12px !important;" }} />
+                    <Tab label="Top 10 google searches" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
                     {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <HeadingsKeywords />
+                <KeywordSuggestions keywordSuggestions={props.keywordSuggestions} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                Item Two
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-                Item Three
+                <SerpSuggestions serp={props.serp} />
             </CustomTabPanel>
         </Box>
     );

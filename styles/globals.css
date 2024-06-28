@@ -277,16 +277,52 @@ code[class*='language-'] {
 .MuiInputBase-root{
   border-radius: 3px !important;
 }
-.keyword-unused{
+.keyword-unused {
   border-radius: 5px !important;
   color: #808688;
   background-color: #EBEBED;
   width: fit-content;
   padding: 5px;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease; /* Add transition property */
+}
 
+.keyword-unused:hover {
+  color: #00A840;
+  background-color: #fff;
+  /* transform: translate(-50%, -50%); */
 }
 .keyword-used{
-  border-radius: 10px;
-  color: #41A667;
-  background-color: #BEE4C7;
+  border-radius: 5px !important;
+  color: #009539;
+  background-color: #e2feed;
+  width: fit-content;
+  padding: 5px;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease; /* Add transition property */
+}
+
+.keyword-used:hover {
+  color: #009539;
+  background-color: #fff;
+  /* transform: translate(-50%, -50%); */
+}
+.links {
+  color: #90919F;
+  background-color: #fff;
+  /* transform: translate(-50%, -50%); */
+}
+.links:hover {
+  color: #2979FF;
+  background-color: #fff;
+  /* transform: translate(-50%, -50%); */
+}
+
+#simple-tabpanel-0 .MuiBox-root{
+  padding: 0px;
+  width: 100%;
+}
+#simple-tabpanel-1 .MuiBox-root{
+  padding: 0px;
+  width: 100%;
 }

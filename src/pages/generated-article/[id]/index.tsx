@@ -45,6 +45,9 @@ export default function Page() {
     const [price, setPrice] = useState<number | string>(0);
     const [keywords, setKeywords] = useState<any>([])
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
+    const [keywordSuggestionsTmp, setKeywordSuggestionsTmp] = useState<any>([]);
+    const [keywordSuggestions, setKeywordSuggestions] = useState<any>([]);
+    const [serp, setSERP] = useState<any>([]);
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
     const [status, setStatus] = useState<string>('');
@@ -61,6 +64,50 @@ export default function Page() {
         }
 
     }, [router.query.id])
+
+    useEffect(() => {
+        if (keywordSuggestions.length == 0) {
+            LoginRegistrationAPI.getKeywordSuggestions({ id: router.query.id }).then(res => {
+                setKeywordSuggestionsTmp(res.data.keywords)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
+
+    }, [articleTopic])
+
+    useEffect(() => {
+        LoginRegistrationAPI.getSERP({ keywords: articleTopic }).then(res => {
+
+            setSERP(separateString(res.data.serp))
+        }).catch(e => {
+            console.log(e)
+        })
+
+    }, [keywords])
+
+    useEffect(() => {
+        // console.log("change of article")
+        if (keywordSuggestionsTmp.length > 0) {
+            countKeywords();
+        }
+
+
+    }, [html, keywordSuggestionsTmp])
+
+    const countKeywords = () => {
+        // Create a copy of the keywords array to avoid direct state mutation
+        const updatedKeywords = keywordSuggestionsTmp.map((keywordObj: any) => {
+            // Use a regular expression to find all occurrences of the keyword in the article content
+            const regex = new RegExp(`\\b${keywordObj.keyword}\\b`, 'gi');
+            const count = (html.match(regex) || []).length;
+            return { ...keywordObj, count }; // Add the count property to the keyword object
+        });
+        console.log(updatedKeywords)
+        // Update the state with the new keywords array
+        setKeywordSuggestions(updatedKeywords);
+    };
+
 
     useEffect(() => {
         let counter = 0;
@@ -421,7 +468,7 @@ export default function Page() {
     }
 
     const save = () => {
-        console.log("inside save...")
+        // console.log("inside save...")
         LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
             if (res.status == 200) {
                 // Swal.fire(
@@ -492,6 +539,8 @@ export default function Page() {
                         status={status}
                         setStatus={setStatus}
                         schedule={schedule}
+                        keywordSuggestions={keywordSuggestions}
+                        serp={serp}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

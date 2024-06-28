@@ -50,6 +50,7 @@ const EditorControlled = (props: any) => {
 
   const [text, setText] = useState(props.text)
   useEffect(() => {
+    // console.log("change of content")
     let htmlTmp = convertEditorStateToHTML(value);
     if (props.fImg?.urls?.full) {
       props.setHtml(insertImageAfterFirstH1(htmlTmp, props.fImg.urls.full));

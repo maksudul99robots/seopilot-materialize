@@ -454,7 +454,7 @@ export default function ArticleIU(props: any) {
                                 <Button variant='outlined' color='secondary' className='outlined-btn-color' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Inputs</Button>
                             </Box>
                         </Box>
-                        <Metrics titleScore={titleScore} wordScore={wordScore} />
+                        <Metrics titleScore={titleScore} wordScore={wordScore} keywordSuggestions={props.keywordSuggestions} serp={props.serp} />
 
                         {/* <Outlines outlines={outlines} /> */}
                         <Headings headings={headings} />

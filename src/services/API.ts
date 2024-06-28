@@ -429,6 +429,12 @@ export const LoginRegistrationAPI = {
     async getMyTasks(data: any, url = "/get-my-tasks", source = undefined) {
         return await axios.post(`${API_ROOT}${url}`, data, header);
     },
+    async getKeywordSuggestions(data: any, url = "/get-keyword-suggestions", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getSERP(data: any, url = "/get-serp", source = undefined) {
+        return await axios.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

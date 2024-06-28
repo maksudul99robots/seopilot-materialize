@@ -22,7 +22,7 @@ const Metrics = (props: any) => {
     const [title, setTitle] = useState(props.titleScore.score)
     const [word, setWord] = useState(props.wordScore.score)
     const [mainValue, setMainValue] = useState(0);
-
+    // console.log("keywordSuggestions:", props.keywordSuggestions)
     useEffect(() => {
         setTitle(props.titleScore.score);
         setWord(props.wordScore.score);
@@ -84,7 +84,7 @@ const Metrics = (props: any) => {
 
 
                 </Box>
-                <MetricsTabs />
+                <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} />
             </Box>
         </Box >
 
