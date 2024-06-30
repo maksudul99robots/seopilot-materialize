@@ -66,6 +66,8 @@ export default function ArticleIU(props: any) {
     const [reloadUnsplashRequest, setReloadUnsplashRequest] = useState(0)
     const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
+    const [termScore, seTermScore] = useState({ score: 0, msg: "" })
+    const [linkScore, setLinkScore] = useState({ score: 0, msg: "" })
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
         position: "relative",
@@ -454,7 +456,15 @@ export default function ArticleIU(props: any) {
                                 <Button variant='outlined' color='secondary' className='outlined-btn-color' href={`/create-article?id=${props.id}`} sx={{ height: 40 }} startIcon={<Icon icon="lucide:file-input" />}>Show Inputs</Button>
                             </Box>
                         </Box>
-                        <Metrics titleScore={titleScore} wordScore={wordScore} keywordSuggestions={props.keywordSuggestions} serp={props.serp} />
+                        <Metrics
+                            titleScore={titleScore}
+                            wordScore={wordScore}
+                            keywordSuggestions={props.keywordSuggestions}
+                            serp={props.serp}
+                            termScore={termScore}
+                            linkScore={linkScore}
+                            primaryKeyword={props.keywords}
+                        />
 
                         {/* <Outlines outlines={outlines} /> */}
                         <Headings headings={headings} />

@@ -79,7 +79,7 @@ export default function Page() {
     useEffect(() => {
         LoginRegistrationAPI.getSERP({ keywords: articleTopic }).then(res => {
 
-            setSERP(separateString(res.data.serp))
+            setSERP(res.data.serp)
         }).catch(e => {
             console.log(e)
         })

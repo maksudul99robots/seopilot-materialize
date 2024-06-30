@@ -309,12 +309,12 @@ code[class*='language-'] {
 }
 .links {
   color: #90919F;
-  background-color: #fff;
+  /* background-color: #fff; */
   /* transform: translate(-50%, -50%); */
 }
 .links:hover {
   color: #2979FF;
-  background-color: #fff;
+  /* background-color: #fff; */
   /* transform: translate(-50%, -50%); */
 }
 

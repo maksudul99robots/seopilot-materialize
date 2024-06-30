@@ -56,7 +56,7 @@ export default function MetricsTabs(props: any) {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <KeywordSuggestions keywordSuggestions={props.keywordSuggestions} />
+                <KeywordSuggestions keywordSuggestions={props.keywordSuggestions} primaryKeyword={props.primaryKeyword} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <SerpSuggestions serp={props.serp} />
