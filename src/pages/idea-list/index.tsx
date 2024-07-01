@@ -459,7 +459,7 @@ const IdeaList = () => {
     const updateList = () => {
 
         LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
-            // console.log("res:", res.data)
+            console.log("res:", res.data)
             setMainData(res.data.idea_library)
 
 

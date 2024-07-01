@@ -158,7 +158,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function CreateArticleUI(props: any) {
-    console.log("props.settings:", props.settings[props.idea_id])
+    // console.log("props.settings:", props.settings[props.idea_id])
     // ** States
     const [show, setShow] = useState<boolean>(false)
 
@@ -587,7 +587,7 @@ export default function CreateArticleUI(props: any) {
                                         name="Keywords"
                                     />
                                     {/* <em>press enter to add new tag</em> */}
-                                    <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword</FormHelperText>
+                                    <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword. You have to put only one target keyword to rank for.</FormHelperText>
                                 </Grid>
                                 <Grid item sm={6} xs={6}>
                                     <FormControl fullWidth>

@@ -221,7 +221,7 @@ export default function CreateArticleUI(props: any) {
     ]);
     const auth = useAuth()
     const [extraPrompt, setExtraPrompt] = useState<string>('')
-    const [user, setUser] = useState(props?.data?.assign_user);
+    const [user, setUser] = useState(props?.data?.assign_user ? props?.data?.assign_user : auth.user?.id);
     const [dateTime, setDateTime] = useState<Date>(new Date());
     const handleClose = () => {
         setShow(false);
@@ -709,7 +709,7 @@ export default function CreateArticleUI(props: any) {
                                         name="Keywords"
                                     />
                                     {/* <em>press enter to add new tag</em> */}
-                                    <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword</FormHelperText>
+                                    <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword. You have to put only one target keyword to rank for.</FormHelperText>
                                 </Grid>
                                 <Grid item sm={6} xs={6}>
                                     <FormControl fullWidth>
