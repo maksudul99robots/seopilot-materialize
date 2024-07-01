@@ -36,7 +36,7 @@ import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
-import { getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
+import { getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
 import { CustomMadeChips } from 'src/services/CustomMadeChips';
 import { getDateTime } from 'src/services/DateTimeFormatter';
@@ -66,7 +66,7 @@ export default function ArticleIU(props: any) {
     const [reloadUnsplashRequest, setReloadUnsplashRequest] = useState(0)
     const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
-    const [termScore, seTermScore] = useState({ score: 0, msg: "" })
+    const [termScore, setTermScore] = useState({ score: 0, msg: "" })
     const [linkScore, setLinkScore] = useState({ score: 0, msg: "" })
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
@@ -195,6 +195,22 @@ export default function ArticleIU(props: any) {
     useEffect(() => {
         setTitleScore(getTitleCalculation(props.articleTopic))
     }, [props.articleTopic])
+
+    useEffect(() => {
+        if (props.keywordSuggestions.length > 0 && props.primaryKeyword) {
+            getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount).then((res: any) => {
+                setTermScore(res)
+            });
+        }
+
+    }, [props.keywordSuggestions])
+    useEffect(() => {
+        getLinkCalculations(props.html).then((res: any) => {
+            setLinkScore(res)
+        });
+
+
+    }, [props.html])
     return (
         <>
 
@@ -463,7 +479,7 @@ export default function ArticleIU(props: any) {
                             serp={props.serp}
                             termScore={termScore}
                             linkScore={linkScore}
-                            primaryKeyword={props.keywords}
+                            primaryKeyword={props.primaryKeyword}
                         />
 
                         {/* <Outlines outlines={outlines} /> */}

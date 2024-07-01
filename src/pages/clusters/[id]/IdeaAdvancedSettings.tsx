@@ -157,7 +157,7 @@ import DndForListicle from 'src/services/DND/DNDForListicle'
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
 
 const IdeaAdvancedSettings = (props: any) => {
-  console.log("props.settings:", props.settings[props.idea_id])
+  // console.log("props.settings:", props.settings[props.idea_id])
   // ** States
   const [show, setShow] = useState<boolean>(false)
 

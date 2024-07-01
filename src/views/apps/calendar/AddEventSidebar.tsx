@@ -101,7 +101,7 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
   }, [store, addEventSidebarOpen])
   // ** States
   const [values, setValues] = useState<DefaultStateType>(defaultState)
-  console.log("values:", store.selectedEvent?.extendedProps)
+  // console.log("values:", store.selectedEvent?.extendedProps)
   const {
     control,
     setValue,

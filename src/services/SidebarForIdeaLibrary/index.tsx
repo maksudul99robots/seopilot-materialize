@@ -27,7 +27,7 @@ export default function IdeaLibraryDrawer(props: any) {
     const toggleDrawer =
         (anchor: Anchor, open: boolean) =>
             (event: React.KeyboardEvent | React.MouseEvent) => {
-                console.log("anchor, open:", anchor, open)
+                // console.log("anchor, open:", anchor, open)
                 if (
                     event.type === 'keydown' &&
                     ((event as React.KeyboardEvent).key === 'Tab' ||

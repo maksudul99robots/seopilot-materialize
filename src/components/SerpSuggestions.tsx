@@ -6,7 +6,7 @@ import Link from "next/link";
 import Icon from "src/@core/components/icon"
 
 export const SerpSuggestions = (props: any) => {
-    console.log("serp:", props.serp)
+    // console.log("serp:", props.serp)
     return (
         <Box sx={{ width: '100%', marginTop: "10px" }}>
             {props.serp.length > 0 ?
@@ -30,7 +30,7 @@ export const SerpSuggestions = (props: any) => {
                                 fontSize: "12px",
                                 textDecoration: "none"
                             }} // Added margin for spacing
-                            href={ks}
+                            href={ks.url}
                             className="links"
                         >
                             {ks.url}

@@ -11,20 +11,21 @@ export const KeywordSuggestions = (props: any) => {
             {
                 props.primaryKeyword &&
                 <Box sx={{ marginBottom: "20px", display: "flex", alignItems: "center" }}>
-                    <Typography variant="body2" sx={{ marginRight: "5px" }}>Primary Keyword:</Typography>
+                    <Typography variant="body2" sx={{ marginRight: "5px", fontSize: "12px" }}>Target Keyword:</Typography>
                     <Typography sx={
                         {
                             borderRadius: '5px',
                             color: "#009539",
                             backgroundColor: "#e2feed",
                             width: "fit-content",
-                            padding: "5px"
+                            padding: "5px",
+                            fontSize: "14px"
                         }
                     }>{props.primaryKeyword}</Typography>
                 </Box>
             }
 
-            <Typography variant="body2" sx={{ marginRight: "5px" }}>Keyword suggestions:</Typography>
+            <Typography variant="body2" sx={{ marginRight: "5px", fontSize: "12px" }}>Keyword suggestions:</Typography>
             {
                 props.keywordSuggestions.length > 0 ?
                     props.keywordSuggestions.map((ks: any, index: number) => (

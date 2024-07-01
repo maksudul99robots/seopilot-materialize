@@ -976,7 +976,7 @@ export default function CreateArticle(props: any) {
 
                                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                         <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
-                                            Target Keywords
+                                            Target Keyword
                                             <LightTooltip title={
                                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
                                                     The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
@@ -997,7 +997,8 @@ export default function CreateArticle(props: any) {
                                         name="Keywords"
                                     />
                                     {/* <em>press enter to add new tag</em> */}
-                                    <FormHelperText sx={{ fontSize: "14px" }}>Press enter to add keyword</FormHelperText>
+                                    <FormHelperText sx={{ fontSize: "14px" }}>
+                                        Press enter to add the keyword. You have to put only one target keyword to rank for.</FormHelperText>
                                 </Grid>
                                 <Grid item sm={6} xs={6}>
                                     <FormControl fullWidth>

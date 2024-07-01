@@ -158,7 +158,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function CreateArticleUI(props: any) {
-    console.log("props:", props)
+    // console.log("props:", props)
     // ** States
     const [show, setShow] = useState<boolean>(false)
 

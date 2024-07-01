@@ -12,6 +12,7 @@ import Outlines from './Outlines';
 import { getDateTime } from 'src/services/DateTimeFormatter';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from 'src/hooks/useAuth';
+import { getTermCalculations } from 'src/services/MetricsCalculator';
 // import 'react-toastify/dist/ReactToastify.css';
 const steps = [
     'Researching Keywords',
@@ -44,6 +45,7 @@ export default function Page() {
     const [keywordByKeybert, setKeywordsByKeyBert] = useState<any>(null);
     const [price, setPrice] = useState<number | string>(0);
     const [keywords, setKeywords] = useState<any>([])
+    const [primaryKeyword, setPrimaryKeywords] = useState<any>('')
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [keywordSuggestionsTmp, setKeywordSuggestionsTmp] = useState<any>([]);
     const [keywordSuggestions, setKeywordSuggestions] = useState<any>([]);
@@ -69,6 +71,7 @@ export default function Page() {
         if (keywordSuggestions.length == 0) {
             LoginRegistrationAPI.getKeywordSuggestions({ id: router.query.id }).then(res => {
                 setKeywordSuggestionsTmp(res.data.keywords)
+                setPrimaryKeywords(res.data.primary_keyword)
             }).catch(e => {
                 console.log(e)
             })
@@ -93,7 +96,9 @@ export default function Page() {
         }
 
 
+
     }, [html, keywordSuggestionsTmp])
+
 
     const countKeywords = () => {
         // Create a copy of the keywords array to avoid direct state mutation
@@ -103,7 +108,7 @@ export default function Page() {
             const count = (html.match(regex) || []).length;
             return { ...keywordObj, count }; // Add the count property to the keyword object
         });
-        console.log(updatedKeywords)
+        // console.log(updatedKeywords)
         // Update the state with the new keywords array
         setKeywordSuggestions(updatedKeywords);
     };
@@ -235,6 +240,7 @@ export default function Page() {
                         if (res.data.keywords) {
                             const keywordArray = separateString(res.data.keywords);
                             setKeywords(keywordArray)
+                            setPrimaryKeywords(keywordArray[0])
                         }
 
                         if (res.data.listicle_outlines) {
@@ -541,6 +547,7 @@ export default function Page() {
                         schedule={schedule}
                         keywordSuggestions={keywordSuggestions}
                         serp={serp}
+                        primaryKeyword={primaryKeyword}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
