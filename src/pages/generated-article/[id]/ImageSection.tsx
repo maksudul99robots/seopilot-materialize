@@ -49,20 +49,20 @@ const ImageWithButtons = (props: any) => {
                 </div>
             </div>
 
-            {hovered && props.imgService != 'dall-e-2' && props.imgService != 'dall-e-3' && (
-                <div style={{
-                    position: 'absolute', bottom: props.url && props.username && props.referral ? 35 : 5, right: 0, width: "100%",
-                    backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
-                    display: "flex", justifyContent: "end"
-                }}>
+            {/* {hovered && props.imgService != 'dall-e-2' && props.imgService != 'dall-e-3' && ( */}
+            <div style={{
+                position: 'absolute', bottom: props.url && props.username && props.referral ? 35 : 5, right: 0, width: "100%",
+                backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
+                display: "flex", justifyContent: "end"
+            }}>
 
-                    <div style={{ height: "100%", margin: "30px 30px 30px 20px" }}>
-                        {/* <Icon icon="teenyicons:refresh-outline" className='featured_img_btn' style={{ border: "1px solid #E9E9EC", }}
+                <div style={{ height: "100%", margin: "30px 30px 30px 20px" }}>
+                    {/* <Icon icon="teenyicons:refresh-outline" className='featured_img_btn' style={{ border: "1px solid #E9E9EC", }}
                             /> */}
-                        <DownloadImage url={props.src} name={`${props.topic}.png`} />
-                    </div>
+                    <DownloadImage url={props.src} name={`${props.topic}.png`} imgService={props.imgService} />
                 </div>
-            )}
+            </div>
+            {/* )} */}
             {
                 props.url && props.username && props.referral &&
                 <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
