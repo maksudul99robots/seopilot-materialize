@@ -231,7 +231,7 @@ const IdeaList = () => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-                      <h5>Unable to Generate Article</h5>
+                      <h5>Unable to Get Researches</h5>
                       `,
                         icon: "error",
                         // input: 'text',
@@ -296,7 +296,7 @@ const IdeaList = () => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-                      <h5>Unable to Generate Article</h5>
+                      <h5>Unable to Get Researches</h5>
                       `,
                         icon: "error",
                         // input: 'text',
@@ -363,6 +363,8 @@ const IdeaList = () => {
             setMainData(res.data)
 
 
+        }).catch(e => {
+            console.log("unable to get PrimaryResearch")
         })
         // setMainData(dummy)
 

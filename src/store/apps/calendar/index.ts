@@ -10,18 +10,13 @@ import { CalendarFiltersType, AddEventType, EventType } from 'src/types/apps/cal
 
 // ** Fetch Events
 export const fetchEvents = createAsyncThunk('appCalendar/fetchEvents', async (calendars: CalendarFiltersType[] | any) => {
-  let res = await LoginRegistrationAPI.getSchadules({})
+  try {
+    let res = await LoginRegistrationAPI.getSchadules({})
+    return res.data
+  } catch (e) {
+    return []
+  }
 
-  // let folders = await LoginRegistrationAPI.getFolders({});
-  // let folder: any[] = []
-  // folders.data.map(async (f: any, i: number) => {
-  //   folder.push(f.name)
-  //   if (i == folders.data.length - 1) {
-  //     await dispatch(fetchEvents(folder))
-  //   }
-  // })
-
-  return res.data
 })
 
 // ** Add Event
@@ -33,14 +28,20 @@ export const addEvent = createAsyncThunk('appCalendar/addEvent', async (event: A
   })
   // await dispatch(fetchEvents(['Personal', 'Business', 'Family', 'Holiday', 'ETC']))
   // console.log("event:", response.data.event)
-  let folders = await LoginRegistrationAPI.getFolders({});
-  let folder: any[] = []
-  folders.data.map(async (f: any, i: number) => {
-    folder.push(f.name)
-    if (i == folders.data.length - 1) {
-      await dispatch(fetchEvents(folder))
-    }
-  })
+  try {
+    let folders = await LoginRegistrationAPI.getFolders({});
+    let folder: any[] = []
+    folders.data.map(async (f: any, i: number) => {
+      folder.push(f.name)
+      if (i == folders.data.length - 1) {
+        await dispatch(fetchEvents(folder))
+      }
+    })
+
+  } catch (e) {
+
+  }
+
   return response.data.event
 })
 
@@ -51,15 +52,19 @@ export const updateEvent = createAsyncThunk('appCalendar/updateEvent', async (ev
       event
     }
   })
-  let folders = await LoginRegistrationAPI.getFolders({});
-  let folder: any[] = []
-  folders.data.map(async (f: any, i: number) => {
-    folder.push(f.name)
-    if (i == folders.data.length - 1) {
-      await dispatch(fetchEvents(folder))
-    }
-  })
+  try {
+    let folders = await LoginRegistrationAPI.getFolders({});
+    let folder: any[] = []
+    folders.data.map(async (f: any, i: number) => {
+      folder.push(f.name)
+      if (i == folders.data.length - 1) {
+        await dispatch(fetchEvents(folder))
+      }
+    })
 
+  } catch (e) {
+
+  }
 
   return response.data.event
 })
@@ -69,14 +74,19 @@ export const deleteEvent = createAsyncThunk('appCalendar/deleteEvent', async (id
   const response = await axios.delete('/apps/calendar/remove-event', {
     params: { id }
   })
-  let folders = await LoginRegistrationAPI.getFolders({});
-  let folder: any[] = []
-  folders.data.map(async (f: any, i: number) => {
-    folder.push(f.name)
-    if (i == folders.data.length - 1) {
-      await dispatch(fetchEvents(folder))
-    }
-  })
+  try {
+    let folders = await LoginRegistrationAPI.getFolders({});
+    let folder: any[] = []
+    folders.data.map(async (f: any, i: number) => {
+      folder.push(f.name)
+      if (i == folders.data.length - 1) {
+        await dispatch(fetchEvents(folder))
+      }
+    })
+
+  } catch (e) {
+
+  }
 
   return response.data
 })

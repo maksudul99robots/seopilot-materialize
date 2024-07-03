@@ -263,7 +263,7 @@ const Clusters = () => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-                      <h5>Unable to Generate Article</h5>
+                      <h5>Unable to Get Clusters</h5>
                       `,
                         icon: "error",
                         // input: 'text',
@@ -312,6 +312,8 @@ const Clusters = () => {
                 // console.log("res:", res.data)
                 setMainData(res.data)
 
+            }).catch(e => {
+                console.log("unable to get")
             })
 
         }

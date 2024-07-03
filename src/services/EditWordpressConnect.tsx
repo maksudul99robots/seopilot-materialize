@@ -74,6 +74,8 @@ const EditWordpressConnect = (props: any) => {
   const handleSubmit = () => {
     LoginRegistrationAPI.updateConnectWP({ address: address, username: username, password: appPassword, id: props.id }).then(res => {
       props.setReRender(!props.reRender);
+    }).catch(e => {
+      console.log("unable to update")
     })
     setShow(false)
   }

@@ -292,7 +292,7 @@ const IdeaList = () => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-                      <h5>Unable to Generate Article</h5>
+                      <h5>Unable to Get Ideas</h5>
                       `,
                         icon: "error",
                         // input: 'text',
@@ -342,6 +342,8 @@ const IdeaList = () => {
                 setMainData(res.data.idea_library)
 
 
+            }).catch(e => {
+                console.log("unable to get ideas")
             })
 
         }
@@ -459,10 +461,11 @@ const IdeaList = () => {
     const updateList = () => {
 
         LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
-            console.log("res:", res.data)
             setMainData(res.data.idea_library)
 
 
+        }).catch(e => {
+            console.log("unable to get ideas")
         })
 
 

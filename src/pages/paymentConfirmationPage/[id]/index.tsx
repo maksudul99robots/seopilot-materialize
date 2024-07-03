@@ -16,7 +16,7 @@ const PaymentConfirmationPage = () => {
             LoginRegistrationAPI.completeCalculation({ token: router.query.id }).then((result) => {
                 // console.log("result:", result)
                 LoginRegistrationAPI.updateUser({}).then(res => {
-                    console.log("res:", res)
+                    // console.log("res:", res)
                     auth.setUserDataWithToken(res)
                 }).catch(e => {
 

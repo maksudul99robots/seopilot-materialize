@@ -137,6 +137,8 @@ export default function ArticleIU(props: any) {
                     length_score: res.data.length_score ? res.data.length_score : 0
                 }
                 setScoreObj(x);
+            }).catch(e => {
+                console.log("unable to get")
             })
         }
     }, [props.id])

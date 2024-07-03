@@ -348,12 +348,16 @@ const TableServerSide = () => {
                         loadServerRows
                         setMainData(res.data);
 
+                    }).catch(e => {
+                        console.log("unable to get")
                     })
                 } else {
                     LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
                         loadServerRows
                         setMainData(res.data);
 
+                    }).catch(e => {
+                        console.log("unable to get")
                     })
                 }
 

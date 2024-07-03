@@ -102,6 +102,8 @@ const Team = () => {
 
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch((e: any) => {
+            console.log("error:", e)
         })
     }, [reRender])
     useEffect(() => {
@@ -256,6 +258,8 @@ const Team = () => {
                 setMainData(res.data);
                 // setTotal(res.data.total)
                 // setRows(loadServerRows(paginationModel.page, res.data.data))
+            }).catch(e => {
+                console.log("unable to get teams")
             })
         } else {
             Swal.fire({

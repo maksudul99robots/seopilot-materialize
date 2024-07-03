@@ -148,6 +148,8 @@ const AppBarContent = (props: Props) => {
       // setCurrentWorkspaceRole(res.data.workspaceRole)
       // setTotal(res.data.total)
       // setRows(loadServerRows(paginationModel.page, res.data.data))
+    }).catch(e => {
+      console.log("unable to get workspaces")
     })
   }, [])
   useEffect(() => {

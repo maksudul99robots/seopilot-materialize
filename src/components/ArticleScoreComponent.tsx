@@ -54,6 +54,8 @@ export default function AiScoreComponent(props: any) {
                 // if(res.status ==200){
                 //     setWordScore
                 // }
+            }).catch(e => {
+                console.log("unable to save")
             })
         }
 

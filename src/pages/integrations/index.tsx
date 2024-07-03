@@ -133,6 +133,8 @@ const TableServerSide = () => {
             setMainData(res.data);
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch(e => {
+            console.log("unable to get connections")
         })
 
     }, [reRender])
@@ -257,6 +259,8 @@ const TableServerSide = () => {
                 // console.log("data:", res.data)
                 // setTotal(res.data.total)
                 // setRows(loadServerRows(paginationModel.page, res.data.data))
+            }).catch(e => {
+                console.log("unable to get")
             })
 
             LoginRegistrationAPI.getMyTeamObject({}).then(res => {

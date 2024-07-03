@@ -297,6 +297,8 @@ const SelectConnects = (props: any) => {
           post_status: status,
           article_content: getHtmlFromDocument(props.html),
           status: 'success'
+        }).catch(e => {
+          console.log("unable to get")
         })
         Swal.fire({
           title: 'Success!',
@@ -313,6 +315,8 @@ const SelectConnects = (props: any) => {
           post_status: status,
           article_content: getHtmlFromDocument(props.html),
           status: 'error'
+        }).catch(e => {
+          console.log("unable to get")
         })
         Swal.fire({
           title: 'Error!',
@@ -334,6 +338,8 @@ const SelectConnects = (props: any) => {
         post_status: status,
         article_content: getHtmlFromDocument(props.html),
         status: 'error'
+      }).catch(e => {
+        console.log("unable to get")
       })
       Swal.fire({
         title: 'Error!',

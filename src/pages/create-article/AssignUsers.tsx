@@ -10,7 +10,7 @@ const AssignUsers = (props: any) => {
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
         }).catch(e => {
-            console.log("unable to get Folders")
+            console.log("unable to get teams")
         })
     }, [])
     return (

@@ -102,6 +102,8 @@ const ReWritenTxtTable = (props: any) => {
 
             setMainData(res.data);
 
+        }).catch(e => {
+            console.log("unable to get")
         })
         return () => {
 

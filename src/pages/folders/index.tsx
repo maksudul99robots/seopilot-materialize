@@ -161,6 +161,8 @@ const Folders = () => {
         LoginRegistrationAPI.getFolders({ get_count: true }).then(res => {
             loadServerRows
             setMainData(res.data);
+        }).catch(e => {
+            console.log("unable to get folders")
         })
     }, [])
     useEffect(() => {
@@ -229,6 +231,8 @@ const Folders = () => {
             LoginRegistrationAPI.getFolders({ get_count: true }).then(res => {
                 loadServerRows
                 setMainData(res.data);
+            }).catch(e => {
+                console.log("unable to get folders")
             })
         }
     }, [reloadData])

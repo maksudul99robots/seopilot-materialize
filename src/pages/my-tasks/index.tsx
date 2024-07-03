@@ -215,63 +215,6 @@ const MyTasks = () => {
             }
         }
     ]
-    const regenerateArticle = (id: number) => {
-        let retryID: boolean[] = [];
-        retryID[id] = true;
-
-        setRetryLoading(retryID)
-
-        LoginRegistrationAPI.regenerateArticle({ id: id }).then(res => {
-            retryID[id] = false;
-
-            setRetryLoading(retryID)
-            setTimeout(() => {
-
-                if (getArticleFromParams > 0) {
-                    LoginRegistrationAPI.getAIArticleHistory({ folder_id: existingFolder }).then(res => {
-                        loadServerRows
-                        setMainData(res.data);
-
-                    })
-                } else {
-                    LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                        loadServerRows
-                        setMainData(res.data);
-
-                    })
-                }
-
-                // LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
-                //     loadServerRows
-                //     setMainData(res.data);
-                //     // console.log("data:", res.data)
-                //     // setTotal(res.data.total)
-                //     // setRows(loadServerRows(paginationModel.page, res.data.data))
-                // })
-            }, 3000)
-
-
-            Swal.fire({
-                title: 'Success',
-                text: 'Article is Being Re-generated.',
-                icon: 'success',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            })
-        }).catch(e => {
-            retryID[id] = false;
-
-            setRetryLoading(retryID)
-            Swal.fire({
-                title: 'Error',
-                text: 'Unable to Re-generate.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
-            })
-        })
-    }
-
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
             const queryLowered = q.toLowerCase()

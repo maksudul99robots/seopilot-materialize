@@ -139,6 +139,8 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
     // calendarApi.refetchEvents()
     LoginRegistrationAPI.updateSchedule({ date_time: values.startDate, schedule_id: store.selectedEvent?.id }).then(res => {
       props.setUpdateValue(props.updateValue + 1)
+    }).catch(e => {
+      console.log("unable to update")
     })
 
     handleSidebarClose()
@@ -159,6 +161,8 @@ const AddEventSidebar = (props: AddEventSidebarType) => {
 
         LoginRegistrationAPI.deleteSchedule({ schedule_id: store.selectedEvent?.id }).then(res => {
           props.setUpdateValue(props.updateValue + 1)
+        }).catch(e => {
+          console.log("unable to delete")
         })
 
       }

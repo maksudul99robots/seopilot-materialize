@@ -286,6 +286,8 @@ const TableServerSide = () => {
                     // console.log("data:", res.data)
                     // setTotal(res.data.total)
                     // setRows(loadServerRows(paginationModel.page, res.data.data))
+                }).catch(e => {
+                    console.log("unable to get history")
                 })
             }, 3000)
 
