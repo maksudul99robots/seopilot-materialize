@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { KeywordSuggestions } from './KeywordSuggestions';
 import { SerpSuggestions } from './SerpSuggestions';
+import { PAA } from './PAA';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -22,10 +23,10 @@ function CustomTabPanel(props: TabPanelProps) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            style={{ padding: "0px" }}
+            style={{ padding: "0px !important;" }}
             {...other}
         >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+            {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
         </div>
     );
 }
@@ -51,7 +52,8 @@ export default function MetricsTabs(props: any) {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ fontSize: "12px !important;", padding: "0px" }}>
                     <Tab label="Terms" {...a11yProps(0)} sx={{ fontSize: "12px !important;" }} />
-                    <Tab label="Top 10 google searches" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
+                    <Tab label="Top 10 SERP" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
+                    <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} />
                     {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
                 </Tabs>
             </Box>
@@ -60,6 +62,9 @@ export default function MetricsTabs(props: any) {
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <SerpSuggestions serp={props.serp} />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+                <PAA paa={props.paa} />
             </CustomTabPanel>
         </Box>
     );

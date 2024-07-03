@@ -197,7 +197,7 @@ export default function ArticleIU(props: any) {
     }, [props.articleTopic])
 
     useEffect(() => {
-        if (props.keywordSuggestions.length > 0 && props.primaryKeyword) {
+        if (props.keywordSuggestions && props.keywordSuggestions.length > 0 && props.primaryKeyword) {
             getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount).then((res: any) => {
                 setTermScore(res)
             });
@@ -481,6 +481,7 @@ export default function ArticleIU(props: any) {
                             termScore={termScore}
                             linkScore={linkScore}
                             primaryKeyword={props.primaryKeyword}
+                            paa={props.paa}
                         />
 
                         {/* <Outlines outlines={outlines} /> */}

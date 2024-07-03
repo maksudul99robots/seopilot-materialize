@@ -122,7 +122,7 @@ const Metrics = (props: any) => {
 
 
                 </Box>
-                <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} primaryKeyword={props.primaryKeyword} />
+                <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} primaryKeyword={props.primaryKeyword} paa={props.paa} />
             </Box>
         </Box >
 

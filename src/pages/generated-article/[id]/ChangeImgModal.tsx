@@ -109,10 +109,10 @@ const ChangeImgModal = (props: any) => {
         setSelectedImg(null)
     }
 
-    useEffect(() => {
-        console.log(indices)
-        console.log(selectedImg)
-    }, [indices, selectedImg])
+    // useEffect(() => {
+    //     console.log(indices)
+    //     console.log(selectedImg)
+    // }, [indices, selectedImg])
 
     const getAllImages = async () => {
         LoginRegistrationAPI.getAllImages({ id: props.id }).then((responseImg: any) => {
@@ -156,7 +156,7 @@ const ChangeImgModal = (props: any) => {
         setLoading(true)
         LoginRegistrationAPI.regenerateFeaturedImg({ service: service, id: props.id, img_prompt: imgPrompt }).then((responseImg: any) => {
             setLoading(false)
-            console.log("responseImg:", responseImg.data)
+            // console.log("responseImg:", responseImg.data)
             if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
                 let x = JSON.parse(responseImg?.data?.featured_img)
                 // props.setImgService(responseImg.data.service)
@@ -188,7 +188,7 @@ const ChangeImgModal = (props: any) => {
 
     const changeImgIndex = () => {
         LoginRegistrationAPI.updateIndexFeaturedImg({ index: selectedImg.index, id: props.id, service: service }).then(res => {
-            console.log("res.data:", res.data)
+            // console.log("res.data:", res.data)
             // console.log("index:", index)
             if ((res.data.service == 'unsplash' || res.data.service == 'pexels')) {
                 // console.log("x:", x)
@@ -237,9 +237,6 @@ const ChangeImgModal = (props: any) => {
         })
     }
 
-    const changeImage = () => {
-
-    }
 
     const getAIImage = () => {
         setAiImgLoading(true)

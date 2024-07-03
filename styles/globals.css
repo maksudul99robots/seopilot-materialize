@@ -317,12 +317,11 @@ code[class*='language-'] {
   /* background-color: #fff; */
   /* transform: translate(-50%, -50%); */
 }
-
-#simple-tabpanel-0 .MuiBox-root{
-  padding: 0px;
-  width: 100%;
+.paa{
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease; 
+  padding: 3px;
 }
-#simple-tabpanel-1 .MuiBox-root{
-  padding: 0px;
-  width: 100%;
+.paa:hover{
+  background-color: #e2feed;
 }

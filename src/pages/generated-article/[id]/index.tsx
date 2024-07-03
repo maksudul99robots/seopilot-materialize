@@ -48,8 +48,9 @@ export default function Page() {
     const [primaryKeyword, setPrimaryKeywords] = useState<any>('')
     const [listicleOutlines, setListicleOutlines] = useState<any>([]);
     const [keywordSuggestionsTmp, setKeywordSuggestionsTmp] = useState<any>([]);
-    const [keywordSuggestions, setKeywordSuggestions] = useState<any>([]);
-    const [serp, setSERP] = useState<any>([]);
+    const [keywordSuggestions, setKeywordSuggestions] = useState<any>(null);
+    const [serp, setSERP] = useState<any>(null);
+    const [paa, setPaa] = useState<any>(null);
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
     const [status, setStatus] = useState<string>('');
@@ -65,13 +66,21 @@ export default function Page() {
             auth.updateArticleStatus(null)
         }
 
+
     }, [router.query.id])
 
     useEffect(() => {
-        if (keywordSuggestions.length == 0) {
+        if (!keywordSuggestions && router.query.id) {
             LoginRegistrationAPI.getKeywordSuggestions({ id: router.query.id }).then(res => {
                 setKeywordSuggestionsTmp(res.data.keywords)
                 setPrimaryKeywords(res.data.primary_keyword)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
+        if (!paa && articleTopic.length > 0) {
+            LoginRegistrationAPI.getPAA({ query: articleTopic }).then(res => {
+                setPaa(res.data)
             }).catch(e => {
                 console.log(e)
             })
@@ -80,12 +89,14 @@ export default function Page() {
     }, [articleTopic])
 
     useEffect(() => {
-        LoginRegistrationAPI.getSERP({ keywords: articleTopic }).then(res => {
+        if (!serp && articleTopic.length > 0) {
+            LoginRegistrationAPI.getSERP({ keywords: articleTopic }).then(res => {
+                setSERP(res.data.serp)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
 
-            setSERP(res.data.serp)
-        }).catch(e => {
-            console.log(e)
-        })
 
     }, [keywords])
 
@@ -94,8 +105,6 @@ export default function Page() {
         if (keywordSuggestionsTmp.length > 0) {
             countKeywords();
         }
-
-
 
     }, [html, keywordSuggestionsTmp])
 
@@ -548,6 +557,7 @@ export default function Page() {
                         keywordSuggestions={keywordSuggestions}
                         serp={serp}
                         primaryKeyword={primaryKeyword}
+                        paa={paa}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
