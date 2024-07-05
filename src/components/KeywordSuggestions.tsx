@@ -7,7 +7,7 @@ import Icon from "src/@core/components/icon"
 export const KeywordSuggestions = (props: any) => {
     // console.log("keywordSuggestions:", props.keywordSuggestions)
     return (
-        <Box sx={{ wordWrap: "break-word", whiteSpace: "normal", width: '300px', marginTop: "10px" }}>
+        <Box sx={{ wordWrap: "break-word", whiteSpace: "normal", width: '100%', marginTop: "10px" }}>
             {
                 props.primaryKeyword &&
                 <Box sx={{ marginBottom: "20px", display: "flex", alignItems: "center" }}>
