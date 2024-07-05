@@ -78,19 +78,19 @@ export default function Page() {
                 console.log(e)
             })
         }
-        if (!paa && articleTopic.length > 0) {
-            LoginRegistrationAPI.getPAA({ query: articleTopic }).then(res => {
-                setPaa(res.data)
-            }).catch(e => {
-                console.log(e)
-            })
-        }
+        // if (!paa && articleTopic.length > 0) {
+        //     LoginRegistrationAPI.getPAA({ query: articleTopic }).then(res => {
+        //         setPaa(res.data)
+        //     }).catch(e => {
+        //         console.log(e)
+        //     })
+        // }
 
     }, [articleTopic])
 
     useEffect(() => {
         if (!serp && articleTopic.length > 0) {
-            LoginRegistrationAPI.getSERP({ keywords: articleTopic }).then(res => {
+            LoginRegistrationAPI.getSERP({ keywords: articleTopic, article_id: router.query.id }).then(res => {
                 setSERP(res.data.serp)
             }).catch(e => {
                 console.log(e)

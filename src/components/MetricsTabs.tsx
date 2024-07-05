@@ -53,7 +53,7 @@ export default function MetricsTabs(props: any) {
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ fontSize: "12px !important;", padding: "0px" }}>
                     <Tab label="Terms" {...a11yProps(0)} sx={{ fontSize: "12px !important;" }} />
                     <Tab label="Top 10 SERP" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
-                    <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} />
+                    {/* <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} /> */}
                     {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
                 </Tabs>
             </Box>
@@ -63,9 +63,9 @@ export default function MetricsTabs(props: any) {
             <CustomTabPanel value={value} index={1}>
                 <SerpSuggestions serp={props.serp} />
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
+            {/* <CustomTabPanel value={value} index={2}>
                 <PAA paa={props.paa} />
-            </CustomTabPanel>
+            </CustomTabPanel> */}
         </Box>
     );
 }
