@@ -20,7 +20,8 @@ import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar'
 // ** Types Imports
 import { ThemeColor } from 'src/@core/layouts/types'
 import { DataGridRowType } from 'src/@fake-db/types'
-
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -42,6 +43,12 @@ type CustomRowType = {
 }
 
 type SortType = 'asc' | 'desc' | undefined | null
+
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
 
 // ** renders client column
 const renderClient = (params: GridRenderCellParams) => {
@@ -121,6 +128,36 @@ const TableServerSide = () => {
     const [integrationCount, setIntegrationCount] = useState<number>(0);
     const [teamObj, setTeamObj] = useState<any>(null);
     const [show, setShow] = useState<boolean>(false)
+    const [value, setValue] = useState(0);
+
+    function a11yProps(index: number) {
+        return {
+            id: `simple-tab-${index}`,
+            // sx: 'font-size:12px',
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+    function CustomTabPanel(props: TabPanelProps) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                style={{ padding: "0px !important;" }}
+                {...other}
+            >
+                {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
+            </div>
+        );
+    }
+
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -334,6 +371,9 @@ const TableServerSide = () => {
 
     useEffect(() => {
         setIntegrationCount(mainData.length)
+
+        console.log("mainData:", mainData)
+        console.log("rows:", rows)
     }, [mainData])
     const handleClose = () => {
 
@@ -342,7 +382,9 @@ const TableServerSide = () => {
 
 
     return (
-        <Box >
+
+
+        <>
             {
                 showAlert &&
                 //         <Alert severity='info' variant='standard' sx={{ marginBottom: "20px", fontSize: "16px", , width: "100%" }}>
@@ -386,51 +428,87 @@ const TableServerSide = () => {
                 <ReactPlayer url='https://vimeo.com/908440876/4a42c699f8?share=copy' controls style={{ height: "900", width: "506" }} />
             </Dialog>
 
+            <Card sx={{ width: '100%', }}>
+                {/* <Typography variant='body1'>Keywords</Typography> */}
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
+                        <Tab label="WordPress Connections" {...a11yProps(0)} sx={{}} />
+                        <Tab label="Google Search Console" {...a11yProps(1)} sx={{}} />
+                        {/* <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} /> */}
+                        {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
+                    </Tabs>
+                </Box>
+                <CustomTabPanel value={value} index={0}>
+                    <Box >
 
+                        <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%", marginTop: "20px" }}>
+                            <Box sx={{ margin: "20px" }}>
+                                <Typography variant='h6'>
+                                    WordPress Connections
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: "flex", alignItems: "center", marginRight: "15px" }}>
+                                <DialogAddCard reRender={reRender} setReRender={setReRender}
+                                    disabled={
+                                        (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
+                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
+                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
+                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
+                                            ? true : false
+                                    }
+                                />
+                            </Box>
+                        </Box>
 
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
-                <DialogAddCard reRender={reRender} setReRender={setReRender}
-                    disabled={
-                        (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
-                            ? true : false
-                    }
-                />
-            </Box>
-            <Card>
-                <DataGrid
-                    autoHeight
-                    pagination
-                    rows={rows}
-                    rowCount={total}
-                    columns={columns}
-                    // checkboxSelection
-                    rowSelection={false}
-                    sortingMode='server'
-                    paginationMode='server'
-                    pageSizeOptions={[50]}
-                    paginationModel={paginationModel}
-                    onSortModelChange={handleSortModel}
-                    slots={{ toolbar: ServerSideToolbar }}
-                    onPaginationModelChange={setPaginationModel}
-                    slotProps={{
-                        baseButton: {
-                            variant: 'outlined'
-                        },
-                        toolbar: {
-                            title: "WordPress Connections",
-                            value: searchValue,
-                            clearSearch: () => handleSearch(''),
-                            onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
-                        }
-                    }}
-                />
+                        <Card>
+
+                            <DataGrid
+                                autoHeight
+                                pagination
+                                rows={rows}
+                                rowCount={total}
+                                columns={columns}
+                                // checkboxSelection
+                                rowSelection={false}
+                                sortingMode='server'
+                                paginationMode='server'
+                                pageSizeOptions={[50]}
+                                paginationModel={paginationModel}
+                                onSortModelChange={handleSortModel}
+                                // slots={{ toolbar: ServerSideToolbar }}
+                                onPaginationModelChange={setPaginationModel}
+                            // slotProps={{
+                            //     baseButton: {
+                            //         variant: 'outlined'
+                            //     },
+                            //     toolbar: {
+                            //         title: "WordPress Connections",
+                            //         value: searchValue,
+                            //         clearSearch: () => handleSearch(''),
+                            //         onChange: (event: ChangeEvent<HTMLInputElement>) => handleSearch(event.target.value)
+                            //     }
+                            // }}
+                            />
+                        </Card>
+
+                    </Box >
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                    {/* <SerpSuggestions serp={props.serp} /> */}
+                    <GSCIntegrations />
+                </CustomTabPanel>
+                {/* <CustomTabPanel value={value} index={2}>
+                <PAA paa={props.paa} />
+            </CustomTabPanel> */}
             </Card>
-            {/* <GSCIntegrations /> */}
-        </Box >
+
+
+
+        </>
+
+
+
 
     )
 }

@@ -442,6 +442,18 @@ export const LoginRegistrationAPI = {
     async getDallEImg(data: any, url = "/download-dall-e-img", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getAllSites(data: any, url = "/gsc-sites", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async saveGoogleAccessToken(data: any, url = "/google-search-console-verify", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async addSites(data: any, url = "/gsc-add-site", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async addWebsiteAnalytics(data: any, url = "/gsc-add-website-analytics", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
