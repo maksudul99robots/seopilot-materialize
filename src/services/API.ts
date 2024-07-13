@@ -448,10 +448,16 @@ export const LoginRegistrationAPI = {
     async saveGoogleAccessToken(data: any, url = "/google-search-console-verify", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
-    async addSites(data: any, url = "/gsc-add-site", source = undefined) {
+    async addSite(data: any, url = "/gsc-add-site", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getSitesFromGSC(data: any, url = "/gsc-all-sites", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
     async addWebsiteAnalytics(data: any, url = "/gsc-add-website-analytics", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async deleteGSC(data: any, url = "/gsc-delete", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
 

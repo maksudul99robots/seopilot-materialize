@@ -371,9 +371,6 @@ const TableServerSide = () => {
 
     useEffect(() => {
         setIntegrationCount(mainData.length)
-
-        console.log("mainData:", mainData)
-        console.log("rows:", rows)
     }, [mainData])
     const handleClose = () => {
 
@@ -386,34 +383,21 @@ const TableServerSide = () => {
 
         <>
             {
-                showAlert &&
-                //         <Alert severity='info' variant='standard' sx={{ marginBottom: "20px", fontSize: "16px", , width: "100%" }}>
-                //     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                //         <p>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website.</p> <Button variant='outlined' onClick={e => {
-                //             setShow(true)
-                //         }} startIcon={<Icon icon="ph:video-thin" />} >
-                //             Watch Step-by-Step Instructions
-                //         </Button>
+                showAlert && value == 0 ?
 
-                //     </div>
-
-                // </Alert>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#DEF1F9", color: "#22B2E0", borderRadius: "10px", paddingX: "10px", marginBottom: "20px" }}>
-                    <p>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic", color: "#22B2E0" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website.</p> <Button variant='outlined' onClick={e => {
-                        setShow(true)
-                    }} startIcon={<Icon icon="ph:video-thin" />} >
-                        Watch Step-by-Step Instructions
-                    </Button>
-                </Box>
-                // <Box sx={{
-                //     backgroundColor: "#DEF1F9",
-                //     color:
-                // }}>
-
-                // </Box>
-
-
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#DEF1F9", color: "#22B2E0", borderRadius: "10px", paddingX: "10px", marginBottom: "20px" }}>
+                        <p>Review this <a href='https://seopilot.io/docs/connecting-wordpress-to-seopilot/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic", color: "#22B2E0" }} target='_blank'>Step By Step Guide to Connect a WordPress</a> Website and Publish an Article on Your Website.</p> <Button variant='outlined' onClick={e => {
+                            setShow(true)
+                        }} startIcon={<Icon icon="ph:video-thin" />} >
+                            Watch Step-by-Step Instructions
+                        </Button>
+                    </Box>
+                    : showAlert && value == 1 ?
+                        <Box sx={{ display: "flex", textAlign: "center", alignItems: "center", justifyContent: "space-between", backgroundColor: "#DEF1F9", color: "#22B2E0", borderRadius: "10px", paddingX: "10px", marginBottom: "20px" }}>
+                            <p style={{ width: "100%" }}>We use Google OAuth 2.0 to get access to your Google Search Console. The connected sites are used for analysis and internal linking.</p>
+                        </Box> : null
             }
+
 
             <Dialog
                 fullWidth

@@ -115,7 +115,7 @@ const ClusterIdea = () => {
     const [topic, setTopic] = useState<string>('');
     const [loading, setLoading] = useState(false)
     const [settings, setSettings] = useState<any>({})
-
+    const [allSites, setAllSites] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
 
@@ -224,7 +224,7 @@ const ClusterIdea = () => {
                         {/* {renderClient(params)} */}
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             {
-                                settings[row.id].status == 'completed' ?
+                                settings[row.id]?.status == 'completed' ?
                                     <Link style={{ textDecoration: "none" }} href={'/generated-article/' + settings[row.id].article_id}>
                                         <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, fontSize: "13px" }} title={row.topic}>
                                             {row.topic}
@@ -354,7 +354,7 @@ const ClusterIdea = () => {
                                     <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22", marginRight: "3px" }} href={'/generated-article/' + settings[row.id].article_id}>
                                         view
                                     </Button >
-                                    <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                    <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
                                 </>
 
                                 : settings[row.id].status == 'idea' ?
@@ -364,7 +364,7 @@ const ClusterIdea = () => {
                                         }} sx={{ fontSize: "10px", marginRight: "3px" }}>
                                             Write
                                         </Button >
-                                        <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                        <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
                                     </>
                                     : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
                                         <><Button variant='contained' size='medium' disabled onClick={() => {
@@ -372,7 +372,7 @@ const ClusterIdea = () => {
                                         }} sx={{ fontSize: "10px", marginRight: "3px", padding: "0px" }}>
                                             <Icon icon="line-md:loading-twotone-loop" style={{ height: "20px" }}></Icon>
                                         </Button >
-                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} />
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
                                         </> :
                                         <>
                                             <Button variant='contained' size='medium' sx={{ fontSize: "10px", marginRight: "3px" }} onClick={() => {
@@ -380,7 +380,7 @@ const ClusterIdea = () => {
                                             }}>
                                                 Retry
                                             </Button >
-                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} /></>
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} /></>
 
                         }
                     </Box>
@@ -435,6 +435,7 @@ const ClusterIdea = () => {
             extra_prompt: data.extra_prompt,
             img_prompt: data.citation,
             citation: data.citation,
+            no_of_citations: data.no_of_citations,
             folder_id: data.folder_id,
             idea_id: row.id
         }).
@@ -548,6 +549,31 @@ const ClusterIdea = () => {
 
     useEffect(() => {
         if (router.query.id) {
+            LoginRegistrationAPI.getAllSites({}).then(res => {
+                if (res.status == 200) {
+                    // console.log(res.data)
+                    setAllSites(res.data)
+                    // console.log(res.data[0])
+                    // if (res.data[0]) {
+                    //     setSelectedSite(res.data[0].id)
+                    // }
+                } else {
+
+                }
+            }).catch(e => {
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
+                })
+                // }else{}
+            })
             LoginRegistrationAPI.getIdeaList({ cluster_id: router.query.id }).then(res => {
                 // console.log("res:", res.data)
                 setTopic(res.data.topic)

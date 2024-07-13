@@ -17,6 +17,8 @@ import Icon from 'src/@core/components/icon'
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export default function ClusterDrawer(props: any) {
+
+    // console.log(props.allSites)
     const [state, setState] = React.useState({
         // top: false,
         // left: false,
@@ -103,6 +105,7 @@ export default function ClusterDrawer(props: any) {
                             settings={props.settings}
                             setSettings={props.setSettings}
                             handleChange={props.handleChange}
+                            allSites={props.allSites}
                         />
                     </Drawer>
                 </React.Fragment>

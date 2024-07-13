@@ -96,6 +96,7 @@ const IdeaList = () => {
     const auth = useAuth()
     const router = useRouter()
     const [resetDataset, setResetDataset] = useState<number>(0);
+    const [allSites, setAllSites] = useState<any>([]);
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -233,7 +234,9 @@ const IdeaList = () => {
                         <IdeaLibraryDrawer data={row}
                             idea_id={row.id}
                             updateList={updateList}
-                            isCreateIdea={false} />
+                            isCreateIdea={false}
+                            allSites={allSites}
+                        />
                         <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={e => {
                             submit(row)
                         }} sx={{ fontSize: "12px", padding: "5px", marginRight: "5px" }}>
@@ -272,6 +275,32 @@ const IdeaList = () => {
     useEffect(() => {
 
         if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+            LoginRegistrationAPI.getAllSites({}).then(res => {
+                if (res.status == 200) {
+                    // console.log(res.data)
+                    setAllSites(res.data)
+                    // console.log(res.data[0])
+                    // if (res.data[0]) {
+                    //     setSelectedSite(res.data[0].id)
+                    // }
+                } else {
+
+                }
+            }).catch(e => {
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
+                })
+                // }else{}
+            })
+
             LoginRegistrationAPI.getIdeasWithoutCluster({}).then(res => {
                 // console.log("res:", res.data)
                 setMainData(res.data.idea_library)

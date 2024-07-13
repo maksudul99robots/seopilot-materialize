@@ -223,6 +223,7 @@ export default function CreateArticleUI(props: any) {
     const [extraPrompt, setExtraPrompt] = useState<string>('')
     const [user, setUser] = useState(props?.data?.assign_user ? props?.data?.assign_user : auth.user?.id);
     const [dateTime, setDateTime] = useState<Date>(new Date());
+    const [internalLinking, setInternalLinking] = useState(props.settings[props.idea_id]?.internal_linking ? props.settings[props.idea_id]?.internal_linking : false);
     const handleClose = () => {
         setShow(false);
         // props.handleClose();
@@ -394,7 +395,8 @@ export default function CreateArticleUI(props: any) {
             idea_id: props.idea_id,
             folder_id: folder,
             assign_user: user,
-            due_date: dateTime
+            due_date: dateTime,
+            internal_linking: internalLinking
 
         }).then(res => {
             // if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
@@ -926,10 +928,10 @@ export default function CreateArticleUI(props: any) {
 
 
 
-                                <Grid item xs={12} className='add-icon-color'>
-                                    <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
-                                        <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} className='add-icon-color'>Advanced Settings</Typography>
-                                        {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
+                                <Grid item xs={12} >
+                                    <div style={{ display: "flex", alignItems: "center" }} >
+                                        <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} >Section Settings</Typography>
+
                                     </div>
 
                                 </Grid>
@@ -938,7 +940,7 @@ export default function CreateArticleUI(props: any) {
 
 
                                 {/* Additional Settings starts*/}
-                                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Grid item xs={12} sx={{ display: "flex" }}>
                                     <SwitchesCustomized label="Include Introduction" isChecked={introduction} onClick={() => setIntroduction(!introduction)} />
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -951,7 +953,7 @@ export default function CreateArticleUI(props: any) {
                                     </LightTooltip >
 
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Grid item xs={12} sx={{ display: "flex" }}>
                                     <SwitchesCustomized label="Include Conclusion" isChecked={conclusion} onClick={() => setConclusion(!conclusion)} />
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -964,7 +966,7 @@ export default function CreateArticleUI(props: any) {
                                     </LightTooltip >
 
                                 </Grid>
-                                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Grid item xs={12} sx={{ display: "flex" }}>
                                     <SwitchesCustomized label="Table of Contents (TOC)" isChecked={toc} onClick={() => setToc(!toc)} />
                                     <LightTooltip title={
                                         <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -980,7 +982,7 @@ export default function CreateArticleUI(props: any) {
 
                                 {
                                     articleType != 'listicle' &&
-                                    <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                    <Grid item xs={12} sx={{ display: "flex" }}>
                                         <SwitchesCustomized label="Include FAQ" isChecked={faq} onClick={() => setFaq(!faq)} />
                                         <LightTooltip title={
                                             <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1000,7 +1002,7 @@ export default function CreateArticleUI(props: any) {
 
                                 {
                                     articleType == "listicle" ?
-                                        <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
+                                        <Grid item xs={12} sx={{ display: "flex" }}>
                                             <SwitchesCustomized label="Number Each Listicle Item" isChecked={numberedItem} onClick={() => setNumberedItem(!numberedItem)} />
                                             <LightTooltip title={
                                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1015,67 +1017,9 @@ export default function CreateArticleUI(props: any) {
                                         : null
                                 }
 
-                                {
 
-                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o') &&
-                                    <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
-                                        <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
-                                        <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
-                                        <LightTooltip title={
-                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
-                                            </p>
-                                        } placement="top">
-                                            <div style={{ height: "100%" }}>
-                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                            </div>
-                                        </LightTooltip >
-
-                                    </Grid>
-                                }
-
-
-                                <Grid item xs={12} sx={{ display: showAdditionalSettings && citation ? "flex" : "none" }}>
-                                    <Box sx={{ width: "100%", display: showAdditionalSettings && citation ? "flex" : "none" }}>
-                                        <Grid item sm={6} xs={6}>
-                                            <FormControl size='medium' fullWidth>
-                                                <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
-                                                <Select
-                                                    fullWidth
-                                                    placeholder='Select Number of Citations'
-                                                    label='Select Number of Citations'
-                                                    labelId='Select Number of Citations'
-                                                    value={noOfCitations}
-                                                    onChange={e => {
-
-                                                        setNoOfCitations(e.target.value)
-
-                                                    }}
-                                                >
-
-                                                    <MenuItem value="1-10">Low (1-10)</MenuItem>
-                                                    <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
-                                                    <MenuItem value="20+">High (20+)</MenuItem>
-
-
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        {/* <LightTooltip title={
-                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                        System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
-                                    </p>
-                                } placement="top">
-                                    <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
-                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                    </div>
-                                </LightTooltip > */}
-                                    </Box>
-
-
-                                </Grid>
-                                <Grid item xs={12} sx={{ display: showAdditionalSettings ? "flex" : "none" }}>
-                                    <Box sx={{ width: "100%", display: showAdditionalSettings ? "flex" : "none" }}>
+                                <Grid item xs={12} sx={{ display: "flex" }}>
+                                    <Box sx={{ width: "100%", display: "flex" }}>
                                         <Grid item sm={6} xs={6}>
                                             <FormControl size='medium' fullWidth>
                                                 <InputLabel id='img-service'>Select Image Service</InputLabel>
@@ -1121,9 +1065,9 @@ export default function CreateArticleUI(props: any) {
                                 </Grid>
 
                                 {
-                                    showAdditionalSettings && (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
+                                    (imgService == 'dall-e-2' || imgService == 'dall-e-3') &&
                                     <>
-                                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: "flex" }}>
                                             Image Prompt for DALL-E*
                                             <LightTooltip title={
                                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1154,9 +1098,9 @@ export default function CreateArticleUI(props: any) {
 
                                 }
                                 {
-                                    articleType != 'listicle' && showAdditionalSettings &&
+                                    articleType != 'listicle' &&
                                     <>
-                                        <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                        <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: "flex" }}>
                                             Extra Section Prompt
                                             <LightTooltip title={
                                                 <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1189,9 +1133,120 @@ export default function CreateArticleUI(props: any) {
 
 
                                 {/* </Box> */}
+
+
                                 {
                                     articleType != 'listicle' &&
-                                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", display: showAdditionalSettings ? "flex" : "none" }}>
+                                    <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: "flex" }} onClick={() => {
+                                        const newArray = [...numberOfLinks];
+                                        newArray.push(1);
+                                        setNumberOfLinks(newArray);
+                                    }} startIcon={<Icon icon="gg:add" />}>
+                                        Add Another Link
+                                    </Button>
+                                }
+                                {/* Additional Settings ends*/}
+
+
+                            </Grid>
+                        </Card>
+
+                        <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
+                            <Grid item xs={12} sx={{ mb: 5 }}>
+                                <div style={{ display: "flex", alignItems: "center" }} >
+                                    <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} >Internal and External Linkings</Typography>
+                                </div>
+
+                            </Grid>
+                            <Grid container>
+
+                                {
+
+                                    (articleType !== "listicle") &&
+                                    <Grid item xs={12} sx={{ display: "flex" }}>
+                                        <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                        <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
+                                        <LightTooltip title={
+                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                                            </p>
+                                        } placement="top">
+                                            <div style={{ height: "100%" }}>
+                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                            </div>
+                                        </LightTooltip >
+
+                                    </Grid>
+                                }
+
+                                <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
+                                    <SwitchesCustomized label="Include Auto Internal Linking" isChecked={internalLinking} onClick={() => {
+                                        if (props.allSites.length > 0)
+                                            setInternalLinking(!internalLinking)
+                                        else
+                                            Swal.fire({
+                                                title: '',
+                                                html: '<p>You have not connected to GSC or You do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
+                                                icon: 'warning',
+                                                confirmButtonText: 'Close',
+                                                confirmButtonColor: "#2979FF"
+                                            })
+                                    }} />
+                                    <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
+                                    <LightTooltip title={
+                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                            You have to add your Google Search Console profile with Google OAuth 2.0. We will fetch your connected website information to add internal linking.
+                                        </p>
+                                    } placement="top">
+                                        <div style={{ height: "100%" }}>
+                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                        </div>
+                                    </LightTooltip >
+
+                                </Grid>
+                                <Grid item xs={12} sx={{ display: citation ? "flex" : "none", mt: 5 }}>
+                                    <Box sx={{ width: "100%", display: citation ? "flex" : "none" }}>
+                                        <Grid item sm={6} xs={6}>
+                                            <FormControl size='medium' fullWidth>
+                                                <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
+                                                <Select
+                                                    fullWidth
+                                                    placeholder='Select Number of Citations'
+                                                    label='Select Number of Citations'
+                                                    labelId='Select Number of Citations'
+                                                    value={noOfCitations}
+                                                    onChange={e => {
+
+                                                        setNoOfCitations(e.target.value)
+
+                                                    }}
+                                                >
+
+                                                    <MenuItem value="1-10">Low (1-10)</MenuItem>
+                                                    <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
+                                                    <MenuItem value="20+">High (20+)</MenuItem>
+
+
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        {/* <LightTooltip title={
+                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                        System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
+                                    </p>
+                                } placement="top">
+                                    <div style={{ height: "100%", display: "flex", alignItems: "center", marginLeft: "10px" }}>
+                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                    </div>
+                                </LightTooltip > */}
+                                    </Box>
+
+
+                                </Grid>
+
+                                {
+                                    articleType != 'listicle' &&
+                                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "0px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
                                         Links
                                         <LightTooltip title={
                                             <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
@@ -1207,59 +1262,59 @@ export default function CreateArticleUI(props: any) {
                                     </Typography>
                                 }
 
+                                <Grid container>
+                                    {
+                                        articleType != 'listicle' && numberOfLinks.map((link, index) => {
+                                            return (
+                                                <Grid container sx={{ mb: 3 }}>
+                                                    <Grid item sm={11} xs={11} sx={{ display: "block" }}>
+                                                        <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
+                                                            // console.log(e.target.value)
+                                                            const newArray = [...links];
+                                                            newArray[index] = e.target.value
+                                                            setLinks(newArray);
+                                                        }} InputProps={{
+                                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                                        }} />
+                                                    </Grid>
+                                                    <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start", pl: 1 }}>
+                                                        <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
+                                                            if (index != 0) {
+                                                                const newArray = [...numberOfLinks];
+                                                                newArray.splice(index, 1);
+                                                                setNumberOfLinks(newArray);
 
-                                {
-                                    articleType != 'listicle' && numberOfLinks.map((link, index) => {
-                                        return (
-                                            <>
-                                                <Grid item sm={11} xs={11} sx={{ display: showAdditionalSettings ? "block" : "none" }}>
-                                                    <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
-                                                        // console.log(e.target.value)
-                                                        const newArray = [...links];
-                                                        newArray[index] = e.target.value
-                                                        setLinks(newArray);
-                                                    }} InputProps={{
-                                                        startAdornment: <InputAdornment position="start"></InputAdornment>,
-                                                    }} />
+                                                                const newLinks = [...links];
+                                                                newLinks.splice(index, 1);
+                                                                setLinks(newLinks);
+                                                            }
+
+                                                        }} />
+
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item sm={1} sx={{ display: showAdditionalSettings ? "flex" : "none", alignItems: "center", justifyContent: "start" }}>
-                                                    <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
-                                                        if (index != 0) {
-                                                            const newArray = [...numberOfLinks];
-                                                            newArray.splice(index, 1);
-                                                            setNumberOfLinks(newArray);
 
-                                                            const newLinks = [...links];
-                                                            newLinks.splice(index, 1);
-                                                            setLinks(newLinks);
-                                                        }
-
-                                                    }} />
-
-                                                </Grid>
-                                            </>
-
-                                        )
-                                    })
+                                            )
+                                        })
 
 
-                                }
+                                    }
 
-                                {
-                                    articleType != 'listicle' &&
-                                    <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
-                                        const newArray = [...numberOfLinks];
-                                        newArray.push(1);
-                                        setNumberOfLinks(newArray);
-                                    }} startIcon={<Icon icon="gg:add" />}>
-                                        Add Another Link
-                                    </Button>
-                                }
-                                {/* Additional Settings ends*/}
+                                    {
+                                        articleType != 'listicle' &&
+                                        <Button variant='text' size="large" sx={{ mr: 2, ml: 0, p: 2, mt: 2, display: "flex" }} onClick={() => {
+                                            const newArray = [...numberOfLinks];
+                                            newArray.push(1);
+                                            setNumberOfLinks(newArray);
+                                        }} startIcon={<Icon icon="gg:add" />}>
+                                            Add Another Link
+                                        </Button>
+                                    }
+                                </Grid>
 
 
                             </Grid>
-                        </Card>
+                        </Card >
 
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                             <Grid container spacing={6}>

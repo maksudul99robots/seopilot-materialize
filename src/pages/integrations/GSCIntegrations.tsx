@@ -81,6 +81,9 @@ import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from 'next/navigation'
+import DeleteWordpressConnect from 'src/services/DeleteWordpressConnect'
+import SelectGSCSiteModal from 'src/services/SelectGSCSiteModal'
+import DeleteGSC from 'src/services/DeleteGSC'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -117,6 +120,28 @@ const GSCIntegrations = () => {
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('asc')
     const [rows, setRows] = useState<CustomRowType[]>([])
+    const [sites, setSites] = useState<any>([
+        {
+            "siteUrl": "sc-domain:pitchresponse.com",
+            "permissionLevel": "siteOwner"
+        },
+        {
+            "siteUrl": "sc-domain:rockethub.com",
+            "permissionLevel": "siteOwner"
+        },
+        {
+            "siteUrl": "sc-domain:99robots.com",
+            "permissionLevel": "siteOwner"
+        },
+        {
+            "siteUrl": "https://ampfluence.com/",
+            "permissionLevel": "siteOwner"
+        },
+        {
+            "siteUrl": "sc-domain:seopilot.io",
+            "permissionLevel": "siteOwner"
+        }
+    ])
     const [searchValue, setSearchValue] = useState<string>('')
     const [sortColumn, setSortColumn] = useState<string>('site')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
@@ -125,10 +150,13 @@ const GSCIntegrations = () => {
     const [showAlert, setShowAlert] = useState<boolean>(true);
     const [showDelete, setShowDelete] = useState<boolean>(false);
     const [showGSC, setShowGSC] = useState<boolean>(true);
+
     const auth = useAuth()
     const searchParams = useSearchParams()
 
     const [code, setCode] = useState<string | null>(searchParams.get('code'))
+
+    const [showSites, setShowSites] = useState<boolean>(false);
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
@@ -136,19 +164,34 @@ const GSCIntegrations = () => {
 
     useEffect(() => {
         if (code) {
-            LoginRegistrationAPI.saveGoogleAccessToken({ code: code }).then((res1) => {
-                LoginRegistrationAPI.addSites({}).then((res2) => {
-                    LoginRegistrationAPI.addWebsiteAnalytics({}).then(res3 => {
-                        setReRender(!reRender)
+            LoginRegistrationAPI.getAllSites({}).then(res0 => {
+                if (res0.data.length > 0) {
+                    // Swal.fire({
+                    //     title: 'Please Remove Existing GSC Site.',
+                    //     text: 'You have to remove your existing connected site to add new site.',
+                    //     icon: 'warning',
+                    //     confirmButtonText: 'OK',
+                    //     confirmButtonColor: "#2979FF"
+                    // })
+                } else {
+                    LoginRegistrationAPI.saveGoogleAccessToken({ code: code }).then((res1) => {
+                        LoginRegistrationAPI.getSitesFromGSC({}).then((res2) => {
+                            setSites(res2.data)
+                            setShowSites(true)
+                            // LoginRegistrationAPI.addWebsiteAnalytics({}).then(res3 => {
+                            //     setReRender(!reRender)
+                            // }).catch(e => {
+                            //     console.log("unable to get connections")
+                            // })
+                        }).catch(e => {
+                            console.log("unable to get connections")
+                        })
                     }).catch(e => {
                         console.log("unable to get connections")
                     })
-                }).catch(e => {
-                    console.log("unable to get connections")
-                })
-            }).catch(e => {
-                console.log("unable to get connections")
+                }
             })
+
         }
     }, [code])
 
@@ -179,7 +222,7 @@ const GSCIntegrations = () => {
 
     const columns: GridColDef[] = [
         {
-            flex: 0.25,
+            flex: 0.99,
             minWidth: 290,
             field: 'site_url',
             headerName: 'Sites',
@@ -195,6 +238,19 @@ const GSCIntegrations = () => {
                             </Typography>
                         </Box>
                     </Box>
+                )
+            }
+        },
+        {
+            flex: 0.1,
+            minWidth: 200,
+            field: 'action',
+            headerName: 'Action',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params
+
+                return (
+                    <DeleteGSC showDelete={true} reRender={reRender} setReRender={setReRender} />
                 )
             }
         }
@@ -277,8 +333,7 @@ const GSCIntegrations = () => {
     }
 
     useEffect(() => {
-        console.log("mainData:", mainData)
-        console.log("rows:", rows)
+
         if (mainData.length > 0) {
             setShowGSC(false)
 
@@ -341,6 +396,7 @@ const GSCIntegrations = () => {
                     </Button>
                 </Box>
             </Box>
+            <SelectGSCSiteModal sites={sites} showSites={showSites} reRender={reRender} setReRender={setReRender} setShowSites={setShowSites} />
 
             <Card sx={{ marginTop: "20px" }}>
                 <DataGrid
@@ -356,7 +412,7 @@ const GSCIntegrations = () => {
                     paginationModel={paginationModel}
                     onSortModelChange={handleSortModel}
                     onPaginationModelChange={setPaginationModel}
-
+                    rowSelection={false}
                 />
             </Card>
 

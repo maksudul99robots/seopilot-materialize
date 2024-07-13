@@ -110,6 +110,7 @@ export default function IdeaLibraryDrawer(props: any) {
                             updateList={props.updateList}
                             idea_id={props.idea_id}
                             data={props.data}
+                            allSites={props.allSites}
                         />
                     </Drawer>
                 </React.Fragment>
