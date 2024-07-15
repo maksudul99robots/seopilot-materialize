@@ -156,7 +156,29 @@ const TableServerSide = () => {
 
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+        if (auth?.user?.workspace_owner_info?.plan?.plan == "yearly - captain" ||
+            auth?.user?.workspace_owner_info?.plan?.plan == "monthly - captain" ||
+            auth?.user?.workspace_owner_info?.plan?.plan == "captain"
+        ) {
+            setValue(newValue);
+        } else {
+            Swal.fire({
+                title: '',
+                html: '<p>Please Upgrade to <strong>CAPTAIN</strong> plan to add your GSC integration</p>',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF",
+                showCancelButton: true,
+                cancelButtonText: 'CANCEL',
+                cancelButtonColor: "#ccc"
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    router.push("/plans")
+                }
+                // console.log(res)
+            })
+        }
+
     };
 
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
@@ -417,7 +439,15 @@ const TableServerSide = () => {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
                         <Tab label="WordPress Connections" {...a11yProps(0)} sx={{}} />
-                        <Tab label="Google Search Console" {...a11yProps(1)} sx={{}} />
+                        <LightTooltip title={
+                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+
+                                Google Search Console is a powerful tool for enhancing your SEO strategy. It helps you optimize internal linking, analyze keywords, and find better keyword suggestions. Using GSC with SEO Pilot will ensure your articles are perfectly optimized for search engines.
+                            </p>
+                        } placement="top">
+                            <Tab label="Google Search Console" {...a11yProps(1)} sx={{}} />
+                        </LightTooltip >
+
                         {/* <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} /> */}
                         {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
                     </Tabs>
