@@ -55,14 +55,16 @@ const SelectGSCSiteModal = (props: any) => {
     setSelectedSite(props?.sites[0]?.siteUrl)
   }, [props.sites])
 
-  const handleClose = () => {
+  const handleClose = (event: any = null, reason: any = null) => {
+    if (reason && reason === "backdropClick")
+      return;
     props.setShowSites(false)
   }
   const handleSubmit = () => {
     LoginRegistrationAPI.addSite({ site_url: selectedSite }).then(res => {
       LoginRegistrationAPI.addWebsiteAnalytics({}).then(res3 => {
         props.setReRender(!props.reRender);
-        handleClose()
+        props.setShowSites(false)
       }).catch(e => {
         console.log("unable to get connections")
       })
