@@ -11,8 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import CreateArticleUI from './CreateArticleUI';
-import { MenuItem } from '@mui/material';
-import Icon from 'src/@core/components/icon'
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -97,6 +97,18 @@ export default function ClusterDrawer(props: any) {
                         open={state[anchor]}
                         onClose={toggleDrawer(anchor, false)}
                     >
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                            pauseOnHover
+                            theme="light"
+                        />
                         <CreateArticleUI
                             toggleDrawer={closeDrawer}
                             isCreateIdea={props.isCreateIdea}

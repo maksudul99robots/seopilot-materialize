@@ -246,6 +246,8 @@ const GSCIntegrations = () => {
             minWidth: 200,
             field: 'action',
             headerName: 'Action',
+            disableColumnMenu: true,
+            sortable: false,
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
@@ -413,6 +415,7 @@ const GSCIntegrations = () => {
                     onSortModelChange={handleSortModel}
                     onPaginationModelChange={setPaginationModel}
                     rowSelection={false}
+
                 />
             </Card>
 

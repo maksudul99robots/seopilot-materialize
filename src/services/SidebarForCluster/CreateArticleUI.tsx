@@ -73,6 +73,7 @@ import { getDateTime } from 'src/services/DateTimeFormatter';
 import GetCountryList from 'src/pages/create-article/CountryList';
 import Folders from 'src/pages/create-article/Folders';
 import AssignUsers from 'src/pages/create-article/AssignUsers';
+import { toast } from 'react-toastify';
 
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
@@ -284,6 +285,7 @@ export default function CreateArticleUI(props: any) {
         props.handleChange(props.idea_id, citation, 'citation')
         props.handleChange(props.idea_id, noOfCitations, 'no_of_citations')
         props.handleChange(props.idea_id, folder, 'folder_id')
+        props.handleChange(props.idea_id, internalLinking, 'internal_linking')
         // props.handleChange(props.idea_id, 'idea', 'status')
 
         LoginRegistrationAPI.saveIdeaLibrarySettings({
@@ -1049,13 +1051,14 @@ export default function CreateArticleUI(props: any) {
                                         if (props.allSites.length > 0)
                                             setInternalLinking(!internalLinking)
                                         else
-                                            Swal.fire({
-                                                title: '',
-                                                html: '<p>You have not connected to GSC or You do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
-                                                icon: 'warning',
-                                                confirmButtonText: 'Close',
-                                                confirmButtonColor: "#2979FF"
-                                            })
+                                            toast('You have not connected GSC or you do not have any website added to your GSC.', { hideProgressBar: true, autoClose: 2000, type: 'error' })
+                                        // Swal.fire({
+                                        //     title: '',
+                                        //     html: '<p>You have not connected GSC or you do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
+                                        //     icon: 'warning',
+                                        //     confirmButtonText: 'Close',
+                                        //     confirmButtonColor: "#2979FF"
+                                        // })
                                     }} />
                                     <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
                                     <LightTooltip title={

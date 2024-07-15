@@ -48,11 +48,11 @@ const SelectGSCSiteModal = (props: any) => {
   const [focus, setFocus] = useState<Focused | undefined>()
   // const [expiry, setExpiry] = useState<string | number>('')
   const [show, setShow] = useState<boolean>(props.showSites)
-  const [selectedSite, setSelectedSite] = useState<any>(props.sites[0] ? props.sites[0].siteUrl : '')
+  const [selectedSite, setSelectedSite] = useState<any>(props.sites[0] ? props.sites[0]?.siteUrl : '')
   const handleBlur = () => setFocus(undefined)
 
   useEffect(() => {
-    setSelectedSite(props.sites[0].siteUrl)
+    setSelectedSite(props?.sites[0]?.siteUrl)
   }, [props.sites])
 
   const handleClose = () => {
@@ -109,30 +109,38 @@ const SelectGSCSiteModal = (props: any) => {
             </Typography>
             {/* <Typography variant='body2'>Send Article to WordPress</Typography> */}
           </Box>
-          <FormControl fullWidth sx={{
-            width: "100%", marginTop: "20px"
-          }}>
-            <InputLabel id='address-select'>Select a Website Domain</InputLabel>
-            <Select
-              fullWidth
-              placeholder='Select a Website Domain'
-              label='Select a Website Domain'
-              labelId='address-select'
-              value={selectedSite}
-              onChange={e => {
-                setSelectedSite(e.target.value)
-              }}
-            >
-              {
-                props.sites.map((c: any, i: any) => {
-                  return (
-                    <MenuItem key={i} value={c.siteUrl}>{c.siteUrl}</MenuItem>
-                  )
-                })
+          {
+            props.sites && props.sites.length > 0 ?
+              <FormControl fullWidth sx={{
+                width: "100%", marginTop: "20px"
+              }}>
+                <InputLabel id='address-select'>Select a Website Domain</InputLabel>
+                <Select
+                  fullWidth
+                  placeholder='Select a Website Domain'
+                  label='Select a Website Domain'
+                  labelId='address-select'
+                  value={selectedSite}
+                  onChange={e => {
+                    setSelectedSite(e.target.value)
+                  }}
+                >
+                  {
+                    props.sites?.map((c: any, i: any) => {
+                      return (
+                        <MenuItem key={i} value={c.siteUrl}>{c.siteUrl}</MenuItem>
+                      )
+                    })
 
-              }
-            </Select>
-          </FormControl>
+                  }
+                </Select>
+              </FormControl>
+              :
+              <Typography variant='h6' sx={{ textAlign: "center" }}>
+                You do not have any site added in your email
+              </Typography>
+          }
+
         </DialogContent>
         <DialogActions
           sx={{
@@ -141,12 +149,12 @@ const SelectGSCSiteModal = (props: any) => {
             pb: theme => [`${theme.spacing(8)} !important`, `${theme.spacing(12.5)} !important`]
           }}
         >
-          <Button variant='contained' sx={{ mr: 2 }} onClick={handleSubmit}>
+          <Button variant='contained' sx={{ mr: 0 }} onClick={handleSubmit} disabled={props.sites && props.sites.length == 0}>
             Add
           </Button>
-          <Button variant='outlined' color='secondary' onClick={handleClose}>
+          {/* <Button variant='outlined' color='secondary' onClick={handleClose}>
             Cancel
-          </Button>
+          </Button> */}
         </DialogActions>
       </Dialog>
     </>

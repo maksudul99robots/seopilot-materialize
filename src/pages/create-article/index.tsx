@@ -323,6 +323,9 @@ export default function CreateArticle(props: any) {
                     if (res.data.no_of_citations) {
                         setNoOfCitations(res.data.no_of_citations)
                     }
+                    if (res.data.internal_linking) {
+                        setInternalLinking(res.data.internal_linking)
+                    }
                     // }
                 }
             }).catch(e => {
@@ -1509,7 +1512,7 @@ export default function CreateArticle(props: any) {
                                         else
                                             Swal.fire({
                                                 title: '',
-                                                html: '<p>You have not connected to GSC or You do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
+                                                html: '<p>You have not connected GSC or you do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
                                                 icon: 'warning',
                                                 confirmButtonText: 'Close',
                                                 confirmButtonColor: "#2979FF"

@@ -530,7 +530,8 @@ const ClusterIdea = () => {
                         folder_id: il.folder_id,
                         assign_user: il.assign_user,
                         due_date: il.due_date,
-                        article_id: il.article_id
+                        article_id: il.article_id,
+                        internal_linking: il.internal_linking
                     }
                     if (i == res.data.idea_library.length - 1) {
                         setSettings(x);
@@ -608,7 +609,8 @@ const ClusterIdea = () => {
                             status: il.status,
                             folder_id: il.folder_id,
                             assign_user: il.assign_user,
-                            due_date: il.due_date
+                            due_date: il.due_date,
+                            internal_linking: il.internal_linking
                         }
                         if (i == res.data.idea_library.length - 1) {
                             setSettings(x);

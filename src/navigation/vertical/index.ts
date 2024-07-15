@@ -126,7 +126,8 @@ const navigation = (): VerticalNavItemsType | any => {
   if (auth?.user?.workspace_owner_info?.plan?.plan == "yearly - passenger" ||
     auth?.user?.workspace_owner_info?.plan?.plan == "monthly - passenger" ||
     auth?.user?.workspace_owner_info?.plan?.plan == "passenger" ||
-    auth?.user?.workspace_owner_info?.plan?.plan == "extension_only"
+    auth?.user?.workspace_owner_info?.plan?.plan == "extension_only" ||
+    auth?.user?.workspace_owner_info?.plan?.plan == "free"
   ) {
     menus =
       [
