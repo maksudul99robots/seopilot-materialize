@@ -346,7 +346,7 @@ const Team = () => {
                 <InviteTeamMember
                     reRender={reRender} setReRender={setReRender}
                     disabled={
-                        !canCreate
+                        currentWorkspaceRole == 'member'
                     }
 
                 />

@@ -91,7 +91,7 @@ const InviteTeamMember = (props: any) => {
     LoginRegistrationAPI.inviteToTeam({ role, email }).then(res => {
       props.setReRender(!props.reRender);
       setLoading(false);
-      // if (res.data == "The email is added to the team.") {
+      // if (res.status == 203) {
       //   Swal.fire({
       //     title: 'Success!',
       //     text: 'The email is added to the team.',
@@ -101,9 +101,9 @@ const InviteTeamMember = (props: any) => {
       //   })
       // } else {
       Swal.fire({
-        title: 'Success!',
+        title: res.status == 203 ? 'Sorry' : 'Success!',
         text: res.data,
-        icon: 'success',
+        icon: res.status == 203 ? 'warning' : 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
