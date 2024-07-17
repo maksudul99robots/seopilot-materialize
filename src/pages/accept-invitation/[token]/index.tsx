@@ -103,31 +103,34 @@ const CreateAccountInvite = () => {
     const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
 
     useEffect(() => {
-        // console.log(router.query.token)
-
-        if (auth.user) {
-            // console.log("removing.....")
-            auth.removeStorageAndReload()
-        } else {
-            if (router.query.token?.length && router.query.token.length > 0) {
-                LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
-                    // console.log(res.data)
-                    setEmail(res.data.email)
-                    setIsVerified(true)
-                }).catch(e => {
-                    console.log(e)
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Invalid Invitation Code',
-                        icon: 'error',
-                        confirmButtonText: 'Close',
-                        confirmButtonColor: "#2979FF"
-                    }).then(() => {
-                        router.push('/')
-                    })
+        // if (auth.user) {
+        //     // console.log("removing.....")
+        //     auth.removeStorageAndReload()
+        // } else {
+        if (router.query.token?.length && router.query.token.length > 0) {
+            console.log("calline.....:", router.query.token)
+            LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
+                console.log(res.data)
+                setEmail(res.data.email)
+                setIsVerified(true)
+                if (res.data.user_state == 'existing') {
+                    // auth.removeStorageAndReload()
+                    router.push('/go-to-login-page')
+                }
+            }).catch(e => {
+                console.log(e)
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid Invitation Code',
+                    icon: 'error',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push('/')
                 })
-            }
+            })
         }
+        // }
 
 
     }, [router.query.token])
@@ -291,8 +294,8 @@ const CreateAccountInvite = () => {
 
 CreateAccountInvite.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
-// CreateAccountInvite.authGuard = false
-CreateAccountInvite.guestGuard = true
+CreateAccountInvite.authGuard = false
+CreateAccountInvite.guestGuard = false
 
 
 export default CreateAccountInvite

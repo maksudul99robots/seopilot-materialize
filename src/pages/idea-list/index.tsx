@@ -274,7 +274,23 @@ const IdeaList = () => {
 
     useEffect(() => {
 
-        if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getAIModels({}).then(res => {
+            }).catch(e => {
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
+                })
+                // }else{}
+            })
+
             LoginRegistrationAPI.getAllSites({}).then(res => {
                 if (res.status == 200) {
                     // console.log(res.data)

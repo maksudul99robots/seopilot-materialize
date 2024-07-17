@@ -233,7 +233,12 @@ const AddApiKey = () => {
 
 
                             </Box>
-
+                            <Typography variant='subtitle2' sx={{ mb: 0, mt: 0, display: "flex", fontSize: "12px" }}>
+                                By default this API key will be added for all the workspaces.
+                            </Typography>
+                            <Typography variant='subtitle2' sx={{ mb: 2, mt: 0, display: "flex", fontSize: "12px" }}>
+                                NOTE: You can edit/change the API Key for any individual workspace at any time.
+                            </Typography>
 
 
                         </Grid>

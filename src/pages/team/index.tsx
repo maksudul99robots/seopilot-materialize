@@ -88,6 +88,7 @@ const Team = () => {
     const [showDelete, setShowDelete] = useState<boolean>(false);
     const [teamMEmberCount, setTeamMemberCount] = useState<number>(1);
     const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
+    const [canCreate, setCanCreate] = useState<boolean>(false);
     const auth = useAuth()
     const router = useRouter()
 
@@ -270,6 +271,14 @@ const Team = () => {
                 confirmButtonColor: "#2979FF"
             })
         }
+
+        LoginRegistrationAPI.canAddTeamMembers({}).then(res => {
+            setCanCreate(res.data)
+            // setTotal(res.data.total)
+            // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch(e => {
+            console.log("unable to get workspaces")
+        })
     }, [])
 
     const fetchTableData = (useCallback(
@@ -326,13 +335,7 @@ const Team = () => {
                 <InviteTeamMember
                     reRender={reRender} setReRender={setReRender}
                     disabled={
-                        currentWorkspaceRole == 'member' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && teamMEmberCount > 4) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && teamMEmberCount > 24)
-                            ? true : false
+                        !canCreate
                     }
 
                 />

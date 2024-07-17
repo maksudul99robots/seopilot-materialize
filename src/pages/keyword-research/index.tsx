@@ -211,6 +211,22 @@ const IdeaList = () => {
     useEffect(() => {
 
         if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+            LoginRegistrationAPI.getAIModels({}).then(res => {
+            }).catch(e => {
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
+                })
+                // }else{}
+            })
+
             LoginRegistrationAPI.getPrimaryResearch({}).then(res => {
                 // console.log("res:", res.data)
                 setMainData(res.data)

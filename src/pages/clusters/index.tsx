@@ -123,6 +123,10 @@ const Clusters = () => {
         }
     }, [auth?.user?.plan])
 
+    useEffect(() => {
+
+    }, [])
+
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
@@ -242,7 +246,24 @@ const Clusters = () => {
 
     useEffect(() => {
 
-        if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
+        if (auth.user?.is_active) {
+
+            LoginRegistrationAPI.getAIModels({}).then(res => {
+            }).catch(e => {
+                console.log(e);
+                // if (e?.response?.status == 401) {
+                Swal.fire({
+                    title: 'Error',
+                    text: e.response.data,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: "#2979FF"
+                }).then(() => {
+                    router.push("/add-apikey")
+                })
+                // }else{}
+            })
+
             LoginRegistrationAPI.getClusters({}).then(res => {
                 // console.log("res:", res.data)
                 setMainData(res.data)
@@ -257,8 +278,6 @@ const Clusters = () => {
                         // input: 'text',
                         // inputLabel: 'Please try again later.',
                         confirmButtonColor: "#2979FF"
-                    }).then(() => {
-                        router.push('/add-apikey')
                     })
                 } else {
                     Swal.fire({

@@ -460,6 +460,12 @@ export const LoginRegistrationAPI = {
     async deleteGSC(data: any, url = "/gsc-delete", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async canCreateWorkspace(data: any, url = "/can-create-workspace", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async canAddTeamMembers(data: any, url = "/can-add-team-member", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

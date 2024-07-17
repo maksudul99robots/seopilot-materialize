@@ -104,8 +104,7 @@ const Workspaces = () => {
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
     const [reRender, setReRender] = useState<any>([]);
-    const [showEdit, setShowEdit] = useState<boolean>(false);
-    const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [canCreate, setCanCreate] = useState<boolean>(false);
     const [workspaceCount, setWorkspaceCount] = useState<number>(1);
     const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const auth = useAuth()
@@ -266,6 +265,14 @@ const Workspaces = () => {
             })
 
         }
+        LoginRegistrationAPI.canCreateWorkspace({}).then(res => {
+            setCanCreate(res.data)
+            // setTotal(res.data.total)
+            // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch(e => {
+            console.log("unable to get workspaces")
+        })
+
         // if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
         //     Swal.fire({
         //         title: 'Error!',
@@ -332,13 +339,16 @@ const Workspaces = () => {
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 <CreateWorkspace reRender={reRender} setReRender={setReRender}
                     disabled={
-                        currentWorkspaceRole == 'member' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
-                            auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && workspaceCount > 4) ||
-                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && workspaceCount > 24)
-                            ? true : false} />
+                        // currentWorkspaceRole == 'member' ||
+                        //     auth?.user?.workspace_owner_info?.plan?.plan == 'free' ||
+                        //     auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' ||
+                        //     auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ||
+                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && workspaceCount > 4) ||
+                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && workspaceCount > 24)
+                        //     ? true : false}
+                        !canCreate
+                    }
+                />
             </Box>
             <Card>
                 <DataGrid

@@ -91,14 +91,24 @@ const InviteTeamMember = (props: any) => {
     LoginRegistrationAPI.inviteToTeam({ role, email }).then(res => {
       props.setReRender(!props.reRender);
       setLoading(false);
-
+      // if (res.data == "The email is added to the team.") {
+      //   Swal.fire({
+      //     title: 'Success!',
+      //     text: 'The email is added to the team.',
+      //     icon: 'success',
+      //     confirmButtonText: 'OK',
+      //     confirmButtonColor: "#2979FF"
+      //   })
+      // } else {
       Swal.fire({
         title: 'Success!',
-        text: 'An Invitation Mail is Sent',
+        text: res.data,
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       })
+      // }
+
     }).catch(e => {
       setLoading(false);
       console.log(e)
@@ -140,8 +150,11 @@ const InviteTeamMember = (props: any) => {
             <Icon icon='mdi:close' />
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
-            <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
+            <Typography variant='h5' sx={{ mb: 3, lineHeight: '' }}>
               Invite a Team Member to Your Workspace
+            </Typography>
+            <Typography variant='subtitle2' sx={{ mb: 3, lineHeight: '' }}>
+              Existing team members of the owner's other workspaces can be added without email verification
             </Typography>
           </Box>
           <Grid container spacing={6}>
@@ -197,7 +210,7 @@ const InviteTeamMember = (props: any) => {
             onClick={handleSubmit}
             disabled={loading || !isEmailValid}
             startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : <Icon icon="bi:send" />}>
-            Send Invitation Email
+            Send Invitation
           </Button>
           <Button variant='outlined' color='secondary' onClick={handleClose}>
             Cancel
