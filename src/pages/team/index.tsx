@@ -97,9 +97,20 @@ const Team = () => {
     }
 
     useEffect(() => {
+
+        LoginRegistrationAPI.canAddTeamMembers({}).then(res => {
+            setCanCreate(res.data)
+            // setTotal(res.data.total)
+            // setRows(loadServerRows(paginationModel.page, res.data.data))
+        }).catch(e => {
+            console.log("unable to get workspaces")
+        })
+
         LoginRegistrationAPI.getTeam({}).then(res => {
             loadServerRows
             setMainData(res.data);
+
+
 
             // setTotal(res.data.total)
             // setRows(loadServerRows(paginationModel.page, res.data.data))
