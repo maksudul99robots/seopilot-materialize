@@ -829,7 +829,7 @@ const SelectConnects = (props: any) => {
                 minDate={new Date()}
                 showTimeSelect={true}
                 dateFormat={'MM-dd-yyyy hh:mm a'}
-                customInput={<PickersComponent label='Schadule date' registername='Schadule date' />}
+                customInput={<PickersComponent label='Schedule date' registername='Schedule date' />}
                 onChange={(date: Date) => {
                   setDateTime(date)
                   console.log("date:", date)

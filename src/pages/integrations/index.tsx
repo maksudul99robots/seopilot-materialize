@@ -241,26 +241,26 @@ const TableServerSide = () => {
                 )
             }
         },
-        {
-            flex: 0.25,
-            minWidth: 290,
-            field: 'password',
-            headerName: 'App Password',
-            renderCell: (params: GridRenderCellParams) => {
-                const { row } = params
+        // {
+        //     flex: 0.25,
+        //     minWidth: 290,
+        //     field: 'password',
+        //     headerName: 'App Password',
+        //     renderCell: (params: GridRenderCellParams) => {
+        //         const { row } = params
 
-                return (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row.password}
-                            </Typography>
-                        </Box>
-                    </Box>
-                )
-            }
-        },
+        //         return (
+        //             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        //                 {/* {renderClient(params)} */}
+        //                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        //                     <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+        //                         {row.password}
+        //                     </Typography>
+        //                 </Box>
+        //             </Box>
+        //         )
+        //     }
+        // },
         {
             flex: 0.175,
             type: 'date',
@@ -464,12 +464,14 @@ const TableServerSide = () => {
                             <Box sx={{ display: "flex", alignItems: "center", marginRight: "15px" }}>
                                 <DialogAddCard reRender={reRender} setReRender={setReRender}
                                     disabled={
-                                        (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
-                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
-                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
-                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
-                                            (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
-                                            ? true : false
+                                        // (teamObj?.role !== 'owner' && teamObj?.role !== 'admin') || ((auth?.user?.workspace_owner_info?.plan?.plan == 'free' && integrationCount > 0) ||
+                                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only' && integrationCount > 0) ||
+                                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' && integrationCount > 0) ||
+                                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'copilot' && integrationCount > 4) ||
+                                        //     (auth?.user?.workspace_owner_info?.plan?.plan == 'captain' && integrationCount > 24))
+                                        //     ? true : false
+
+                                        mainData?.length != 0
                                     }
                                 />
                             </Box>
