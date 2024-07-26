@@ -337,7 +337,7 @@ export default function CreateArticle(props: any) {
 
     useEffect(() => {
 
-        if (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o') {
+        if (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini') {
 
         } else {
             setCitation(false)
@@ -969,6 +969,7 @@ export default function CreateArticle(props: any) {
                                             }}
                                         >
                                             <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                                            <MenuItem value='gpt-4o-mini'>GPT-4o mini</MenuItem>
                                             <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
                                             <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                             <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
