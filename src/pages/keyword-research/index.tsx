@@ -119,6 +119,8 @@ const IdeaList = () => {
     const auth = useAuth()
     const router = useRouter()
     const [resetDataset, setResetDataset] = useState<number>(0);
+    const [hasOpenAiKey, setHasOpenAiKey] = useState('');
+    const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
 
     useEffect(() => {
         if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
@@ -211,20 +213,35 @@ const IdeaList = () => {
     useEffect(() => {
 
         if (auth.user?.is_active && auth?.user?.workspace_owner_info?.plan?.plan != 'free') {
-            LoginRegistrationAPI.getAIModels({}).then(res => {
+            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    setHasOpenAiKey('yes')
+                } else {
+                    setHasOpenAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
             }).catch(e => {
-                console.log(e);
-                // if (e?.response?.status == 401) {
-                Swal.fire({
-                    title: 'Error',
-                    text: e.response.data,
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push("/add-apikey")
-                })
-                // }else{}
+                // console.log(e);
+                setHasOpenAiKey('no')
+            })
+
+            LoginRegistrationAPI.getClaudeAPIKey({}).then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    // setApiKey(res.data.apikey)
+                    setHasClaudeAiKey('yes')
+                } else {
+                    // setApiKey('none')
+                    setHasClaudeAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                // console.log(e);
+                // setApiKey('none')
+                setHasClaudeAiKey('no')
             })
 
             LoginRegistrationAPI.getPrimaryResearch({}).then(res => {
@@ -260,6 +277,21 @@ const IdeaList = () => {
         }
 
     }, [])
+
+    useEffect(() => {
+        console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
+        if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please Add API Key',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
+            }).then(() => {
+                router.push("/add-apikey")
+            })
+        }
+    }, [hasClaudeAiKey, hasOpenAiKey])
 
     useEffect(() => {
 

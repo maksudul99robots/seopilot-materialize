@@ -21,6 +21,18 @@ import Icon from "src/@core/components/icon";
 import ReactPlayer from "react-player";
 import { width } from "@mui/system";
 
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import OpenAiApiKey from "./OpenAiApiKey";
+import ClaudeAiApiKey from "./ClaudeAiApiKey";
+
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
+
+
 interface State {
     password: string
     showPassword: boolean
@@ -59,6 +71,8 @@ const AddApiKey = () => {
     const [show, setShow] = useState<boolean>(false)
     const auth = useAuth();
     const router = useRouter()
+    const [value, setValue] = useState(0);
+    const [claudeApikey, setNewClaudeApikey] = useState('')
     // const formattedString = originalString.substring(0, 10) + "*".repeat(originalString.length - 15) + originalString.slice(-5);
     useEffect(() => {
         if (auth.user?.is_active) {
@@ -76,6 +90,8 @@ const AddApiKey = () => {
             }).catch(e => {
                 console.log(e)
             })
+
+
         } else {
             Swal.fire({
                 title: 'Check Your Email',
@@ -182,84 +198,91 @@ const AddApiKey = () => {
         setShow(false)
     }
 
+    function a11yProps(index: number) {
+        return {
+            id: `simple-tab-${index}`,
+            // sx: 'font-size:12px',
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+    function CustomTabPanel(props: TabPanelProps) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                style={{ padding: "0px !important;" }}
+                {...other}
+            >
+                {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
+            </div>
+        );
+    }
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        // if (auth?.user?.workspace_owner_info?.plan?.plan == "yearly - captain" ||
+        //     auth?.user?.workspace_owner_info?.plan?.plan == "monthly - captain" ||
+        //     auth?.user?.workspace_owner_info?.plan?.plan == "captain"
+        // ) {
+        setValue(newValue);
+        // } else {
+        //     Swal.fire({
+        //         title: '',
+        //         html: '<p>Please Upgrade to <strong>CAPTAIN</strong> plan to add your GSC integration</p>',
+        //         icon: 'warning',
+        //         confirmButtonText: 'OK',
+        //         confirmButtonColor: "#2979FF",
+        //         showCancelButton: true,
+        //         cancelButtonText: 'CANCEL',
+        //         cancelButtonColor: "#ccc"
+        //     }).then((res) => {
+        //         if (res.isConfirmed) {
+        //             router.push("/plans")
+        //         }
+        //         // console.log(res)
+        //     })
+        // }
+
+    };
+
     return (
         <>
 
-            <Card>
-                {/* <CardHeader title='OpenAI API Key' /> */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", padding: "20px" }}>
-                    <Typography variant="h6">
-                        OpenAI API Key
 
-                    </Typography>
-                    <Button variant='outlined' onClick={e => {
-                        setShow(true)
-                    }} startIcon={<Icon icon="ph:video-thin" />} >
-                        Watch Step-by-Step Instructions
-                    </Button>
+            <Card sx={{ width: '100%', }}>
+                {/* <Typography variant='body1'>Keywords</Typography> */}
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" >
+                        <Tab label="Open AI API Key" {...a11yProps(0)} sx={{}} />
+                        {/* <LightTooltip title={
+                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+
+                                Google Search Console is a powerful tool for enhancing your SEO strategy. It helps you optimize internal linking, analyze keywords, and find better keyword suggestions. Using GSC with SEO Pilot will ensure your articles are perfectly optimized for search engines.
+                            </p>
+                        } placement="top"> */}
+                        <Tab label="Claude AI API Key" {...a11yProps(1)} sx={{}} />
+                        {/* </LightTooltip > */}
+
+                        {/* <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} /> */}
+                        {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
+                    </Tabs>
                 </Box>
-                <Dialog
-                    fullWidth
-                    open={show}
-                    maxWidth='xl'
-                    sx={{ display: "flex", justifyContent: "center" }}
-                    onClose={handleClose}
-                    onBackdropClick={handleClose}
-                    TransitionComponent={Transition}
-                >
-                    <iframe width="900" height="506" src="https://www.youtube.com/embed/n8AxB_j4naM?si=k_ZZAbvLzi-ivc5k" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
-                </Dialog>
-
-                <CardContent>
-                    <APIKeyInstructions />
-                    <form>
-
-                        <Grid sx={{ width: "100%", padding: "0px" }}>
-
-                            {
-                                apikey &&
-                                <Typography variant='subtitle1' sx={{ mb: 2, mt: 10, display: "flex" }}>
-                                    Your API Key: &nbsp;<strong style={{ backgroundColor: "#ECECEF", color: "#0C0C0D" }}>{apikey}</strong>
-                                </Typography>
-                            }
-
-                            <Typography variant='subtitle1' sx={{ mb: 2, mt: 5, display: "flex" }}>
-                                Please Enter your API Key:
-                            </Typography>
-                            <Box sx={{ alignItems: "center", width: "100%" }}>
-                                <Grid item xs={11} >
-                                    <TextField fullWidth label='Open-AI API Key' value={newApikey} placeholder={apikey} onChange={e => { setNewApikey(e.target.value); }} />
-                                </Grid>
+                <CustomTabPanel value={value} index={0}>
+                    <OpenAiApiKey teamObj={teamObj} apikey={apikey} setNewApikey={setNewApikey} newApikey={newApikey} />
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                    <ClaudeAiApiKey teamObj={teamObj} />
+                </CustomTabPanel>
+                {/* <CustomTabPanel value={value} index={2}>
+                <PAA paa={props.paa} />
+            </CustomTabPanel> */}
+            </Card>
 
 
-                            </Box>
-                            <Typography variant='subtitle2' sx={{ mb: 0, mt: 0, display: "flex", fontSize: "12px" }}>
-                                By default this API key will be added for all the workspaces.
-                            </Typography>
-                            <Typography variant='subtitle2' sx={{ mb: 2, mt: 0, display: "flex", fontSize: "12px" }}>
-                                NOTE: You can edit/change the API Key for any individual workspace at any time.
-                            </Typography>
 
-
-                        </Grid>
-                        <LoadingButton
-                            color="primary"
-                            variant="contained"
-                            size="large"
-                            // type="submit"
-                            style={{ marginTop: "30px", padding: "10px 35px 10px 35px" }}
-                            onClick={() => submit()}
-                            disabled={disable}
-                            loading={loading}
-                            loadingPosition="end"
-
-                        >
-                            Submit
-                        </LoadingButton>
-                    </form>
-
-                </CardContent>
-            </Card >
         </>
 
     );

@@ -119,7 +119,7 @@ const KeywordResearch = (props: any) => {
                 } else {
                     Swal.fire({
                         html: `<h3>Error</h3>
-          <h5>Keyword Research Faild. Please Communicate to Our Support Team.</h5>
+          <h5>Keyword Research Failed. Please Communicate to Our Support Team.</h5>
           `,
                         icon: "error",
                         // input: 'text',

@@ -58,12 +58,6 @@ const KeywordResearch = (props: any) => {
     const router = useRouter()
     const auth = useAuth();
 
-    useEffect(() => {
-
-
-
-    }, [auth?.user])
-
     const submit = () => {
 
         setLoading(true)

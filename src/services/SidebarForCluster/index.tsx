@@ -118,6 +118,8 @@ export default function ClusterDrawer(props: any) {
                             setSettings={props.setSettings}
                             handleChange={props.handleChange}
                             allSites={props.allSites}
+                            hasClaudeAiKey={props.hasClaudeAiKey}
+                            hasOpenAiKey={props.hasOpenAiKey}
                         />
                     </Drawer>
                 </React.Fragment>

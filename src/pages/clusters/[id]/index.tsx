@@ -116,6 +116,8 @@ const ClusterIdea = () => {
     const [loading, setLoading] = useState(false)
     const [settings, setSettings] = useState<any>({})
     const [allSites, setAllSites] = useState<any>([]);
+    const [hasOpenAiKey, setHasOpenAiKey] = useState('');
+    const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
     const auth = useAuth()
     const router = useRouter()
 
@@ -286,7 +288,7 @@ const ClusterIdea = () => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 return (
-                    <ModelDropdown settings={settings} id={row.id} handleChange={handleChange} />
+                    <ModelDropdown settings={settings} id={row.id} handleChange={handleChange} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
                 )
 
             }
@@ -354,7 +356,7 @@ const ClusterIdea = () => {
                                     <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22", marginRight: "3px" }} href={'/generated-article/' + settings[row.id].article_id}>
                                         view
                                     </Button >
-                                    <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
+                                    <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
                                 </>
 
                                 : settings[row.id].status == 'idea' ?
@@ -364,7 +366,7 @@ const ClusterIdea = () => {
                                         }} sx={{ fontSize: "10px", marginRight: "3px" }}>
                                             Write
                                         </Button >
-                                        <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
+                                        <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
                                     </>
                                     : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
                                         <><Button variant='contained' size='medium' disabled onClick={() => {
@@ -372,7 +374,7 @@ const ClusterIdea = () => {
                                         }} sx={{ fontSize: "10px", marginRight: "3px", padding: "0px" }}>
                                             <Icon icon="line-md:loading-twotone-loop" style={{ height: "20px" }}></Icon>
                                         </Button >
-                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} />
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
                                         </> :
                                         <>
                                             <Button variant='contained' size='medium' sx={{ fontSize: "10px", marginRight: "3px" }} onClick={() => {
@@ -380,7 +382,7 @@ const ClusterIdea = () => {
                                             }}>
                                                 Retry
                                             </Button >
-                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} /></>
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} /></>
 
                         }
                     </Box>
@@ -632,30 +634,76 @@ const ClusterIdea = () => {
                     router.push("/clusters")
                 })
             })
+
+            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    setHasOpenAiKey('yes')
+                } else {
+                    setHasOpenAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                // console.log(e);
+                setHasOpenAiKey('no')
+            })
+
+            LoginRegistrationAPI.getClaudeAPIKey({}).then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    // setApiKey(res.data.apikey)
+                    setHasClaudeAiKey('yes')
+                } else {
+                    // setApiKey('none')
+                    setHasClaudeAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                // console.log(e);
+                // setApiKey('none')
+                setHasClaudeAiKey('no')
+            })
         }
 
 
     }, [router.query.id])
 
     useEffect(() => {
-        if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
-            // Swal.fire('401',
-            //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-            //     'error').then(() => {
-            //         router.push("/")
-            //     })
-
+        console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
+        if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
             Swal.fire({
-                title: '401',
-                text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF",
+                title: 'Error',
+                text: 'Please Add API Key',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
             }).then(() => {
-                router.push("/")
+                router.push("/add-apikey")
             })
         }
-    }, [auth?.user?.plan])
+    }, [hasClaudeAiKey, hasOpenAiKey])
+
+    // useEffect(() => {
+    //     if (auth?.user?.workspace_owner_info?.plan?.plan == 'free' || auth?.user?.workspace_owner_info?.plan?.plan == 'extension_only') {
+    //         // Swal.fire('401',
+    //         //     'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //         //     'error').then(() => {
+    //         //         router.push("/")
+    //         //     })
+
+    //         Swal.fire({
+    //             title: '401',
+    //             text: 'You don\'t have access to this page. Please Upgrade to enable AI-Article Feature.',
+    //             icon: 'error',
+    //             confirmButtonText: 'Close',
+    //             confirmButtonColor: "#2979FF",
+    //         }).then(() => {
+    //             router.push("/")
+    //         })
+    //     }
+    // }, [auth?.user?.plan])
     const fetchTableData = (useCallback(
         async (sort: SortType, q: string, column: string) => {
 

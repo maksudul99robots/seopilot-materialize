@@ -466,6 +466,15 @@ export const LoginRegistrationAPI = {
     async canAddTeamMembers(data: any, url = "/can-add-team-member", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async verifyClaudeAPIKey(data: any, url = "/verify-claude-api-key", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async addClaudeAPIKey(data: any, url = "/add-claude-api-key", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getClaudeAPIKey(data: any, url = "/get-claude-api-key", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

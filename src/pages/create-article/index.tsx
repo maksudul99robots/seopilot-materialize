@@ -223,6 +223,8 @@ export default function CreateArticle(props: any) {
     const [dateTime, setDateTime] = useState<Date>(new Date());
     const [internalLinking, setInternalLinking] = useState(false);
     const [selectedSite, setSelectedSite] = useState('');
+    const [hasOpenAiKey, setHasOpenAiKey] = useState('');
+    const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
 
     useEffect(() => {
         const { id, edit_article } = router.query;
@@ -346,19 +348,58 @@ export default function CreateArticle(props: any) {
     }, [model])
 
     useEffect(() => {
+        // console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
+        if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please Add API Key',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
+            }).then(() => {
+                router.push("/add-apikey")
+            })
+        }
+
+        if (hasClaudeAiKey == 'yes' && hasOpenAiKey == 'no') {
+            setModel('claude-3-5-sonnet-20240620')
+        }
+    }, [hasClaudeAiKey, hasOpenAiKey])
+
+    useEffect(() => {
         if (auth.user?.is_active) {
             LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
                 // console.log(res);
                 if (res.status == 200) {
                     setApiKey(res.data.apikey)
+                    setHasOpenAiKey('yes')
                 } else {
                     setApiKey('none')
+                    setHasOpenAiKey('no')
                 }
                 // setApikey(res.data.apikey)
                 // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
             }).catch(e => {
                 // console.log(e);
                 setApiKey('none')
+                setHasOpenAiKey('no')
+            })
+
+            LoginRegistrationAPI.getClaudeAPIKey({}).then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    // setApiKey(res.data.apikey)
+                    setHasClaudeAiKey('yes')
+                } else {
+                    // setApiKey('none')
+                    setHasClaudeAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                // console.log(e);
+                // setApiKey('none')
+                setHasClaudeAiKey('no')
             })
 
             LoginRegistrationAPI.getAIModels({}).then(res => {
@@ -387,15 +428,15 @@ export default function CreateArticle(props: any) {
             }).catch(e => {
                 console.log(e);
                 // if (e?.response?.status == 401) {
-                Swal.fire({
-                    title: 'Error',
-                    text: e.response.data,
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push("/add-apikey")
-                })
+                // Swal.fire({
+                //     title: 'Error',
+                //     text: e.response.data,
+                //     icon: 'warning',
+                //     confirmButtonText: 'OK',
+                //     confirmButtonColor: "#2979FF"
+                // }).then(() => {
+                //     router.push("/add-apikey")
+                // })
                 // }else{}
             })
             LoginRegistrationAPI.getAllSites({}).then(res => {
@@ -411,15 +452,15 @@ export default function CreateArticle(props: any) {
             }).catch(e => {
                 console.log(e);
                 // if (e?.response?.status == 401) {
-                Swal.fire({
-                    title: 'Error',
-                    text: e.response.data,
-                    icon: 'warning',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: "#2979FF"
-                }).then(() => {
-                    router.push("/add-apikey")
-                })
+                // Swal.fire({
+                //     title: 'Error',
+                //     text: e.response.data,
+                //     icon: 'warning',
+                //     confirmButtonText: 'OK',
+                //     confirmButtonColor: "#2979FF"
+                // }).then(() => {
+                //     // router.push("/add-apikey")
+                // })
                 // }else{}
             })
 
@@ -473,19 +514,20 @@ export default function CreateArticle(props: any) {
     }
 
     const submit = async () => {
-        // check if AI model allowed
-        const isModelAllowed = await isAIModelAllowed(model, allModels);
+        // console.log("isModelAllowed......................", model, allModels)
+        // // check if AI model allowed
+        // const isModelAllowed = await isAIModelAllowed(model, allModels);
         // console.log("isModelAllowed", isModelAllowed)
-        if (!isModelAllowed) {
-            Swal.fire({
-                title: 'Error!',
-                text: `Your Selected Model ${model} is Not Accessible from Your API Key. Try Another AI Model.`,
-                icon: 'error',
-                confirmButtonText: 'Close',
-                confirmButtonColor: "#2979FF"
-            })
-            return ''
-        }
+        // if (!isModelAllowed) {
+        //     Swal.fire({
+        //         title: 'Error!',
+        //         text: `Your Selected Model ${model} is Not Accessible from Your API Key. Try Another AI Model.`,
+        //         icon: 'error',
+        //         confirmButtonText: 'Close',
+        //         confirmButtonColor: "#2979FF"
+        //     })
+        //     return ''
+        // }
         if (topic == '') {
             Swal.fire({
                 title: '',
@@ -905,14 +947,14 @@ export default function CreateArticle(props: any) {
     return (
         // <Card>
         <>
-            {
+            {/* {
                 (apiKey == 'none') &&
                 <Alert severity='warning' sx={{ display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", marginBottom: "20px" }}>
                     You Have to Add API Key to Generate Article. <Link href='/add-apikey/' style={{ textDecoration: "underline", fontSize: "18px", fontWeight: "600", fontStyle: "italic" }} >Click Here to Add API Key</Link>.
 
                 </Alert>
 
-            }
+            } */}
 
 
             <Box sx={{ padding: "0px" }}>
@@ -968,11 +1010,13 @@ export default function CreateArticle(props: any) {
                                                 setModel(e.target.value)
                                             }}
                                         >
-                                            <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                                            <MenuItem value='gpt-4o-mini'>GPT-4o mini</MenuItem>
-                                            <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
-                                            <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                                            <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4o' disabled={hasOpenAiKey != 'yes'}>GPT-4o (Recommended)</MenuItem>
+                                            <MenuItem value='gpt-4o-mini' disabled={hasOpenAiKey != 'yes'}>GPT-4o mini</MenuItem>
+                                            <MenuItem value='gpt-4-turbo' disabled={hasOpenAiKey != 'yes'}>GPT-4-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4' disabled={hasOpenAiKey != 'yes'}>GPT-4</MenuItem>
+                                            <MenuItem value='gpt-3.5-turbo-1106' disabled={hasOpenAiKey != 'yes'}>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='claude-3-5-sonnet-20240620' disabled={hasClaudeAiKey != 'yes'}>Claude 3.5 Sonnet</MenuItem>
+                                            {/* <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem> */}
                                         </Select>
                                     </FormControl>
                                 </Grid>
