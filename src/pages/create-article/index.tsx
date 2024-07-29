@@ -339,7 +339,7 @@ export default function CreateArticle(props: any) {
 
     useEffect(() => {
 
-        if (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini') {
+        if (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') {
 
         } else {
             setCitation(false)
@@ -1533,7 +1533,7 @@ export default function CreateArticle(props: any) {
 
                                 {
 
-                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o') &&
+                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') &&
                                     <Grid item xs={12} sx={{ display: "flex" }}>
                                         <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
                                         <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
