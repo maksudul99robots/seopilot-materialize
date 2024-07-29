@@ -146,7 +146,8 @@ export default function ToolbarDropdown(props: any) {
                             article_id={props.article_id}
                             replaceText={props.replaceText}
                             handleClose={handleClose}
-
+                            hasClaudeAiKey={props.hasClaudeAiKey}
+                            hasOpenAiKey={props.hasOpenAiKey}
                         />
                     </MenuItem>
 
@@ -162,6 +163,8 @@ export default function ToolbarDropdown(props: any) {
                         article_id={props.article_id}
                         replaceText={props.replaceText}
                         handleClose={handleClose}
+                        hasClaudeAiKey={props.hasClaudeAiKey}
+                        hasOpenAiKey={props.hasOpenAiKey}
                     />
                 </MenuItem>
                 <Divider sx={{ my: 0.5 }} />
@@ -175,6 +178,8 @@ export default function ToolbarDropdown(props: any) {
                         article_id={props.article_id}
                         replaceText={props.replaceText}
                         handleClose={handleClose}
+                        hasClaudeAiKey={props.hasClaudeAiKey}
+                        hasOpenAiKey={props.hasOpenAiKey}
                     />
                 </MenuItem>
                 <Divider sx={{ my: 0.5 }} />
@@ -189,6 +194,8 @@ export default function ToolbarDropdown(props: any) {
                         replaceText={props.replaceText}
                         replaceTextWithList={props.replaceTextWithList}
                         handleClose={handleClose}
+                        hasClaudeAiKey={props.hasClaudeAiKey}
+                        hasOpenAiKey={props.hasOpenAiKey}
                     />
                 </MenuItem>
             </StyledMenu>

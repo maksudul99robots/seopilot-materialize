@@ -13,6 +13,7 @@ import { Icon } from '@iconify/react';
 import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import InsertNewText from 'src/services/ToolbarOptions/InsertNewText';
 import draftToHtml from 'draftjs-to-html';
+import { LoginRegistrationAPI } from 'src/services/API';
 
 const EditorControlled = (props: any) => {
   const [isImgAdded, setIsImgAdded] = useState<any>([])
@@ -25,6 +26,8 @@ const EditorControlled = (props: any) => {
   const [lastCurrentState, setLastCurrentState] = useState<any>(null)
   const [lastSelectionOnePoint, setLastSelectionOnePoint] = useState<any>(null)
   const [lastCurrentStateOnePoint, setLastCurrentStateOnePoint] = useState<any>(null)
+  const [hasOpenAiKey, setHasOpenAiKey] = useState('');
+  const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
   const [value, setValue] = useState(EditorState.createWithContent(
     ContentState.createFromBlockArray(
       convertFromHTML(props.data ? '<p id="seopilot-editor">' + props.data + '</p>' : '<p id="seopilot-editor">no data</p>')
@@ -80,6 +83,37 @@ const EditorControlled = (props: any) => {
       // replaceImgSpansWithFigures(getAllImgUrls(convertEditorStateToHTML(value)))
       replaceCameraEmojisWithImages(getAllImgUrls(convertEditorStateToHTML(value)))
     }, 800)
+
+    LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+      // console.log(res);
+      if (res.status == 200) {
+        setHasOpenAiKey('yes')
+      } else {
+        setHasOpenAiKey('no')
+      }
+      // setApikey(res.data.apikey)
+      // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+    }).catch(e => {
+      // console.log(e);
+      setHasOpenAiKey('no')
+    })
+
+    LoginRegistrationAPI.getClaudeAPIKey({}).then(res => {
+      // console.log(res);
+      if (res.status == 200) {
+        // setApiKey(res.data.apikey)
+        setHasClaudeAiKey('yes')
+      } else {
+        // setApiKey('none')
+        setHasClaudeAiKey('no')
+      }
+      // setApikey(res.data.apikey)
+      // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+    }).catch(e => {
+      // console.log(e);
+      // setApiKey('none')
+      setHasClaudeAiKey('no')
+    })
   }, [])
 
   const convertEditorStateToHTML = (editorState) => {
@@ -357,6 +391,8 @@ const EditorControlled = (props: any) => {
 
   }, [text])
 
+
+
   function getAllImgUrls(htmlString) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlString, 'text/html');
@@ -384,7 +420,7 @@ const EditorControlled = (props: any) => {
     <div>
       <div className="custom-toolbar" style={{ ...toolbarPosition }}>
 
-        <ToolbarDropdown replaceTextWithList={replaceTextWithList} text={text} article_id={props.article_id} setReloadArticle={props.setReloadArticle} reloadArticle={props.reloadArticle} replaceText={replaceText} setSelectionAndState={setSelectionAndState} />
+        <ToolbarDropdown replaceTextWithList={replaceTextWithList} text={text} article_id={props.article_id} setReloadArticle={props.setReloadArticle} reloadArticle={props.reloadArticle} replaceText={replaceText} setSelectionAndState={setSelectionAndState} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
       </div>
 
       <ReactDraftWysiwyg
@@ -399,7 +435,7 @@ const EditorControlled = (props: any) => {
           //   {
           //     marginLeft: "10px", marginBottom: "5px"
           //   }}>Insert</Button>,
-          <InsertNewText article_id={props.article_id} insertText={insertText} />,
+          <InsertNewText article_id={props.article_id} insertText={insertText} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />,
           <ReWritenTxtTable article_id={props.article_id} />,
           <Button variant='contained'
             sx={

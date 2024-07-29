@@ -21,11 +21,10 @@ const ClaudeAPIKeyInstructions = ({ plan }: any) => {
 
                     2. Copy the API Key and store it somewhere safe.
                     <br />
-
                     3. Copy the API Key and paste it into the Claude AI API Key input field below.<br />
                     4. Make sure you have balance in your account. <br />
                     5. To see your API request limits, please go to <a href='https://docs.anthropic.com/en/api/rate-limits' target='_blank'>this</a> URL. <br />
-                    6. We recommand to have at least Tier 1 plan or more to have uninterrupted service. <br />
+                    6. To experience all of our services, please subscribe to a paid plan on Claude API.<br />
                 </Typography>
                 {/* <Typography variant='body2'>
                     If you’re in the market for new desktops, notebooks, or PDAs, there are a myriad of choices. Here’s a rundown
