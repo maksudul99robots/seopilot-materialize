@@ -1531,26 +1531,7 @@ export default function CreateArticle(props: any) {
                             </Grid>
                             <Grid container>
 
-                                {
-
-                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') &&
-                                    <Grid item xs={12} sx={{ display: "flex" }}>
-                                        <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
-                                        <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
-                                        <LightTooltip title={
-                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
-                                            </p>
-                                        } placement="top">
-                                            <div style={{ height: "100%" }}>
-                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                            </div>
-                                        </LightTooltip >
-
-                                    </Grid>
-                                }
-
-                                <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
+                                <Grid item xs={12} sx={{ display: "flex" }}>
                                     <SwitchesCustomized label="Include Auto Internal Linking" isChecked={internalLinking} onClick={() => {
                                         if (allSites.length > 0)
                                             setInternalLinking(!internalLinking)
@@ -1575,6 +1556,27 @@ export default function CreateArticle(props: any) {
                                     </LightTooltip >
 
                                 </Grid>
+
+                                {
+
+                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') &&
+                                    <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
+                                        <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                        <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
+                                        <LightTooltip title={
+                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                                            </p>
+                                        } placement="top">
+                                            <div style={{ height: "100%" }}>
+                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                            </div>
+                                        </LightTooltip >
+
+                                    </Grid>
+                                }
+
+
                                 <Grid item xs={12} sx={{ display: citation ? "flex" : "none", mt: 5 }}>
                                     <Box sx={{ width: "100%", display: citation ? "flex" : "none" }}>
                                         <Grid item sm={6} xs={6}>
