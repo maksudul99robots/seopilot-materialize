@@ -671,7 +671,7 @@ const ClusterIdea = () => {
     }, [router.query.id])
 
     useEffect(() => {
-        console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
+        // console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
         if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
             Swal.fire({
                 title: 'Error',
@@ -753,7 +753,7 @@ const ClusterIdea = () => {
 
     const writeAll = () => {
         mainData?.map((d: any, i: number) => {
-            if (settings[d.id].status == 'idea') {
+            if (settings[d.id].status == 'idea' || settings[d.id].status == 'error') {
                 setSettings((prevSettings: any) => ({
                     ...prevSettings,
                     [d.id]: {
@@ -774,15 +774,16 @@ const ClusterIdea = () => {
                     outline_source: settings[d.id].outline_source,
                     outline_url: settings[d.id].outline_url,
                     faq: settings[d.id].faq,
-                    toc: true,
+                    toc: settings[d.id].toc,
                     model: settings[d.id].model,
                     showFeaturedImg: settings[d.id].img,
                     point_of_view: settings[d.id].point_of_view,
                     img_service: settings[d.id].img_service,
                     extra_prompt: settings[d.id].extra_prompt,
-                    img_prompt: settings[d.id].citation,
+                    img_prompt: settings[d.id].img_prompt,
                     citation: settings[d.id].citation,
-                    folder_id: '',
+                    no_of_citations: settings[d.id].no_of_citations,
+                    folder_id: settings[d.id].folder_id,
                     idea_id: d.id
                 }).
                     then(res => {

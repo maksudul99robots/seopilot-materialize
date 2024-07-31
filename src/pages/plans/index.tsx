@@ -46,7 +46,7 @@ const Pricing = () => {
       imgWidth: 100,
       title: 'Passenger',
       imgHeight: 100,
-      monthlyPrice: 19,
+      monthlyPrice: 49,
       // currentPlan: auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'passenger' ? true : auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan == 'regular' ? false : false,
       currentPlan:
         (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan) == 'free' ? false :
@@ -57,8 +57,8 @@ const Pricing = () => {
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/passenger.svg',
       yearlyPlan: {
-        perMonth: 15.8,
-        totalAnnual: 190
+        perMonth: 40.8,
+        totalAnnual: 490
       },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
@@ -76,7 +76,7 @@ const Pricing = () => {
     {
       imgWidth: 100,
       imgHeight: 100,
-      monthlyPrice: 49,
+      monthlyPrice: 129,
       title: 'Co-Pilot',
       popularPlan: true,
       currentPlan:
@@ -86,7 +86,7 @@ const Pricing = () => {
               false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/copilot.svg',
-      yearlyPlan: { perMonth: 40.8, totalAnnual: 490 },
+      yearlyPlan: { perMonth: 107.5, totalAnnual: 1290 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
@@ -102,7 +102,7 @@ const Pricing = () => {
     {
       imgWidth: 100,
       imgHeight: 100,
-      monthlyPrice: 99,
+      monthlyPrice: 299,
       title: 'Captain',
       popularPlan: true,
       currentPlan:
@@ -112,7 +112,7 @@ const Pricing = () => {
               false,
       subtitle: 'SaaS & Chrome Extension Plan',
       imgSrc: '/images/pages/captain.svg',
-      yearlyPlan: { perMonth: 82.5, totalAnnual: 990 },
+      yearlyPlan: { perMonth: 249.2, totalAnnual: 2990 },
       planBenefits: [
         { text: "Advanced AI Writer (Saas)", show: true },
         { text: "Unlimited Articles", show: true },
