@@ -321,3 +321,8 @@ code[class*='language-'] {
 .paa:hover {
   background-color: #e2feed;
 }
+.ext-download-button{
+  display: flex;
+  align-items: center;
+  text-decoration: none !important;
+}

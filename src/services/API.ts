@@ -475,6 +475,18 @@ export const LoginRegistrationAPI = {
     async getClaudeAPIKey(data: any, url = "/get-claude-api-key", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getGSCDataInRange(data: any, url = "/get-gsc-data-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getGSCSummaryInRange(data: any, url = "/get-gsc-summary-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getGSCQueryInRange(data: any, url = "/get-gsc-query-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getGSCPagesInRange(data: any, url = "/get-gsc-page-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
