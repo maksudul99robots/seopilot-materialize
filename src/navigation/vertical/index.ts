@@ -74,6 +74,20 @@ const navigation = (): VerticalNavItemsType | any => {
         // badgeContent: "beta"
       },
       {
+        title: 'GSC Stats',
+        // icon: 'fluent-mdl2:folder-list-mirrored',
+        icon: 'icomoon-free:stats-dots',
+        path: '/gsc-stats',
+        restrict: [
+          'free',
+          'passenger',
+          'monthly - passenger',
+          'yearly - passenger'
+        ]
+        // badgeColor: "info",
+        // badgeContent: "beta"
+      },
+      {
         sectionTitle: 'My Tasks'
       },
       {

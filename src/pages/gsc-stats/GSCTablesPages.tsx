@@ -205,7 +205,7 @@ const GSCTablesPages = (props: any) => {
                 })
                 .catch(e => {
                     setLoading(false)
-                    console.log('unable to get folders')
+
                 })
         }
     }, [props.start, props.end])
@@ -232,18 +232,6 @@ const GSCTablesPages = (props: any) => {
         },
         [paginationModel, mainData]
     )
-
-    useEffect(() => {
-        if (reloadData > 0) {
-            LoginRegistrationAPI.getFolders({ get_count: true })
-                .then(res => {
-                    setMainData(res.data)
-                })
-                .catch(e => {
-                    console.log('unable to get folders')
-                })
-        }
-    }, [reloadData])
 
     useEffect(() => {
         fetchTableData(sort, searchValue, sortColumn, type, length, status)

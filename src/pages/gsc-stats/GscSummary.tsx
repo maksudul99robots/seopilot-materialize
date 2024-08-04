@@ -4,6 +4,7 @@ import Icon from 'src/@core/components/icon'
 import { LoginRegistrationAPI } from "src/services/API"
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from "@mui/material";
+import { useRouter } from "next/router";
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -14,15 +15,27 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontSize: 11,
     },
 }));
+import Swal from 'sweetalert2'
 const GSCSummary = (props: any) => {
     const [summary, setSummary] = useState<any>()
-
+    const router = useRouter()
 
     useEffect(() => {
         if (props.start && props.end) {
             LoginRegistrationAPI.getGSCSummaryInRange({ start: props.start, end: props.end }).then(res => {
                 setSummary(res.data[0])
             }).catch(e => {
+                if (e?.response?.data == 'No GSC Site Added') {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Please Add GSC',
+                        icon: 'warning',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: "#2979FF"
+                    }).then(() => {
+                        router.push("/integrations")
+                    })
+                }
 
             })
         }

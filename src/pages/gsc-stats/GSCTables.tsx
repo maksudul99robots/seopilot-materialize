@@ -205,7 +205,7 @@ const GSCTables = (props: any) => {
                 })
                 .catch(e => {
                     setLoading(false)
-                    console.log('unable to get folders')
+
                 })
         }
     }, [props.start, props.end])
