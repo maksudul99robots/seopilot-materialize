@@ -2,7 +2,9 @@ import { useEffect, useState, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
+import { CSVLink } from "react-csv";
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
+import Icon from 'src/@core/components/icon'
 
 type SortType = 'asc' | 'desc' | undefined | null
 
@@ -10,9 +12,8 @@ import { LoginRegistrationAPI } from 'src/services/API'
 
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
-import { CSVLink } from "react-csv";
-import { Button } from '@mui/material'
-import Icon from 'src/@core/components/icon'
+import { Button } from '@mui/material';
+import { getCountryNameFlag } from 'src/services/getCountryNameFlag';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -25,7 +26,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     }
 }))
 
-const GSCTables = (props: any) => {
+const GSCTablesCountry = (props: any) => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -52,13 +53,25 @@ const GSCTables = (props: any) => {
             headerName: 'Query',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
-
+                let country = getCountryNameFlag(row.keys)
+                console.log("country:", country)
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 500 }} title={row.keys}>
-                                {row.keys}
-                            </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+
+                            {country[0] ?
+                                <>
+                                    <img src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country[0].alpha2}.svg`} style={{ height: "24px", width: "24px" }}></img>
+                                    <span style={{ marginLeft: '10px' }} title={country[0].name}>{country[0].name}</span>
+                                </>
+                                :
+                                <>
+                                    <Icon icon={"bi:question-circle"}></Icon>
+                                    <span style={{ marginLeft: '10px' }}>{row.keys}</span>
+                                </>
+
+                            }
+
                         </Box>
                     </Box>
                 )
@@ -198,7 +211,7 @@ const GSCTables = (props: any) => {
     useEffect(() => {
         if (props.start && props.end) {
             setLoading(true)
-            LoginRegistrationAPI.getGSCQueryInRange({ start: props.start, end: props.end })
+            LoginRegistrationAPI.getGSCCountryInRange({ start: props.start, end: props.end })
                 .then(res => {
                     setLoading(false)
                     setMainData(res.data)
@@ -273,18 +286,16 @@ const GSCTables = (props: any) => {
         return `${month}-${day}-${year}`;
     }
 
-
     return (
         <Box>
             <Card>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px' }}>
-                    <Typography variant='h6'>Queries</Typography>
-
+                    <Typography variant='h6'>Countries</Typography>
                     <CSVLink
                         data={mainData}
                         headers={headers}
                         filename={
-                            "GSC_query_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
+                            "GSC_country_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>
@@ -313,4 +324,4 @@ const GSCTables = (props: any) => {
     )
 }
 
-export default GSCTables
+export default GSCTablesCountry

@@ -27,6 +27,8 @@ import { Box } from '@mui/material'
 import GSCTables from 'src/pages/gsc-stats/GSCTables'
 import GSCTablesPages from 'src/pages/gsc-stats/GSCTablesPages'
 import GSCSummary from 'src/pages/gsc-stats/GscSummary'
+import GSCTablesCountry from 'src/pages/gsc-stats/GSCTablesCountry'
+import GSCTablesDevice from 'src/pages/gsc-stats/GSCTablesDevice'
 
 
 const areaColors = {
@@ -224,6 +226,12 @@ const ApexAreaChart = () => {
       </Card>
       <Card sx={{ marginTop: "30px" }}>
         <GSCTablesPages start={startDate} end={endDate} />
+      </Card>
+      <Card sx={{ marginTop: "30px" }}>
+        <GSCTablesCountry start={startDate} end={endDate} />
+      </Card>
+      <Card sx={{ marginTop: "30px" }}>
+        <GSCTablesDevice start={startDate} end={endDate} />
       </Card>
     </Box>
 

@@ -2,7 +2,9 @@ import { useEffect, useState, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
+import { CSVLink } from "react-csv";
 import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
+import Icon from 'src/@core/components/icon'
 
 type SortType = 'asc' | 'desc' | undefined | null
 
@@ -10,9 +12,8 @@ import { LoginRegistrationAPI } from 'src/services/API'
 
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
-import { CSVLink } from "react-csv";
-import { Button } from '@mui/material'
-import Icon from 'src/@core/components/icon'
+import { Button } from '@mui/material';
+import { getCountryNameFlag } from 'src/services/getCountryNameFlag';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -25,7 +26,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     }
 }))
 
-const GSCTables = (props: any) => {
+const GSCTablesDevice = (props: any) => {
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -55,8 +56,9 @@ const GSCTables = (props: any) => {
 
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 500 }} title={row.keys}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: "center" }}>
+                            <Icon icon={row.keys == "DESKTOP" ? "ph:desktop-light" : row.keys == "TABLET" ? "arcticons:tablet" : "la:mobile"} style={{ marginRight: "5px" }}></Icon>
+                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 500 }}>
                                 {row.keys}
                             </Typography>
                         </Box>
@@ -194,11 +196,10 @@ const GSCTables = (props: any) => {
             )
         }
     ]
-
     useEffect(() => {
         if (props.start && props.end) {
             setLoading(true)
-            LoginRegistrationAPI.getGSCQueryInRange({ start: props.start, end: props.end })
+            LoginRegistrationAPI.getGSCDevicesInRange({ start: props.start, end: props.end })
                 .then(res => {
                     setLoading(false)
                     setMainData(res.data)
@@ -273,18 +274,16 @@ const GSCTables = (props: any) => {
         return `${month}-${day}-${year}`;
     }
 
-
     return (
         <Box>
             <Card>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px' }}>
-                    <Typography variant='h6'>Queries</Typography>
-
+                    <Typography variant='h6'>Devices</Typography>
                     <CSVLink
                         data={mainData}
                         headers={headers}
                         filename={
-                            "GSC_query_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
+                            "GSC_devices_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>
@@ -313,4 +312,4 @@ const GSCTables = (props: any) => {
     )
 }
 
-export default GSCTables
+export default GSCTablesDevice

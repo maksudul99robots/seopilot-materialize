@@ -13,6 +13,7 @@ import { LoginRegistrationAPI } from 'src/services/API'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
+import Link from 'next/link';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -56,9 +57,9 @@ const GSCTablesPages = (props: any) => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 500 }}>
+                            <Link style={{ textDecoration: "none", fontWeight: 500 }} className='links' href={row.keys} target='_blank' title={row.keys}>
                                 {row.keys}
-                            </Typography>
+                            </Link>
                         </Box>
                     </Box>
                 )

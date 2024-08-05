@@ -487,6 +487,12 @@ export const LoginRegistrationAPI = {
     async getGSCPagesInRange(data: any, url = "/get-gsc-page-range", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getGSCCountryInRange(data: any, url = "/get-gsc-country-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async getGSCDevicesInRange(data: any, url = "/get-gsc-device-range", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

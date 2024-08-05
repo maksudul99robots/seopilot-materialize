@@ -17,6 +17,8 @@ import ApexAreaChart from 'src/views/charts/apex-charts/ApexAreaChart'
 import { useEffect, useState } from 'react'
 import { LoginRegistrationAPI } from 'src/services/API'
 import GSCTables from './GSCTables'
+import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
 
 
 const LinkStyled = styled(Link)(({ theme }) => ({
@@ -28,12 +30,21 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 
 const ApexCharts = () => {
   const [site, setSite] = useState<any>({});
+  const router = useRouter()
   useEffect(() => {
     LoginRegistrationAPI.getAllSites({}).then(res => {
       if (res.data[0])
         setSite(res.data[0])
     }).catch(e => {
-
+      Swal.fire({
+        title: 'Error',
+        text: 'You do not have any site integrated to SEOPILOT',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        confirmButtonColor: "#2979FF"
+      }).then(() => {
+        router.push("/integrations")
+      })
     })
   }, [])
   return (
