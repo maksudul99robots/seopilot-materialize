@@ -26,6 +26,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 }))
 
 const GSCTables = (props: any) => {
+    console.log("site:", props.site)
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')
@@ -273,6 +274,18 @@ const GSCTables = (props: any) => {
         return `${month}-${day}-${year}`;
     }
 
+    function formatDateToYYYYMMDD(date: Date) {
+        if (date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}${month}${day}`;
+        } else {
+            return ""
+        }
+
+    }
 
     return (
         <Box>
@@ -284,7 +297,7 @@ const GSCTables = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            "GSC_query_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
+                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-query-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

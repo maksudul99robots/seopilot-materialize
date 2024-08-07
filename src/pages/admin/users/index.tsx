@@ -81,6 +81,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getDateTime } from 'src/services/DateTimeFormatter'
 import UserDetails from 'src/services/UserDetails/UserDetails'
+import ChangeUserPlan from './ChangeUserPlan'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -99,6 +100,8 @@ const TableServerSide = () => {
     const [sort, setSort] = useState<SortType>('desc')
     const [rows, setRows] = useState<CustomRowType[]>([])
     const [searchValue, setSearchValue] = useState<string>('')
+    const [showPlanChangeModal, setShowPlanChangeModal] = useState<boolean>(false)
+    const [changesModalData, setChangesModalData] = useState<any>(null)
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
@@ -178,9 +181,9 @@ const TableServerSide = () => {
         {
             flex: 0.175,
             minWidth: 110,
-            field: 'action',
+            field: 'impersonate',
             sortable: false,
-            headerName: 'Action',
+            headerName: 'Impersonate',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params;
 
@@ -190,6 +193,24 @@ const TableServerSide = () => {
                     }}>
                         Impersonate
                     </Button >
+
+                )
+
+            }
+
+
+        },
+        {
+            flex: 0.175,
+            minWidth: 110,
+            field: 'action',
+            sortable: false,
+            headerName: 'Action',
+            renderCell: (params: GridRenderCellParams) => {
+                const { row } = params;
+
+                return (
+                    <ChangeUserPlan row={row} />
 
                 )
 

@@ -283,6 +283,23 @@ const navigation = (): VerticalNavItemsType | any => {
 
   // }
   const finalMenus = menus.filter((m: any) => !m.restrict || m.restrict === 'none' || !m.restrict.includes(auth?.user?.workspace_owner_info?.plan?.plan));
+  if (auth?.user?.role_permission_id == 2) {
+    finalMenus.push({
+      sectionTitle: 'Admin Settings'
+    },
+      {
+        title: 'Users',
+        icon: 'mdi:account-outline',
+        path: '/admin/users',
+        restrict: 'none'
+      },
+      {
+        title: 'Plans',
+        icon: 'mdi:currency-usd',
+        path: '/admin/articles',
+        restrict: 'none'
+      })
+  }
 
   return finalMenus
 }

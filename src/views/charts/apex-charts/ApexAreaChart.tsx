@@ -45,7 +45,7 @@ interface PickerProps {
 
 
 
-const ApexAreaChart = () => {
+const ApexAreaChart = (props: any) => {
   // ** States
   const [endDate, setEndDate] = useState<DateType>(null)
   const [startDate, setStartDate] = useState<DateType>(null)
@@ -127,8 +127,9 @@ const ApexAreaChart = () => {
       },
       labels: {
         style: { colors: theme.palette.text.disabled },
-        show: false
+        show: true
       },
+      tickAmount: 16,
       categories: categories
     }
   }
@@ -222,16 +223,16 @@ const ApexAreaChart = () => {
         </CardContent>
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTables start={startDate} end={endDate} />
+        <GSCTables start={startDate} end={endDate} site={props.site} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesPages start={startDate} end={endDate} />
+        <GSCTablesPages start={startDate} end={endDate} site={props.site} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesCountry start={startDate} end={endDate} />
+        <GSCTablesCountry start={startDate} end={endDate} site={props.site} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesDevice start={startDate} end={endDate} />
+        <GSCTablesDevice start={startDate} end={endDate} site={props.site} />
       </Card>
     </Box>
 

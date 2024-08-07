@@ -48,6 +48,7 @@ export type UserDataType = {
   workspaces: any | undefined
   workspace_owner_info: any | undefined
   current_workspace: any | undefined
+  role_permission_id: any | undefined
 }
 
 export type AuthValuesType = {

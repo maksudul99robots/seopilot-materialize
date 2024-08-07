@@ -62,7 +62,7 @@ const ApexCharts = () => {
             subtitle={<Typography variant='body2'>{site?.site_url}</Typography>}
           />
           <Grid item xs={12}>
-            <ApexAreaChart />
+            <ApexAreaChart site={site?.site_url} />
           </Grid>
           <Grid item xs={12}>
 

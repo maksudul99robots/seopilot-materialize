@@ -266,12 +266,17 @@ const GSCTablesPages = (props: any) => {
 
     ];
 
-    function formatDate(date: Date) {
-        let d = new Date(date);
-        let month = ('0' + (d.getMonth() + 1)).slice(-2);
-        let day = ('0' + d.getDate()).slice(-2);
-        let year = d.getFullYear();
-        return `${month}-${day}-${year}`;
+    function formatDateToYYYYMMDD(date: Date) {
+        if (date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}${month}${day}`;
+        } else {
+            return ""
+        }
+
     }
 
     return (
@@ -283,7 +288,7 @@ const GSCTablesPages = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            "GSC_page_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
+                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-pages-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

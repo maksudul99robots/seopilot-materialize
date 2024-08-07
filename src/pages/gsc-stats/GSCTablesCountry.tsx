@@ -50,7 +50,7 @@ const GSCTablesCountry = (props: any) => {
             flex: 0.25,
             minWidth: 150,
             field: 'keys',
-            headerName: 'Query',
+            headerName: 'Country',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 let country = getCountryNameFlag(row.keys)
@@ -286,6 +286,19 @@ const GSCTablesCountry = (props: any) => {
         return `${month}-${day}-${year}`;
     }
 
+    function formatDateToYYYYMMDD(date: Date) {
+        if (date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const day = String(date.getDate()).padStart(2, '0');
+
+            return `${year}${month}${day}`;
+        } else {
+            return ""
+        }
+
+    }
+
     return (
         <Box>
             <Card>
@@ -295,7 +308,7 @@ const GSCTablesCountry = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            "GSC_country_" + formatDate(props.start) + "__" + formatDate(props.end) + ".csv"
+                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-country-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

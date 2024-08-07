@@ -493,6 +493,9 @@ export const LoginRegistrationAPI = {
     async getGSCDevicesInRange(data: any, url = "/get-gsc-device-range", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async changeUserPlan(data: any, url = "/change-user-plan", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
