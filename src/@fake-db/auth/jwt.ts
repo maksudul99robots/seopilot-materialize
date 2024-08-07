@@ -22,7 +22,8 @@ const users: UserDataType[] = [
     approle: {},
     workspaces: {},
     workspace_owner_info: {},
-    current_workspace: 1
+    current_workspace: 1,
+    role_permission_id: 1
   },
   {
     id: 2,
@@ -35,7 +36,8 @@ const users: UserDataType[] = [
     approle: {},
     workspaces: {},
     workspace_owner_info: {},
-    current_workspace: 1
+    current_workspace: 1,
+    role_permission_id: 1
   }
 ]
 
@@ -103,7 +105,8 @@ mock.onPost('/jwt/register').reply(request => {
         approle: {},
         workspaces: {},
         workspace_owner_info: {},
-        current_workspace: 1
+        current_workspace: 1,
+        role_permission_id: 1
       }
 
       users.push(userData)
