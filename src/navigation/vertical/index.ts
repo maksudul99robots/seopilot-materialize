@@ -82,7 +82,8 @@ const navigation = (): VerticalNavItemsType | any => {
           'free',
           'passenger',
           'copilot',
-          'captain'
+          'captain',
+          'extension_only'
         ]
         // badgeColor: "info",
         // badgeContent: "beta"
