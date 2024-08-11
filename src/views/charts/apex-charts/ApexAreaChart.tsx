@@ -46,9 +46,7 @@ interface PickerProps {
 
 
 const ApexAreaChart = (props: any) => {
-  // ** States
-  const [endDate, setEndDate] = useState<DateType>(null)
-  const [startDate, setStartDate] = useState<DateType>(null)
+
   const [data, setData] = useState<any>(
     [
       {
@@ -162,41 +160,39 @@ const ApexAreaChart = (props: any) => {
     )
   })
 
-  const handleOnChange = (dates: any) => {
-    const [start, end] = dates
-    setStartDate(start)
-    setEndDate(end)
-    if (start && end)
-      LoginRegistrationAPI.getGSCDataInRange({ start: start, end: end }).then(res => {
+  useEffect(() => {
+    if (props.startDate && props.endDate)
+      LoginRegistrationAPI.getGSCDataInRange({ start: props.startDate, end: props.endDate }).then(res => {
         console.log(res.data)
         setData(res.data.data)
         setCategories(res.data.date)
       }).catch(e => {
         console.log(e)
       })
-  }
+  }, [props.startDate, props.endDate])
 
-  useEffect(() => {
-    const now = new Date();
-    const oneMonthBefore = new Date();
-    oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
-    setStartDate(oneMonthBefore)
-    setEndDate(now)
 
-    LoginRegistrationAPI.getGSCDataInRange({ start: oneMonthBefore, end: now }).then(res => {
-      console.log(res.data)
-      setData(res.data.data)
-      setCategories(res.data.date)
-    }).catch(e => {
-      console.log(e)
-    })
-  }, [])
+  // useEffect(() => {
+  //   const now = new Date();
+  //   const oneMonthBefore = new Date();
+  //   oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
+  //   setStartDate(oneMonthBefore)
+  //   setEndDate(now)
+
+  //   LoginRegistrationAPI.getGSCDataInRange({ start: oneMonthBefore, end: now }).then(res => {
+  //     console.log(res.data)
+  //     setData(res.data.data)
+  //     setCategories(res.data.date)
+  //   }).catch(e => {
+  //     console.log(e)
+  //   })
+  // }, [])
 
   return (
     <Box>
       <Card>
         <CardHeader
-          title={<GSCSummary start={startDate} end={endDate} />}
+          title={<GSCSummary start={props.startDate} end={props.endDate} />}
           // subheader='Commercial networks'
           subheaderTypographyProps={{ sx: { color: theme => `${theme.palette.text.disabled} !important` } }}
           sx={{
@@ -205,34 +201,34 @@ const ApexAreaChart = (props: any) => {
             '& .MuiCardHeader-action': { mb: 0 },
             '& .MuiCardHeader-content': { mb: [2, 0] }
           }}
-          action={
-            <DatePicker
-              selectsRange
-              endDate={endDate}
-              id='apexchart-area'
-              selected={startDate}
-              startDate={startDate}
-              onChange={handleOnChange}
-              placeholderText='Click to select a date'
-              customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
-            />
-          }
+        // action={
+        //   <DatePicker
+        //     selectsRange
+        //     endDate={endDate}
+        //     id='apexchart-area'
+        //     selected={startDate}
+        //     startDate={startDate}
+        //     onChange={handleOnChange}
+        //     placeholderText='Click to select a date'
+        //     customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
+        //   />
+        // }
         />
         <CardContent>
           <ReactApexcharts type='area' height={400} options={options} series={data} />
         </CardContent>
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTables start={startDate} end={endDate} site={props.site} />
+        <GSCTables start={props.startDate} end={props.endDate} site={props.site} links={props.links} setLinks={props.setLinks} keyword={props.keyword} setKeyword={props.setKeyword} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesPages start={startDate} end={endDate} site={props.site} />
+        <GSCTablesPages start={props.startDate} end={props.endDate} site={props.site} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesCountry start={startDate} end={endDate} site={props.site} />
+        <GSCTablesCountry start={props.startDate} end={props.endDate} site={props.site} />
       </Card>
       <Card sx={{ marginTop: "30px" }}>
-        <GSCTablesDevice start={startDate} end={endDate} site={props.site} />
+        <GSCTablesDevice start={props.startDate} end={props.endDate} site={props.site} />
       </Card>
     </Box>
 

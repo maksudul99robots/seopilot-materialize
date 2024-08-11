@@ -74,7 +74,8 @@ import GetCountryList from 'src/pages/create-article/CountryList';
 import Folders from 'src/pages/create-article/Folders';
 import AssignUsers from 'src/pages/create-article/AssignUsers';
 import { toast } from 'react-toastify';
-
+import Tooltip2 from 'react-power-tooltip'
+import { width } from '@mui/system';
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({
     '& .MuiBadge-badge': {
@@ -159,44 +160,42 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function CreateArticleUI(props: any) {
-    console.log("props.settings:", props)
+    console.log("props:", props.titles)
     // ** States
     const [show, setShow] = useState<boolean>(false)
 
     const [numberOfLinks, setNumberOfLinks] = useState([1]);
     //Values
     const [articleType, setArticleType] = useState('blog')
-    const [topic, setTopic] = useState(props.settings[props.idea_id].topic)
-    const [oldTopic, setOldTopic] = useState(props.settings[props.idea_id].topic)
-    const [keywords, setKeywords] = useState<any>(separateString(props.settings[props.idea_id].keywords))
-    const [oldKeywords, setOldKeywords] = useState<any>(separateString(props.settings[props.idea_id].keywords))
-    const [tone, setTone] = useState(props.settings[props.idea_id].tone)
-    const [language, setLanguage] = useState(props.settings[props.idea_id].language)
-    const [links, setLinks] = useState<Array<string>>(separateString(props.settings[props.idea_id].links))
-    // const [country, setCountry] = useState<string>('United States of America (USA)')
-    const [country, setCountry] = useState<string>(props.settings[props.idea_id].country)
-    const [articleLength, setArticleLength] = useState<string>(props.settings[props.idea_id].article_length)
+    const [topic, setTopic] = useState('')
+    const [oldTopic, setOldTopic] = useState('')
+    const [keywords, setKeywords] = useState<any>(separateString(props.keyword));
+    const [tone, setTone] = useState('Clear, Knowledgeable and Confident');
+    const [language, setLanguage] = useState('English');
+    const [links, setLinks] = useState<Array<string>>(separateString(''));
+    const [country, setCountry] = useState<string>('Default');
+    const [articleLength, setArticleLength] = useState<string>('short');
     const [headings, setHeadings] = useState<any>([]);
     const [tempURLHeadings, setTempURLHeadings] = useState<any>([]);
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
-    const [outlineSource, setOutlineSource] = useState<string>(props.settings[props.idea_id].outline_source);
-    const [model, setModel] = useState<string>(props.settings[props.idea_id].model); //gpt-3.5-turbo-1106
-    const [imgService, setImgService] = useState<string>(props.settings[props.idea_id].img_service);
-    const [pointOfView, setPointOfView] = useState<string>(props.settings[props.idea_id].point_of_view);
-    const [outlineURL, setOutlineURL] = useState(props.settings[props.idea_id].outline_url);
-    const [imgPrompt, setImgPrompt] = useState(props.settings[props.idea_id].img_prompt);
+    const [outlineSource, setOutlineSource] = useState<string>('system');
+    const [model, setModel] = useState<string>('gpt-4o'); //gpt-3.5-turbo-1106
+    const [imgService, setImgService] = useState<string>('unsplash');
+    const [pointOfView, setPointOfView] = useState<string>('Third Person (he, she, it, they)');
+    const [outlineURL, setOutlineURL] = useState('');
+    const [imgPrompt, setImgPrompt] = useState('');
     const [showOutline, setShowOutline] = useState(false);
-    const [faq, setFaq] = useState(props.settings[props.idea_id].faq);
-    const [toc, setToc] = useState(props.settings[props.idea_id].toc);
-    const [citation, setCitation] = useState(props.settings[props.idea_id].citation);
-    const [noOfCitations, setNoOfCitations] = useState(props.settings[props.idea_id].no_of_citations);
-    const [introduction, setIntroduction] = useState(props.settings[props.idea_id].introduction);
-    const [conclusion, setConclusion] = useState(props.settings[props.idea_id].conclusion);
+    const [faq, setFaq] = useState(false);
+    const [toc, setToc] = useState(true);
+    const [citation, setCitation] = useState(false);
+    const [noOfCitations, setNoOfCitations] = useState('1-10');
+    const [introduction, setIntroduction] = useState(true);
+    const [conclusion, setConclusion] = useState(true);
     const [loading, setLoading] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
-    const [showAdditionalSettings, setShowAdditionalSettings] = useState(true);
     const [showFeaturedImg, setShowFeaturedImg] = useState(true);
-    const [folder, setFolder] = useState<string | number | any>(props.settings[props.idea_id].folder_id)
+    const [disabled, setDisabled] = useState(true);
+    const [folder, setFolder] = useState<string | number>('')
     const [numberedItem, setNumberedItem] = useState(false);
     const [imgServiceList, setImgServiceList] = useState<any>([
         {
@@ -220,33 +219,40 @@ export default function CreateArticleUI(props: any) {
             display: 'Dall-E-2'
         }
     ]);
-    const auth = useAuth();
+    const auth = useAuth()
     const [extraPrompt, setExtraPrompt] = useState<string>('')
-    const [user, setUser] = useState(props.settings[props.idea_id].assign_user);
-    const [dateTime, setDateTime] = useState<Date>(new Date(props.settings[props.idea_id].due_date ? props.settings[props.idea_id].due_date : new Date()));
-    const [internalLinking, setInternalLinking] = useState(props.settings[props.idea_id].internal_linking ? props.settings[props.idea_id].internal_linking : false);
+    const [user, setUser] = useState(props?.data?.assign_user ? props?.data?.assign_user : auth.user?.id);
+    const [dateTime, setDateTime] = useState<Date>(new Date());
+    const [internalLinking, setInternalLinking] = useState(props.data?.internal_linking ? props.data?.internal_linking : false);
+    const [showTitleSuggestion, setShowTitleSuggestion] = useState(true);
     const handleClose = () => {
         setShow(false);
-        props.handleClose();
+        // props.handleClose();
+        props.toggleDrawer()
     }
 
-    // console.log("props.settings[props.idea_id]:", props.settings[props.idea_id])
+    useEffect(() => {
+        if (props?.data?.raw_outline) {
 
-    const convertArrayToCsvKeywords = (keywordArray: any) => {
-        let csvKeywords = '';
-        if (keywordArray.length > 0) {
-            for (let i = 0; i < keywordArray.length; i++) {
-                if (csvKeywords == '') {
-                    csvKeywords = keywordArray[i];
-                } else {
-                    csvKeywords = csvKeywords + ',' + keywordArray[i];
-                }
+            let h = JSON.parse(props.data.raw_outline);
+            if (typeof (h) == 'object') {
+                setHeadings(h)
             }
 
         }
+    }, [props?.data?.raw_outline])
 
-        return csvKeywords;
-    }
+    // console.log("props.settings[props.idea_id]:", props.settings[props.idea_id])
+
+
+    useEffect(() => {
+        if (topic.length > 0 && disabled) {
+            setDisabled(false)
+        }
+        if (topic.length == 0 && !disabled) {
+            setDisabled(true)
+        }
+    }, [topic])
 
 
     const convertArrayToCSV = (array: any) => {
@@ -264,31 +270,50 @@ export default function CreateArticleUI(props: any) {
 
         return csv;
     }
+
+    const convertArrayToCsvKeywords = (keywordArray: any) => {
+        let csvKeywords = '';
+        if (keywordArray.length > 0) {
+            for (let i = 0; i < keywordArray.length; i++) {
+                if (csvKeywords == '') {
+                    csvKeywords = keywordArray[i];
+                } else {
+                    csvKeywords = csvKeywords + ',' + keywordArray[i];
+                }
+            }
+
+        }
+
+        return csvKeywords;
+    }
+
     const handleSubmit = () => {
+        // console.log({
+        //   article_type: articleType,
+        //   topic: topic,
+        //   keywords: convertArrayToCsvKeywords(keywords),
+        //   article_length: articleLength,
+        //   tone: tone,
+        //   language: language,
+        //   country: country,
+        //   links: convertArrayToCSV(links),
+        //   outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+        //   outline_source: outlineSource,
+        //   outline_url: outlineURL,
+        //   faq: faq,
+        //   toc: toc,
+        //   model: model,
+        //   showFeaturedImg: showFeaturedImg,
+        //   point_of_view: pointOfView,
+        //   img_service: showFeaturedImg ? imgService : null,
+        //   extra_prompt: extraPrompt,
+        //   img_prompt: imgPrompt,
+        //   citation: citation,
+        //   article_id: '',
+        //   no_of_citations: noOfCitations
+        // })
 
-        props.handleChange(props.idea_id, topic, 'topic')
-        props.handleChange(props.idea_id, convertArrayToCsvKeywords(keywords), 'keywords')
-        props.handleChange(props.idea_id, articleLength, 'article_length')
-        props.handleChange(props.idea_id, tone, 'tone')
-        props.handleChange(props.idea_id, language, 'language')
-        props.handleChange(props.idea_id, convertArrayToCSV(links), 'links')
-        props.handleChange(props.idea_id, headings.length > 0 ? JSON.stringify(headings) : null, 'outlines')
-        props.handleChange(props.idea_id, outlineSource, 'outline_source')
-        props.handleChange(props.idea_id, outlineURL, 'outline_url')
-        props.handleChange(props.idea_id, faq, 'faq')
-        props.handleChange(props.idea_id, toc, 'toc')
-        props.handleChange(props.idea_id, model, 'model')
-        props.handleChange(props.idea_id, pointOfView, 'point_of_view')
-        props.handleChange(props.idea_id, imgService, 'img_service')
-        props.handleChange(props.idea_id, extraPrompt, 'extra_prompt')
-        props.handleChange(props.idea_id, imgPrompt, 'img_prompt')
-        props.handleChange(props.idea_id, citation, 'citation')
-        props.handleChange(props.idea_id, noOfCitations, 'no_of_citations')
-        props.handleChange(props.idea_id, folder, 'folder_id')
-        props.handleChange(props.idea_id, internalLinking, 'internal_linking')
-        // props.handleChange(props.idea_id, 'idea', 'status')
-
-        LoginRegistrationAPI.saveIdeaLibrarySettings({
+        LoginRegistrationAPI.createNewIdea({
             article_type: articleType,
             topic: topic,
             keywords: convertArrayToCsvKeywords(keywords),
@@ -309,26 +334,59 @@ export default function CreateArticleUI(props: any) {
             extra_prompt: extraPrompt,
             img_prompt: imgPrompt,
             citation: citation,
-            article_id: props.settings[props.idea_id].article_id,
+            article_id: '',
             no_of_citations: noOfCitations,
-            cluster_id: props.cluster_id,
+            cluster_id: null,
             idea_id: props.idea_id,
-            folder_id: folder,
-            assign_user: user,
-            due_date: dateTime,
-            internal_linking: internalLinking
+            folder_id: folder
 
         }).then(res => {
             // if (topic != oldTopic || JSON.stringify(keywords) != JSON.stringify(oldKeywords)) {
-            props.updateList()
+            // props.updateList()
             // }
-            props.toggleDrawer()
+            handleClose()
+            Swal.fire({
+                title: 'Success',
+                text: 'Article Idea is created successfully!',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                // showCancelButton: true,
+                // confirmButtonColor: "#BB2124",
+                // cancelButtonText: "CANCEL"
+            })
         }).catch(e => {
+            console.log("inside catch", e)
+            Swal.fire({
+                // title: 'Error',
+                text: 'Unable to create article idea!',
+                icon: 'error',
+                confirmButtonText: 'DELETE',
+                // showCancelButton: true,
+                // confirmButtonColor: "#BB2124",
+                // cancelButtonText: "CANCEL"
+            }).then(res => {
+                handleClose()
 
+            })
         })
 
 
+
     }
+    const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
+        return (
+            <TextField
+                inputRef={ref}
+                fullWidth
+                {...props}
+                label={props.label || ''}
+                sx={{ width: '100%' }}
+                error={props.error}
+            />
+        )
+    })
+
+
 
     const handleArticleChange = (prop: string | ChangeEvent<HTMLInputElement>) => {
         if (typeof prop === 'string') {
@@ -439,26 +497,17 @@ export default function CreateArticleUI(props: any) {
 
     function separateString(str: string) {
         // Split the string by commas
-        const parts = str?.split(',');
+        if (str && str != '') {
+            const parts = str?.split(',');
 
-        // Trim each part to remove leading and trailing whitespaces
-        const trimmedParts = parts.map((part: any) => part.trim());
-        // console.log("trimmedParts:", trimmedParts);
-        return trimmedParts;
+            // Trim each part to remove leading and trailing whitespaces
+            const trimmedParts = parts.map((part: any) => part.trim());
+            // console.log("trimmedParts:", trimmedParts);
+            return trimmedParts;
+        }
+        return []
     }
 
-    const PickersComponent = forwardRef(({ ...props }: PickerProps, ref) => {
-        return (
-            <TextField
-                inputRef={ref}
-                fullWidth
-                {...props}
-                label={props.label || ''}
-                sx={{ width: '100%' }}
-                error={props.error}
-            />
-        )
-    })
 
     const [values, setValues] = useState<DefaultStateType>(defaultState)
     const handleStartDate = (date: Date) => {
@@ -466,14 +515,6 @@ export default function CreateArticleUI(props: any) {
             setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
         }
     }
-
-    useEffect(() => {
-
-        if (props.hasClaudeAiKey == 'yes' && props.hasOpenAiKey == 'no') {
-            setModel('claude-3-5-sonnet-20240620')
-        }
-    }, [props.hasClaudeAiKey, props.hasOpenAiKey])
-
     return (
         // <Card>
         <>
@@ -493,15 +534,18 @@ export default function CreateArticleUI(props: any) {
                     }} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
                         <Icon icon='mdi:close' />
                     </IconButton>
-                    <Box sx={{ mb: 9, textAlign: 'center' }}>
-                        <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-                            Article Settings
+                    <Box sx={{ mb: 10, textAlign: 'center' }}>
+                        <Typography variant='h5' sx={{ lineHeight: '2rem' }}>
+
+                            Create Article Idea
+
                         </Typography>
-                        {/* <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article for you.</Typography> */}
+                        <Typography variant='body2'>Enter your inputs and watch SEO Pilot research and generate a rank-worthy article idea for you.</Typography>
+                        {/* <Typography variant='body2'>Select a Site to Send Article</Typography> */}
                     </Box>
 
                     <Grid container spacing={6}>
-                        <Card sx={{ width: "100%", padding: "30px" }}>
+                        <Card sx={{ width: "100%", padding: "30px", overflow: "visible" }}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12}>
                                     {/* <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}> */}
@@ -537,12 +581,11 @@ export default function CreateArticleUI(props: any) {
                                                 setModel(e.target.value)
                                             }}
                                         >
-                                            <MenuItem value='gpt-4o' disabled={props.hasOpenAiKey != 'yes'}>GPT-4o (Recommended)</MenuItem>
-                                            <MenuItem value='gpt-4o-mini' disabled={props.hasOpenAiKey != 'yes'}>GPT-4o mini</MenuItem>
-                                            <MenuItem value='gpt-4-turbo' disabled={props.hasOpenAiKey != 'yes'}>GPT-4-TURBO</MenuItem>
-                                            <MenuItem value='gpt-4' disabled={props.hasOpenAiKey != 'yes'}>GPT-4</MenuItem>
-                                            <MenuItem value='gpt-3.5-turbo-1106' disabled={props.hasOpenAiKey != 'yes'}>GPT-3.5-TURBO</MenuItem>
-                                            <MenuItem value='claude-3-5-sonnet-20240620' disabled={props.hasClaudeAiKey != 'yes'}>Claude 3.5 Sonnet</MenuItem>
+                                            <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                                            <MenuItem value='gpt-4o-mini'>GPT-4o mini</MenuItem>
+                                            <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4'>GPT-4</MenuItem>
+                                            <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -567,6 +610,29 @@ export default function CreateArticleUI(props: any) {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12}>
+
+
+                                    <Box sx={{ position: "relative", width: "20%" }}>
+                                        {showTitleSuggestion && props?.titles.length > 0 &&
+                                            <Tooltip2
+                                                show={true}
+                                                arrowAlign="start"
+                                                position="top center"
+                                                zIndex="1000000"
+                                                fontSize='14px'
+
+                                            >
+                                                {props?.titles.map((t: string) => {
+                                                    return <span style={{ width: "100px" }} onClick={() => { setTopic(t); setShowTitleSuggestion(false) }}>{t}</span>
+                                                })}
+                                            </Tooltip2>
+
+                                        }
+
+
+                                        {!showTitleSuggestion && props?.titles?.length > 0 && <Typography variant='body2' sx={{ marginBottom: "10px", color: "#2979ff", cursor: "pointer" }} onClick={() => setShowTitleSuggestion(true)}>Show Title suggestions</Typography>}
+
+                                    </Box>
 
                                     <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
                                         setTopic(e.target.value)
@@ -812,15 +878,16 @@ export default function CreateArticleUI(props: any) {
 
                         </Typography> */}
 
+
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                             <Grid container spacing={6}>
 
 
 
-                                <Grid item xs={12} className='add-icon-color'>
-                                    <div onClick={() => { setShowAdditionalSettings(!showAdditionalSettings) }} style={{ display: "flex", alignItems: "center" }} >
-                                        <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} className='add-icon-color'>Advanced Settings</Typography>
-                                        {!showAdditionalSettings ? <Icon icon="bxs:down-arrow" fontSize={15} /> : <Icon icon="bxs:up-arrow" fontSize={15} />}
+                                <Grid item xs={12} >
+                                    <div style={{ display: "flex", alignItems: "center" }} >
+                                        <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} >Section Settings</Typography>
+
                                     </div>
 
                                 </Grid>
@@ -905,7 +972,6 @@ export default function CreateArticleUI(props: any) {
                                         </Grid>
                                         : null
                                 }
-
 
 
                                 <Grid item xs={12} sx={{ display: "flex" }}>
@@ -1022,7 +1088,20 @@ export default function CreateArticleUI(props: any) {
                                 }
 
 
+                                {/* </Box> */}
 
+
+                                {
+                                    articleType != 'listicle' &&
+                                    <Button variant='text' size="large" sx={{ mr: 2, ml: 6, p: 2, mt: 2, display: "flex" }} onClick={() => {
+                                        const newArray = [...numberOfLinks];
+                                        newArray.push(1);
+                                        setNumberOfLinks(newArray);
+                                    }} startIcon={<Icon icon="gg:add" />}>
+                                        Add Another Link
+                                    </Button>
+                                }
+                                {/* Additional Settings ends*/}
 
 
                             </Grid>
@@ -1058,17 +1137,9 @@ export default function CreateArticleUI(props: any) {
 
                                 <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
                                     <SwitchesCustomized label="Include Auto Internal Linking" isChecked={internalLinking} onClick={() => {
-                                        if (props.allSites.length > 0)
-                                            setInternalLinking(!internalLinking)
-                                        else
-                                            toast('You have not connected GSC or you do not have any website added to your GSC.', { hideProgressBar: true, autoClose: 2000, type: 'error' })
-                                        // Swal.fire({
-                                        //     title: '',
-                                        //     html: '<p>You have not connected GSC or you do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
-                                        //     icon: 'warning',
-                                        //     confirmButtonText: 'Close',
-                                        //     confirmButtonColor: "#2979FF"
-                                        // })
+
+                                        setInternalLinking(!internalLinking)
+
                                     }} />
                                     <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
                                     <LightTooltip title={
@@ -1193,11 +1264,11 @@ export default function CreateArticleUI(props: any) {
 
                             </Grid>
                         </Card >
-                        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
+
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12}>
-                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "20px", marginBottom: "10px" }}>
+                                    <Typography variant='body1' sx={{ fontSize: "22px", paddingBottom: "10px", fontWeight: 500, marginTop: "10px", marginBottom: "10px" }}>
                                         Content Operations
                                     </Typography>
                                 </Grid>
@@ -1232,6 +1303,8 @@ export default function CreateArticleUI(props: any) {
                                 </Grid>
                             </Grid>
                         </Card>
+                        {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
+
 
 
 
@@ -1271,11 +1344,8 @@ export default function CreateArticleUI(props: any) {
 
 
                     >
-                        {
-                            props.isCreateIdea ?
-                                'Create Idea' :
-                                "save"
-                        }
+                        Create Idea
+
                     </Button>
                     {/* <Button variant='outlined' size="large" sx={{ mr: 3, ml: 3, pt: 3, pb: 3, pl: 4, pr: 4 }} color='secondary' >
                         Cancel

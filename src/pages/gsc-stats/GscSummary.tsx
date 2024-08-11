@@ -28,7 +28,7 @@ const GSCSummary = (props: any) => {
                 if (e?.response?.data == 'No GSC Site Added') {
                     Swal.fire({
                         title: 'Error',
-                        text: 'Please Add GSC',
+                        text: 'Please integrate your GSC in SEO Pilot.',
                         icon: 'warning',
                         confirmButtonText: 'OK',
                         confirmButtonColor: "#2979FF"

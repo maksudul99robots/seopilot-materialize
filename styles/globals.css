@@ -326,3 +326,22 @@ code[class*='language-'] {
   align-items: center;
   text-decoration: none !important;
 }
+
+.chartdatepicker{
+  background-color: #fff;
+  width: 100%;
+  position: sticky !important;
+  top: 0% !important;
+  z-index: 10000;
+  /* position: sticky !important; */
+  
+}
+.rpt-hover{
+  width:25vw
+}
+.rpt-textbox{
+  width: 25vw;
+}
+.rpt-textbox-container{
+  width: 25vw !important;
+}

@@ -34,11 +34,9 @@ import axios from 'axios';
 import AiScoreComponent from 'src/components/ArticleScoreComponent';
 import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
-import ReWritenTxtTable from 'src/services/ToolbarOptions/ReWritenTxtTable';
 import Metrics from 'src/components/Metrics';
 import { getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
-import { CustomMadeChips } from 'src/services/CustomMadeChips';
 import { getDateTime } from 'src/services/DateTimeFormatter';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (

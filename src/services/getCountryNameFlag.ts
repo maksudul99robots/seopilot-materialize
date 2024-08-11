@@ -249,6 +249,6 @@ let countryList = [
     { "alpha2": "AX", "alpha3": "ALA", "name": "Åland Islands" }
 ]
 export const getCountryNameFlag = (alpha3: string) => {
-    console.log(alpha3)
+    // console.log(alpha3)
     return countryList.filter(c => c.alpha3 == alpha3.toLocaleUpperCase())
 }

@@ -13,6 +13,7 @@ import { styled } from '@mui/material/styles'
 import { CSVLink } from "react-csv";
 import { Button } from '@mui/material'
 import Icon from 'src/@core/components/icon'
+import GSCSidebar from 'src/services/GSCSidebar'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -47,8 +48,8 @@ const GSCTables = (props: any) => {
 
     const columns: GridColDef[] = [
         {
-            flex: 0.25,
-            minWidth: 150,
+            flex: 0.20,
+            minWidth: 140,
             field: 'keys',
             headerName: 'Query',
             renderCell: (params: GridRenderCellParams) => {
@@ -85,7 +86,7 @@ const GSCTables = (props: any) => {
             }
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Clicks Growth',
             field: 'clicksChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -145,7 +146,7 @@ const GSCTables = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'CTR Growth',
             field: 'ctrChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -164,7 +165,7 @@ const GSCTables = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Position',
             field: 'position',
             renderCell: (params: GridRenderCellParams) => (
@@ -174,7 +175,7 @@ const GSCTables = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Position Growth',
             field: 'positionChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -192,6 +193,14 @@ const GSCTables = (props: any) => {
                     </LightTooltip>
 
                 </Typography>
+            )
+        },
+        {
+            flex: 0.10,
+            headerName: 'Action',
+            field: 'action',
+            renderCell: (params: GridRenderCellParams) => (
+                <GSCSidebar keyword={params.row.keys} />
             )
         }
     ]
@@ -297,7 +306,7 @@ const GSCTables = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-query-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-query-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

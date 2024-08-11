@@ -288,7 +288,7 @@ const GSCTablesDevice = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-device-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-device-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

@@ -384,8 +384,6 @@ const Clusters = () => {
                     // item.id.toString().toLowerCase().includes(queryLowered) ||
                     // item.output?.toLowerCase().includes(queryLowered) ||
                     item.topic?.toLowerCase().includes(queryLowered) ||
-                    // item.is_error.toLowerCase().includes(queryLowered) ||
-                    item.number_of_clusters?.toLowerCase().includes(queryLowered) ||
                     item.target_audience?.toLowerCase().includes(queryLowered) ||
                     // item.user_id.toLowerCase().includes(queryLowered) ||
                     item.createdAt.toString().toLowerCase().includes(queryLowered) ||

@@ -14,6 +14,8 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import Link from 'next/link';
+import ShowAllClustersForGSC from 'src/services/clusterListGSC/ShowAllClustersForGSC';
+import ShowAllClustersForGSCRefined from 'src/services/clusterListGSC/ShowAllClustersForGSCRefined';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -41,6 +43,8 @@ const GSCTablesPages = (props: any) => {
     const [length, setLength] = useState<string>('all')
     const [runFilter, setRunFilter] = useState<number>(0)
     const [loading, setLoading] = useState<boolean>(false);
+    const [clusters, setClusters] = useState<any>([])
+
     const loadServerRows = (currentPage: number, data: any) => {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
@@ -85,7 +89,7 @@ const GSCTablesPages = (props: any) => {
             }
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Clicks Growth',
             field: 'clicksChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -145,7 +149,7 @@ const GSCTablesPages = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'CTR Growth',
             field: 'ctrChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -164,7 +168,7 @@ const GSCTablesPages = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Position',
             field: 'position',
             renderCell: (params: GridRenderCellParams) => (
@@ -174,7 +178,7 @@ const GSCTablesPages = (props: any) => {
             )
         },
         {
-            flex: 0.09,
+            flex: 0.08,
             headerName: 'Position Growth',
             field: 'positionChange',
             renderCell: (params: GridRenderCellParams) => (
@@ -193,6 +197,14 @@ const GSCTablesPages = (props: any) => {
 
                 </Typography>
             )
+        },
+        {
+            flex: 0.10,
+            headerName: 'Action',
+            field: 'action',
+            renderCell: (params: GridRenderCellParams) => (
+                <ShowAllClustersForGSCRefined clusters={clusters} page={params.row.keys} start={props.start} end={props.end} />
+            )
         }
     ]
 
@@ -210,6 +222,16 @@ const GSCTablesPages = (props: any) => {
                 })
         }
     }, [props.start, props.end])
+
+    useEffect(() => {
+        LoginRegistrationAPI.getClusters({}).then(res => {
+            // console.log("res:", res.data)
+            setClusters(res.data)
+
+        }).catch(e => {
+
+        })
+    }, [])
 
     const fetchTableData = useCallback(
         async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
@@ -281,6 +303,8 @@ const GSCTablesPages = (props: any) => {
 
     return (
         <Box>
+
+
             <Card>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', margin: '20px' }}>
                     <Typography variant='h6'>Pages</Typography>
@@ -288,7 +312,7 @@ const GSCTablesPages = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-pages-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-pages-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

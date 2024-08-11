@@ -803,6 +803,13 @@
     "@types/draft-js" "*"
     "@types/react" "*"
 
+"@types/react-power-tooltip@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/@types/react-power-tooltip/-/react-power-tooltip-1.0.5.tgz"
+  integrity sha512-5t5PKMK8COwkgEhx0qlboWoEk3tb9MoX0syzuztt1r3pfHJTLBvtqm6UL9dk/A2YiWl3VSye9x1vAvR/DPZJCA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@7.1.25":
   version "7.1.25"
   resolved "https://registry.npmjs.org/@types/react-redux/-/react-redux-7.1.25.tgz"
@@ -4096,6 +4103,11 @@ react-popper@^2.2.5, react-popper@^2.3.0, react-popper@2.3.0:
   dependencies:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
+
+react-power-tooltip@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/react-power-tooltip/-/react-power-tooltip-1.0.2.tgz"
+  integrity sha512-c/aCR92wxOPj+mYp3X3WPOEafIEZCEdjXQJzY72SXaVfCp7lhoaBi0UZcJnqMPcWVwFmtDbhQykqhkBlBsGA4A==
 
 react-redux@8.0.5:
   version "8.0.5"

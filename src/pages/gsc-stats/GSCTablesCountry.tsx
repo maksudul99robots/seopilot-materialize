@@ -35,7 +35,6 @@ const GSCTablesCountry = (props: any) => {
     const [sortColumn, setSortColumn] = useState<string>('clicks')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([])
-    const [reloadData, setReloadData] = useState<any>(0)
     const [status, setStatus] = useState<string>('all')
     const [type, setType] = useState<string>('all')
     const [length, setLength] = useState<string>('all')
@@ -54,7 +53,7 @@ const GSCTablesCountry = (props: any) => {
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
                 let country = getCountryNameFlag(row.keys)
-                console.log("country:", country)
+                // console.log("country:", country)
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -223,6 +222,7 @@ const GSCTablesCountry = (props: any) => {
         }
     }, [props.start, props.end])
 
+
     const fetchTableData = useCallback(
         async (sort: SortType, q: string, column: string, type: string = 'all', length: string = 'all', status: string = 'all') => {
             const queryLowered = q.toLowerCase()
@@ -308,7 +308,7 @@ const GSCTablesCountry = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            (props.site && props.site.split("sc-domain:") ? props.site.split("sc-domain:")[1] : "") + "-country-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-country-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

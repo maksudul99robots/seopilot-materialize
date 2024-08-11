@@ -496,6 +496,12 @@ export const LoginRegistrationAPI = {
     async changeUserPlan(data: any, url = "/change-user-plan", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getTitleForKeywords(data: any, url = "/get-titles-for-keyword", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async createIdeaInsertToCluster(data: any, url = "/create-idea-insert-cluster-gsc-pages", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
