@@ -127,7 +127,11 @@ const Pricing = () => {
     }
   ]
 
-  // console.log("auth?.user:", auth?.user)
+  useEffect(() => {
+    if (auth?.user?.workspace_owner_info?.plan?.plan && auth?.user?.workspace_owner_info?.plan?.plan.includes('yearly')) {
+      setPlan('annually')
+    }
+  }, [auth?.user])
 
 
   // ** States
