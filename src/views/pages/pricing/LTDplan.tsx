@@ -14,7 +14,7 @@ const LTDPlan = ({ plan, downOrCancel }: any) => {
                 (plan.plan == 'captain' || plan.plan == "monthly - captain") ? 'captain' :
                     (plan.plan == 'free') ? 'free' : ''
 
-
+    console.log("mainPlan:", mainPlan)
 
     return (
 
