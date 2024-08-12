@@ -612,7 +612,7 @@ export default function CreateArticleUI(props: any) {
                                 <Grid item xs={12}>
 
 
-                                    <Box sx={{ position: "relative", width: "20%" }}>
+                                    <Box sx={{ position: "relative", width: "40%" }}>
                                         {showTitleSuggestion && props?.titles.length > 0 &&
                                             <Tooltip2
                                                 show={true}
@@ -630,7 +630,7 @@ export default function CreateArticleUI(props: any) {
                                         }
 
 
-                                        {!showTitleSuggestion && props?.titles?.length > 0 && <Typography variant='body2' sx={{ marginBottom: "10px", color: "#2979ff", cursor: "pointer" }} onClick={() => setShowTitleSuggestion(true)}>Show Title suggestions</Typography>}
+                                        {!showTitleSuggestion && props?.titles?.length > 0 && <Typography variant='body2' sx={{ marginBottom: "10px", color: "#2979ff", cursor: "pointer", width: "100%" }} onClick={() => setShowTitleSuggestion(true)}>Show Title suggestions</Typography>}
 
                                     </Box>
 

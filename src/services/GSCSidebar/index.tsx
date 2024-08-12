@@ -104,7 +104,8 @@ export default function GSCSidebar(props: any) {
                             getTitles()
 
                         }}
-                    >{!loading ? "Create Idea" : "Loading"}</Button>
+                        disabled={loading}
+                    >{!loading ? "Add Idea" : "Loading"}</Button>
                     <Drawer
                         className='custom-drawer'
                         anchor={anchor}
