@@ -27,7 +27,7 @@ interface Props {
 const PricingHeader = (props: Props) => {
   // ** Props
   const { plan, handleChange, planObj, downOrCancel } = props
-
+  console.log("planObj:", planObj)
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
