@@ -9,12 +9,12 @@ import { Alert } from '@mui/material'
 const LTDPlan = ({ plan, downOrCancel }: any) => {
 
     let mainPlan: any = plan.plan == 'extension_only' ? 'extension_only' :
-        (plan.plan == 'passenger' || plan.plan == "monthly - passenger") ? 'passenger' :
-            (plan.plan == 'copilot' || plan.plan == "monthly - copilot") ? 'copilot' :
-                (plan.plan == 'captain' || plan.plan == "monthly - captain") ? 'captain' :
+        (plan.plan == 'passenger' || plan.plan == "monthly - passenger" || plan.plan == "yearly - passenger") ? 'passenger' :
+            (plan.plan == 'copilot' || plan.plan == "monthly - copilot" || plan.plan == "yearly - copilot") ? 'copilot' :
+                (plan.plan == 'captain' || plan.plan == "monthly - captain" || plan.plan == "yearly - captain") ? 'captain' :
                     (plan.plan == 'free') ? 'free' : ''
 
-    console.log("mainPlan:", mainPlan)
+    // console.log("mainPlan:", mainPlan)
 
     return (
 
