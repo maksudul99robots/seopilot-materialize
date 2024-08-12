@@ -14,7 +14,6 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import Link from 'next/link';
-import ShowAllClustersForGSC from 'src/services/clusterListGSC/ShowAllClustersForGSC';
 import ShowAllClustersForGSCRefined from 'src/services/clusterListGSC/ShowAllClustersForGSCRefined';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (

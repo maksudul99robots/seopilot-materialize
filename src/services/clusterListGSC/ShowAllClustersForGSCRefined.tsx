@@ -1,32 +1,14 @@
 // ** React Imports
-import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect, useCallback } from 'react'
+import { Ref, useState, forwardRef, ReactElement, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
-import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
-import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
 import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import { DataGrid, GridColDef, GridRenderCellParams, GridSortModel } from '@mui/x-data-grid'
-import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar'
-// ** Third Party Imports
-import Payment from 'payment'
-import Cards, { Focused } from 'react-credit-cards'
-
-// ** Util Import
-import { formatCVC, formatExpirationDate, formatCreditCardNumber } from 'src/@core/utils/format'
-
-// ** Styled Component Imports
-import CardWrapper from 'src/@core/styles/libs/react-credit-cards'
 
 // ** Styles Import
 import 'react-credit-cards/es/styles-compiled.css'
@@ -35,8 +17,6 @@ import 'react-credit-cards/es/styles-compiled.css'
 import Icon from 'src/@core/components/icon'
 import { CircularProgress, FormControl, InputAdornment, InputLabel, MenuItem, Select, Table } from '@mui/material'
 import { LoginRegistrationAPI } from '../API'
-import Clusters from 'src/pages/clusters'
-import ListofClusters from './ListofClusters'
 import { getDateTime } from '../DateTimeFormatter'
 
 import TableBody from '@mui/material/TableBody';
@@ -172,7 +152,7 @@ const ShowAllClustersForGSCRefined = (props: any) => {
             </Typography>
           </Box>
 
-          <TableContainer component={Paper} sx={{ border: "1px solid #0000" }}>
+          <TableContainer component={Paper} sx={{ border: "1px solid #0000" }} className='cluster-table-gsc'>
             <Table sx={{ minWidth: 650 }} aria-label="customized table">
               <TableHead sx={{ backgroundColor: "#F5F5F7" }}>
                 <TableRow>
