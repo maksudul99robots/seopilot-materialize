@@ -118,7 +118,7 @@ const InsertNewText = (props: any) => {
         </p>
       } placement="top">
         <div style={{ height: "100%" }}>
-          <Icon icon="pixelarticons:text-add" className='add-icon-color' style={{ padding: "5px", border: "1px solid #E9E9EC" }}
+          <Icon icon="tabler:file-text-ai" className='add-icon-color' style={{ padding: "5px", border: "1px solid #E9E9EC" }}
             onClick={e => {
 
               setShow(true);

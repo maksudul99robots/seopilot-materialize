@@ -15,6 +15,7 @@ import Rephrase from './Rephrase';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 import Shorten from './Shorten';
 import Bulletize from './Bulletize';
+import Simplify from './Simplify';
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -156,6 +157,22 @@ export default function ToolbarDropdown(props: any) {
                 <MenuItem color='#2979FF' onClick={() => {
                     // handleClose()
                 }} disableRipple>
+                    <Shorten
+                        text={props.text}
+                        setReloadArticle={props.setReloadArticle}
+                        reloadArticle={props.reloadArticle}
+                        article_id={props.article_id}
+                        replaceText={props.replaceText}
+                        handleClose={handleClose}
+                        hasClaudeAiKey={props.hasClaudeAiKey}
+                        hasOpenAiKey={props.hasOpenAiKey}
+                    />
+                </MenuItem>
+
+                <Divider sx={{ my: 0.5 }} />
+                <MenuItem color='#2979FF' onClick={() => {
+                    // handleClose()
+                }} disableRipple>
                     <Rephrase
                         text={props.text}
                         setReloadArticle={props.setReloadArticle}
@@ -171,7 +188,7 @@ export default function ToolbarDropdown(props: any) {
                 <MenuItem color='#2979FF' onClick={() => {
                     // handleClose()
                 }} disableRipple>
-                    <Shorten
+                    <Simplify
                         text={props.text}
                         setReloadArticle={props.setReloadArticle}
                         reloadArticle={props.reloadArticle}
