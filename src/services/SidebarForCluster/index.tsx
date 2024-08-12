@@ -87,7 +87,7 @@ export default function ClusterDrawer(props: any) {
                     <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={() => {
 
                         setState({ ...state, right: true });
-                    }} sx={{ fontSize: "12px", padding: "5px", marginRight: "5px" }}>
+                    }} sx={{ fontSize: "12px", padding: "5px" }}>
 
                         Edit
                     </Button>

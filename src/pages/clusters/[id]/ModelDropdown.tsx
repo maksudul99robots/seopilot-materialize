@@ -13,7 +13,7 @@ const ModelDropdown = (props: any) => {
 
                     size="small"
                     sx={{ fontSize: "12px", padding: "0px" }}
-                    value={props.settings[props.id].model}
+                    value={props.settings[props.id]?.model}
                     onChange={e => props.handleChange(props.id, e.target.value, 'model')}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Without label' }}

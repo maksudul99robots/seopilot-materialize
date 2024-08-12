@@ -377,3 +377,11 @@ code[class*='language-'] {
   cursor: pointer !important;
   scrollbar-color: #009ef7 !important;
 }
+
+.delete-icon {
+  color: #8f919b;
+  cursor: pointer
+}
+.delete-icon:hover {
+  color: red;
+}

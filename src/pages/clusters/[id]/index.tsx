@@ -199,12 +199,12 @@ const ClusterIdea = () => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center', fontSize: "5px !important;" }}>
                         {
-                            settings[row.id].status == 'completed' ?
+                            settings[row.id]?.status == 'completed' ?
 
                                 <Icon icon="mdi:tick-circle" color='#2979FF' fontSize="20px"></Icon>
-                                : settings[row.id].status == 'idea' ?
+                                : settings[row.id]?.status == 'idea' ?
                                     <Icon icon="zondicons:minus-outline" color='#626477' fontSize="17px"></Icon>
-                                    : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
+                                    : settings[row.id]?.status == 'outlined-process' || settings[row.id]?.status == 'initiated' ?
                                         <Icon icon="mdi:tick-circle-outline" color='#2979FF' fontSize="19px"></Icon>
                                         :
                                         <Icon icon="ep:warning-filled" color='#F58F4F' fontSize="19px"></Icon>
@@ -340,7 +340,7 @@ const ClusterIdea = () => {
             }
         },
         {
-            flex: 0.12,
+            flex: 0.18,
             minWidth: 120,
             field: 'Action',
             sortable: false,
@@ -351,15 +351,18 @@ const ClusterIdea = () => {
                 return (
                     <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
                         {
-                            settings[row.id].status == 'completed' ?
+                            settings[row.id]?.status == 'completed' ?
                                 <>
                                     <Button variant='contained' size='medium' color='success' sx={{ fontSize: "10px", backgroundColor: "#228B22", marginRight: "3px" }} href={'/generated-article/' + settings[row.id].article_id}>
                                         view
                                     </Button >
                                     <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
+                                    <Icon icon="ph:trash-light" style={{ marginTop: "4px" }} className='delete-icon' onClick={() => {
+                                        deleteIdea(row.id)
+                                    }} ></Icon>
                                 </>
 
-                                : settings[row.id].status == 'idea' ?
+                                : settings[row.id]?.status == 'idea' ?
                                     <>
                                         <Button variant='contained' size='medium' onClick={() => {
                                             submit(settings[row.id], row)
@@ -367,14 +370,20 @@ const ClusterIdea = () => {
                                             Write
                                         </Button >
                                         <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
+                                        <Icon icon="ph:trash-light" style={{ marginTop: "4px" }} className='delete-icon' onClick={() => {
+                                            deleteIdea(row.id)
+                                        }} ></Icon>
                                     </>
-                                    : settings[row.id].status == 'outlined-process' || settings[row.id].status == 'initiated' ?
+                                    : settings[row.id]?.status == 'outlined-process' || settings[row.id]?.status == 'initiated' ?
                                         <><Button variant='contained' size='medium' disabled onClick={() => {
                                             submit(settings[row.id], row)
                                         }} sx={{ fontSize: "10px", marginRight: "3px", padding: "0px" }}>
                                             <Icon icon="line-md:loading-twotone-loop" style={{ height: "20px" }}></Icon>
                                         </Button >
                                             <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
+                                            <Icon icon="ph:trash-light" style={{ marginTop: "4px" }} className='delete-icon' onClick={() => {
+                                                deleteIdea(row.id)
+                                            }} ></Icon>
                                         </> :
                                         <>
                                             <Button variant='contained' size='medium' sx={{ fontSize: "10px", marginRight: "3px" }} onClick={() => {
@@ -382,7 +391,11 @@ const ClusterIdea = () => {
                                             }}>
                                                 Retry
                                             </Button >
-                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} /></>
+                                            <ClusterDrawer settings={settings} setSettings={setSettings} idea_id={row.id} handleChange={handleChange} updateList={updateList} allSites={allSites} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
+                                            <Icon icon="ph:trash-light" style={{ marginTop: "4px" }} className='delete-icon' onClick={() => {
+                                                deleteIdea(row.id)
+                                            }} ></Icon>
+                                        </>
 
                         }
                     </Box>
@@ -485,13 +498,26 @@ const ClusterIdea = () => {
             })
     }
 
-    const checkStatus = (idea_id: number) => {
-        LoginRegistrationAPI.checkClusterIdeaStatus({ idea_id: idea_id }).then(res => {
-            if (res.data.status == 'completed') {
-                updateList()
+    const deleteIdea = (id: number | string) => {
+        Swal.fire({
+            // title: 'Error',
+            text: "Are you sure you want to delete this Article Idea?",
+            icon: 'warning',
+            confirmButtonText: 'DELETE',
+            showCancelButton: true,
+            confirmButtonColor: "#BB2124",
+            cancelButtonText: "CANCEL"
+        }).then(res => {
+            if (res.value) {
+                LoginRegistrationAPI.deleteIdea({ idea_id: id }).then(res => {
+                    router.reload()
+                }).catch(e => {
+                    console.log("error in delete article")
+                })
             }
-        }).catch(e => {
 
+        }).catch(e => {
+            console.log("inside catch", e)
         })
     }
 
