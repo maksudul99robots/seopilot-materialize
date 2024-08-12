@@ -54,7 +54,7 @@ const GSCTablesPages = (props: any) => {
             flex: 0.25,
             minWidth: 150,
             field: 'keys',
-            headerName: 'Query',
+            headerName: 'Page',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 

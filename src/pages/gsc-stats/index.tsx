@@ -141,7 +141,7 @@ const ApexCharts = () => {
           <Box sx={{ position: "sticky", top: 0, width: "100%", backgroundColor: "#fff", margin: "20px 0px 0px 25px", padding: "0px 10px 0px 10px", zIndex: "1000", border: "1px solid #E9E9EC", borderRadius: "5px" }}>
 
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", }}>
-              <Box sx={{ padding: "10px", width: "60%" }}>
+              <Box sx={{ padding: "10px", width: "70%" }}>
 
                 <Typography variant='h6' sx={{ width: "100%", lineHeight: "15px", marginTop: "10px" }}>
                   {/* <LinkStyled href='' target='_blank'> */}
@@ -153,7 +153,7 @@ const ApexCharts = () => {
                   <p style={{ margin: "0px 0px 0px 10px" }}>{site}</p>
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "end", width: "40%" }}>
+              <Box sx={{ display: "flex", justifyContent: "end", width: "30%" }}>
                 <DatePicker
                   selectsRange
                   endDate={endDate}
@@ -165,10 +165,6 @@ const ApexCharts = () => {
                   placeholderText='Click to select a date'
                   customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
                 />
-                {/* <Button variant='outlined' size='small' sx={{ width: "40%", marginLeft: "5px" }} disabled>Show draft</Button> */}
-                <Box sx={{ width: "30%", marginRight: "10px" }}>
-                  <GSCSidebar />
-                </Box>
 
               </Box>
 

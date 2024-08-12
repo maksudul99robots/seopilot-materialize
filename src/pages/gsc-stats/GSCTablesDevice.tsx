@@ -50,7 +50,7 @@ const GSCTablesDevice = (props: any) => {
             flex: 0.25,
             minWidth: 150,
             field: 'keys',
-            headerName: 'Query',
+            headerName: 'Device',
             renderCell: (params: GridRenderCellParams) => {
                 const { row } = params
 
