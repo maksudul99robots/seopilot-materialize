@@ -79,6 +79,16 @@ const ApexCharts = () => {
               }
 
             }
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'You do not have any site integrated to SEOPILOT',
+              icon: 'warning',
+              confirmButtonText: 'OK',
+              confirmButtonColor: "#2979FF"
+            }).then(() => {
+              router.push("/integrations")
+            })
           }
 
           // setSite(res.data[0])
