@@ -52,6 +52,7 @@ const KeywordResearch = (props: any) => {
     const [language, setLanguage] = useState('English')
     const [audience, setAudience] = useState('')
     const [country, setCountry] = useState<string>('Default')
+    const [noOfIdeas, setNoOfIdeas] = useState<number | string>(5)
     const [loading, setLoading] = useState(false)
     const [show, setShow] = useState<boolean>(false)
 
@@ -64,7 +65,7 @@ const KeywordResearch = (props: any) => {
         // console.log(topic, language, country, audience)
         // return
         if (topic.length > 0 && audience.length > 0) {
-            LoginRegistrationAPI.generateIdeas({ topic, language, country, audience }).then(res => {
+            LoginRegistrationAPI.generateIdeas({ topic, language, country, audience, no_of_ideas: noOfIdeas }).then(res => {
                 setLoading(false)
                 router.push('/clusters/' + res.data.id)
             }).catch((e: any) => {
@@ -191,7 +192,7 @@ const KeywordResearch = (props: any) => {
                                 }} value={topic}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <TextField fullWidth label='Target Audience*' placeholder={'Fitness experts and physical therapists'} InputProps={{
                                 startAdornment: <InputAdornment position="start"></InputAdornment>,
                             }}
@@ -200,6 +201,26 @@ const KeywordResearch = (props: any) => {
                                     setAudience(e.target.value)
                                 }} value={audience}
                             />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl fullWidth sx={{}}>
+                                <InputLabel id='no_of_ideas'>No. of Ideas</InputLabel>
+                                <Select
+                                    fullWidth
+                                    placeholder='No. of Ideas'
+                                    label='No. of Ideas'
+                                    labelId='no_of_ideas'
+                                    value={noOfIdeas}
+                                    onChange={e => {
+                                        setNoOfIdeas(e.target.value)
+                                    }}
+                                >
+                                    <MenuItem value={5}>5</MenuItem>
+                                    <MenuItem value={10}>10</MenuItem>
+                                    <MenuItem value={15}>15</MenuItem>
+                                    <MenuItem value={20}>20</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
 
 
@@ -217,13 +238,14 @@ const KeywordResearch = (props: any) => {
                             </div>
                         </LightTooltip >
                     </Typography>
-                    <Grid >
+                    <Grid container spacing={6}>
 
-                        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
+                        {/* <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}> */}
 
-                            {/* <Grid item sm={6} xs={12} sx={{ paddingLeft: "25px", paddingRight: "5px" }}> */}
+                        {/* <Grid item sm={6} xs={12} sx={{ paddingLeft: "25px", paddingRight: "5px" }}> */}
 
-                            <FormControl fullWidth sx={{ paddingRight: "5px" }}>
+                        <Grid item xs={6}>
+                            <FormControl fullWidth sx={{}}>
                                 <InputLabel id='country-select'>Article Language</InputLabel>
                                 <Select
                                     fullWidth
@@ -248,17 +270,22 @@ const KeywordResearch = (props: any) => {
                                     <MenuItem value='Swedish'>Swedish</MenuItem>
                                 </Select>
                             </FormControl>
-                            {/* </Grid> */}
-
-                            {/* <Grid item xs={6} sm={6} sx={{ paddingLeft: "5px" }}> */}
-                            {/* <Grid item xs={12} sm={6} sx={{ paddingLeft: "5px" }}> */}
+                        </Grid>
+                        <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id='country-select'>Article Country</InputLabel>
                                 <GetCountryList country={country} setCountry={setCountry} />
                             </FormControl>
-                            {/* </Grid> */}
-                            {/* </Grid> */}
-                        </Box>
+                        </Grid>
+
+                        {/* </Grid> */}
+
+                        {/* <Grid item xs={6} sm={6} sx={{ paddingLeft: "5px" }}> */}
+                        {/* <Grid item xs={12} sm={6} sx={{ paddingLeft: "5px" }}> */}
+
+                        {/* </Grid> */}
+                        {/* </Grid> */}
+                        {/* </Box> */}
                     </Grid>
 
 
@@ -274,7 +301,7 @@ const KeywordResearch = (props: any) => {
                             onClick={() => submit()}
                             startIcon={<Icon icon="icons8:idea" />}
                             endIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : null}
-                            disabled={loading}
+                            disabled={loading || topic.length == 0 || audience.length == 0}
 
 
                         >

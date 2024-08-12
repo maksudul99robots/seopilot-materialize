@@ -127,7 +127,7 @@ const Pricing = () => {
     }
   ]
 
-
+  console.log("auth?.user:", auth?.user)
 
 
   // ** States
