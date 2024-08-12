@@ -57,40 +57,67 @@ const ApexCharts = () => {
     oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
     setStartDate(oneMonthBefore)
     setEndDate(now)
+    LoginRegistrationAPI.getUser({}).then(res1 => {
+      console.log("res1", res1.data.userData.workspace_owner_info.plan)
 
-    LoginRegistrationAPI.getAllSites({}).then(res => {
-      if (res.data[0]) {
-        // console.log("res.data[0]:", res.data[0])
-        if (res.data[0].site_url) {
-          if (res.data[0].site_url.startsWith("https://")) {
-            let x = res.data[0].site_url.split("https://")
-            x = x[x.length - 1].replace("/", "")
-            // console.log(x)
-            setSite(x)
+      if (res1.data.userData.workspace_owner_info.plan.plan && (res1.data.userData.workspace_owner_info.plan.plan == 'monthly - captain' || res1.data.userData.workspace_owner_info.plan.plan == 'yearly - captain')) {
+        LoginRegistrationAPI.getAllSites({}).then(res => {
+          if (res.data[0]) {
+            // console.log("res.data[0]:", res.data[0])
+            if (res.data[0].site_url) {
+              if (res.data[0].site_url.startsWith("https://")) {
+                let x = res.data[0].site_url.split("https://")
+                x = x[x.length - 1].replace("/", "")
+                // console.log(x)
+                setSite(x)
 
-          } else {
-            let x = res.data[0].site_url.split("sc-domain:")
+              } else {
+                let x = res.data[0].site_url.split("sc-domain:")
 
-            // console.log(x)
-            setSite(x[x.length - 1])
+                // console.log(x)
+                setSite(x[x.length - 1])
+              }
+
+            }
           }
 
-        }
+          // setSite(res.data[0])
+        }).catch(e => {
+          console.log("e:", e)
+          Swal.fire({
+            title: 'Error',
+            text: 'You do not have any site integrated to SEOPILOT',
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            confirmButtonColor: "#2979FF"
+          }).then(() => {
+            router.push("/integrations")
+          })
+        })
+      } else {
+        Swal.fire({
+          title: 'Sorry!',
+          text: 'You do not have GSC Page. Only monthly/yearly Captain plan has the access.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+          confirmButtonColor: "#2979FF"
+        }).then(() => {
+          router.push("/plans")
+        })
       }
-
-      // setSite(res.data[0])
-    }).catch(e => {
-      console.log("e:", e)
+    }).catch(e1 => {
+      console.log(e1)
       Swal.fire({
-        title: 'Error',
-        text: 'You do not have any site integrated to SEOPILOT',
+        title: 'Sorry!',
+        text: 'You do not have GSC Page. Only monthly/yearly Captain plan has the access.',
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
       }).then(() => {
-        router.push("/integrations")
+        router.push("/plans")
       })
     })
+
   }, [])
 
   const CustomInput = forwardRef((props: PickerProps, ref) => {
@@ -170,10 +197,13 @@ const ApexCharts = () => {
 
             </Box>
           </Box>
+          {site.length > 0 &&
+            <Grid item xs={12}>
+              <ApexAreaChart site={site} startDate={startDate} endDate={endDate} links={links} setLinks={setLinks} keyword={keyword} setKeyword={setKeyword} />
+            </Grid>
 
-          <Grid item xs={12}>
-            <ApexAreaChart site={site} startDate={startDate} endDate={endDate} links={links} setLinks={setLinks} keyword={keyword} setKeyword={setKeyword} />
-          </Grid>
+          }
+
         </Grid>
       </DatePickerWrapper>
     </ApexChartWrapper>
