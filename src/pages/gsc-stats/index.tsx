@@ -58,7 +58,7 @@ const ApexCharts = () => {
     setStartDate(oneMonthBefore)
     setEndDate(now)
     LoginRegistrationAPI.getUser({}).then(res1 => {
-      console.log("res1", res1.data.userData.workspace_owner_info.plan)
+      // console.log("res1", res1.data.userData.workspace_owner_info.plan)
 
       if (res1.data.userData.workspace_owner_info.plan.plan && (res1.data.userData.workspace_owner_info.plan.plan == 'monthly - captain' || res1.data.userData.workspace_owner_info.plan.plan == 'yearly - captain')) {
         LoginRegistrationAPI.getAllSites({}).then(res => {
@@ -175,9 +175,9 @@ const ApexCharts = () => {
                   GSC Statistics
                   {/* </LinkStyled> */}
                 </Typography>
-                <Typography variant='body2' sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "50%" }}>
-                  <img height="30" width="30" src={`https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${site}&size=24`} />
-                  <p style={{ margin: "0px 0px 0px 10px" }}>{site}</p>
+                <Typography variant='body2' sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "50%", margin: "4px 0 0 0" }}>
+                  <img height="16" width="16" src={`https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${site}&size=20`} />
+                  <p style={{ margin: "4px 0px 0px 4px" }}>{site}</p>
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "end", width: "30%" }}>
