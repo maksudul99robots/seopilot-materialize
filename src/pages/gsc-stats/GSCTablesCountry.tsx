@@ -308,7 +308,7 @@ const GSCTablesCountry = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            props.site + "-country-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-country-" + props.start + "-" + props.end + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

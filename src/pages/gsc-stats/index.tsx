@@ -42,21 +42,34 @@ const ApexCharts = () => {
   const [site, setSite] = useState<any>("");
   const [endDate, setEndDate] = useState<DateType>(null)
   const [startDate, setStartDate] = useState<DateType>(null)
+  const [endDt, setEndDt] = useState<string>('')
+  const [strDt, setStrDt] = useState<string>('')
   const [keyword, setKeyword] = useState(null);
+
   const [links, setLinks] = useState([]);
   const router = useRouter()
 
   useEffect(() => {
-    // console.log("site.site_url:", site)
+    console.log(strDt, endDt)
+  }, [endDt])
 
-
-  }, [site])
   useEffect(() => {
     const now = new Date();
     const oneMonthBefore = new Date();
     oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
+    // console.log("dates:", start, end)
+    // const adjustedStart = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
+    // const adjustedEnd = end ? new Date(end.getTime() - end.getTimezoneOffset() * 60000) : null;
+
+    // setStartDate(start);
+    // setEndDate(end);
+
+
     setStartDate(oneMonthBefore)
     setEndDate(now)
+
+    setStrDt(oneMonthBefore.toISOString().split('T')[0]);
+    setEndDt(now.toISOString().split('T')[0]);
     LoginRegistrationAPI.getUser({}).then(res1 => {
       // console.log("res1", res1.data.userData.workspace_owner_info.plan)
 
@@ -134,6 +147,7 @@ const ApexCharts = () => {
     const startDate = props.start !== null ? format(props.start, 'MM/dd/yyyy') : ''
     const endDate = props.end !== null ? ` - ${format(props.end, 'MM/dd/yyyy')}` : null
 
+
     const value = `${startDate}${endDate !== null ? endDate : ''}`
 
     return (
@@ -159,9 +173,19 @@ const ApexCharts = () => {
   })
 
   const handleOnChange = (dates: any) => {
+
+
     const [start, end] = dates
-    setStartDate(start)
-    setEndDate(end)
+    // console.log("dates:", start, end)
+    const adjustedStart = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
+    const adjustedEnd = end ? new Date(end.getTime() - end.getTimezoneOffset() * 60000) : null;
+
+    setStartDate(start);
+    setEndDate(end);
+
+    setStrDt(adjustedStart.toISOString().split('T')[0]);
+    setEndDt(adjustedEnd ? adjustedEnd.toISOString().split('T')[0] : '');
+
     // if (start && end)
     //   LoginRegistrationAPI.getGSCDataInRange({ start: start, end: end }).then(res => {
     //     console.log(res.data)
@@ -209,7 +233,7 @@ const ApexCharts = () => {
           </Box>
           {site.length > 0 &&
             <Grid item xs={12}>
-              <ApexAreaChart site={site} startDate={startDate} endDate={endDate} links={links} setLinks={setLinks} keyword={keyword} setKeyword={setKeyword} />
+              <ApexAreaChart site={site} startDate={strDt} endDate={endDt} links={links} setLinks={setLinks} keyword={keyword} setKeyword={setKeyword} />
             </Grid>
 
           }

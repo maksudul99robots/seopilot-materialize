@@ -306,7 +306,7 @@ const GSCTables = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            props.site + "-query-" + formatDateToYYYYMMDD(props.start) + "-" + formatDateToYYYYMMDD(props.end) + ".csv"
+                            props.site + "-query-" + props.start + "-" + props.end + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>
