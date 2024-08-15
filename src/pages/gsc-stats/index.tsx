@@ -49,14 +49,17 @@ const ApexCharts = () => {
   const [links, setLinks] = useState([]);
   const router = useRouter()
 
-  useEffect(() => {
-    console.log(strDt, endDt)
-  }, [endDt])
+  // useEffect(() => {
+  //   console.log(strDt, endDt)
+  // }, [endDt])
 
   useEffect(() => {
-    const now = new Date();
+    const now = new Date(new Date().setDate(new Date().getDate() - 3));
     const oneMonthBefore = new Date();
     oneMonthBefore.setMonth(oneMonthBefore.getMonth() - 1);
+
+    const adjustedStart = new Date(oneMonthBefore.getTime() - oneMonthBefore.getTimezoneOffset() * 60000);
+    const adjustedEnd = now ? new Date(now.getTime() - now.getTimezoneOffset() * 60000) : null;
     // console.log("dates:", start, end)
     // const adjustedStart = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
     // const adjustedEnd = end ? new Date(end.getTime() - end.getTimezoneOffset() * 60000) : null;
@@ -68,8 +71,9 @@ const ApexCharts = () => {
     setStartDate(oneMonthBefore)
     setEndDate(now)
 
-    setStrDt(oneMonthBefore.toISOString().split('T')[0]);
-    setEndDt(now.toISOString().split('T')[0]);
+    setStrDt(adjustedStart.toISOString().split('T')[0]);
+    setEndDt(adjustedEnd ? adjustedEnd.toISOString().split('T')[0] : '');
+
     LoginRegistrationAPI.getUser({}).then(res1 => {
       // console.log("res1", res1.data.userData.workspace_owner_info.plan)
 
@@ -218,6 +222,7 @@ const ApexCharts = () => {
                 <DatePicker
                   selectsRange
                   endDate={endDate}
+                  maxDate={new Date(new Date().setDate(new Date().getDate() - 3))}
                   id='apexchart-area'
                   className='chartdatepicker'
                   selected={startDate}

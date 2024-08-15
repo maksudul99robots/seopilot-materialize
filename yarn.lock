@@ -1894,6 +1894,11 @@ decimal.js-light@^2.4.1:
   resolved "https://registry.npmjs.org/decimal.js-light/-/decimal.js-light-2.5.1.tgz"
   integrity sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==
 
+decorate-component-with-props@^1.0.2:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/decorate-component-with-props/-/decorate-component-with-props-1.2.1.tgz"
+  integrity sha512-X2hZBnVHZAZQHG+g3Ce97SBtog1Vglzg7sPNbUY5XKmmgd3NVAiOHviw9hd7GOJIDrQ1slfwsmkbKQxESWFy7Q==
+
 deep-equal@^2.0.5:
   version "2.2.0"
   resolved "https://registry.npmjs.org/deep-equal/-/deep-equal-2.2.0.tgz"
@@ -2042,6 +2047,15 @@ draft-js-import-html@^1.4.1:
   integrity sha512-KOZmtgxZriCDgg5Smr3Y09TjubvXe7rHPy/2fuLSsL+aSzwUDwH/aHDA/k47U+WfpmL4qgyg4oZhqx9TYJV0tg==
   dependencies:
     draft-js-import-element "^1.4.0"
+
+draft-js-table-plugin@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/draft-js-table-plugin/-/draft-js-table-plugin-1.0.4.tgz"
+  integrity sha512-G1F+4rx8aZvEUQsaRBVVo6NxKGJYMNWoB3lKj8WjQxYbnexZ5EZQlDkwsgQ1I/azUx9LqZiR0ohU6bDu+y/AZQ==
+  dependencies:
+    decorate-component-with-props "^1.0.2"
+    find-with-regex "^1.0.2"
+    union-class-names "^1.0.0"
 
 draft-js-utils@^1.4.0:
   version "1.4.1"
@@ -2574,6 +2588,11 @@ find-up@^5.0.0:
   dependencies:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
+
+find-with-regex@^1.0.2:
+  version "1.1.3"
+  resolved "https://registry.npmjs.org/find-with-regex/-/find-with-regex-1.1.3.tgz"
+  integrity sha512-zkEVQ1H3PIQL/19ADKt1lCQU4QGM3OneiderUcFgn5EgTm/TnoUh7HxPAwP8w/vXxWSLC6KtpbDQpypJ5+majw==
 
 flat-cache@^3.0.4:
   version "3.0.4"
@@ -4800,6 +4819,11 @@ unbox-primitive@^1.0.2:
     has-bigints "^1.0.2"
     has-symbols "^1.0.3"
     which-boxed-primitive "^1.0.2"
+
+union-class-names@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/union-class-names/-/union-class-names-1.0.0.tgz"
+  integrity sha512-u7qYld8H+xWZZvb1Y8BhkD0fVmY+ytlm1skpdeYb6+DrSn8jrOC8zY3KMfmkcO3Mdwu/+CyiZrXXpQy0Up+SUA==
 
 uri-js@^4.2.2:
   version "4.4.1"

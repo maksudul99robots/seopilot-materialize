@@ -53,7 +53,7 @@ const EditorControlled = (props: any) => {
 
   const [text, setText] = useState(props.text)
   useEffect(() => {
-    // console.log("change of content")
+    console.log("change of content:", convertToHTML(value.getCurrentContent()))
     let htmlTmp = convertEditorStateToHTML(value);
     if (props.fImg?.urls?.full) {
       props.setHtml(insertImageAfterFirstH1(htmlTmp, props.fImg.urls.full));
@@ -455,12 +455,25 @@ const EditorControlled = (props: any) => {
 
         ]}
         toolbar={{
-          options: ['inline', 'blockType', 'fontSize', 'list', 'link', 'image', 'textAlign', 'history'],
+          options: ['inline', 'blockType', 'fontSize', 'list', 'link', 'image', 'textAlign', 'history', 'embedded'],
           inline: { inDropdown: false, options: ['bold', 'italic', 'underline'] },
           list: { inDropdown: true },
           textAlign: { inDropdown: true },
           link: { inDropdown: true },
           history: { inDropdown: false },
+          embedded: {
+            defaultSize: {
+              height: '315',
+              width: '560',
+            },
+            embedCallback: (link) => {
+              // This ensures YouTube and Vimeo links are properly embedded
+              if (link.includes('youtube.com') || link.includes('vimeo.com')) {
+                return link.replace('watch?v=', 'embed/');
+              }
+              return link;
+            },
+          },
         }}
         readOnly={props.readOnly ? props.readOnly : false}
         toolbarHidden={props.toolbarHidden ? props.toolbarHidden : false}
