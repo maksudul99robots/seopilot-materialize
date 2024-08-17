@@ -55,6 +55,7 @@ export default function Page() {
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
     const [status, setStatus] = useState<string>('');
     const [schedule, setSchedule] = useState<string | null | undefined>(null)
+    const [iframes, setIframes] = useState([])
     const router = useRouter()
     const auth = useAuth()
 
@@ -562,6 +563,8 @@ export default function Page() {
                         serp={serp}
                         primaryKeyword={primaryKeyword}
                         paa={paa}
+                        iframes={iframes}
+                        setIframes={setIframes}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>

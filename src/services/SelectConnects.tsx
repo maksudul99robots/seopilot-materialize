@@ -272,7 +272,8 @@ const SelectConnects = (props: any) => {
   }
 
   const handleSubmit = () => {
-    // getHtmlFromDocument(props.html)
+    let x = replacePlaceholdersWithIframes()
+    // console.log("inside handleSubmit:", x)
     // return
 
     setLoading(true)
@@ -283,7 +284,7 @@ const SelectConnects = (props: any) => {
     fetch(`${connectSelected.address}${process.env.NEXT_PUBLIC_WP_SLUG}`, {
       method: "POST",
       headers: headers,
-      body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(props.html), status: status })
+      body: JSON.stringify({ title: props.title, content: getHtmlFromDocument(x), status: status })
     }).then(res => {
       // console.log(res);
 
@@ -354,13 +355,14 @@ const SelectConnects = (props: any) => {
 
   }
   const handleScheduleSubmit = () => {
+    let x = replacePlaceholdersWithIframes()
     setLoading(true)
     LoginRegistrationAPI.saveSchedule({
       article_id: props.article_id,
       date_time: dateTime,
       site: connectSelected.id,
       post_status: status,
-      article_content: getHtmlFromDocument(props.html),
+      article_content: getHtmlFromDocument(x),
       status: 'initiated'
     }).then(res => {
       setLoading(false)
@@ -525,6 +527,23 @@ const SelectConnects = (props: any) => {
       setValues({ ...values, startDate: new Date(date), endDate: new Date(date) })
     }
   }
+
+  const replacePlaceholdersWithIframes = () => {
+    let placeholderIndex = 0;
+
+    // Function to replace the placeholder with the original iframe
+    let htmlContent = props.html.replace(/<p dir = "auto">🥌<\/p>/g, () => {
+      // Check if there are still iframes left to replace the placeholder
+      if (placeholderIndex < props.iframes.length) {
+        const replacement = props.iframes[placeholderIndex].originalIframe;
+        placeholderIndex++;
+        return replacement;
+      }
+      return "<p dir = \"auto\">🥌<\/p>"; // Fallback in case there are more placeholders than iframes
+    });
+
+    return htmlContent;
+  };
   return (
     <div style={{}}>
       {/* <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish</Button> */}

@@ -36,7 +36,7 @@ const EditorControlled = (props: any) => {
 
   useEffect(() => {
     let iframesTmp = extractIframeUrls(props.data)
-    setIframes(iframesTmp)
+    props.setIframes(iframesTmp)
     let x = replaceWithPot(props.data, iframesTmp)
     setValue(EditorState.createWithContent(
       ContentState.createFromBlockArray(
@@ -78,7 +78,7 @@ const EditorControlled = (props: any) => {
     if (runInsertEmbedProgrammaticallyFlag) {
       // console.log("iframes...:", iframes)
       const currentContent = value.getCurrentContent();
-      replaceIframeWithFigure(currentContent, iframes)
+      replaceIframeWithFigure()
       // let htmlTmp = convertEditorStateToHTML(value);
       // console.log("htmlTmp:", htmlTmp)
       // props.setHtml(htmlTmp);
@@ -474,8 +474,8 @@ const EditorControlled = (props: any) => {
     let x = 0;
     document.querySelectorAll('span[data-text="true"]').forEach((span, i) => {
       if (span.innerText == '🥌') {
-        console.log("replacing with:", iframes[x])
-        const figureHTML = `<figure class="" data-block="true" data-editor="3dfej" data-offset-key="bp6da-0-0" contenteditable="false">${iframes[x].originalIframe}</figure>`;
+        // console.log("replacing with:", props.iframes[x])
+        const figureHTML = `<figure class="" data-block="true" data-editor="3dfej" data-offset-key="bp6da-0-0" contenteditable="false">${props.iframes[x].originalIframe}</figure>`;
         x = x + 1;
         // Replace the innerHTML of the span with the figureHTML
         span.innerHTML = figureHTML;
@@ -515,12 +515,12 @@ const EditorControlled = (props: any) => {
     // Function to replace the placeholder with the original iframe
     htmlContent = htmlContent.replace(/<p dir = "auto">🥌<\/p>/g, () => {
       // Check if there are still iframes left to replace the placeholder
-      if (placeholderIndex < iframes.length) {
-        const replacement = iframes[placeholderIndex].originalIframe;
+      if (placeholderIndex < props.iframes.length) {
+        const replacement = props.iframes[placeholderIndex].originalIframe;
         placeholderIndex++;
         return replacement;
       }
-      return "<p dir=\"auto\">🥌</p>"; // Fallback in case there are more placeholders than iframes
+      return "<p dir = \"auto\">🥌<\/p>"; // Fallback in case there are more placeholders than iframes
     });
 
     return htmlContent;

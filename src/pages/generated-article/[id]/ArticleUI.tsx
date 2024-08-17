@@ -313,8 +313,20 @@ export default function ArticleIU(props: any) {
                         numberedItem={props.numberedItem}
                         imgService={props.imgService}
                         featuredImgIndex={props.featuredImgIndex}
+                        iframes={props.iframes}
+                        setIframes={props.setIframes}
                     />
-                    <SelectConnects timezone={props.timezone} html={props.html} title={props.articleTopic} fImg={props.fImg} imgService={props.imgService} article_id={props.id} />
+                    <SelectConnects
+                        timezone={props.timezone}
+                        html={props.html}
+                        title={props.articleTopic}
+                        fImg={props.fImg}
+                        imgService={props.imgService}
+                        article_id={props.id}
+                        iframes={props.iframes}
+                        setIframes={props.setIframes}
+
+                    />
                 </Box>
             </Box >
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -456,7 +468,8 @@ export default function ArticleIU(props: any) {
                                 reloadArticle={props.reloadArticle}
                                 article_id={props.id}
                                 save={props.save}
-
+                                iframes={props.iframes}
+                                setIframes={props.setIframes}
                             />
                         }
 
