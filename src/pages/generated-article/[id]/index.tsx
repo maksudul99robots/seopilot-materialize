@@ -105,6 +105,7 @@ export default function Page() {
         if (keywordSuggestionsTmp.length > 0) {
             countKeywords();
         }
+        // console.log("html changes...................................................\n:", html)
 
     }, [html, keywordSuggestionsTmp])
 
@@ -193,6 +194,9 @@ export default function Page() {
                         setCreatedAt(res?.data?.createdAt)
                         setUpdatedAt(res?.data?.updatedAt)
                         setImgService(res.data.img_service)
+                        // if(res.data.content){
+                        //     let iframes = extractIframeUrls(props.data)
+                        // }
                         // setOutlines(res?.data.outline ? res.data.outline : '')
                         if (res?.data?.show_featured_image) {
                             LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
@@ -482,9 +486,9 @@ export default function Page() {
         return trimmedParts;
     }
 
-    const save = () => {
+    const save = (x: string) => {
         // console.log("inside save...")
-        LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: html, topic: articleTopic }).then((res) => {
+        LoginRegistrationAPI.updateSaasAIArticle({ id: router.query.id, article: x, topic: articleTopic }).then((res) => {
             if (res.status == 200) {
                 // Swal.fire(
                 //     'Success',

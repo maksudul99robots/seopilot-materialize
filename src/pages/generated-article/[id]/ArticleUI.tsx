@@ -447,6 +447,7 @@ export default function ArticleIU(props: any) {
                             <EditorControlled
                                 data={props.article}
                                 setHtml={props.setHtml}
+                                html={props.html}
                                 setPlainText={props.setPlainText}
                                 fImg={fImg}
                                 listicleOutlines={props.listicleOutlines}
@@ -455,6 +456,7 @@ export default function ArticleIU(props: any) {
                                 reloadArticle={props.reloadArticle}
                                 article_id={props.id}
                                 save={props.save}
+
                             />
                         }
 

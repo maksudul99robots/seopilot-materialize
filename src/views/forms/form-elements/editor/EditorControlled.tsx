@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react'
 
 // ** Third Party Imports
-import { EditorState, ContentState, convertFromHTML, convertToRaw, Modifier, SelectionState, ContentBlock, genKey } from 'draft-js'
+import { EditorState, ContentState, convertFromHTML, convertToRaw, Modifier, SelectionState, ContentBlock, genKey, AtomicBlockUtils } from 'draft-js'
 import { convertToHTML, parseHTML } from 'draft-convert';
 import ReactDraftWysiwyg from 'src/@core/components/react-draft-wysiwyg'
 import { Button } from '@mui/material';
@@ -20,14 +20,14 @@ const EditorControlled = (props: any) => {
   const [links, setLinks] = useState<any>([]);
   // ** State
   const [bold, setBold] = useState<any>([]);
-  const [italic, setItalic] = useState<any>([]);
-  const [underline, setUnderline] = useState<any>([]);
   const [lastSelection, setLastSelection] = useState<any>(null)
   const [lastCurrentState, setLastCurrentState] = useState<any>(null)
   const [lastSelectionOnePoint, setLastSelectionOnePoint] = useState<any>(null)
   const [lastCurrentStateOnePoint, setLastCurrentStateOnePoint] = useState<any>(null)
   const [hasOpenAiKey, setHasOpenAiKey] = useState('');
   const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
+  const [runInsertEmbedProgrammaticallyFlag, setRunInsertEmbedProgrammaticallyFlag] = useState(false);
+  const [iframes, setIframes] = useState([])
   const [value, setValue] = useState(EditorState.createWithContent(
     ContentState.createFromBlockArray(
       convertFromHTML(props.data ? '<p id="seopilot-editor">' + props.data + '</p>' : '<p id="seopilot-editor">no data</p>')
@@ -35,34 +35,68 @@ const EditorControlled = (props: any) => {
   ))
 
   useEffect(() => {
+    let iframesTmp = extractIframeUrls(props.data)
+    setIframes(iframesTmp)
+    let x = replaceWithPot(props.data, iframesTmp)
     setValue(EditorState.createWithContent(
       ContentState.createFromBlockArray(
-        convertFromHTML(props.data ? '<p id="seopilot-editor">' + props.data + '</p>' : '<p id="seopilot-editor">no data</p>')
+
+        convertFromHTML(props.data ? '<p id="seopilot-editor">' + x + '</p>' : '<p id="seopilot-editor">no data</p>')
       )
     ))
 
     // return () => {
     //   props.save()
     // }
+    console.log("data:", x)
+
+    // console.log("iframes:", iframes)
+    // let x = replaceWithPot(props.data, iframes)
+    setTimeout(() => {
+      setRunInsertEmbedProgrammaticallyFlag(true)
+    }, 1000)
+
   }, [props.data])
   const [toolbarPosition, setToolbarPosition] = useState({
     display: 'none',
   });
 
+  const replaceWithPot = (html, iframes) => {
+    iframes.map(i => {
+      html = html.replace(i.originalIframe, '🥌')
+    })
+
+    return html
+  }
+
 
 
   const [text, setText] = useState(props.text)
+
   useEffect(() => {
-    console.log("change of content:", convertToHTML(value.getCurrentContent()))
+
+    if (runInsertEmbedProgrammaticallyFlag) {
+      // console.log("iframes...:", iframes)
+      const currentContent = value.getCurrentContent();
+      replaceIframeWithFigure(currentContent, iframes)
+      // let htmlTmp = convertEditorStateToHTML(value);
+      // console.log("htmlTmp:", htmlTmp)
+      // props.setHtml(htmlTmp);
+    }
+  }, [runInsertEmbedProgrammaticallyFlag])
+  useEffect(() => {
+    // console.log("change of content:", convertToHTML(value.getCurrentContent()))
     let htmlTmp = convertEditorStateToHTML(value);
+
     if (props.fImg?.urls?.full) {
       props.setHtml(insertImageAfterFirstH1(htmlTmp, props.fImg.urls.full));
 
     } else {
-      // props.setHtml(convertToHTML(value.getCurrentContent()));
+      let htmlTmp = convertEditorStateToHTML(value);
+      props.setHtml(htmlTmp);
 
       // let urls = getAllImgUrls(htmlTmp)
-      props.setHtml(htmlTmp);
+      // props.setHtml(htmlTmp);
 
     }
     setTimeout(() => {
@@ -70,11 +104,34 @@ const EditorControlled = (props: any) => {
       // replaceImgSpansWithFigures(getAllImgUrls(htmlTmp))
     }, 2000)
 
+
+
     setLastSelectionOnePoint(value.getSelection())
     setLastCurrentStateOnePoint(value.getCurrentContent())
 
     // console.log("has focus:", value.getSelection().getHasFocus())
     // console.log("has getFocusOffset:", value.getSelection().getFocusOffset())
+
+    // Get the current content
+    // const currentContent = value.getCurrentContent();
+    // // replaceIframeWithFigure(currentContent, iframes)
+    // // Check if an entity was just created
+    // const blockMap = currentContent.getBlockMap();
+    // blockMap.forEach(block => {
+    //   const entityKey = block.getEntityAt(0);
+    //   if (entityKey) {
+    //     const entity = currentContent.getEntity(entityKey);
+    //     if (entity.getType() === 'EMBEDDED_LINK') {
+    //       const { src } = entity.getData();
+    //       let x = props.videoEmbeds;
+    //       x.push({ selection: JSON.stringify(value.getSelection().toJS()), url: src })
+    //       console.log(x)
+    //       props.setVideoEmbeds(x);
+    //     }
+    //   }
+    // });
+
+    // setValue(newEditorState);
 
   }, [value, props.listicleOutlines])
 
@@ -413,7 +470,61 @@ const EditorControlled = (props: any) => {
       }
     });
   }
+  function replaceIframeWithFigure() {
+    let x = 0;
+    document.querySelectorAll('span[data-text="true"]').forEach((span, i) => {
+      if (span.innerText == '🥌') {
+        console.log("replacing with:", iframes[x])
+        const figureHTML = `<figure class="" data-block="true" data-editor="3dfej" data-offset-key="bp6da-0-0" contenteditable="false">${iframes[x].originalIframe}</figure>`;
+        x = x + 1;
+        // Replace the innerHTML of the span with the figureHTML
+        span.innerHTML = figureHTML;
+      }
+    });
+  }
 
+  // function insertTable() {
+  //   let htmlTmp = convertEditorStateToHTML(value);
+  //   console.log("htmlTmp:", htmlTmp)
+
+  // }
+
+  const extractIframeUrls = (htmlContent) => {
+    const iframeDetails = [];
+    const regex = /<iframe.*?src="(.*?)".*?<\/iframe>/g;
+    let match;
+
+    // Find all matches and extract the URL and original iframe tag
+    while ((match = regex.exec(htmlContent)) !== null) {
+      iframeDetails.push({
+        url: match[1],              // The captured URL from the src attribute
+        originalIframe: match[0],   // The entire iframe tag
+        position: match.index,      // The position of the iframe tag in the HTML content
+        length: match[0].length     // The length of the entire iframe tag
+      });
+    }
+
+    return iframeDetails;
+  };
+
+
+
+  const replacePlaceholdersWithIframes = (htmlContent) => {
+    let placeholderIndex = 0;
+
+    // Function to replace the placeholder with the original iframe
+    htmlContent = htmlContent.replace(/<p dir = "auto">🥌<\/p>/g, () => {
+      // Check if there are still iframes left to replace the placeholder
+      if (placeholderIndex < iframes.length) {
+        const replacement = iframes[placeholderIndex].originalIframe;
+        placeholderIndex++;
+        return replacement;
+      }
+      return "<p dir=\"auto\">🥌</p>"; // Fallback in case there are more placeholders than iframes
+    });
+
+    return htmlContent;
+  };
 
 
   return (
@@ -434,7 +545,7 @@ const EditorControlled = (props: any) => {
           // <Button variant='outlined' startIcon={<Icon icon="dashicons:insert" />} size='small' sx={
           //   {
           //     marginLeft: "10px", marginBottom: "5px"
-          //   }}>Insert</Button>,
+          //   }} onClick={() => insertTable()}>Insert table</Button>,
           <InsertNewText article_id={props.article_id} insertText={insertText} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />,
           <ReWritenTxtTable article_id={props.article_id} />,
           <Button variant='contained'
@@ -446,7 +557,13 @@ const EditorControlled = (props: any) => {
             startIcon={<Icon icon="mdi:content-save-outline" />}
             onClick={e => {
 
-              props.save();
+              let x = replacePlaceholdersWithIframes(props.html)
+
+              // console.log("html:,,,,,,,.....", x)
+              props.setHtml(x)
+
+
+              props.save(x);
 
             }}
           >
@@ -468,7 +585,7 @@ const EditorControlled = (props: any) => {
             },
             embedCallback: (link) => {
               // This ensures YouTube and Vimeo links are properly embedded
-              if (link.includes('youtube.com') || link.includes('vimeo.com')) {
+              if (link.includes('youtube.com')) {
                 return link.replace('watch?v=', 'embed/');
               }
               return link;
