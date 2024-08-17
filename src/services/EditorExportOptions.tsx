@@ -389,6 +389,22 @@ export default function CustomizedMenus(props: any) {
 
         return str;
     }
+    const replacePlaceholdersWithIframes = () => {
+        let placeholderIndex = 0;
+
+        // Function to replace the placeholder with the original iframe
+        let htmlContent = props.html.replace(/<p dir = "auto">🥌<\/p>/g, () => {
+            // Check if there are still iframes left to replace the placeholder
+            if (placeholderIndex < props.iframes.length) {
+                const replacement = props.iframes[placeholderIndex].originalIframe;
+                placeholderIndex++;
+                return replacement;
+            }
+            return "<p dir = \"auto\">🥌<\/p>"; // Fallback in case there are more placeholders than iframes
+        });
+
+        return htmlContent;
+    };
 
     return (
         <div>
@@ -451,7 +467,8 @@ export default function CustomizedMenus(props: any) {
                     }}> */}
                 <MenuItem onClick={() => {
                     // copy(document.getElementsByClassName('DraftEditor-editorContainer')[0]?.innerHTML)
-                    copy(props.html)
+                    let x = replacePlaceholdersWithIframes();
+                    copy(x)
                     handleClose()
                 }} disableRipple>
                     {/* <Icon icon="clarity:code-line" /> */}
@@ -462,7 +479,8 @@ export default function CustomizedMenus(props: any) {
                 {/* </CopyToClipboard> */}
                 <Divider sx={{ my: 0.5 }} />
                 <MenuItem onClick={(e: any) => {
-                    download(props.html);
+                    let x = replacePlaceholdersWithIframes();
+                    download(x);
                     setAnchorEl(null);
                 }} disableRipple>
                     <FileDownloadOutlinedIcon />

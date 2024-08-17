@@ -48,7 +48,7 @@ const EditorControlled = (props: any) => {
     // return () => {
     //   props.save()
     // }
-    console.log("data:", x)
+    // console.log("data:", x)
 
     // console.log("iframes:", iframes)
     // let x = replaceWithPot(props.data, iframes)
