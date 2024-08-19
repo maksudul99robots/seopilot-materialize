@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import ShowAllClustersForGSCRefined from 'src/services/clusterListGSC/ShowAllClustersForGSCRefined';
+import { formatDateToYYYYMMDD } from './utils/DateTimeFormatters';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -287,18 +288,6 @@ const GSCTablesPages = (props: any) => {
 
     ];
 
-    function formatDateToYYYYMMDD(date: Date) {
-        if (date) {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-            const day = String(date.getDate()).padStart(2, '0');
-
-            return `${year}${month}${day}`;
-        } else {
-            return ""
-        }
-
-    }
 
     return (
         <Box>
@@ -311,7 +300,7 @@ const GSCTablesPages = (props: any) => {
                         data={mainData}
                         headers={headers}
                         filename={
-                            props.site + "-pages-" + props.start + "-" + props.end + ".csv"
+                            props.site + "-pages-" + formatDateToYYYYMMDD(new Date(props.start)) + "-" + formatDateToYYYYMMDD(new Date(props.end)) + ".csv"
                         }
                     >
                         <Button variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ marginRight: "5px" }} />}>

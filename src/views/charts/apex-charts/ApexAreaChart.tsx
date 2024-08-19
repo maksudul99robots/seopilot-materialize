@@ -23,7 +23,7 @@ import { DateType } from 'src/types/forms/reactDatepickerTypes'
 // ** Component Import
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 import { LoginRegistrationAPI } from 'src/services/API'
-import { Box } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import GSCTables from 'src/pages/gsc-stats/GSCTables'
 import GSCTablesPages from 'src/pages/gsc-stats/GSCTablesPages'
 import GSCSummary from 'src/pages/gsc-stats/GscSummary'
@@ -32,17 +32,27 @@ import GSCTablesDevice from 'src/pages/gsc-stats/GSCTablesDevice'
 
 
 const areaColors = {
-  series1: '#4E897C',
-  series2: '#7CC1F5',
-  series3: '#5A69F9',
-  series4: '#CC772C'
+  series1: '#16C653',
+  series2: '#41007A',
+  series3: '#1B84FF',
+  series4: '#F6C002'
 }
+// const areaColors = {
+//   series1: '#4E897C',
+//   series2: '#7CC1F5',
+//   series3: '#5A69F9',
+//   series4: '#CC772C'
+// }
 
 interface PickerProps {
   start: Date | number
   end: Date | number
 }
 
+import React, { useRef } from 'react'
+import html2canvas from 'html2canvas';
+import { s } from '@fullcalendar/core/internal-common'
+import { formatDateToYYYYMMDD } from 'src/pages/gsc-stats/utils/DateTimeFormatters'
 
 
 const ApexAreaChart = (props: any) => {
@@ -68,6 +78,42 @@ const ApexAreaChart = (props: any) => {
     ]
   );
   const [categories, setCategories] = useState<any>([])
+  const divRef = useRef<HTMLDivElement>(null);
+  const downloadScreenshot = async () => {
+    if (divRef.current) {
+      const ssBtn = document.getElementById('ss-btn');
+      const ssTxt = document.getElementById('ss-txt');
+      const gscStatsParent = document.getElementById('gsc-stats-parent');
+      const gscStat = document.getElementsByClassName('gsc-stats');
+
+      if (ssBtn) ssBtn.style.display = 'none';
+      if (ssTxt) ssTxt.style.display = 'flex';
+      if (gscStatsParent) gscStatsParent.style.justifyContent = "space-between";
+
+      Array.from(gscStat).map((g: any) => {
+        g.style.padding = "10px 30px 10px 30px"
+      })
+      // Capture the div as a canvas
+      const canvas = await html2canvas(divRef.current, { backgroundColor: null, scale: 1 });
+
+      // Get canvas context and add the watermark
+      const ctx = canvas.getContext('2d');
+      // Restore the button visibility
+      if (ssBtn) ssBtn.style.display = 'inline-flex';
+      if (ssTxt) ssTxt.style.display = 'none';
+      if (gscStatsParent) gscStatsParent.style.justifyContent = "start";
+
+      Array.from(gscStat).map((g: any) => {
+        g.style.padding = "5px"
+      })
+
+      // Create a link element to download the image
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = props.site + "-stats-" + formatDateToYYYYMMDD(new Date(props.startDate)) + "-" + formatDateToYYYYMMDD(new Date(props.endDate)) + ".png"
+      link.click();
+    }
+  };
 
   // ** Hook
   const theme = useTheme()
@@ -84,7 +130,7 @@ const ApexAreaChart = (props: any) => {
       show: true,
       curve: 'straight',
       width: 2,
-      colors: ['#000'] // Set the stroke color here if needed
+      colors: [areaColors.series4, areaColors.series3, areaColors.series2, areaColors.series1] // Set the stroke color here if needed
     },
     legend: {
       position: 'top',
@@ -101,7 +147,7 @@ const ApexAreaChart = (props: any) => {
     },
     colors: [areaColors.series4, areaColors.series3, areaColors.series2, areaColors.series1],
     fill: {
-      opacity: 0.4,
+      opacity: 0.1,
       type: 'solid'
     },
     grid: {
@@ -190,7 +236,7 @@ const ApexAreaChart = (props: any) => {
 
   return (
     <Box>
-      <Card>
+      <Card ref={divRef}>
         <CardHeader
           title={<GSCSummary start={props.startDate} end={props.endDate} />}
           // subheader='Commercial networks'
@@ -201,21 +247,16 @@ const ApexAreaChart = (props: any) => {
             '& .MuiCardHeader-action': { mb: 0 },
             '& .MuiCardHeader-content': { mb: [2, 0] }
           }}
-        // action={
-        //   <DatePicker
-        //     selectsRange
-        //     endDate={endDate}
-        //     id='apexchart-area'
-        //     selected={startDate}
-        //     startDate={startDate}
-        //     onChange={handleOnChange}
-        //     placeholderText='Click to select a date'
-        //     customInput={<CustomInput start={startDate as Date | number} end={endDate as Date | number} />}
-        //   />
-        // }
+          action={
+
+            <Button id='ss-btn' variant='outlined' size='small' startIcon={<Icon icon="ph:download-thin" style={{ padding: "0px", display: "inline-flex" }} />} onClick={downloadScreenshot}>
+              Download Screenshot
+            </Button>
+          }
         />
         <CardContent>
           <ReactApexcharts type='area' height={400} options={options} series={data} />
+          <Typography id='ss-txt' variant="subtitle2" sx={{ paddingRight: "10px", textAlign: "end", display: "none", alignItems: "center", justifyContent: "end" }}>Powered by <img src='/images/logos/SEOPilotLogo256.png' height={35} style={{ paddingLeft: "10px" }} /></Typography>
         </CardContent>
       </Card>
       <Card sx={{ marginTop: "30px" }}>

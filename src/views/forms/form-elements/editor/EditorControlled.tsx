@@ -69,8 +69,6 @@ const EditorControlled = (props: any) => {
     return html
   }
 
-
-
   const [text, setText] = useState(props.text)
 
   useEffect(() => {
@@ -85,7 +83,7 @@ const EditorControlled = (props: any) => {
     }
   }, [runInsertEmbedProgrammaticallyFlag])
   useEffect(() => {
-    // console.log("change of content:", convertToHTML(value.getCurrentContent()))
+    console.log("change of content:")
     let htmlTmp = convertEditorStateToHTML(value);
 
     if (props.fImg?.urls?.full) {
@@ -102,6 +100,11 @@ const EditorControlled = (props: any) => {
     setTimeout(() => {
       getAllH2Elements();
       // replaceImgSpansWithFigures(getAllImgUrls(htmlTmp))
+      const figures = document.querySelectorAll('figure');
+      figures.forEach(figure => {
+        (figure as HTMLElement).style.margin = '0';
+      });
+
     }, 2000)
 
 
@@ -109,29 +112,7 @@ const EditorControlled = (props: any) => {
     setLastSelectionOnePoint(value.getSelection())
     setLastCurrentStateOnePoint(value.getCurrentContent())
 
-    // console.log("has focus:", value.getSelection().getHasFocus())
-    // console.log("has getFocusOffset:", value.getSelection().getFocusOffset())
 
-    // Get the current content
-    // const currentContent = value.getCurrentContent();
-    // // replaceIframeWithFigure(currentContent, iframes)
-    // // Check if an entity was just created
-    // const blockMap = currentContent.getBlockMap();
-    // blockMap.forEach(block => {
-    //   const entityKey = block.getEntityAt(0);
-    //   if (entityKey) {
-    //     const entity = currentContent.getEntity(entityKey);
-    //     if (entity.getType() === 'EMBEDDED_LINK') {
-    //       const { src } = entity.getData();
-    //       let x = props.videoEmbeds;
-    //       x.push({ selection: JSON.stringify(value.getSelection().toJS()), url: src })
-    //       console.log(x)
-    //       props.setVideoEmbeds(x);
-    //     }
-    //   }
-    // });
-
-    // setValue(newEditorState);
 
   }, [value, props.listicleOutlines])
 
@@ -475,7 +456,7 @@ const EditorControlled = (props: any) => {
     document.querySelectorAll('span[data-text="true"]').forEach((span, i) => {
       if (span.innerText == '🥌') {
         // console.log("replacing with:", props.iframes[x])
-        const figureHTML = `<figure class="" data-block="true" data-editor="3dfej" data-offset-key="bp6da-0-0" contenteditable="false">${props.iframes[x].originalIframe}</figure>`;
+        const figureHTML = `<figure class="" data-block="true" data-editor="3dfej" data-offset-key="bp6da-0-0" contenteditable="false" style="margin:0;">${props.iframes[x].originalIframe}</figure>`;
         x = x + 1;
         // Replace the innerHTML of the span with the figureHTML
         span.innerHTML = figureHTML;
@@ -580,8 +561,8 @@ const EditorControlled = (props: any) => {
           history: { inDropdown: false },
           embedded: {
             defaultSize: {
-              height: '315',
-              width: '560',
+              height: '523',
+              width: '930',
             },
             embedCallback: (link) => {
               // This ensures YouTube and Vimeo links are properly embedded

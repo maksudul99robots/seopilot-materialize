@@ -3,9 +3,9 @@
   "version": "2.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3500",
+    "dev": "next dev -p 3600",
     "build": "next build ",
-    "start": "next start -p 3500",
+    "start": "next start -p 3600",
     "export": "next export",
     "lint": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
@@ -59,6 +59,7 @@
     "draft-js-table-plugin": "^1.0.4",
     "draftjs-to-html": "^0.9.1",
     "gauge-chart": "^1.0.0",
+    "html2canvas": "^1.4.1",
     "i18next": "22.4.11",
     "i18next-browser-languagedetector": "7.0.1",
     "i18next-http-backend": "2.2.0",
@@ -98,6 +99,8 @@
     "stylis": "4.1.3",
     "stylis-plugin-rtl": "2.1.1",
     "sweetalert2": "^11.7.29",
+    "type": "^2.7.3",
+    "use-react-screenshot": "^4.0.0",
     "yup": "1.0.2"
   },
   "devDependencies": {
