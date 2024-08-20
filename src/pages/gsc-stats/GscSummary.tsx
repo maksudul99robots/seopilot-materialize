@@ -50,7 +50,7 @@ const GSCSummary = (props: any) => {
             {
                 summary &&
                 <>
-                    <Box className="gsc-stats" sx={{ borderRadius: "10px", border: "3px dashed #E6E8F0", marginRight: "10px", padding: "5px" }}>
+                    <Box className="gsc-stats" sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", marginRight: "10px", padding: "5px" }}>
                         <Box sx={{ display: "flex", }}>
                             <Box title="Clicks"><Icon icon={!summary?.clicksChange?.startsWith("-") ? "solar:arrow-up-line-duotone" : 'solar:arrow-down-line-duotone'} style={{
                                 fontSize: "25px",
@@ -74,7 +74,7 @@ const GSCSummary = (props: any) => {
                         </Box>
                         <Typography variant="subtitle2" sx={{ paddingLeft: "10px" }}>Clicks</Typography>
                     </Box>
-                    <Box className="gsc-stats" sx={{ borderRadius: "10px", border: "3px dashed #E6E8F0", marginRight: "10px", padding: "5px" }}>
+                    <Box className="gsc-stats" sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", marginRight: "10px", padding: "5px" }}>
                         <Box sx={{ display: "flex", }}>
                             <Box title="Impressions"><Icon icon={!summary?.impressionsChange?.startsWith("-") ? "solar:arrow-up-line-duotone" : 'solar:arrow-down-line-duotone'} style={{
                                 fontSize: "25px",
@@ -97,7 +97,7 @@ const GSCSummary = (props: any) => {
                         </Box>
                         <Typography variant="subtitle2" sx={{ paddingLeft: "10px" }}>Impressions</Typography>
                     </Box>
-                    <Box className="gsc-stats" sx={{ borderRadius: "10px", border: "3px dashed #E6E8F0", marginRight: "10px", padding: "5px" }}>
+                    <Box className="gsc-stats" sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", marginRight: "10px", padding: "5px" }}>
                         <Box sx={{ display: "flex", }}>
                             <Box title="CTR"><Icon icon={!summary?.ctrChange?.startsWith("-") ? "solar:arrow-up-line-duotone" : 'solar:arrow-down-line-duotone'} style={{
                                 fontSize: "25px",
@@ -120,7 +120,7 @@ const GSCSummary = (props: any) => {
                         </Box>
                         <Typography variant="subtitle2" sx={{ paddingLeft: "10px" }}>CTR</Typography>
                     </Box>
-                    <Box className="gsc-stats" sx={{ borderRadius: "10px", border: "3px dashed #E6E8F0", marginRight: "10px", padding: "5px" }}>
+                    <Box className="gsc-stats" sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", marginRight: "10px", padding: "5px" }}>
                         <Box sx={{ display: "flex", }}>
                             <Box title="Position"><Icon icon={!summary?.positionChange?.startsWith("-") ? "solar:arrow-up-line-duotone" : 'solar:arrow-down-line-duotone'} style={{
                                 fontSize: "25px",

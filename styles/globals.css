@@ -388,3 +388,6 @@ code[class*='language-'] {
 /* .gsc-stats{
   padding:30px !important;
 } */
+.no-border{
+  border: none !important;
+}

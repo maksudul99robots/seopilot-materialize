@@ -144,6 +144,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async getOwnersWorkspaces(data: any, url = "/get-owners-workspaces", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async createWorkspace(data: any, url = "/create-workspace", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
         // return

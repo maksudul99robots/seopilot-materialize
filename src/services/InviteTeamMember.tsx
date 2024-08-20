@@ -3,29 +3,21 @@ import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect } from 
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
-import Switch from '@mui/material/Switch'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
 import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
-// ** Third Party Imports
-import Payment from 'payment'
-import Cards, { Focused } from 'react-credit-cards'
+
+
+import { Focused } from 'react-credit-cards'
 
 // ** Util Import
-import { formatCVC, formatExpirationDate, formatCreditCardNumber } from 'src/@core/utils/format'
-
-// ** Styled Component Imports
-import CardWrapper from 'src/@core/styles/libs/react-credit-cards'
 
 // ** Styles Import
 import 'react-credit-cards/es/styles-compiled.css'
@@ -51,7 +43,6 @@ const InviteTeamMember = (props: any) => {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [disable, setDisable] = useState(true);
   const [loading, setLoading] = useState(false);
-
   const [focus, setFocus] = useState<Focused | undefined>()
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
@@ -88,7 +79,7 @@ const InviteTeamMember = (props: any) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    LoginRegistrationAPI.inviteToTeam({ role, email }).then(res => {
+    LoginRegistrationAPI.inviteToTeam({ role, email, workspace: props.workspaceSelected }).then(res => {
       props.setReRender(!props.reRender);
       setLoading(false);
       // if (res.status == 203) {
@@ -178,6 +169,36 @@ const InviteTeamMember = (props: any) => {
                 </Grid>
 
               </Grid>
+            </Grid>
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+
+              <FormControl fullWidth >
+                <InputLabel id='address-select'>Select Workspace</InputLabel>
+                <Select
+                  fullWidth
+                  placeholder='Select Workspace'
+                  label='Select Workspace'
+                  labelId='Select Workspace'
+                  defaultValue={props.workspaceSelected}
+                  onChange={e => {
+                    props.setWorkspaceSelected(e.target.value);
+
+                  }}
+
+
+                >
+                  <MenuItem value="all">All</MenuItem>
+                  {
+                    props.workspaces.map((w: any, i: any) => {
+                      return (
+                        <MenuItem key={i} value={w.id}>{w.name}</MenuItem>
+                      )
+                    })
+
+                  }
+                </Select>
+              </FormControl>
+
             </Grid>
             <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
               <FormControl fullWidth>

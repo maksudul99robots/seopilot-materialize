@@ -84,6 +84,8 @@ const Team = () => {
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 20 })
     const [mainData, setMainData] = useState<any>([]);
     const [reRender, setReRender] = useState<any>([]);
+    const [workspaces, setWorkspaces] = useState<any>([]);
+
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [showDelete, setShowDelete] = useState<boolean>(false);
     const [teamMEmberCount, setTeamMemberCount] = useState<number>(1);
@@ -91,10 +93,14 @@ const Team = () => {
     const [canCreate, setCanCreate] = useState<boolean>(false);
     const auth = useAuth()
     const router = useRouter()
-
+    const [workspaceSelected, setWorkspaceSelected] = useState<any>(auth?.user?.current_workspace);
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
+
+    useEffect(() => {
+        console.log("workspaceSelected:", workspaceSelected)
+    }, [workspaceSelected])
 
     useEffect(() => {
 
@@ -290,6 +296,11 @@ const Team = () => {
         }).catch(e => {
             console.log("unable to get workspaces")
         })
+        LoginRegistrationAPI.getOwnersWorkspaces({}).then(res => {
+            setWorkspaces(res.data.workspaces)
+        }).catch(e => {
+            console.log("unable to get workspaces")
+        })
     }, [])
 
     const fetchTableData = (useCallback(
@@ -348,6 +359,9 @@ const Team = () => {
                     disabled={
                         currentWorkspaceRole == 'member'
                     }
+                    setWorkspaceSelected={setWorkspaceSelected}
+                    workspaces={workspaces}
+                    workspaceSelected={workspaceSelected}
 
                 />
             </Box>

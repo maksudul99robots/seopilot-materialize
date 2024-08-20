@@ -374,11 +374,16 @@ const IdeaList = () => {
         console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
         if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
             Swal.fire({
-                title: 'Error',
-                text: 'Please Add API Key',
-                icon: 'warning',
-                confirmButtonText: 'OK',
-                confirmButtonColor: "#2979FF"
+                title: 'Enter API Key',
+                text: 'To start using SEO Pilot, an OpenAI or Claude API Key is required.',
+                // icon: 'warning',
+                iconHtml: '<img src="/images/inventory.png"/>',
+                confirmButtonText: 'Enter API Key',
+                confirmButtonColor: "#2979FF",
+                customClass: {
+                    icon: 'no-border'
+                }
+
             }).then(() => {
                 router.push("/add-apikey")
             })
