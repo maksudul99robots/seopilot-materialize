@@ -1,4 +1,4 @@
-export function formatDateToYYYYMMDD(date: Date) {
+export const formatDateToYYYYMMDD = (date: Date) => {
     if (date) {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based

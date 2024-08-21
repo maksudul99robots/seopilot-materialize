@@ -17,7 +17,7 @@ import 'react-credit-cards/es/styles-compiled.css'
 import Icon from 'src/@core/components/icon'
 import { CircularProgress, FormControl, InputAdornment, InputLabel, MenuItem, Select, Table } from '@mui/material'
 import { LoginRegistrationAPI } from '../API'
-import { getDateTime } from '../DateTimeFormatter'
+import { getDateTime } from '../utils/DateTimeFormatter'
 
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

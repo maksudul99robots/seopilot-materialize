@@ -14,7 +14,7 @@ import { CSVLink } from "react-csv";
 import { Button } from '@mui/material'
 import Icon from 'src/@core/components/icon'
 import GSCSidebar from 'src/services/GSCSidebar'
-import { formatDateToYYYYMMDD } from './utils/DateTimeFormatters'
+import { formatDateToYYYYMMDD } from '../../services/utils/DateTimeFormattersYYYYMMDD'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

@@ -25,7 +25,7 @@ import Cards, { Focused } from 'react-credit-cards'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 import { LoginRegistrationAPI } from '../API'
-import { getDateTime } from '../DateTimeFormatter'
+import { getDateTime } from '../utils/DateTimeFormatter'
 import { Chip } from '@mui/material'
 import { UserInfo } from './UserInfo'
 import { WorkspaceInfo } from './WorkspaceInfo'

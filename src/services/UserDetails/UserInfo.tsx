@@ -1,5 +1,5 @@
 import { Box, Chip, Typography } from "@mui/material"
-import { getDateTime } from "../DateTimeFormatter"
+import { getDateTime } from "../utils/DateTimeFormatter"
 
 export const UserInfo = (props: any) => {
     return (

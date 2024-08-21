@@ -14,7 +14,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import { getCountryNameFlag } from 'src/services/getCountryNameFlag';
-import { formatDateToYYYYMMDD } from './utils/DateTimeFormatters';
+import { formatDateToYYYYMMDD } from '../../services/utils/DateTimeFormattersYYYYMMDD';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -278,14 +278,6 @@ const GSCTablesCountry = (props: any) => {
         { label: "Position Growth", key: "positionChange" },
 
     ];
-
-    function formatDate(date: Date) {
-        let d = new Date(date);
-        let month = ('0' + (d.getMonth() + 1)).slice(-2);
-        let day = ('0' + d.getDate()).slice(-2);
-        let year = d.getFullYear();
-        return `${month}-${day}-${year}`;
-    }
 
     return (
         <Box>

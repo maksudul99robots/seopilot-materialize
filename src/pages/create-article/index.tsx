@@ -70,7 +70,7 @@ import CustomBadge from 'src/@core/components/mui/badge'
 // ** Types
 import { CustomBadgeProps } from 'src/@core/components/mui/badge/types'
 import AssignUsers from './AssignUsers';
-import { getDateTime } from 'src/services/DateTimeFormatter';
+import { getDateTime } from 'src/services/utils/DateTimeFormatter';
 
 
 const ListBadge = styled(CustomBadge)<CustomBadgeProps>(() => ({

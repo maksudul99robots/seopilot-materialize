@@ -14,7 +14,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import { getCountryNameFlag } from 'src/services/getCountryNameFlag';
-import { formatDateToYYYYMMDD } from './utils/DateTimeFormatters';
+import { formatDateToYYYYMMDD } from '../../services/utils/DateTimeFormattersYYYYMMDD';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

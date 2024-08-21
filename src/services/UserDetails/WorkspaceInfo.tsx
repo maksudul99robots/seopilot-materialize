@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material"
 import { Box } from "@mui/system"
-import { getDateTime } from "../DateTimeFormatter"
+import { getDateTime } from "../utils/DateTimeFormatter"
 
 export const WorkspaceInfo = (props: any) => {
     return (

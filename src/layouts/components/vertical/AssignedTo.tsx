@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Typography } from
 import { Box } from "@mui/system"
 import { forwardRef, useEffect, useState } from "react"
 import { LoginRegistrationAPI } from "src/services/API"
-import { getDateTime } from "src/services/DateTimeFormatter"
+import { getDateTime } from "src/services/utils/DateTimeFormatter"
 import DatePicker from 'react-datepicker'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import Swal from "sweetalert2"

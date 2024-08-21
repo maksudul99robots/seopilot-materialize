@@ -15,7 +15,7 @@ import { styled } from '@mui/material/styles'
 import { Button } from '@mui/material';
 import Link from 'next/link';
 import ShowAllClustersForGSCRefined from 'src/services/clusterListGSC/ShowAllClustersForGSCRefined';
-import { formatDateToYYYYMMDD } from './utils/DateTimeFormatters';
+import { formatDateToYYYYMMDD } from '../../services/utils/DateTimeFormattersYYYYMMDD';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

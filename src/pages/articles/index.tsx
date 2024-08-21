@@ -40,7 +40,7 @@ import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
-import { getDateTime } from 'src/services/DateTimeFormatter'
+import { getDateTime } from 'src/services/utils/DateTimeFormatter'
 import Icon from 'src/@core/components/icon'
 import NotificationDropdown, { NotificationsType } from 'src/@core/layouts/components/shared-components/NotificationDropdown'
 import FilterOptions from '../admin/articles/filterOptions/FilterOptions'

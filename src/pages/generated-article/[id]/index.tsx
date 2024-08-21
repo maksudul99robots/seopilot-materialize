@@ -9,7 +9,7 @@ import { LoginRegistrationAPI } from 'src/services/API';
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2';
 import Outlines from './Outlines';
-import { getDateTime } from 'src/services/DateTimeFormatter';
+import { getDateTime } from 'src/services/utils/DateTimeFormatter';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from 'src/hooks/useAuth';
 import { getTermCalculations } from 'src/services/MetricsCalculator';

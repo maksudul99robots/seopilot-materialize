@@ -14,7 +14,7 @@ import { useAuth } from 'src/hooks/useAuth';
 import CustomizedMenus from 'src/services/EditorExportOptions';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { getDateTime } from 'src/services/DateTimeFormatter';
+import { getDateTime } from 'src/services/utils/DateTimeFormatter';
 import { getHeadings } from 'src/services/Headings';
 import DialogAddCard from 'src/services/DialogAddCard';
 import SelectConnects from 'src/services/SelectConnects';

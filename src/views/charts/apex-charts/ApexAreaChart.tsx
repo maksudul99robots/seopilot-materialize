@@ -52,7 +52,7 @@ interface PickerProps {
 import React, { useRef } from 'react'
 import html2canvas from 'html2canvas';
 import { s } from '@fullcalendar/core/internal-common'
-import { formatDateToYYYYMMDD } from 'src/pages/gsc-stats/utils/DateTimeFormatters'
+import { formatDateToYYYYMMDD } from 'src/services/utils/DateTimeFormatters'
 
 
 const ApexAreaChart = (props: any) => {

@@ -37,7 +37,7 @@ import { PromptComponent } from 'src/components/PromptComponent';
 import Metrics from 'src/components/Metrics';
 import { getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
-import { getDateTime } from 'src/services/DateTimeFormatter';
+import { getDateTime } from 'src/services/utils/DateTimeFormatter';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />

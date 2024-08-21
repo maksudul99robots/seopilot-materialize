@@ -73,7 +73,7 @@ import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
-import { getDateTime } from 'src/services/DateTimeFormatter'
+import { getDateTime } from 'src/services/utils/DateTimeFormatter'
 import DialogAddCard from 'src/services/DialogAddCard'
 import DeleteWordpressConnect from 'src/services/DeleteWordpressConnect'
 import EditWordpressConnect from 'src/services/EditWordpressConnect'
