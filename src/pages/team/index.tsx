@@ -93,7 +93,7 @@ const Team = () => {
     const [canCreate, setCanCreate] = useState<boolean>(false);
     const auth = useAuth()
     const router = useRouter()
-    const [workspaceSelected, setWorkspaceSelected] = useState<any>(auth?.user?.current_workspace);
+    const [workspaceSelected, setWorkspaceSelected] = useState<any>([]);
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }

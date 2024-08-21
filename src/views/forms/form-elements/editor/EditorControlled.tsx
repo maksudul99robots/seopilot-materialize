@@ -561,8 +561,9 @@ const EditorControlled = (props: any) => {
           history: { inDropdown: false },
           embedded: {
             defaultSize: {
-              height: '523',
               width: '930',
+              height: '523',
+
             },
             embedCallback: (link) => {
               // This ensures YouTube and Vimeo links are properly embedded

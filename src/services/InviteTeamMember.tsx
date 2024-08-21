@@ -12,7 +12,9 @@ import Typography from '@mui/material/Typography'
 import Fade, { FadeProps } from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-
+import Checkbox from '@mui/material/Checkbox'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 
 import { Focused } from 'react-credit-cards'
@@ -47,12 +49,32 @@ const InviteTeamMember = (props: any) => {
   const [show, setShow] = useState<boolean>(false)
   const handleBlur = () => setFocus(undefined)
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
+
+  const handleCheckboxChange = (id: string) => {
+    setSelectedIds((prevSelectedIds) =>
+      prevSelectedIds.includes(id)
+        ? prevSelectedIds.filter((selectedId) => selectedId !== id)
+        : [...prevSelectedIds, id]
+    );
+  };
+
+  const handleSelectAllChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = event.target.checked;
+    setSelectAll(isChecked);
+    setSelectedIds(isChecked ? props.workspaces.map((w: any) => w.id) : []);
+  };
+
+  const isAllSelected = selectedIds.length === props.workspaces.length;
+
   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.name === 'email') {
       // target.value = formatCreditCardNumber(target.value, Payment)
       setEmail(target.value)
     }
   }
+
 
   const handleClose = () => {
     setEmail('')
@@ -79,7 +101,7 @@ const InviteTeamMember = (props: any) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    LoginRegistrationAPI.inviteToTeam({ role, email, workspace: props.workspaceSelected }).then(res => {
+    LoginRegistrationAPI.inviteToTeam({ role, email, workspace: selectedIds }).then(res => {
       props.setReRender(!props.reRender);
       setLoading(false);
       // if (res.status == 203) {
@@ -149,9 +171,40 @@ const InviteTeamMember = (props: any) => {
             </Typography>
           </Box>
           <Grid container spacing={6}>
+
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+
+              <Typography variant='h6'>Select Workspace(s)</Typography>
+              <FormGroup>
+                <FormControlLabel
+                  label="All"
+                  sx={{ height: "25px" }}
+                  control={
+                    <Checkbox
+                      checked={isAllSelected || selectAll}
+                      onChange={handleSelectAllChange}
+                    />
+                  }
+                />
+                {props.workspaces.map((w: any) => (
+                  <FormControlLabel
+                    sx={{ height: "25px" }}
+                    key={w.id}
+                    label={w.name}
+                    control={
+                      <Checkbox
+                        checked={selectedIds.includes(w.id)}
+                        onChange={() => handleCheckboxChange(w.id)}
+                      />
+                    }
+                  />
+                ))}
+              </FormGroup>
+            </Grid>
+
             <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
               <Grid container spacing={6}>
-                <Grid item xs={12} sx={{ mt: 7 }}>
+                <Grid item xs={12} sx={{ mt: 2 }}>
                   <TextField
                     fullWidth
                     name='email'
@@ -170,36 +223,7 @@ const InviteTeamMember = (props: any) => {
 
               </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
 
-              <FormControl fullWidth >
-                <InputLabel id='address-select'>Select Workspace</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Select Workspace'
-                  label='Select Workspace'
-                  labelId='Select Workspace'
-                  defaultValue={props.workspaceSelected}
-                  onChange={e => {
-                    props.setWorkspaceSelected(e.target.value);
-
-                  }}
-
-
-                >
-                  <MenuItem value="all">All</MenuItem>
-                  {
-                    props.workspaces.map((w: any, i: any) => {
-                      return (
-                        <MenuItem key={i} value={w.id}>{w.name}</MenuItem>
-                      )
-                    })
-
-                  }
-                </Select>
-              </FormControl>
-
-            </Grid>
             <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
               <FormControl fullWidth>
                 <InputLabel id='role-select'>Select Role</InputLabel>
@@ -229,7 +253,7 @@ const InviteTeamMember = (props: any) => {
         >
           <Button variant='contained' sx={{ mr: 2 }}
             onClick={handleSubmit}
-            disabled={loading || !isEmailValid}
+            disabled={loading || !isEmailValid || selectedIds.length == 0}
             startIcon={loading ? <Icon icon="line-md:loading-twotone-loop" /> : <Icon icon="bi:send" />}>
             Send Invitation
           </Button>
