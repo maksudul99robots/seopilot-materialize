@@ -50,29 +50,11 @@ import { LoginRegistrationAPI } from '../../services/API'
 import { useAuth } from 'src/hooks/useAuth'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
-import { getDateTime } from 'src/services/utils/DateTimeFormatter'
-import DialogAddCard from 'src/services/DialogAddCard'
-import DeleteWordpressConnect from 'src/services/DeleteWordpressConnect'
-import EditWordpressConnect from 'src/services/EditWordpressConnect'
-import { Chip } from '@mui/material'
-import CreateWorkspace from 'src/services/CreateWorkspace'
 import InviteTeamMember from 'src/services/InviteTeamMember'
 import EditTeamMember from 'src/services/EditTeamMember'
 import DeleteTeamMember from 'src/services/DeleteTeamMember'
 import ResendInvitationTeamMember from 'src/services/ResendInvitationTeamMember'
-
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        backgroundColor: theme.palette.common.white,
-        color: 'rgba(0, 0, 0, 0.87)',
-        boxShadow: theme.shadows[1],
-        fontSize: 11,
-    },
-}));
+import Avatar from '../../services/AvatarComponent';
 
 const Team = () => {
     // ** States
@@ -85,22 +67,15 @@ const Team = () => {
     const [mainData, setMainData] = useState<any>([]);
     const [reRender, setReRender] = useState<any>([]);
     const [workspaces, setWorkspaces] = useState<any>([]);
-
-    const [showEdit, setShowEdit] = useState<boolean>(false);
-    const [showDelete, setShowDelete] = useState<boolean>(false);
+    const [emails, setEmails] = useState<any>([])
     const [teamMEmberCount, setTeamMemberCount] = useState<number>(1);
     const [currentWorkspaceRole, setCurrentWorkspaceRole] = useState<string>('member')
     const [canCreate, setCanCreate] = useState<boolean>(false);
     const auth = useAuth()
-    const router = useRouter()
     const [workspaceSelected, setWorkspaceSelected] = useState<any>([]);
     function loadServerRows(currentPage: number, data: CustomRowType[]) {
         return data.slice(currentPage * paginationModel.pageSize, (currentPage + 1) * paginationModel.pageSize)
     }
-
-    useEffect(() => {
-        console.log("workspaceSelected:", workspaceSelected)
-    }, [workspaceSelected])
 
     useEffect(() => {
 
@@ -146,12 +121,14 @@ const Team = () => {
                 return (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {/* {renderClient(params)} */}
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                                {row?.user?.email}
+                        {/* <Box sx={{ display: 'flex' }}> */}
 
-                            </Typography>
-                        </Box>
+                        <Avatar email={row?.user?.email} bg={row?.user?.avatar_bg} />
+                        <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, ml: 2 }}>
+                            {row?.user?.email}
+
+                        </Typography>
+                        {/* </Box> */}
                     </Box>
                 )
             }
@@ -279,6 +256,16 @@ const Team = () => {
             }).catch(e => {
                 console.log("unable to get teams")
             })
+            LoginRegistrationAPI.getOwnersFullTeam({}).then(res => {
+                // loadServerRows
+                setEmails(res.data);
+                // setTotal(res.data.total)
+                // setRows(loadServerRows(paginationModel.page, res.data.data))
+            }).catch(e => {
+                console.log("unable to get teams")
+            })
+
+
         } else {
             Swal.fire({
                 title: 'Check Your Email',
@@ -362,7 +349,7 @@ const Team = () => {
                     setWorkspaceSelected={setWorkspaceSelected}
                     workspaces={workspaces}
                     workspaceSelected={workspaceSelected}
-
+                    emails={emails}
                 />
             </Box>
             <Card>

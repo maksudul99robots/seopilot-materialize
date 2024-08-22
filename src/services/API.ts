@@ -507,6 +507,9 @@ export const LoginRegistrationAPI = {
     async createIdeaInsertToCluster(data: any, url = "/create-idea-insert-cluster-gsc-pages", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getOwnersFullTeam(data: any, url = "/get-owner-full-team", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

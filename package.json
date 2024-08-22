@@ -48,6 +48,7 @@
     "cleave.js": "1.6.0",
     "clipboard-copy": "4.0.1",
     "clsx": "1.2.1",
+    "core-js-pure": "^3.38.1",
     "country-list": "^2.3.0",
     "crypto-js": "^4.2.0",
     "date-fns": "2.29.3",
@@ -131,6 +132,7 @@
     "eslint-import-resolver-alias": "1.1.2",
     "eslint-import-resolver-typescript": "3.5.3",
     "eslint-plugin-import": "2.27.5",
+    "md5": "^2.3.0",
     "prettier": "2.8.4",
     "typescript": "4.9.5"
   },

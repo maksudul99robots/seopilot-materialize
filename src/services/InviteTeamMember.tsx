@@ -1,5 +1,5 @@
 // ** React Imports
-import { Ref, useState, forwardRef, ReactElement, ChangeEvent, useEffect } from 'react'
+import { Ref, useState, forwardRef, ReactElement, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -26,10 +26,11 @@ import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
-import { FormControl, InputAdornment, InputLabel, MenuItem, Select } from '@mui/material'
+import { FormControl, InputAdornment, InputLabel, MenuItem, Select, Autocomplete } from '@mui/material'
 import { LoginRegistrationAPI } from './API'
 import { ValidateEmail } from './emailValidation'
 import Swal from 'sweetalert2'
+// import Avatar from 'react-avatar'
 
 const Transition = forwardRef(function Transition(
   props: FadeProps & { children?: ReactElement<any, any> },
@@ -37,6 +38,11 @@ const Transition = forwardRef(function Transition(
 ) {
   return <Fade ref={ref} {...props} />
 })
+
+import { SyntheticEvent } from 'react';
+// import { getUserAvatarURL } from './getAvatar'
+import Avatar from './AvatarComponent'
+
 
 const InviteTeamMember = (props: any) => {
   // ** States
@@ -68,13 +74,19 @@ const InviteTeamMember = (props: any) => {
 
   const isAllSelected = selectedIds.length === props.workspaces.length;
 
-  const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.name === 'email') {
-      // target.value = formatCreditCardNumber(target.value, Payment)
-      setEmail(target.value)
-    }
-  }
+  // const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  //   if (target.name === 'email') {
+  //     // target.value = formatCreditCardNumber(target.value, Payment)
+  //     setEmail(target.value)
+  //   }
+  // }
 
+  const handleInputChange = (
+    event: SyntheticEvent,
+    value: string
+  ) => {
+    setEmail(value);
+  };
 
   const handleClose = () => {
     setEmail('')
@@ -172,7 +184,112 @@ const InviteTeamMember = (props: any) => {
           </Box>
           <Grid container spacing={6}>
 
+
+
             <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+              <Grid container spacing={6}>
+                <Grid item xs={12} sx={{ mt: 2 }}>
+                  <Autocomplete
+                    freeSolo
+                    options={props.emails}
+                    getOptionLabel={(option: any) => option.email}
+                    inputValue={email}
+                    onInputChange={handleInputChange}
+                    renderOption={(props, option) => (
+                      <Box component="li" {...props} display="flex" alignItems="center">
+                        <Avatar email={option.email} bg={option.avatar_bg} />
+                        {/* <Avatar src={getUserAvatarURL(option.email, 50)} size={"40"} round="50%" /> */}
+                        <Typography variant='body1' sx={{ ml: 2 }}>{option.email}</Typography>
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        name='email'
+                        value={email}
+                        autoComplete='off'
+                        label='Email Address'
+                        onBlur={handleBlur}
+                        placeholder=''
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: <InputAdornment position="start"></InputAdornment>,
+                        }}
+                      />
+                    )}
+                  />
+                  {/* <TextField
+                    fullWidth
+                    name='email'
+                    value={email}
+                    autoComplete='off'
+                    label='Email Address'
+                    onBlur={handleBlur}
+                    onChange={handleInputChange}
+                    placeholder=''
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start"></InputAdornment>,
+                    }}
+
+                  /> */}
+                </Grid>
+
+              </Grid>
+            </Grid>
+            {/* <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+              <TableContainer >
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" sx={{ fontSize: "12px", padding: "2px !important;" }}>mtushar78+29@gmail.com</TableCell>
+                    </TableRow>
+
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid> */}
+
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
+              <FormControl fullWidth>
+                <InputLabel id='role-select'>Select Role</InputLabel>
+                <Select
+                  fullWidth
+                  placeholder='Select Role'
+                  label='Select Role'
+                  labelId='Select Role'
+                  defaultValue={role}
+                  onChange={e => {
+                    setRole(e.target.value)
+                  }}
+                >
+                  <MenuItem value='member'>Member</MenuItem>
+                  <MenuItem value='admin'>Admin</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(2)} !important` }}>
 
               <Typography variant='h6'>Select Workspace(s)</Typography>
               <FormGroup>
@@ -200,47 +317,6 @@ const InviteTeamMember = (props: any) => {
                   />
                 ))}
               </FormGroup>
-            </Grid>
-
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sx={{ mt: 2 }}>
-                  <TextField
-                    fullWidth
-                    name='email'
-                    value={email}
-                    autoComplete='off'
-                    label='Email Address'
-                    onBlur={handleBlur}
-                    onChange={handleInputChange}
-                    placeholder=''
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start"></InputAdornment>,
-                    }}
-
-                  />
-                </Grid>
-
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(5)} !important` }}>
-              <FormControl fullWidth>
-                <InputLabel id='role-select'>Select Role</InputLabel>
-                <Select
-                  fullWidth
-                  placeholder='Select Role'
-                  label='Select Role'
-                  labelId='Select Role'
-                  defaultValue={role}
-                  onChange={e => {
-                    setRole(e.target.value)
-                  }}
-                >
-                  <MenuItem value='member'>Member</MenuItem>
-                  <MenuItem value='admin'>Admin</MenuItem>
-                </Select>
-              </FormControl>
             </Grid>
           </Grid>
         </DialogContent>
