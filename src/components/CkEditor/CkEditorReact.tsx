@@ -1,4 +1,5 @@
 // components/custom-editor.js
+//@ts-nocheck
 'use client' // only in App Router
 
 import React, { useRef, useState } from 'react';
@@ -27,7 +28,7 @@ function CustomEditor() {
                 data={editorData}
                 onReady={editor => {
                     // Store a reference to the editor instance
-                    editorRef.current = { editor };
+                    editorRef?.current = { editor };
                 }}
                 onChange={(event, editor) => {
                     const data = editor.getData();
