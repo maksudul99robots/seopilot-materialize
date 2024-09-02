@@ -225,6 +225,8 @@ export default function CreateArticle(props: any) {
     const [selectedSite, setSelectedSite] = useState('');
     const [hasOpenAiKey, setHasOpenAiKey] = useState('');
     const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
+    const [youtubeURL, setYoutubeURL] = useState('');
+    const [youtubeLinkValid, setYoutubeLinkValid] = useState(false);
 
     useEffect(() => {
         const { id, edit_article } = router.query;
@@ -491,6 +493,18 @@ export default function CreateArticle(props: any) {
     }, [])
 
 
+    useEffect(() => {
+        // console.log(isValidYouTubeLink(youtubeURL))
+        if (isValidYouTubeLink(youtubeURL)) {
+
+            setYoutubeLinkValid(true)
+        } else {
+            setYoutubeLinkValid(false)
+        }
+        setYoutubeLinkValid(isValidYouTubeLink(youtubeURL))
+
+    }, [youtubeURL])
+
     function separateString(str: string) {
         // Split the string by commas
         const parts = str.split(',');
@@ -518,6 +532,12 @@ export default function CreateArticle(props: any) {
         return csv;
     }
 
+    function isValidYouTubeLink(url: string) {
+        const regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([^&=\n\r]+)(&.*)?$/;
+        return regex.test(url);
+    }
+
+
     const submit = async () => {
         // console.log("isModelAllowed......................", model, allModels)
         // // check if AI model allowed
@@ -533,7 +553,7 @@ export default function CreateArticle(props: any) {
         //     })
         //     return ''
         // }
-        if (topic == '') {
+        if (topic == '' && articleType != 'youtube-to-blog') {
             Swal.fire({
                 title: '',
                 text: `Please Enter Article Topic.`,
@@ -544,9 +564,11 @@ export default function CreateArticle(props: any) {
             return ''
         }
 
+
+
         // return
         if (isAllowedToCreateArticle) {
-            if (articleType != 'listicle') {
+            if (articleType != 'listicle' && articleType != 'youtube-to-blog') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
                     Swal.fire({
                         title: 'Error!',
@@ -621,7 +643,7 @@ export default function CreateArticle(props: any) {
 
                         })
                 }
-            } else {
+            } else if (articleType == 'youtube-to-blog') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
                     Swal.fire({
                         title: 'Error!',
@@ -632,9 +654,20 @@ export default function CreateArticle(props: any) {
                     })
                     return;
                 } else {
-
-                    LoginRegistrationAPI.generateListicles(
+                    if (youtubeURL == '' || !youtubeLinkValid) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Please Enter a Valid Youtube URL.',
+                            icon: 'error',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: "#2979FF"
+                        })
+                        return;
+                    }
+                    setLoading(true)
+                    LoginRegistrationAPI.generateYTB(
                         {
+                            youtube_url: youtubeURL,
                             article_type: articleType,
                             topic: topic,
                             keywords: convertArrayToCsvKeywords(keywords),
@@ -663,10 +696,12 @@ export default function CreateArticle(props: any) {
                             no_of_citations: noOfCitations,
                             user: user,
                             due_date: dateTime,
-                            internal_linking: internalLinking
+                            internal_linking: internalLinking,
+                            introduction: introduction,
+                            conclusion: conclusion
                         }
                     ).then(res => {
-                        // console.log("res:", res);
+                        console.log("res:", res);
                         setLoading(false)
                         router.push("/generated-article/" + res.data.id)
                     }).catch(e => {
@@ -698,6 +733,8 @@ export default function CreateArticle(props: any) {
 
                     })
                 }
+            } else {
+
 
 
             }
@@ -1040,48 +1077,74 @@ export default function CreateArticle(props: any) {
                                         >
                                             <MenuItem value='blog'>Blog Article</MenuItem>
                                             <MenuItem value='listicle'>Listicle</MenuItem>
+                                            <MenuItem value='youtube-to-blog'>Youtube Video To Blog</MenuItem>
                                             {/* <MenuItem value='product'>Amazon Product Review</MenuItem>
                                     <MenuItem value='guest'>Guest Post</MenuItem> */}
                                         </Select>
                                     </FormControl>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
-                                        setTopic(e.target.value)
-                                    }} value={topic} InputProps={{
-                                        startAdornment: <InputAdornment position="start"></InputAdornment>,
-                                    }}
-                                        name='topic'
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
 
-                                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                        <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
-                                            Target Keyword
-                                            <LightTooltip title={
-                                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                    The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
-                                                </p>
-                                            } placement="top">
-                                                <div style={{ height: "100%" }}>
-                                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                                </div>
-                                            </LightTooltip >
-                                        </Typography>
-                                        {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                                        {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-                                    </Box>
-
-                                    <TagsInput
-                                        value={keywords}
-                                        onChange={setKeywords}
-                                        name="Keywords"
-                                    />
-                                    {/* <em>press enter to add new tag</em> */}
-                                    <FormHelperText sx={{ fontSize: "14px" }}>
-                                        Press enter to add the keyword. You have to put only one target keyword to rank for.</FormHelperText>
                                 </Grid>
+                                {
+                                    articleType == 'youtube-to-blog' &&
+                                    <Grid item xs={12}>
+                                        <TextField fullWidth label='Youtube URL' placeholder={'Enter Youtube URL'} onChange={e => {
+                                            setYoutubeURL(e.target.value)
+                                        }} value={youtubeURL} InputProps={{
+                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                        }}
+                                            name='Youtube URL'
+                                            error={!youtubeLinkValid}
+                                        />
+                                        <FormHelperText sx={{ fontSize: "14px", color: "#7CC1F5" }}>
+                                            Make sure the youtube video has captions.</FormHelperText>
+                                    </Grid>
+                                }
+
+
+                                {
+                                    articleType !== 'youtube-to-blog' &&
+                                    <Grid item xs={12}>
+                                        <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
+                                            setTopic(e.target.value)
+                                        }} value={topic} InputProps={{
+                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                        }}
+                                            name='topic'
+                                        />
+                                    </Grid>
+                                }
+                                {
+                                    articleType !== 'youtube-to-blog' &&
+                                    <Grid item xs={12}>
+
+                                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                            <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
+                                                Target Keyword
+                                                <LightTooltip title={
+                                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                        The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
+                                                    </p>
+                                                } placement="top">
+                                                    <div style={{ height: "100%" }}>
+                                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                                    </div>
+                                                </LightTooltip >
+                                            </Typography>
+                                            {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                                            {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                                        </Box>
+
+                                        <TagsInput
+                                            value={keywords}
+                                            onChange={setKeywords}
+                                            name="Keywords"
+                                        />
+                                        {/* <em>press enter to add new tag</em> */}
+                                        <FormHelperText sx={{ fontSize: "14px" }}>
+                                            Press enter to add the keyword. You have to put only one target keyword to rank for.</FormHelperText>
+                                    </Grid>
+                                }
+
                                 <Grid item sm={6} xs={6}>
                                     <FormControl fullWidth>
                                         <InputLabel id='country-select'>Article Tone</InputLabel>
@@ -1201,104 +1264,108 @@ export default function CreateArticle(props: any) {
 
                         </Card>
 
+                        {
+                            articleType !== 'youtube-to-blog' &&
+                            <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
+                                <Grid container spacing={6}>
+                                    {
+                                        articleType != 'listicle' &&
+                                        <>
+                                            <Typography variant='body1' sx={{ fontSize: "22px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
+                                                Outline Source
+                                                <LightTooltip title={
+                                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                        <b>System Generated Outline</b>- Based on the given inputs, SEO Pilot will programmatically generate an outline and produce the article.
+                                                        <br></br>
+                                                        <b>Create Your Own Outline</b>- Allows you to specify the outline. Add, edit, remove, and re-order headings.
+                                                        <br></br>
+                                                        <b>Get Outline From a URL</b>- the system will scrape the given URL to extract all Headings to form an outline. Thereafter, you can add, edit, remove, and re-order headings.
 
 
-                        <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
-                            <Grid container spacing={6}>
-                                {
-                                    articleType != 'listicle' &&
-                                    <>
-                                        <Typography variant='body1' sx={{ fontSize: "22px", fontWeight: 500, marginLeft: "25px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
-                                            Outline Source
-                                            <LightTooltip title={
-                                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                    <b>System Generated Outline</b>- Based on the given inputs, SEO Pilot will programmatically generate an outline and produce the article.
-                                                    <br></br>
-                                                    <b>Create Your Own Outline</b>- Allows you to specify the outline. Add, edit, remove, and re-order headings.
-                                                    <br></br>
-                                                    <b>Get Outline From a URL</b>- the system will scrape the given URL to extract all Headings to form an outline. Thereafter, you can add, edit, remove, and re-order headings.
+                                                    </p>
+                                                } placement="top">
+                                                    <div style={{ height: "100%" }}>
+                                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                                    </div>
+                                                </LightTooltip >
+                                            </Typography>
+                                            <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
+                                                {data.map((item, index) => (
+                                                    <CustomRadioIcons
+                                                        key={index}
+                                                        data={data[index]}
+                                                        selected={outlineSource}
+                                                        icon={icons[index].icon}
+                                                        name='custom-radios-icons'
+                                                        handleChange={handleChange}
+                                                        gridProps={{ sm: 4, xs: 12 }}
+                                                        iconProps={icons[index].iconProps}
 
-
-                                                </p>
-                                            } placement="top">
-                                                <div style={{ height: "100%" }}>
-                                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                                </div>
-                                            </LightTooltip >
-                                        </Typography>
-                                        <Grid container spacing={4} sx={{ paddingLeft: "25px" }}>
-                                            {data.map((item, index) => (
-                                                <CustomRadioIcons
-                                                    key={index}
-                                                    data={data[index]}
-                                                    selected={outlineSource}
-                                                    icon={icons[index].icon}
-                                                    name='custom-radios-icons'
-                                                    handleChange={handleChange}
-                                                    gridProps={{ sm: 4, xs: 12 }}
-                                                    iconProps={icons[index].iconProps}
-
-                                                />
-                                            ))}
-                                        </Grid>
-                                    </>
-                                }
+                                                    />
+                                                ))}
+                                            </Grid>
+                                        </>
+                                    }
 
 
 
-                                {
-                                    outlineSource == 'url' &&
-                                    <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
+                                    {
+                                        outlineSource == 'url' &&
+                                        <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between" }}>
 
-                                        <TextField fullWidth label='Insert URL' placeholder='https://example.com' onChange={e => {
-                                            setOutlineURL(e.target.value)
-                                        }} value={outlineURL} InputProps={{
-                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
-                                        }}
-                                        />
-                                        <Button variant='outlined' size="medium" sx={{ ml: 3, pt: 3, pb: 3, pl: 4, pr: 4, width: fetchOutlineLoading ? "200px" : '150px' }}
-                                            disabled={isValidURL(outlineURL) ? false : true}
-                                            onClick={() => fetchOutline()}
-                                            startIcon={fetchOutlineLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null
-                                            }
-                                        >
-                                            Get Outline
-                                        </Button>
-                                    </Grid>
-                                }
-
-                                {
-                                    (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
-
-                                    <DndList
-                                        headings={headings}
-                                        setHeadings={setHeadings}
-                                        editHeadingOnChange={editHeadingOnChange}
-                                        removeHeadings={removeHeadings}
-                                        changeHeadingTag={changeHeadingTag}
-                                        addnewHeading={addnewHeading}
-                                    />
-                                }
-
-                                {
-                                    articleType == 'listicle' ?
-                                        <Grid item xs={12}>
-                                            {/* <ListicleInputComponent listicleOutlines={listicleOutlines} setListicleOutlines={setListicleOutlines} /> */}
-                                            <DndForListicle
-                                                listicleOutlines={listicleOutlines}
-                                                setListicleOutlines={setListicleOutlines}
-                                                editListicleOutlineChange={editListicleOutlineChange}
-                                                removeListicleOutline={removeListicleOutline}
-                                                changeListicleOutlineTag={changeListicleOutlineTag}
-                                                addnewListicleOutline={addnewListicleOutline}
-                                                changeListicleOutlineImgSrc={changeListicleOutlineImgSrc}
-                                                changeListicleOutlineImgSrcUrl={changeListicleOutlineImgSrcUrl}
+                                            <TextField fullWidth label='Insert URL' placeholder='https://example.com' onChange={e => {
+                                                setOutlineURL(e.target.value)
+                                            }} value={outlineURL} InputProps={{
+                                                startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                            }}
                                             />
+                                            <Button variant='outlined' size="medium" sx={{ ml: 3, pt: 3, pb: 3, pl: 4, pr: 4, width: fetchOutlineLoading ? "200px" : '150px' }}
+                                                disabled={isValidURL(outlineURL) ? false : true}
+                                                onClick={() => fetchOutline()}
+                                                startIcon={fetchOutlineLoading ? <Icon icon="line-md:loading-twotone-loop" /> : null
+                                                }
+                                            >
+                                                Get Outline
+                                            </Button>
                                         </Grid>
-                                        : null
-                                }
-                            </Grid>
-                        </Card>
+                                    }
+
+                                    {
+                                        (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
+
+                                        <DndList
+                                            headings={headings}
+                                            setHeadings={setHeadings}
+                                            editHeadingOnChange={editHeadingOnChange}
+                                            removeHeadings={removeHeadings}
+                                            changeHeadingTag={changeHeadingTag}
+                                            addnewHeading={addnewHeading}
+                                        />
+                                    }
+
+                                    {
+                                        articleType == 'listicle' ?
+                                            <Grid item xs={12}>
+                                                {/* <ListicleInputComponent listicleOutlines={listicleOutlines} setListicleOutlines={setListicleOutlines} /> */}
+                                                <DndForListicle
+                                                    listicleOutlines={listicleOutlines}
+                                                    setListicleOutlines={setListicleOutlines}
+                                                    editListicleOutlineChange={editListicleOutlineChange}
+                                                    removeListicleOutline={removeListicleOutline}
+                                                    changeListicleOutlineTag={changeListicleOutlineTag}
+                                                    addnewListicleOutline={addnewListicleOutline}
+                                                    changeListicleOutlineImgSrc={changeListicleOutlineImgSrc}
+                                                    changeListicleOutlineImgSrcUrl={changeListicleOutlineImgSrcUrl}
+                                                />
+                                            </Grid>
+                                            : null
+                                    }
+                                </Grid>
+                            </Card>
+
+                        }
+
+
 
                         {/* </Box> */}
 
@@ -1527,50 +1594,34 @@ export default function CreateArticle(props: any) {
 
                             </Grid>
                         </Card>
-                        <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
-                            <Grid item xs={12} sx={{ mb: 5 }}>
-                                <div style={{ display: "flex", alignItems: "center" }} >
-                                    <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} >Internal and External Linkings</Typography>
-                                </div>
-
-                            </Grid>
-                            <Grid container>
-
-                                <Grid item xs={12} sx={{ display: "flex" }}>
-                                    <SwitchesCustomized label="Include Auto Internal Linking" isChecked={internalLinking} onClick={() => {
-                                        if (allSites.length > 0)
-                                            setInternalLinking(!internalLinking)
-                                        else
-                                            Swal.fire({
-                                                title: '',
-                                                html: '<p>You have not connected GSC or you do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
-                                                icon: 'warning',
-                                                confirmButtonText: 'Close',
-                                                confirmButtonColor: "#2979FF"
-                                            })
-                                    }} />
-                                    <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
-                                    <LightTooltip title={
-                                        <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            You have to add your Google Search Console profile with Google OAuth 2.0. We will fetch your connected website information to add internal linking.
-                                        </p>
-                                    } placement="top">
-                                        <div style={{ height: "100%" }}>
-                                            <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
-                                        </div>
-                                    </LightTooltip >
+                        {
+                            articleType !== 'youtube-to-blog' &&
+                            <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
+                                <Grid item xs={12} sx={{ mb: 5 }}>
+                                    <div style={{ display: "flex", alignItems: "center" }} >
+                                        <Typography sx={{ marginRight: "10px", fontWeight: "600", fontSize: "22px" }} >Internal and External Linkings</Typography>
+                                    </div>
 
                                 </Grid>
+                                <Grid container>
 
-                                {
-
-                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') &&
-                                    <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
-                                        <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                    <Grid item xs={12} sx={{ display: "flex" }}>
+                                        <SwitchesCustomized label="Include Auto Internal Linking" isChecked={internalLinking} onClick={() => {
+                                            if (allSites.length > 0)
+                                                setInternalLinking(!internalLinking)
+                                            else
+                                                Swal.fire({
+                                                    title: '',
+                                                    html: '<p>You have not connected GSC or you do not have any website added to your GSC.</p><b> Go to integrations  page to add GSC</b>',
+                                                    icon: 'warning',
+                                                    confirmButtonText: 'Close',
+                                                    confirmButtonColor: "#2979FF"
+                                                })
+                                        }} />
                                         <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
                                         <LightTooltip title={
                                             <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                                                You have to add your Google Search Console profile with Google OAuth 2.0. We will fetch your connected website information to add internal linking.
                                             </p>
                                         } placement="top">
                                             <div style={{ height: "100%" }}>
@@ -1579,36 +1630,54 @@ export default function CreateArticle(props: any) {
                                         </LightTooltip >
 
                                     </Grid>
-                                }
 
+                                    {
 
-                                <Grid item xs={12} sx={{ display: citation ? "flex" : "none", mt: 5 }}>
-                                    <Box sx={{ width: "100%", display: citation ? "flex" : "none" }}>
-                                        <Grid item sm={6} xs={6}>
-                                            <FormControl size='medium' fullWidth>
-                                                <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
-                                                <Select
-                                                    fullWidth
-                                                    placeholder='Select Number of Citations'
-                                                    label='Select Number of Citations'
-                                                    labelId='Select Number of Citations'
-                                                    value={noOfCitations}
-                                                    onChange={e => {
+                                        (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620') &&
+                                        <Grid item xs={12} sx={{ display: "flex", mt: 5 }}>
+                                            <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
+                                            <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />
+                                            <LightTooltip title={
+                                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                    Fetches real time search result to cite sources into the article. Currently only available for GPT-4 and GPT-4 Turbo model.
+                                                </p>
+                                            } placement="top">
+                                                <div style={{ height: "100%" }}>
+                                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
+                                                </div>
+                                            </LightTooltip >
 
-                                                        setNoOfCitations(e.target.value)
-
-                                                    }}
-                                                >
-
-                                                    <MenuItem value="1-10">Low (1-10)</MenuItem>
-                                                    <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
-                                                    <MenuItem value="20+">High (20+)</MenuItem>
-
-
-                                                </Select>
-                                            </FormControl>
                                         </Grid>
-                                        {/* <LightTooltip title={
+                                    }
+
+
+                                    <Grid item xs={12} sx={{ display: citation ? "flex" : "none", mt: 5 }}>
+                                        <Box sx={{ width: "100%", display: citation ? "flex" : "none" }}>
+                                            <Grid item sm={6} xs={6}>
+                                                <FormControl size='medium' fullWidth>
+                                                    <InputLabel id='Select Number of Citations'>Select Number of Citations</InputLabel>
+                                                    <Select
+                                                        fullWidth
+                                                        placeholder='Select Number of Citations'
+                                                        label='Select Number of Citations'
+                                                        labelId='Select Number of Citations'
+                                                        value={noOfCitations}
+                                                        onChange={e => {
+
+                                                            setNoOfCitations(e.target.value)
+
+                                                        }}
+                                                    >
+
+                                                        <MenuItem value="1-10">Low (1-10)</MenuItem>
+                                                        <MenuItem value="10-20">Medium (10 - 20)</MenuItem>
+                                                        <MenuItem value="20+">High (20+)</MenuItem>
+
+
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                            {/* <LightTooltip title={
                                     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
                                         System will select one image from Unsplash, Pexels or DALL-E to use as the featured image. In the future, we will allow choosing from multiple images.
                                     </p>
@@ -1617,82 +1686,84 @@ export default function CreateArticle(props: any) {
                                         <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "6px" }} />
                                     </div>
                                 </LightTooltip > */}
-                                    </Box>
+                                        </Box>
 
 
-                                </Grid>
-
-                                {
-                                    articleType != 'listicle' &&
-                                    <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "0px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
-                                        Links
-                                        <LightTooltip title={
-                                            <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                Add links in the article. You can add multiple links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as link in the article.
-                                            </p>
-                                        } placement="top">
-                                            <div style={{ height: "100%" }}>
-                                                <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                            </div>
-                                        </LightTooltip >
-
-
-                                    </Typography>
-                                }
-
-                                <Grid container>
-                                    {
-                                        articleType != 'listicle' && numberOfLinks.map((link, index) => {
-                                            return (
-                                                <Grid container sx={{ mb: 3 }}>
-                                                    <Grid item sm={11} xs={11} sx={{ display: "block" }}>
-                                                        <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
-                                                            // console.log(e.target.value)
-                                                            const newArray = [...links];
-                                                            newArray[index] = e.target.value
-                                                            setLinks(newArray);
-                                                        }} InputProps={{
-                                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
-                                                        }} />
-                                                    </Grid>
-                                                    <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start", pl: 1 }}>
-                                                        <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
-                                                            if (index != 0) {
-                                                                const newArray = [...numberOfLinks];
-                                                                newArray.splice(index, 1);
-                                                                setNumberOfLinks(newArray);
-
-                                                                const newLinks = [...links];
-                                                                newLinks.splice(index, 1);
-                                                                setLinks(newLinks);
-                                                            }
-
-                                                        }} />
-
-                                                    </Grid>
-                                                </Grid>
-
-                                            )
-                                        })
-
-
-                                    }
+                                    </Grid>
 
                                     {
                                         articleType != 'listicle' &&
-                                        <Button variant='text' size="large" sx={{ mr: 2, ml: 0, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
-                                            const newArray = [...numberOfLinks];
-                                            newArray.push(1);
-                                            setNumberOfLinks(newArray);
-                                        }} startIcon={<Icon icon="gg:add" />}>
-                                            Add Another Link
-                                        </Button>
+                                        <Typography variant='body1' sx={{ fontSize: "18px", fontWeight: 500, marginLeft: "0px", marginTop: "20px", marginBottom: "20px", display: "flex" }}>
+                                            Links
+                                            <LightTooltip title={
+                                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                    Add links in the article. You can add multiple links as well. <br></br>NOTE: If the generated article DO NOT include any suitable keywords for the URL(s), it may not include the URL(s) as link in the article.
+                                                </p>
+                                            } placement="top">
+                                                <div style={{ height: "100%" }}>
+                                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                                </div>
+                                            </LightTooltip >
+
+
+                                        </Typography>
                                     }
+
+                                    <Grid container>
+                                        {
+                                            articleType != 'listicle' && numberOfLinks.map((link, index) => {
+                                                return (
+                                                    <Grid container sx={{ mb: 3 }}>
+                                                        <Grid item sm={11} xs={11} sx={{ display: "block" }}>
+                                                            <TextField fullWidth label='Links to include in article' placeholder='https://example.com' value={links[index] ? links[index] : ''} onChange={e => {
+                                                                // console.log(e.target.value)
+                                                                const newArray = [...links];
+                                                                newArray[index] = e.target.value
+                                                                setLinks(newArray);
+                                                            }} InputProps={{
+                                                                startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                                            }} />
+                                                        </Grid>
+                                                        <Grid item sm={1} sx={{ display: "flex", alignItems: "center", justifyContent: "start", pl: 1 }}>
+                                                            <Icon icon="carbon:close-outline" className='close-icon-style' onClick={e => {
+                                                                if (index != 0) {
+                                                                    const newArray = [...numberOfLinks];
+                                                                    newArray.splice(index, 1);
+                                                                    setNumberOfLinks(newArray);
+
+                                                                    const newLinks = [...links];
+                                                                    newLinks.splice(index, 1);
+                                                                    setLinks(newLinks);
+                                                                }
+
+                                                            }} />
+
+                                                        </Grid>
+                                                    </Grid>
+
+                                                )
+                                            })
+
+
+                                        }
+
+                                        {
+                                            articleType != 'listicle' &&
+                                            <Button variant='text' size="large" sx={{ mr: 2, ml: 0, p: 2, mt: 2, display: showAdditionalSettings ? "flex" : "none" }} onClick={() => {
+                                                const newArray = [...numberOfLinks];
+                                                newArray.push(1);
+                                                setNumberOfLinks(newArray);
+                                            }} startIcon={<Icon icon="gg:add" />}>
+                                                Add Another Link
+                                            </Button>
+                                        }
+                                    </Grid>
+
+
                                 </Grid>
+                            </Card >
+                        }
 
-
-                            </Grid>
-                        </Card >
                         {/* <Divider sx={{ my: theme => `${theme.spacing(2)} !important`, width: "98%", marginBottom: "20px", marginLeft: "2%" }} /> */}
 
                         <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>

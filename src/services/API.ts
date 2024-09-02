@@ -94,6 +94,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async generateYTB(data: any, url = "/generate-youtube-to-blog", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async setStatusToError(data: any, url = "/set-saas-ai-article-status", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
         // return
