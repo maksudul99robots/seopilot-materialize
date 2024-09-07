@@ -330,7 +330,11 @@ export default function CreateArticle(props: any) {
                     if (res.data.internal_linking) {
                         setInternalLinking(res.data.internal_linking)
                     }
+                    if (res.data.youtube_url)
+                        setYoutubeURL(res.data.youtube_url)
                     // }
+
+                    console.log("res.data.youtube_url:", res.data.youtube_url)
                 }
             }).catch(e => {
                 console.log(e);
@@ -507,12 +511,17 @@ export default function CreateArticle(props: any) {
 
     function separateString(str: string) {
         // Split the string by commas
-        const parts = str.split(',');
+        if (str) {
+            const parts = str.split(',');
 
-        // Trim each part to remove leading and trailing whitespaces
-        const trimmedParts = parts.map((part: any) => part.trim());
-        // console.log("trimmedParts:", trimmedParts);
-        return trimmedParts;
+            // Trim each part to remove leading and trailing whitespaces
+            const trimmedParts = parts.map((part: any) => part.trim());
+            // console.log("trimmedParts:", trimmedParts);
+            return trimmedParts;
+        } else {
+            return []
+        }
+
     }
 
 

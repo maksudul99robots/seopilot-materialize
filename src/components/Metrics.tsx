@@ -3,7 +3,8 @@ import ReactSpeedometer from "react-d3-speedometer"
 import ProgressBar from "@ramonak/react-progress-bar";
 import { useEffect, useState } from "react";
 import MetricsTabs from "./MetricsTabs";
-
+import CustomAvatar from 'src/@core/components/mui/avatar'
+import Icon from 'src/@core/components/icon'
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -122,6 +123,43 @@ const Metrics = (props: any) => {
 
 
                 </Box>
+
+                <Box sx={{ width: "100%", margin: "20px 0px 10px 0px", display: "flex", justifyContent: "space-between" }}>
+
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
+                            <Icon icon='material-symbols-light:match-word' style={{ fontSize: "28px" }} />
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Typography variant='caption'>Word Count</Typography>
+                            <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>{props.wordCount}</Typography>
+                        </Box>
+                    </Box>
+                    {(props.tokens != 0 && props?.tokens != undefined && props?.tokens != null) &&
+                        <>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
+                                    <Icon icon='tabler:hash' style={{ fontSize: "28px" }} />
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography variant='caption'>Tokens Used</Typography>
+                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>{props.tokens?.total_tokens}</Typography>
+                                </Box>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
+                                    <Icon icon='ri:price-tag-3-line' style={{ fontSize: "28px" }} />
+                                </CustomAvatar>
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography variant='caption'>Price</Typography>
+                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>${props.price}</Typography>
+                                </Box>
+                            </Box>
+                        </>
+                    }
+
+                </Box>
+
                 <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} primaryKeyword={props.primaryKeyword} paa={props.paa} />
             </Box>
         </Box >

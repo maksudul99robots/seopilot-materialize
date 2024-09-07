@@ -224,15 +224,31 @@ export default function ArticleIU(props: any) {
                             Last Updated: {getDateTime(props.updatedAt)}
                         </Typography>
                     }
-                    <Typography variant='subtitle2' sx={{}}>
-                        Word Count: {props.wordCount} words
+                    <Box sx={{ display: "flex" }}>
+                        <Typography variant='subtitle2' sx={{ paddingRight: "10px" }}>
+                            Article Type: {props.articleType.replaceAll('-', ' ').toUpperCase()}
+
+                        </Typography>
+                        <Typography variant='subtitle2' sx={{ paddingLeft: "10px", paddingRight: "10px", borderLeft: "2px solid #AFAEB9" }}>
+                            AI Model: {props.model}
+
+                        </Typography>
                         {
-                            (props.tokens != 0 && props?.tokens != undefined && props?.tokens != null) ?
-                                ` | Tokens Used: ${props?.tokens?.total_tokens} 
-                                | Cost: ~$${props.price}` : ''
+                            (props.articleType == 'youtube-to-blog') &&
+                            <Typography variant='subtitle2' sx={{ paddingLeft: "10px", paddingRight: "10px", borderLeft: "2px solid #AFAEB9" }} >
+                                <Link href={props.youtubeURL} target='_blank'>Input URL</Link>
+                            </Typography>
 
                         }
-                    </Typography>
+                        {
+                            (props.outlineURL && props.outlineURL != '') &&
+                            <Typography variant='subtitle2' sx={{ paddingLeft: "10px", borderLeft: "2px solid #AFAEB9" }} >
+                                <Link href={props.outlineURL} target='_blank'>Outline URL</Link>
+                            </Typography>
+
+                        }
+                    </Box>
+
 
 
                 </Box>
@@ -497,6 +513,10 @@ export default function ArticleIU(props: any) {
                             linkScore={linkScore}
                             primaryKeyword={props.primaryKeyword}
                             paa={props.paa}
+                            wordCount={props.wordCount}
+                            tokens={props.tokens}
+                            price={props.price}
+
                         />
 
                         {/* <Outlines outlines={outlines} /> */}

@@ -54,6 +54,9 @@ export default function Page() {
     const [numberedItem, setNumberedItem] = useState(false);
     const [alreadyLoaded, setAlreadyLoaded] = useState(false);
     const [status, setStatus] = useState<string>('');
+    const [youtubeURL, setYoutubeURL] = useState<string>('');
+    const [outlineURL, setOutlineURL] = useState('');
+    const [model, setModel] = useState<string>(''); //gpt-3.5-turbo-1106
     const [schedule, setSchedule] = useState<string | null | undefined>(null)
     const [iframes, setIframes] = useState([])
     const router = useRouter()
@@ -195,6 +198,8 @@ export default function Page() {
                         setCreatedAt(res?.data?.createdAt)
                         setUpdatedAt(res?.data?.updatedAt)
                         setImgService(res.data.img_service)
+                        setOutlineURL(res.data?.outline_url ? res.data?.outline_url : '')
+                        setModel(res.data?.model)
                         // if(res.data.content){
                         //     let iframes = extractIframeUrls(props.data)
                         // }
@@ -290,6 +295,9 @@ export default function Page() {
                         //         autoClose: 5000,
                         //     })
                         // }
+                        if (res.data.youtube_url)
+                            setYoutubeURL(res.data.youtube_url)
+
                         setAlreadyLoaded(true)
 
                     }, 1000)
@@ -336,6 +344,8 @@ export default function Page() {
                                     setShowArticleEditor(true);               //  ..  setTimeout()
                                     clearInterval(interval)
                                     setArticle('')
+                                    setOutlineURL(res.data?.outline_url ? res.data?.outline_url : '')
+                                    setModel(res.data?.model)
                                     // setArticle(res?.data.content ? res.data.content : '')
                                     // setOutlines(res?.data.outline ? res.data.outline : '')
                                     let outputString = res?.data?.content.replace('<article>', '');
@@ -419,6 +429,11 @@ export default function Page() {
                                     }
                                     if (res.data.schedule)
                                         setSchedule(res.data.schedule)
+
+                                    if (res.data.youtube_url)
+                                        setYoutubeURL(res.data.youtube_url)
+
+
                                 }, 3000)
                             } else {
                                 Swal.fire({
@@ -565,6 +580,9 @@ export default function Page() {
                         paa={paa}
                         iframes={iframes}
                         setIframes={setIframes}
+                        youtubeURL={youtubeURL}
+                        outlineURL={outlineURL}
+                        model={model}
                     />
                     :
                     <Card sx={{ padding: "20px" }}>
