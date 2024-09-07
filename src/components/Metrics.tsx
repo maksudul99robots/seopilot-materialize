@@ -1,6 +1,7 @@
 import { Box, Grid, LinearProgress, Tooltip, TooltipProps, Typography, styled, tooltipClasses } from "@mui/material"
 import ReactSpeedometer from "react-d3-speedometer"
-import ProgressBar from "@ramonak/react-progress-bar";
+// import ProgressBar from "@ramonak/react-progress-bar";
+import { LinearProgressProps } from '@mui/material/LinearProgress';
 import { useEffect, useState } from "react";
 import MetricsTabs from "./MetricsTabs";
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -16,6 +17,23 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
         fontSize: 11,
     },
 }));
+
+
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
+                <LinearProgress variant="determinate" {...props} />
+            </Box>
+            <Box sx={{ minWidth: 35 }}>
+                <Typography
+                    variant="body2"
+                    sx={{ color: 'text.secondary' }}
+                >{`${Math.round(props.value)}%`}</Typography>
+            </Box>
+        </Box>
+    );
+}
 
 const Metrics = (props: any) => {
 
@@ -68,8 +86,8 @@ const Metrics = (props: any) => {
 
                         <Box sx={{ width: "75%" }}>
 
-                            <ProgressBar completed={(title).toFixed(0)} bgColor="#2979FF" borderRadius="4px" />
-
+                            {/* <ProgressBar completed={(title).toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
+                            <LinearProgressWithLabel value={(title).toFixed(0)} />
 
                         </Box>
 
@@ -85,7 +103,8 @@ const Metrics = (props: any) => {
                         </LightTooltip>
 
                         <Box sx={{ width: "75%" }}>
-                            <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" borderRadius="4px" />
+                            {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
+                            <LinearProgressWithLabel value={(word).toFixed(0)} />
                         </Box>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
@@ -101,7 +120,8 @@ const Metrics = (props: any) => {
                         </LightTooltip>
                         <Box sx={{ width: "75%" }}>
                             {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" /> */}
-                            <ProgressBar completed={(term)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" />
+                            {/* <ProgressBar completed={(term)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
+                            <LinearProgressWithLabel value={(term).toFixed(0)} />
                         </Box>
                     </Box>
                     <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
@@ -116,7 +136,8 @@ const Metrics = (props: any) => {
                         </LightTooltip>
                         <Box sx={{ width: "75%" }}>
                             {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" /> */}
-                            <ProgressBar completed={(link)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" />
+                            {/* <ProgressBar completed={(link)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
+                            <LinearProgressWithLabel value={(link).toFixed(0)} />
                         </Box>
                     </Box>
 
@@ -128,7 +149,7 @@ const Metrics = (props: any) => {
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
-                            <Icon icon='material-symbols-light:match-word' style={{ fontSize: "28px" }} />
+                            <Icon icon='material-symbols:match-word-rounded' style={{ fontSize: "28px" }} />
                         </CustomAvatar>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Word Count</Typography>
