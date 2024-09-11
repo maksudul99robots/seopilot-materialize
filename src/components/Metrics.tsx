@@ -160,20 +160,20 @@ const Metrics = (props: any) => {
                         <>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
-                                    <Icon icon='tabler:hash' style={{ fontSize: "28px" }} />
+                                    <Icon icon='tabler:heading' style={{ fontSize: "28px" }} />
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography variant='caption'>Tokens Used</Typography>
-                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>{props.tokens?.total_tokens}</Typography>
+                                    <Typography variant='caption'>Headings</Typography>
+                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>{props.headings}</Typography>
                                 </Box>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
-                                    <Icon icon='ri:price-tag-3-line' style={{ fontSize: "28px" }} />
+                                    <Icon icon='tabler:link' style={{ fontSize: "28px" }} />
                                 </CustomAvatar>
                                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                    <Typography variant='caption'>Price</Typography>
-                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>${props.price}</Typography>
+                                    <Typography variant='caption'>Links</Typography>
+                                    <Typography sx={{ fontWeight: 600, fontSize: "14px" }}>{props.linkScore.links}</Typography>
                                 </Box>
                             </Box>
                         </>

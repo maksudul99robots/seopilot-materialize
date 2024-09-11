@@ -38,6 +38,7 @@ import Metrics from 'src/components/Metrics';
 import { getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
 import { getDateTime } from 'src/services/utils/DateTimeFormatter';
+import AddFeaturedImg from './AddFeaturedImg';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -65,7 +66,7 @@ export default function ArticleIU(props: any) {
     const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
     const [termScore, setTermScore] = useState({ score: 0, msg: "" })
-    const [linkScore, setLinkScore] = useState({ score: 0, msg: "" })
+    const [linkScore, setLinkScore] = useState({ score: 0, msg: "", links: 0 })
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
         position: "relative",
@@ -215,7 +216,7 @@ export default function ArticleIU(props: any) {
         <>
 
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", width: "100%" }}>
-                <Box sx={{ width: "50%" }}>
+                <Box sx={{ width: "70%" }}>
                     {props.schedule ?
                         <Typography variant='subtitle1' sx={{ width: "100%", marginBottom: "10px" }}>
                             Publish Date: {getDateTime(props.schedule)}
@@ -247,12 +248,27 @@ export default function ArticleIU(props: any) {
                             </Typography>
 
                         }
+
+                        {
+                            (!auth?.user?.workspace_owner_info?.plan?.plan?.includes('monthly') && !auth?.user?.workspace_owner_info?.plan?.plan?.includes('yearly')) &&
+                            <Typography variant='subtitle2' sx={{ paddingLeft: "10px", borderLeft: "2px solid #AFAEB9", paddingRight: "10px", }} >
+                                Tokens Used: {props.tokens?.total_tokens}
+                            </Typography>
+
+                        }
+                        {
+                            (!auth?.user?.workspace_owner_info?.plan?.plan?.includes('monthly') && !auth?.user?.workspace_owner_info?.plan?.plan?.includes('yearly')) &&
+                            <Typography variant='subtitle2' sx={{ paddingLeft: "10px", borderLeft: "2px solid #AFAEB9" }} >
+                                Cost: ${props.price}
+                            </Typography>
+
+                        }
                     </Box>
 
 
 
                 </Box>
-                <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "50%" }}>
+                <Box id="custom-actions" sx={{ display: "flex", justifyContent: "end", alignItems: "center", marginBottom: "10px", width: "30%" }}>
                     {/* <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography sx={{ fontWeight: "600" }}>Content Status:</Typography>
                         <FormControl sx={{ marginX: "5px" }}>
@@ -452,17 +468,8 @@ export default function ArticleIU(props: any) {
                                     </p> */}
                                             </div>
                                             :
-                                            // <LightTooltip title={
-                                            //     <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                            //         Add Featured Image in Your Article
-
-                                            //     </p>
-                                            // } placement="top">
-                                            //     <div style={{ height: "100%" }}>
-                                            //         <Icon icon="gg:add" className='add-icon-color' fontSize="30px" />
-                                            //     </div>
-                                            // </LightTooltip >
-                                            null
+                                            <AddFeaturedImg id={props.id} />
+                                // null
 
 
                             }
@@ -516,6 +523,7 @@ export default function ArticleIU(props: any) {
                             wordCount={props.wordCount}
                             tokens={props.tokens}
                             price={props.price}
+                            headings={headings?.length}
 
                         />
 

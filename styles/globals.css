@@ -391,3 +391,7 @@ code[class*='language-'] {
 .no-border{
   border: none !important;
 }
+
+.arc {
+  margin-bottom: 10px !important;
+}

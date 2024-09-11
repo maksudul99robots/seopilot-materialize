@@ -361,6 +361,9 @@ export const LoginRegistrationAPI = {
     async getAllImages(data: any, url = "/get-all-imgs", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async generateFeaturedImagesUP(data: any, url = "/generate-featured-images-up", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
     async generateAIImage(data: any, url = "/generate-ai-img", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },

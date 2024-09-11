@@ -100,15 +100,15 @@ export const getLinkCalculations = (content: string) => {
             // Query the document for all <a> tags
             const anchorTags = doc.querySelectorAll('a');
             let ret = anchorTags.length >= 5 && anchorTags.length < 10 ?
-                { score: 100, msg: `It is ideal to have 3-5 links per 1000 words` }
+                { score: 100, msg: `It is ideal to have 3-5 links per 1000 words`, links: anchorTags.length }
                 : anchorTags.length > 10 ?
-                    { score: 80, msg: `Too many Links! It is ideal to have 3-5 links per 1000 words.` } : { score: anchorTags.length * 100 / 5, msg: `It is ideal to have 3-5 links per 1000 words` }
+                    { score: 80, msg: `Too many Links! It is ideal to have 3-5 links per 1000 words.`, links: anchorTags.length } : { score: anchorTags.length * 100 / 5, msg: `It is ideal to have 3-5 links per 1000 words`, links: anchorTags.length }
             // Return the count of <a> tags
             return resolve(ret);
 
         } catch (e) {
             console.log(e)
-            resolve({ score: 0, msg: `It is ideal to have 3-5 links per 1000 words` })
+            resolve({ score: 0, msg: `It is ideal to have 3-5 links per 1000 words`, links: 0 })
         }
     })
 
