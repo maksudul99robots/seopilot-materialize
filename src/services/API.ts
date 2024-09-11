@@ -518,6 +518,9 @@ export const LoginRegistrationAPI = {
     async getOwnersFullTeam(data: any, url = "/get-owner-full-team", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async verifyYoutubeURL(data: any, url = "/verify-youtube-url", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 
