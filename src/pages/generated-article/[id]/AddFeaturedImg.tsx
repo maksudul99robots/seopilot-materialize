@@ -229,15 +229,15 @@ const AddFeaturedImg = (props: any) => {
 
         LoginRegistrationAPI.updateIndexFeaturedImg({ index: selectedImg.index, id: props.id, service: selectedImg.service }).then(res => {
             // console.log("res.data:", res.data)
-            // console.log("index:", index)
-            router.reload()
-            if ((res.data.service == 'unsplash')) {
+            // // console.log("index:", index)
+            // router.reload()
+            if ((res.data.service == 'unsplash' || res.data.service == 'pexels')) {
                 // console.log("x:", x)
                 let x = res.data.featured_img;
                 x = JSON.parse(x)
                 if (res.data.service == 'unsplash') {
                     x = x[res.data.index]
-                    props.setImgSrc('')
+                    // props.setImgSrc('')
 
                     let y = indices;
                     y.unsplash = res.data.index;
@@ -251,7 +251,7 @@ const AddFeaturedImg = (props: any) => {
                 }
 
                 // console.log("x:......", x)
-                props.setImgService(service)
+                props.setImgService(res.data.service)
                 props.setFImg(x);
 
                 handleClose()
@@ -314,7 +314,7 @@ const AddFeaturedImg = (props: any) => {
                 </p>
             } placement="top">
                 <div style={{ height: "100%" }}>
-                    <Icon icon="gg:add" className='add-icon-color' fontSize="30px" onClick={e => setShow(true)} />
+                    <Button variant='outlined' size='small' startIcon={<Icon icon="material-symbols-light:imagesmode-outline-rounded" fontSize="30px" />} onClick={e => setShow(true)} >Add Featured Image</Button>
                 </div>
             </LightTooltip >
             <Dialog
@@ -606,7 +606,7 @@ const AddFeaturedImg = (props: any) => {
                         }
                             onClick={changeImgIndex}
                         >
-                            Change
+                            Insert
                         </Button>
                     </div>
 

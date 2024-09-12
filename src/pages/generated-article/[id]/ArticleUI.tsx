@@ -468,7 +468,11 @@ export default function ArticleIU(props: any) {
                                     </p> */}
                                             </div>
                                             :
-                                            <AddFeaturedImg id={props.id} />
+                                            <AddFeaturedImg
+                                                id={props.id}
+                                                setFImg={props.setFImg}
+                                                setImgService={props.setImgService}
+                                            />
                                 // null
 
 
