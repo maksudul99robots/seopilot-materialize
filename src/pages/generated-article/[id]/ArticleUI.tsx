@@ -517,6 +517,7 @@ export default function ArticleIU(props: any) {
                                                 id={props.id}
                                                 setFImg={props.setFImg}
                                                 setImgService={props.setImgService}
+                                                setFeaturedImgIndex={props.setFeaturedImgIndex}
                                             />
                                 // null
 
