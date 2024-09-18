@@ -1,3 +1,5 @@
+import { arrow } from "@popperjs/core";
+
 export const getTitleCalculation = (title: string) => {
     if (title.length > 49 && title.length < 61) {
         return { score: 100, msg: "Ideal title length 50-60 characters." };
@@ -26,28 +28,69 @@ export const getTitleCalculation = (title: string) => {
     }
 }
 
-export const getWordCountCalculations = (words: number) => {
+export const getWordCountCalculations = (words: number, avg: any) => {
 
-    if (words < 2101) {
-        let score = ((words) / 2100) * 100
-        score = customRound(score)
-        return { score: score, msg: "Ideal word count is 2100." }
+    if (avg?.avg_wc && Math.trunc(avg?.avg_wc) <= words) {
+
+        return { score: 100, msg: `The average word count of the similar articles is ${Math.trunc(avg.avg_wc)}`, arrow: 'tdesign:arrow-up' }
+    } else if (avg?.avg_wc && avg.avg_wc > 0) {
+        let score = (words * 100) / avg.avg_wc
+        return { score: score, msg: `The average word count of the similar articles is ${Math.trunc(avg.avg_wc)}`, arrow: 'tdesign:arrow-down' }
     } else {
-        if (words > 2500 && words < 3000) {
-            let extra = words - 2500;
-            let score = ((2500 - extra) / 2500) * 100
-            score = customRound(score)
-            return { score: score, msg: "Ideal word count is ~2100. Try to keep it around 2100-2500." }
-        } else if (words > 3000) {
-            return { score: 60, msg: "Article is too long. Ideal word count is ~2100. Try to keep it around 2100-2500." }
-        } else { // words > 2101. words <3000, words <2500
-            return { score: 100, msg: "Ideal word count is ~2100." }
-        }
+        return { score: 100, msg: `The average word count of the similar articles is ${Math.trunc(avg.avg_wc)}`, arrow: 'tdesign:arrow-up' }
     }
+
+    // if (words < 2101) {
+    //     let score = ((words) / 2100) * 100
+    //     score = customRound(score)
+    //     return { score: score, msg: "Ideal word count is 2100." }
+    // } else {
+    //     if (words > 2500 && words < 3000) {
+    //         let extra = words - 2500;
+    //         let score = ((2500 - extra) / 2500) * 100
+    //         score = customRound(score)
+    //         return { score: score, msg: "Ideal word count is ~2100. Try to keep it around 2100-2500." }
+    //     } else if (words > 3000) {
+    //         return { score: 60, msg: "Article is too long. Ideal word count is ~2100. Try to keep it around 2100-2500." }
+    //     } else { // words > 2101. words <3000, words <2500
+    //         return { score: 100, msg: "Ideal word count is ~2100." }
+    //     }
+    // }
 
 
 }
-export const getTermCalculations = (primaryKeyword: string, keywords: any, content: string, wordCount: number) => {
+export const getHeadingsCalculations = (headings: any, avg: any) => {
+
+    if (avg?.avg_h && Math.trunc(avg?.avg_h) <= headings.length) {
+
+        return { score: 100, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_h)}`, arrow: 'tdesign:arrow-up' }
+    } else if (avg?.avg_h && avg.avg_h > 0) {
+        let score = (headings.length * 100) / avg.avg_h
+        return { score: score, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_h)}`, arrow: 'tdesign:arrow-down' }
+    } else {
+        return { score: 100, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_h)}`, arrow: 'tdesign:arrow-up' }
+    }
+
+    // if (words < 2101) {
+    //     let score = ((words) / 2100) * 100
+    //     score = customRound(score)
+    //     return { score: score, msg: "Ideal word count is 2100." }
+    // } else {
+    //     if (words > 2500 && words < 3000) {
+    //         let extra = words - 2500;
+    //         let score = ((2500 - extra) / 2500) * 100
+    //         score = customRound(score)
+    //         return { score: score, msg: "Ideal word count is ~2100. Try to keep it around 2100-2500." }
+    //     } else if (words > 3000) {
+    //         return { score: 60, msg: "Article is too long. Ideal word count is ~2100. Try to keep it around 2100-2500." }
+    //     } else { // words > 2101. words <3000, words <2500
+    //         return { score: 100, msg: "Ideal word count is ~2100." }
+    //     }
+    // }
+
+
+}
+export const getTermCalculations = (primaryKeyword: string, keywords: any = [], content: string, wordCount: number, setKeywordsCount: any) => {
     // console.log("incoming:", primaryKeyword, keywords, content)
     return new Promise((resolve, reject) => {
         try {
@@ -59,34 +102,41 @@ export const getTermCalculations = (primaryKeyword: string, keywords: any, conte
             if (count > idealPKcount)
                 count = idealPKcount;
             // console.log("count:", count, idealPKcount)
-            let primaryKeywordScore = (50 * count) / idealPKcount
-
+            let primaryKeywordScore = (60 * count) / idealPKcount
+            !keywords ? keywords = [] : null;
             keywords = keywords.filter((item: any) => item.keyword !== primaryKeyword.toLowerCase());
             let usedKeywords = 0;
             let secondaryKeywordScore = 0;
+            // console.log("keywords.length:", keywords.length)
+
             keywords.map((k: any, i: number) => {
                 if (k.count > 0)
                     usedKeywords++;
                 if (i == keywords.length - 1) {
-                    if (usedKeywords >= 15) {
-                        secondaryKeywordScore = 45;
+                    if (usedKeywords >= 10) {
+                        secondaryKeywordScore = 40;
                     } else {
-                        secondaryKeywordScore = (45 * usedKeywords) / 15;
-                        let total = (primaryKeywordScore + secondaryKeywordScore).toFixed(2)
+                        secondaryKeywordScore = (40 * usedKeywords) / 10;
+                        let total = (primaryKeywordScore + secondaryKeywordScore).toFixed(0)
+                        setKeywordsCount(count + usedKeywords)
                         // console.log({ score: primaryKeywordScore + secondaryKeywordScore, msg: `Primary Keyword score: ${primaryKeywordScore} , Secondary Keyword Score: ${secondaryKeywordScore}` })
-                        resolve({ score: primaryKeywordScore + secondaryKeywordScore, msg: `Target Keyword Score: ${primaryKeywordScore.toFixed(2)} , Secondary Keyword Score: ${secondaryKeywordScore.toFixed(2)}` })
+                        resolve({
+                            score: primaryKeywordScore + secondaryKeywordScore,
+                            msg: `The target keywords should appear at least ${Math.trunc(idealPKcount)} times, and the secondary keywords should appear at least 10 times`,
+                            arrow: (count >= idealPKcount && usedKeywords >= 10) ? 'tdesign:arrow-up' : 'tdesign:arrow-down'
+                        })
                     }
                 }
             })
 
         } catch (e) {
-            console.log(e)
-            resolve({ score: 0, msg: `Target Keyword score: 0 , Secondary Keyword Score: 0` })
+            console.log("error.......:", e)
+            resolve({ score: 0, msg: `Target Keyword score: 0 , Secondary Keyword Score: 0`, arrow: 'tdesign:arrow-down' })
         }
     })
 
 }
-export const getLinkCalculations = (content: string) => {
+export const getLinkCalculations = (content: string, avg: any, setLink: any) => {
     // console.log("incoming:", primaryKeyword, keywords, content)
     return new Promise((resolve, reject) => {
         try {
@@ -99,16 +149,20 @@ export const getLinkCalculations = (content: string) => {
 
             // Query the document for all <a> tags
             const anchorTags = doc.querySelectorAll('a');
-            let ret = anchorTags.length >= 5 && anchorTags.length < 10 ?
-                { score: 100, msg: `It is ideal to have 3-5 links per 1000 words`, links: anchorTags.length }
-                : anchorTags.length > 10 ?
-                    { score: 80, msg: `Too many Links! It is ideal to have 3-5 links per 1000 words.`, links: anchorTags.length } : { score: anchorTags.length * 100 / 5, msg: `It is ideal to have 3-5 links per 1000 words`, links: anchorTags.length }
-            // Return the count of <a> tags
-            return resolve(ret);
+            setLink(anchorTags.length)
+            if (avg?.avg_urls && Math.trunc(avg?.avg_urls) <= anchorTags.length) {
+                let score = 100
+                return resolve({ score: 100, msg: `The average number of Links of the similar articles is ${Math.trunc(avg.avg_urls)}`, links: anchorTags.length, arrow: 'tdesign:arrow-up' })
+            } else if (avg?.avg_urls && avg.avg_urls > 0) {
+                let score = (anchorTags.length * 100) / avg.avg_urls
+                return resolve({ score: score, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_urls)}`, links: anchorTags.length, arrow: 'tdesign:arrow-down' })
+            } else {
+                resolve({ score: 100, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_urls)}`, links: anchorTags.length, arrow: 'tdesign:arrow-up' })
+            }
 
         } catch (e) {
             console.log(e)
-            resolve({ score: 0, msg: `It is ideal to have 3-5 links per 1000 words`, links: 0 })
+            resolve({ score: 0, msg: `The average number of Headings of the similar articles is ${Math.trunc(avg.avg_urls)}`, links: 0, arrow: 'tdesign:arrow-down' })
         }
     })
 

@@ -805,6 +805,17 @@
     "@emotion/weak-memoize" "^0.3.1"
     stylis "4.2.0"
 
+"@emotion/css@11.10.6":
+  version "11.10.6"
+  resolved "https://registry.npmjs.org/@emotion/css/-/css-11.10.6.tgz"
+  integrity sha512-88Sr+3heKAKpj9PCqq5A1hAmAkoSIvwEq1O2TwDij7fUtsJpdkV4jMTISSTouFeRvsGvXIpuSuDQ4C1YdfNGXw==
+  dependencies:
+    "@emotion/babel-plugin" "^11.10.6"
+    "@emotion/cache" "^11.10.5"
+    "@emotion/serialize" "^1.1.1"
+    "@emotion/sheet" "^1.2.1"
+    "@emotion/utils" "^1.2.0"
+
 "@emotion/hash@^0.9.0":
   version "0.9.0"
   resolved "https://registry.npmjs.org/@emotion/hash/-/hash-0.9.0.tgz"
@@ -1255,6 +1266,11 @@
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.2.0.tgz"
   integrity sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==
 
+"@scarf/scarf@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/@scarf/scarf/-/scarf-1.1.1.tgz"
+  integrity sha512-VGbKDbk1RFIaSmdVb0cNjjWJoRWRI/Weo23AjRCC2nryO0iAS8pzsToJfPVPtVs74WHw4L1UTADNdIYRLkirZQ==
+
 "@swc/helpers@0.4.14":
   version "0.4.14"
   resolved "https://registry.npmjs.org/@swc/helpers/-/helpers-0.4.14.tgz"
@@ -1465,6 +1481,13 @@
   integrity sha512-wasD1t78JDmQvdPDRPf/mf5FSHMlncunW0F6KMOKB3awzi3Wi21yHMGsRAUOkfTr3R8F+yceG8fSLz0kYWu/QA==
   dependencies:
     "@types/draft-js" "*"
+    "@types/react" "*"
+
+"@types/react-loading-overlay@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/@types/react-loading-overlay/-/react-loading-overlay-1.0.4.tgz"
+  integrity sha512-zzdX884CXau6/fuK2VRnE8bNRUT9ZhMRa2hHYw8oQXtr47e2VyeUUhwmMf/fbEVgkSpdXC9rM8xt6qXuPOsqAg==
+  dependencies:
     "@types/react" "*"
 
 "@types/react-power-tooltip@^1.0.5":
@@ -4867,6 +4890,15 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-loading-overlay-ts@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.npmjs.org/react-loading-overlay-ts/-/react-loading-overlay-ts-2.0.2.tgz"
+  integrity sha512-dy1GhUOz91aPmvvuT85WUFBCG7NX1ZJBKbeHgGHSC+gss6u9/6AfpFgDnXlJLxGpv+VbbeCXye8ETy+BX3SS4A==
+  dependencies:
+    "@emotion/css" "11.10.6"
+    "@scarf/scarf" "1.1.1"
+    react-transition-group "4.4.5"
+
 react-onclickoutside@^6.12.2:
   version "6.12.2"
   resolved "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-6.12.2.tgz"
@@ -4943,7 +4975,7 @@ react-toastify@^9.1.3:
   dependencies:
     clsx "^1.1.1"
 
-react-transition-group@^4.4.5:
+react-transition-group@^4.4.5, react-transition-group@4.4.5:
   version "4.4.5"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.5.tgz"
   integrity sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==

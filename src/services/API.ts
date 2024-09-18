@@ -521,6 +521,9 @@ export const LoginRegistrationAPI = {
     async verifyYoutubeURL(data: any, url = "/verify-youtube-url", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
+    async getRealtimeArticleMetrics(data: any, url = "/get-avg-metrics", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
 
 
 

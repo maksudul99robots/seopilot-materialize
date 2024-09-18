@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import MetricsTabs from "./MetricsTabs";
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -35,45 +37,142 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
     );
 }
 
+import LoadingOverlay from "react-loading-overlay-ts";
+
 const Metrics = (props: any) => {
 
     // const [heading, setHeading] = useState(60)
+    console.log("wordScore:", props.wordScore)
+    console.log("termScore:", props.termScore)
+    console.log("linkScore:", props.linkScore)
+    console.log("headingScore:", props.headingScore)
     const [title, setTitle] = useState(props.titleScore.score)
     const [word, setWord] = useState(props.wordScore.score)
     const [term, setTerm] = useState(props.termScore.score)
     const [link, setLink] = useState(props.linkScore.score)
+    const [heading, setHeading] = useState(props.headingScore.score)
     const [mainValue, setMainValue] = useState(0);
-    // console.log("keywordSuggestions:", props)
+    // console.log("props.linkScore:", props.linkScore)
     useEffect(() => {
         setTitle(props.titleScore.score);
         setWord(props.wordScore.score);
         setTerm(props.termScore.score)
         setLink(props.linkScore.score)
-        let x = parseFloat(((props.titleScore.score * 0.2) + (props.wordScore.score * 0.2) + (props.termScore.score * 0.4)).toFixed(2) + (props.linkScore.score * 0.2).toFixed(2));
+        setHeading(props.headingScore.score)
+        let x = parseFloat(((props.headingScore.score * 0.2) + (props.wordScore.score * 0.2) + (props.termScore.score * 0.4)).toFixed(2) + (props.linkScore.score * 0.2).toFixed(2));
         setMainValue(customRound(x))
-    }, [props.titleScore.score, props.wordScore.score, props.termScore.score, props.linkScore.score])
+    }, [props.headingScore.score, props.wordScore.score, props.termScore.score, props.linkScore.score])
     function customRound(number: number) {
         const roundedNumber = Math.round(number * 100) / 100; // Round to two decimal places
         return Math.round(roundedNumber); // Round to the nearest integer
     }
+
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const handleOpen = () => {
+        setOpen(true);
+    };
     return (
         <Box sx={{}}>
 
             <Box sx={{ borderRadius: "4px", border: "1px solid #E9E9EC", padding: "10px", marginTop: "5px" }}>
-                <Box>
+                <LoadingOverlay active={props.loading} spinner text="Metrics Loading...">
+                    <div >
+                        <Box>
 
-                    <ReactSpeedometer
-                        value={mainValue}
-                        labelFontSize="12px"
-                        maxValue={100}
-                        segments={10}
-                        width={350}
-                        ringWidth={30}
-                        height={220}
-                        valueTextFontSize="23px"
-                    />
-                </Box>
-                <Box sx={{ backgroundColor: "#F7F7F9", padding: "5px", borderRadius: "4px" }}>
+                            <ReactSpeedometer
+                                value={mainValue}
+                                labelFontSize="12px"
+                                maxValue={100}
+                                segments={10}
+                                width={350}
+                                ringWidth={20}
+                                height={220}
+                                needleHeightRatio={0.8}
+                                valueTextFontSize="20px"
+                            />
+                        </Box>
+                        <Box sx={{ backgroundColor: "#F7F7F9", padding: "5px", borderRadius: "4px" }}>
+                            <Grid container padding={3}>
+
+                                <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontSize: "12px", borderRight: "1px solid #e8e8ee" }}>
+                                    <Typography sx={{ fontSize: "12px", fontWeight: 400, margin: "5px" }}>Words</Typography>
+                                    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "5px", alignItems: "center" }}>
+                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{props.wordCount}</Typography>
+                                        <Icon icon={props.wordScore.arrow} style={{ fontSize: "15px", color: props.wordScore.arrow == 'tdesign:arrow-down' ? 'red' : 'green' }} />
+                                    </Box>
+
+                                    <LightTooltip title={
+                                        <div>
+                                            {props.wordScore.msg}
+                                        </div>
+                                    } placement="top">
+                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{props.metricsComp?.avg?.avg_wc ? Math.trunc(props.metricsComp?.avg?.avg_wc) : 0}</Typography>
+
+                                    </LightTooltip>
+
+                                </Grid>
+                                <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontSize: "12px", borderRight: "1px solid #e8e8ee" }}>
+                                    <Typography sx={{ fontSize: "12px", fontWeight: 400, margin: "5px" }}>Headings</Typography>
+                                    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "5px", alignItems: "center" }}>
+                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{props.headings}</Typography>
+                                        <Icon icon={props.headingScore.arrow} style={{ fontSize: "15px", color: props.headingScore.arrow == 'tdesign:arrow-down' ? 'red' : 'green' }} />
+                                    </Box>
+
+                                    <LightTooltip title={
+                                        <div>
+                                            {props.headingScore.msg}
+                                        </div>
+                                    } placement="top">
+                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{props.metricsComp?.avg?.avg_h ? Math.trunc(props.metricsComp?.avg?.avg_h) : 0}</Typography>
+
+                                    </LightTooltip>
+
+                                </Grid>
+                                <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontSize: "12px", borderRight: "1px solid #e8e8ee" }}>
+                                    <Typography sx={{ fontSize: "12px", fontWeight: 400, margin: "5px" }}>Links</Typography>
+                                    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "5px", alignItems: "center", }}>
+                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{props.link}</Typography>
+                                        <Icon icon={props.linkScore.arrow} style={{ fontSize: "15px", color: props.linkScore.arrow == 'tdesign:arrow-down' ? 'red' : 'green' }} />
+                                    </Box>
+
+                                    <LightTooltip title={
+                                        <div>
+                                            {props.linkScore.msg}
+                                        </div>
+                                    } placement="top">
+                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{props.metricsComp?.avg?.avg_urls ? Math.trunc(props.metricsComp?.avg?.avg_urls) : 0}</Typography>
+
+                                    </LightTooltip>
+
+                                </Grid>
+                                <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontSize: "12px" }}>
+                                    <Typography sx={{ fontSize: "12px", fontWeight: 400, margin: "5px" }}>Terms</Typography>
+                                    <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "5px", alignItems: "center" }}>
+                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{props.keywordCount}</Typography>
+                                        <Icon icon={props.termScore.arrow} style={{ fontSize: "15px", color: props.termScore.arrow == 'tdesign:arrow-down' ? 'red' : 'green' }} />
+                                    </Box>
+
+                                    <LightTooltip title={
+                                        <div>
+                                            {props.termScore?.msg ? props.termScore?.msg : 'Ideally, the target keyword should make up about 2% of the entire article.'}
+                                        </div>
+                                    } placement="top">
+                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>2%</Typography>
+
+                                    </LightTooltip>
+
+                                </Grid>
+
+                            </Grid>
+                        </Box>
+                    </div>
+                </LoadingOverlay>
+
+                {/* <Box sx={{ backgroundColor: "#F7F7F9", padding: "5px", borderRadius: "4px" }}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", paddingY: "10px" }}>
                         <LightTooltip title={
                             props.titleScore.msg
@@ -86,7 +185,6 @@ const Metrics = (props: any) => {
 
                         <Box sx={{ width: "75%" }}>
 
-                            {/* <ProgressBar completed={(title).toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
                             <LinearProgressWithLabel value={(title).toFixed(0)} />
 
                         </Box>
@@ -103,7 +201,6 @@ const Metrics = (props: any) => {
                         </LightTooltip>
 
                         <Box sx={{ width: "75%" }}>
-                            {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
                             <LinearProgressWithLabel value={(word).toFixed(0)} />
                         </Box>
                     </Box>
@@ -119,8 +216,6 @@ const Metrics = (props: any) => {
 
                         </LightTooltip>
                         <Box sx={{ width: "75%" }}>
-                            {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" /> */}
-                            {/* <ProgressBar completed={(term)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
                             <LinearProgressWithLabel value={(term).toFixed(0)} />
                         </Box>
                     </Box>
@@ -135,17 +230,15 @@ const Metrics = (props: any) => {
 
                         </LightTooltip>
                         <Box sx={{ width: "75%" }}>
-                            {/* <ProgressBar completed={(word).toFixed(0)} bgColor="#2979FF" /> */}
-                            {/* <ProgressBar completed={(link)?.toFixed(0)} bgColor="#2979FF" borderRadius="4px" /> */}
                             <LinearProgressWithLabel value={(link).toFixed(0)} />
                         </Box>
                     </Box>
 
 
 
-                </Box>
+                </Box> */}
 
-                <Box sx={{ width: "100%", margin: "20px 0px 10px 0px", display: "flex", justifyContent: "space-between" }}>
+                {/* <Box sx={{ width: "100%", margin: "20px 0px 10px 0px", display: "flex", justifyContent: "space-between" }}>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CustomAvatar skin='light' sx={{ mr: 1, width: "35px", height: "35px" }} variant='rounded'>
@@ -179,7 +272,7 @@ const Metrics = (props: any) => {
                         </>
                     }
 
-                </Box>
+                </Box> */}
 
                 <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} primaryKeyword={props.primaryKeyword} paa={props.paa} />
             </Box>

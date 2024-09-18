@@ -28,7 +28,7 @@ const DndList = ({ headings, setHeadings, editHeadingOnChange, addnewHeading, se
 
         }
     }
-    console.log(window.location.pathname.includes("create-article"))
+    // console.log(window.location.pathname.includes("create-article"))
 
     return (
         <DndContext

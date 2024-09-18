@@ -1356,17 +1356,17 @@ export default function CreateArticle(props: any) {
 
                                     {
                                         (outlineSource !== 'system' && ((headings?.length > 0) || showOutline)) &&
-                                        <Grid item xs={12}>
-                                            <DndList
-                                                headings={headings}
-                                                setHeadings={setHeadings}
-                                                editHeadingOnChange={editHeadingOnChange}
-                                                removeHeadings={removeHeadings}
-                                                changeHeadingTag={changeHeadingTag}
-                                                addnewHeading={addnewHeading}
-                                            />
+                                        // <Grid item xs={12}>
+                                        <DndList
+                                            headings={headings}
+                                            setHeadings={setHeadings}
+                                            editHeadingOnChange={editHeadingOnChange}
+                                            removeHeadings={removeHeadings}
+                                            changeHeadingTag={changeHeadingTag}
+                                            addnewHeading={addnewHeading}
+                                        />
 
-                                        </Grid>
+                                        // </Grid>
 
                                     }
 

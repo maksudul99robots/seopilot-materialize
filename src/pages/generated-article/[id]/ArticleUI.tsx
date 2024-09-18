@@ -35,7 +35,7 @@ import AiScoreComponent from 'src/components/ArticleScoreComponent';
 import AdminDetailsComponent from './AdminDetailsComponent';
 import { PromptComponent } from 'src/components/PromptComponent';
 import Metrics from 'src/components/Metrics';
-import { getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
+import { getHeadingsCalculations, getLinkCalculations, getTermCalculations, getTitleCalculation, getWordCountCalculations } from 'src/services/MetricsCalculator';
 import ImageSection from './ImageSection';
 import { getDateTime } from 'src/services/utils/DateTimeFormatter';
 import AddFeaturedImg from './AddFeaturedImg';
@@ -60,13 +60,17 @@ export default function ArticleIU(props: any) {
     const [fImg, setFimg] = useState<any>(props.fImg);
     const [imgSrc, setImgSrc] = useState('');
     const [copied, setCopied] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [keywords, setKeywords] = useState<any>(JSON.parse(props.keywordByKeybert));
     const [isKeybert, setIsKeybert] = useState(true)
     const [reloadUnsplashRequest, setReloadUnsplashRequest] = useState(0)
-    const [wordScore, setWordScore] = useState({ score: 0, msg: "" })
+    const [wordScore, setWordScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
-    const [termScore, setTermScore] = useState({ score: 0, msg: "" })
-    const [linkScore, setLinkScore] = useState({ score: 0, msg: "", links: 0 })
+    const [termScore, setTermScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
+    const [headingScore, setHeadingScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
+    const [linkScore, setLinkScore] = useState({ score: 0, msg: "", links: 0, arrow: 'tdesign:arrow-down' })
+    const [link, setLink] = useState(0)
+    const [keywordCount, setKeywordsCount] = useState(0)
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
         position: "relative",
@@ -83,6 +87,7 @@ export default function ArticleIU(props: any) {
         length_score: 0
     });
     const [statusDropdown, setStatusDropdown] = useState<any>([])
+    const [metricsComp, setMetricsComp] = useState<any>(null)
 
     useEffect(() => {
         if (props.status == 'completed') {
@@ -140,7 +145,35 @@ export default function ArticleIU(props: any) {
                 console.log("unable to get")
             })
         }
+        if (props.articleTopic.length > 0) {
+            setLoading(true)
+            LoginRegistrationAPI.getRealtimeArticleMetrics({ keyword: props.articleTopic, article_id: props.id }).then(res => {
+                // console.log("res.data:", res.data)
+                setLoading(false)
+                setMetricsComp(res.data)
+
+
+            }).catch(e => {
+                console.log(e)
+                setLoading(false)
+            })
+        }
+
     }, [props.id])
+
+    useEffect(() => {
+        if (metricsComp) {
+            setHeadingScore(getHeadingsCalculations(headings, metricsComp?.avg));
+            setWordScore(getWordCountCalculations(props.wordCount, metricsComp?.avg))
+            getLinkCalculations(props.html, metricsComp?.avg, setLink).then((res: any) => {
+                setLinkScore(res)
+            });
+            getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount, setKeywordsCount).then((res: any) => {
+                console.log("term:", res)
+                setTermScore(res)
+            });
+        }
+    }, [metricsComp])
     // console.log("articleObj", articleObj?.prompt)
     const download = (html: string, title: string, id: any) => {
         title = title.replaceAll(' ', '-')
@@ -182,6 +215,11 @@ export default function ArticleIU(props: any) {
         setHeadings(h);
     }, [props.html])
 
+    useEffect(() => {
+        if (metricsComp?.avg)
+            setHeadingScore(getHeadingsCalculations(headings, metricsComp?.avg));
+    }, [headings])
+
     const getImgFromLocation = async (url: string) => {
         // console.log("requesting to unsplash:", url)
         if ((url && imgSrc == '')) {
@@ -191,7 +229,8 @@ export default function ArticleIU(props: any) {
     }
 
     useEffect(() => {
-        setWordScore(getWordCountCalculations(props.wordCount))
+        if (metricsComp?.avg)
+            setWordScore(getWordCountCalculations(props.wordCount, metricsComp?.avg))
     }, [props.wordCount])
     useEffect(() => {
         setTitleScore(getTitleCalculation(props.articleTopic))
@@ -199,19 +238,25 @@ export default function ArticleIU(props: any) {
 
     useEffect(() => {
         if (props.keywordSuggestions && props.keywordSuggestions.length > 0 && props.primaryKeyword) {
-            getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount).then((res: any) => {
+            getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount, setKeywordsCount).then((res: any) => {
+                // console.log("term:", res)
                 setTermScore(res)
             });
         }
 
     }, [props.keywordSuggestions])
     useEffect(() => {
-        getLinkCalculations(props.html).then((res: any) => {
-            setLinkScore(res)
-        });
+        if (metricsComp?.avg)
+            getLinkCalculations(props.html, metricsComp?.avg, setLink).then((res: any) => {
+                setLinkScore(res)
+            });
 
 
     }, [props.html])
+
+    useEffect(() => {
+        console.log("link:", link)
+    }, [link])
     return (
         <>
 
@@ -528,7 +573,11 @@ export default function ArticleIU(props: any) {
                             tokens={props.tokens}
                             price={props.price}
                             headings={headings?.length}
-
+                            metricsComp={metricsComp}
+                            headingScore={headingScore}
+                            link={link}
+                            loading={loading}
+                            keywordCount={keywordCount}
                         />
 
                         {/* <Outlines outlines={outlines} /> */}
