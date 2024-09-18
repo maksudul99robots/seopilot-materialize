@@ -107,7 +107,7 @@ export const getTermCalculations = (primaryKeyword: string, keywords: any = [], 
             keywords = keywords.filter((item: any) => item.keyword !== primaryKeyword.toLowerCase());
             let usedKeywords = 0;
             let secondaryKeywordScore = 0;
-            // console.log("keywords.length:", keywords.length)
+
 
             keywords.map((k: any, i: number) => {
                 if (k.count > 0)
@@ -120,12 +120,15 @@ export const getTermCalculations = (primaryKeyword: string, keywords: any = [], 
                         let total = (primaryKeywordScore + secondaryKeywordScore).toFixed(0)
                         setKeywordsCount(count + usedKeywords)
                         // console.log({ score: primaryKeywordScore + secondaryKeywordScore, msg: `Primary Keyword score: ${primaryKeywordScore} , Secondary Keyword Score: ${secondaryKeywordScore}` })
-                        resolve({
-                            score: primaryKeywordScore + secondaryKeywordScore,
-                            msg: `The target keywords should appear at least ${Math.trunc(idealPKcount)} times, and the secondary keywords should appear at least 10 times`,
-                            arrow: (count >= idealPKcount && usedKeywords >= 10) ? 'tdesign:arrow-up' : 'tdesign:arrow-down'
-                        })
+
                     }
+
+                    // console.log("count, idealPKcount, usedKeywords:", count, idealPKcount, usedKeywords)
+                    resolve({
+                        score: primaryKeywordScore + secondaryKeywordScore,
+                        msg: `The target keywords should appear at least ${Math.trunc(idealPKcount)} times, and the secondary keywords should appear at least 10 times`,
+                        arrow: (count >= idealPKcount && usedKeywords >= 10) ? 'tdesign:arrow-up' : 'tdesign:arrow-down'
+                    })
                 }
             })
 

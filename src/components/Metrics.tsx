@@ -42,10 +42,10 @@ import LoadingOverlay from "react-loading-overlay-ts";
 const Metrics = (props: any) => {
 
     // const [heading, setHeading] = useState(60)
-    console.log("wordScore:", props.wordScore)
-    console.log("termScore:", props.termScore)
-    console.log("linkScore:", props.linkScore)
-    console.log("headingScore:", props.headingScore)
+    // console.log("wordScore:", props.wordScore)
+    // console.log("termScore:", props.termScore)
+    // console.log("linkScore:", props.linkScore)
+    // console.log("headingScore:", props.headingScore)
     const [title, setTitle] = useState(props.titleScore.score)
     const [word, setWord] = useState(props.wordScore.score)
     const [term, setTerm] = useState(props.termScore.score)
@@ -59,11 +59,14 @@ const Metrics = (props: any) => {
         setTerm(props.termScore.score)
         setLink(props.linkScore.score)
         setHeading(props.headingScore.score)
-        let x = parseFloat(((props.headingScore.score * 0.2) + (props.wordScore.score * 0.2) + (props.termScore.score * 0.4)).toFixed(2) + (props.linkScore.score * 0.2).toFixed(2));
+        let x = (props.headingScore.score * 0.2) + (props.wordScore.score * 0.2) + (props.termScore.score * 0.4) + (props.linkScore.score * 0.2);
+        // console.log("x:", x)
+        console.log(props.headingScore.score, props.wordScore.score, props.termScore.score,)
         setMainValue(customRound(x))
     }, [props.headingScore.score, props.wordScore.score, props.termScore.score, props.linkScore.score])
     function customRound(number: number) {
         const roundedNumber = Math.round(number * 100) / 100; // Round to two decimal places
+        // console.log("roundedNumber:", roundedNumber)
         return Math.round(roundedNumber); // Round to the nearest integer
     }
 
