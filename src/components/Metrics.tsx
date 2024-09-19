@@ -61,7 +61,7 @@ const Metrics = (props: any) => {
         setHeading(props.headingScore.score)
         let x = (props.headingScore.score * 0.2) + (props.wordScore.score * 0.2) + (props.termScore.score * 0.4) + (props.linkScore.score * 0.2);
         // console.log("x:", x)
-        console.log(props.headingScore.score, props.wordScore.score, props.termScore.score,)
+        // console.log(props.headingScore.score, props.wordScore.score, props.termScore.score,)
         setMainValue(customRound(x))
     }, [props.headingScore.score, props.wordScore.score, props.termScore.score, props.linkScore.score])
     function customRound(number: number) {

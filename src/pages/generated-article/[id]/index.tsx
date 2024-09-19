@@ -92,17 +92,17 @@ export default function Page() {
 
     }, [articleTopic])
 
-    useEffect(() => {
-        if (!serp && articleTopic.length > 0) {
-            LoginRegistrationAPI.getSERP({ keywords: articleTopic, article_id: router.query.id }).then(res => {
-                setSERP(res.data.serp)
-            }).catch(e => {
-                console.log(e)
-            })
-        }
+    // useEffect(() => {
+    //     if (!serp && articleTopic.length > 0) {
+    //         LoginRegistrationAPI.getSERP({ keywords: articleTopic, article_id: router.query.id }).then(res => {
+    //             setSERP(res.data.serp)
+    //         }).catch(e => {
+    //             console.log(e)
+    //         })
+    //     }
 
 
-    }, [keywords])
+    // }, [keywords])
 
     useEffect(() => {
         // console.log("change of article")
