@@ -82,7 +82,7 @@ const navigation = (): VerticalNavItemsType | any => {
           'free',
           'passenger',
           'copilot',
-          'captain',
+          // 'captain',
           'extension_only'
         ]
         // badgeColor: "info",
@@ -153,136 +153,7 @@ const navigation = (): VerticalNavItemsType | any => {
 
     ];
 
-  // if (auth?.user?.workspace_owner_info?.plan?.plan == "yearly - passenger" ||
-  //   auth?.user?.workspace_owner_info?.plan?.plan == "monthly - passenger" ||
-  //   auth?.user?.workspace_owner_info?.plan?.plan == "passenger" ||
-  //   auth?.user?.workspace_owner_info?.plan?.plan == "extension_only" ||
-  //   auth?.user?.workspace_owner_info?.plan?.plan == "free"
-  // ) {
-  //   menus =
-  //     [
-  //       {
-  //         sectionTitle: 'CONTENT'
-  //       },
-  //       {
-  //         title: 'Create Article',
-  //         icon: 'streamline:ai-edit-spark',
-  //         path: '/create-article'
-  //       },
-  //       {
-  //         title: 'My Articles',
-  //         icon: 'ic:outline-article',
-  //         path: '/articles'
-  //       },
-  //       {
-  //         title: 'Folders',
-  //         icon: 'mdi:folders-outline',
-  //         path: '/folders'
-  //       },
-  //       {
-  //         title: 'Calendar',
-  //         icon: 'fluent-mdl2:date-time-mirrored',
-  //         path: '/calendar'
-  //       },
-  //       {
-  //         sectionTitle: 'Research',
-  //         badgeColor: "info",
-  //         badgeContent: "beta"
-  //       },
-  //       // {
-  //       //   title: 'Create Cluster',
-  //       //   icon: 'vaadin:cluster',
-  //       //   path: '/create-cluster',
-  //       //   // badgeColor: "info",
-  //       //   // badgeContent: "beta"
-  //       // },
-  //       {
-  //         title: 'Idea Library',
-  //         icon: 'icons8:idea',
-  //         path: '/idea-list',
-  //         // badgeColor: "info",
-  //         // badgeContent: "beta"
-  //       },
-  //       {
-  //         title: 'Article Clusters',
-  //         // icon: 'fluent-mdl2:folder-list-mirrored',
-  //         icon: 'vaadin:cluster',
-  //         path: '/clusters',
-  //         // badgeColor: "info",
-  //         // badgeContent: "beta"
-  //       },
-  //       // {
-  //       //   title: 'Keyword Research',
-  //       //   icon: 'ri:menu-search-line',
-  //       //   path: '/keyword-research',
-  //       //   // badgeColor: "info",
-  //       //   // badgeContent: "beta"
-  //       // },
-  //       {
-  //         sectionTitle: 'Workspace Settings'
-  //       },
-  //       {
-  //         title: 'API Key',
-  //         icon: 'material-symbols:key-outline',
-  //         path: '/add-apikey'
-  //       },
-  //       {
-  //         title: 'Integrations',
-  //         icon: 'carbon:plug',
-  //         path: '/integrations'
-  //       },
-  //       {
-  //         sectionTitle: 'Account Settings'
-  //       },
-  //       {
-  //         title: 'Workspaces',
-  //         icon: 'material-symbols:workspaces-outline',
-  //         path: '/workspaces'
-  //       },
-  //       {
-  //         title: 'Team',
-  //         icon: 'fluent:people-team-28-regular',
-  //         path: '/team'
-  //       },
-  //       {
-  //         sectionTitle: 'Profile Settings'
-  //       },
 
-  //       {
-  //         title: 'Profile',
-  //         icon: 'mdi:account-outline',
-  //         path: '/user-profile/account'
-  //       },
-  //       {
-  //         title: 'Plans',
-  //         icon: 'mdi:currency-usd',
-  //         path: '/plans'
-  //       },
-  //       {
-  //         title: 'Sign Out',
-  //         icon: 'material-symbols:logout-sharp',
-  //         path: '/go-to-login-page'
-  //       },
-
-  //     ];
-  // }
-
-  // const finalMenus = () => {
-  //   let x: any[] = [];
-  //   menus.forEach(m => {
-  //     if (m?.restrict && m?.restrict !== 'none') {
-  //       if (!m.restrict.includes(auth?.user?.workspace_owner_info?.plan?.plan)) {
-  //         x.push(m)
-  //       }
-  //     } else {
-  //       x.push(m);
-  //     }
-  //   })
-  //   console.log("x:", x)
-  //   return x;
-
-
-  // }
   const finalMenus = menus.filter((m: any) => !m.restrict || m.restrict === 'none' || !m.restrict.includes(auth?.user?.workspace_owner_info?.plan?.plan));
   if (auth?.user?.role_permission_id == 2) {
     finalMenus.push({
@@ -295,8 +166,8 @@ const navigation = (): VerticalNavItemsType | any => {
         restrict: 'none'
       },
       {
-        title: 'Plans',
-        icon: 'mdi:currency-usd',
+        title: 'All Articles',
+        icon: 'ic:outline-article',
         path: '/admin/articles',
         restrict: 'none'
       })

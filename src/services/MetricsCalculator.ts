@@ -91,7 +91,7 @@ export const getHeadingsCalculations = (headings: any, avg: any) => {
 
 }
 export const getTermCalculations = (primaryKeyword: string, keywords: any = [], content: string, wordCount: number, setKeywordsCount: any) => {
-    // console.log("incoming:", primaryKeyword, keywords, content)
+    // console.log("incoming:", primaryKeyword)
     return new Promise((resolve, reject) => {
         try {
             // Calculate primary keyword count
@@ -99,38 +99,43 @@ export const getTermCalculations = (primaryKeyword: string, keywords: any = [], 
             let count = (content.match(regex) || []).length;
             let idealPKcount: number = wordCount * 2 / 100;
             // console.log("count:", count)
-            if (count > idealPKcount)
-                count = idealPKcount;
+            let primaryKeywordScore = 0;
+            if (count < idealPKcount) {
+                primaryKeywordScore = (100 * count) / idealPKcount
+            } else {
+                primaryKeywordScore = 100;
+            }
+
             // console.log("count:", count, idealPKcount)
-            let primaryKeywordScore = (60 * count) / idealPKcount
+
             !keywords ? keywords = [] : null;
             keywords = keywords.filter((item: any) => item.keyword !== primaryKeyword.toLowerCase());
-            let usedKeywords = 0;
-            let secondaryKeywordScore = 0;
-
-
-            keywords.map((k: any, i: number) => {
-                if (k.count > 0)
-                    usedKeywords++;
-                if (i == keywords.length - 1) {
-                    if (usedKeywords >= 10) {
-                        secondaryKeywordScore = 40;
-                    } else {
-                        secondaryKeywordScore = (40 * usedKeywords) / 10;
-                        let total = (primaryKeywordScore + secondaryKeywordScore).toFixed(0)
-                        setKeywordsCount(count + usedKeywords)
-                        // console.log({ score: primaryKeywordScore + secondaryKeywordScore, msg: `Primary Keyword score: ${primaryKeywordScore} , Secondary Keyword Score: ${secondaryKeywordScore}` })
-
-                    }
-
-                    // console.log("count, idealPKcount, usedKeywords:", count, idealPKcount, usedKeywords)
-                    resolve({
-                        score: primaryKeywordScore + secondaryKeywordScore,
-                        msg: `The target keywords should appear at least ${Math.trunc(idealPKcount)} times, and the secondary keywords should appear at least 10 times`,
-                        arrow: (count >= idealPKcount && usedKeywords >= 10) ? 'tdesign:arrow-up' : 'tdesign:arrow-down'
-                    })
-                }
+            setKeywordsCount(count)
+            resolve({
+                score: primaryKeywordScore,
+                msg: `The target keywords should be included at least ${Math.trunc(idealPKcount)} times.`,
+                arrow: (count >= idealPKcount) ? 'tdesign:arrow-up' : 'tdesign:arrow-down',
+                idealPKcount: idealPKcount
             })
+
+            // keywords.map((k: any, i: number) => {
+            //     if (k.count > 0)
+            //         usedKeywords++;
+            //     if (i == keywords.length - 1) {
+            //         if (usedKeywords >= 10) {
+            //             secondaryKeywordScore = 40;
+            //         } else {
+            //             secondaryKeywordScore = (40 * usedKeywords) / 10;
+            //             let total = (primaryKeywordScore + secondaryKeywordScore).toFixed(0)
+            //             setKeywordsCount(count + usedKeywords)
+            //             // console.log({ score: primaryKeywordScore + secondaryKeywordScore, msg: `Primary Keyword score: ${primaryKeywordScore} , Secondary Keyword Score: ${secondaryKeywordScore}` })
+
+            //         }
+
+            //         // console.log("count, idealPKcount, usedKeywords:", count, idealPKcount, usedKeywords)
+
+            //     }
+            // })
 
         } catch (e) {
             console.log("error.......:", e)

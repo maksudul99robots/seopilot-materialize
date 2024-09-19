@@ -66,7 +66,7 @@ export default function ArticleIU(props: any) {
     const [reloadUnsplashRequest, setReloadUnsplashRequest] = useState(0)
     const [wordScore, setWordScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
     const [titleScore, setTitleScore] = useState({ score: 0, msg: "" })
-    const [termScore, setTermScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
+    const [termScore, setTermScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down', idealPKcount: 0 })
     const [headingScore, setHeadingScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
     const [linkScore, setLinkScore] = useState({ score: 0, msg: "", links: 0, arrow: 'tdesign:arrow-down' })
     const [link, setLink] = useState(0)
@@ -88,6 +88,10 @@ export default function ArticleIU(props: any) {
     });
     const [statusDropdown, setStatusDropdown] = useState<any>([])
     const [metricsComp, setMetricsComp] = useState<any>(null)
+    const [lastSelectionOnePoint, setLastSelectionOnePoint] = useState(null);
+    const [lastCurrentStateOnePoint, setLastCurrentStateOnePoint] = useState(null);
+    const [insertHeader, setInsertHeader] = useState<() => void>(() => { });
+
 
     useEffect(() => {
         if (props.status == 'completed') {
@@ -169,7 +173,7 @@ export default function ArticleIU(props: any) {
                 setLinkScore(res)
             });
             getTermCalculations(props.primaryKeyword, props.keywordSuggestions, props.html, props.wordCount, setKeywordsCount).then((res: any) => {
-                console.log("term:", res)
+                // console.log("term:", res)
                 setTermScore(res)
             });
         }
@@ -254,9 +258,6 @@ export default function ArticleIU(props: any) {
 
     }, [props.html])
 
-    useEffect(() => {
-        console.log("link:", link)
-    }, [link])
     return (
         <>
 
@@ -543,6 +544,12 @@ export default function ArticleIU(props: any) {
                                 save={props.save}
                                 iframes={props.iframes}
                                 setIframes={props.setIframes}
+                                insertHeader={insertHeader}
+                                setInsertHeader={setInsertHeader}
+                                lastCurrentStateOnePoint={lastCurrentStateOnePoint}
+                                setLastCurrentStateOnePoint={setLastCurrentStateOnePoint}
+                                lastSelectionOnePoint={lastSelectionOnePoint}
+                                setLastSelectionOnePoint={setLastSelectionOnePoint}
                             />
                         }
 
@@ -579,6 +586,9 @@ export default function ArticleIU(props: any) {
                             link={link}
                             loading={loading}
                             keywordCount={keywordCount}
+                            insertHeader={insertHeader}
+                            lastCurrentStateOnePoint={lastCurrentStateOnePoint}
+                            lastSelectionOnePoint={lastSelectionOnePoint}
                         />
 
                         {/* <Outlines outlines={outlines} /> */}

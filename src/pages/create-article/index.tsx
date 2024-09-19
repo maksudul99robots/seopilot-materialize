@@ -573,6 +573,17 @@ export default function CreateArticle(props: any) {
             return ''
         }
 
+        if (keywords.length == 0) {
+            Swal.fire({
+                title: '',
+                text: `Please Enter Target Keyword for the article.`,
+                icon: 'warning',
+                confirmButtonText: 'Close',
+                confirmButtonColor: "#2979FF"
+            })
+            return ''
+        }
+
 
 
         // return
@@ -1137,37 +1148,36 @@ export default function CreateArticle(props: any) {
                                         />
                                     </Grid>
                                 }
-                                {
-                                    articleType !== 'youtube-to-blog' &&
-                                    <Grid item xs={12}>
 
-                                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                            <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
-                                                Target Keyword
-                                                <LightTooltip title={
-                                                    <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
-                                                        The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
-                                                    </p>
-                                                } placement="top">
-                                                    <div style={{ height: "100%" }}>
-                                                        <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
-                                                    </div>
-                                                </LightTooltip >
-                                            </Typography>
-                                            {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
-                                            {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
-                                        </Box>
+                                <Grid item xs={12}>
 
-                                        <TagsInput
-                                            value={keywords}
-                                            onChange={setKeywords}
-                                            name="Keywords"
-                                        />
-                                        {/* <em>press enter to add new tag</em> */}
-                                        <FormHelperText sx={{ fontSize: "14px" }}>
-                                            Press enter to add the keyword. You have to put only one target keyword to rank for.</FormHelperText>
-                                    </Grid>
-                                }
+                                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                        <Typography variant='body1' sx={{ fontSize: "16px", fontWeight: 500, marginTop: "-5px", marginBottom: "0px", display: "flex" }}>
+                                            Target Keyword
+                                            <LightTooltip title={
+                                                <p style={{ color: "#606378", fontSize: "12px", zIndex: "99999999", }}>
+                                                    The presence of the target keywords in the article multiple times is not assured. However, utilizing the GPT-4 AI model can enhance the likelihood of their occurrence.
+                                                </p>
+                                            } placement="top">
+                                                <div style={{ height: "100%" }}>
+                                                    <Icon icon="ph:info-fill" className='add-icon-color' style={{ fontSize: "20px", marginTop: "4px", marginLeft: "5px" }} />
+                                                </div>
+                                            </LightTooltip >
+                                        </Typography>
+                                        {/* <iconify-icon icon="ic:baseline-search"></iconify-icon> */}
+                                        {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
+                                    </Box>
+
+                                    <TagsInput
+                                        value={keywords}
+                                        onChange={setKeywords}
+                                        name="Keywords"
+                                    />
+                                    {/* <em>press enter to add new tag</em> */}
+                                    <FormHelperText sx={{ fontSize: "14px" }}>
+                                        Press enter to add the keyword. You have to put only one target keyword to rank for.</FormHelperText>
+                                </Grid>
+
 
                                 <Grid item sm={6} xs={6}>
                                     <FormControl fullWidth>

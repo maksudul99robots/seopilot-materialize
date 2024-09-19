@@ -111,9 +111,14 @@ const Metrics = (props: any) => {
                                     <LightTooltip title={
                                         <div>
                                             {props.wordScore.msg}
+                                            <img src="https://media.giphy.com/media/iPg2OZbNXc7uM/giphy.gif" />
                                         </div>
                                     } placement="top">
-                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{props.metricsComp?.avg?.avg_wc ? Math.trunc(props.metricsComp?.avg?.avg_wc) : 0}</Typography>
+                                        <Box>
+                                            <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{props.metricsComp?.avg?.avg_wc ? Math.trunc(props.metricsComp?.avg?.avg_wc) : 0}</Typography>
+
+
+                                        </Box>
 
                                     </LightTooltip>
 
@@ -155,7 +160,7 @@ const Metrics = (props: any) => {
                                 <Grid item xs={3} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", fontSize: "12px" }}>
                                     <Typography sx={{ fontSize: "12px", fontWeight: 400, margin: "5px" }}>Terms</Typography>
                                     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", margin: "5px", alignItems: "center" }}>
-                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{props.keywordCount}</Typography>
+                                        <Typography sx={{ fontWeight: 600, fontSize: "16px" }}>{Math.trunc(props.keywordCount)}</Typography>
                                         <Icon icon={props.termScore.arrow} style={{ fontSize: "15px", color: props.termScore.arrow == 'tdesign:arrow-down' ? 'red' : 'green' }} />
                                     </Box>
 
@@ -164,7 +169,7 @@ const Metrics = (props: any) => {
                                             {props.termScore?.msg ? props.termScore?.msg : 'Ideally, the target keyword should make up about 2% of the entire article.'}
                                         </div>
                                     } placement="top">
-                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>2%</Typography>
+                                        <Typography sx={{ fontWeight: 300, fontSize: "12px" }}>{Math.trunc(props.termScore?.idealPKcount)}</Typography>
 
                                     </LightTooltip>
 
@@ -277,7 +282,16 @@ const Metrics = (props: any) => {
 
                 </Box> */}
 
-                <MetricsTabs keywordSuggestions={props.keywordSuggestions} serp={props.serp} primaryKeyword={props.primaryKeyword} paa={props.paa} />
+                <MetricsTabs
+                    keywordSuggestions={props.keywordSuggestions}
+                    serp={props.serp}
+                    primaryKeyword={props.primaryKeyword}
+                    paa={props.paa}
+                    metricsComp={props.metricsComp}
+                    insertHeader={props.insertHeader}
+                    lastSelectionOnePoint={props.lastSelectionOnePoint}
+                    lastCurrentStateOnePoint={props.lastCurrentStateOnePoint}
+                />
             </Box>
         </Box >
 

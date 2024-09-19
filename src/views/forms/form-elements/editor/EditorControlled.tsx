@@ -34,9 +34,14 @@ const EditorControlled = (props: any) => {
     )
   ))
 
+  // useEffect(() => {
+  //   console.log("lastCurrentStateOnePoint:", lastCurrentStateOnePoint, "lastSelectionOnePoint:", lastSelectionOnePoint)
+  // }, [lastCurrentStateOnePoint, lastSelectionOnePoint])
+
   useEffect(() => {
     let iframesTmp = extractIframeUrls(props.data)
-    props.setIframes(iframesTmp)
+    if (props.setIframes)
+      props.setIframes(iframesTmp)
     let x = replaceWithPot(props.data, iframesTmp)
     setValue(EditorState.createWithContent(
       ContentState.createFromBlockArray(
@@ -108,9 +113,11 @@ const EditorControlled = (props: any) => {
     }, 2000)
 
 
+    if (value.getSelection() && value.getCurrentContent()) {
+      props.setLastSelectionOnePoint(value.getSelection())
+      props.setLastCurrentStateOnePoint(value.getCurrentContent())
+    }
 
-    setLastSelectionOnePoint(value.getSelection())
-    setLastCurrentStateOnePoint(value.getCurrentContent())
 
 
 
@@ -152,6 +159,10 @@ const EditorControlled = (props: any) => {
       // setApiKey('none')
       setHasClaudeAiKey('no')
     })
+
+    if (props.setInsertHeader) {
+      props.setInsertHeader(() => insertHeader);
+    }
   }, [])
 
   const convertEditorStateToHTML = (editorState) => {
@@ -172,14 +183,39 @@ const EditorControlled = (props: any) => {
 
   function insertText(text) {
 
-    const currentContent = lastCurrentStateOnePoint;
-    const currentSelection = lastSelectionOnePoint;
+    const currentContent = props.lastCurrentStateOnePoint;
+    const currentSelection = props.lastSelectionOnePoint;
     const newContent = Modifier.insertText(currentContent, currentSelection, text);
     const newEditorState = EditorState.push(value, newContent, 'insert-characters');
 
     setValue(EditorState.forceSelection(newEditorState, newContent.getSelectionAfter()));
 
   }
+
+  function insertHeader(text, propsSelection, propState, headerType) {
+    // console.log("headerType:", headerType)
+
+    if (!propsSelection || !propState) {
+      // console.error("Content:", propState, "Selection:", propsSelection);
+      return;
+    }
+    // console.error("Content:", propState, "Selection:", propsSelection);
+    // return
+    // Set block type to 'header-two' (h2)
+    const newContentWithBlockType = Modifier.setBlockType(propState, propsSelection, headerType);
+
+    // Collapse the selection to the focus point, or create a default empty selection if needed
+    const collapsedSelection = SelectionState.createEmpty(propsSelection.getAnchorKey());
+
+    // Insert text into the collapsed selection
+    const newContentWithText = Modifier.insertText(newContentWithBlockType, collapsedSelection, text);
+
+    const newEditorState = EditorState.push(value, newContentWithText, 'insert-characters');
+
+    // Force the selection to the new state
+    setValue(EditorState.forceSelection(newEditorState, newContentWithText.getSelectionAfter()));
+  }
+
 
 
   function getAllH2Elements() {
@@ -413,6 +449,51 @@ const EditorControlled = (props: any) => {
 
     setValue(newEditorState);
   };
+  const replaceTextWithHeaders = (initialText, listItems, listType) => {
+    const selection = lastSelection;
+    const contentState = lastCurrentState;
+
+    // Create a ContentBlock for the initial text
+    const initialBlock = new ContentBlock({
+      key: genKey(),
+      type: 'header-two', // or any other appropriate type
+      text: initialText,
+    });
+
+    // Create a new ContentState with the initial text block followed by the list block
+    // const listItemsBlocks = listItems.map(item => {
+    //   return new ContentBlock({
+    //     key: genKey(),
+    //     type: 'header-two',
+    //     text: item.trim(),
+    //   });
+    // });
+
+    const currentContent = props.lastCurrentStateOnePoint;
+    const currentSelection = props.lastSelectionOnePoint;
+
+    // const blocks = [initialBlock, ...listItemsBlocks];
+    const contentStateWithTextAndList = ContentState.createFromBlockArray(initialBlock);
+
+    // Replace the text with the initial text and list blocks
+    const newContentState = Modifier.insertText(
+      currentContent,
+      currentSelection,
+      contentStateWithTextAndList.getBlockMap()
+    );
+
+    const newEditorState = EditorState.push(
+      value,
+      newContentState,
+      'insert-characters'
+    );
+
+
+    // const newContent = Modifier.insertText(currentContent, currentSelection, text);
+    // const newEditorState = EditorState.push(value, newContent, 'insert-characters');
+
+    setValue(newEditorState);
+  };
 
 
 
@@ -512,7 +593,18 @@ const EditorControlled = (props: any) => {
     <div>
       <div className="custom-toolbar" style={{ ...toolbarPosition }}>
 
-        <ToolbarDropdown replaceTextWithList={replaceTextWithList} text={text} article_id={props.article_id} setReloadArticle={props.setReloadArticle} reloadArticle={props.reloadArticle} replaceText={replaceText} setSelectionAndState={setSelectionAndState} hasClaudeAiKey={hasClaudeAiKey} hasOpenAiKey={hasOpenAiKey} />
+        <ToolbarDropdown
+          replaceTextWithList={replaceTextWithList}
+          text={text}
+          article_id={props.article_id}
+          setReloadArticle={props.setReloadArticle}
+          reloadArticle={props.reloadArticle}
+          replaceText={replaceText}
+          setSelectionAndState={setSelectionAndState}
+          hasClaudeAiKey={hasClaudeAiKey}
+          hasOpenAiKey={hasOpenAiKey}
+          insertHeader={insertHeader}
+        />
       </div>
 
       <ReactDraftWysiwyg

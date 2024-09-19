@@ -28,7 +28,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 }))
 
 const GSCTables = (props: any) => {
-    console.log("site:", props.site)
+    // console.log("site:", props.site)
     // ** States
     const [total, setTotal] = useState<number>(0)
     const [sort, setSort] = useState<SortType>('desc')

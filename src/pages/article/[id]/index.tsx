@@ -42,6 +42,8 @@ export default function Page() {
     const [copied, setCopied] = useState(false);
     const [headings, setHeadings] = useState([]);
     const auth = useAuth()
+    const [lastSelectionOnePoint, setLastSelectionOnePoint] = useState(null);
+    const [lastCurrentStateOnePoint, setLastCurrentStateOnePoint] = useState(null);
 
     useEffect(() => {
 
@@ -179,7 +181,7 @@ export default function Page() {
             </Box >
 
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Grid item xs={12} sx={{ width: "60%", marginRight: "10px" }}>
+                <Grid item xs={12} sx={{ width: "70%", marginRight: "10px" }}>
 
                     <Card sx={{ overflow: 'visible', padding: "20px", width: "100%", marginBottom: "10px" }}>
 
@@ -207,17 +209,23 @@ export default function Page() {
                         sx={{ overflow: 'visible', padding: "20px", width: "100%" }}
                     >
 
-
-
                         {
                             articleObj?.output &&
-                            <EditorControlled data={articleData} setHtml={setHtml} setPlainText={setPlainText} />
+                            <EditorControlled
+                                data={articleData}
+                                setHtml={setHtml}
+                                setPlainText={setPlainText}
+                                lastCurrentStateOnePoint={lastCurrentStateOnePoint}
+                                setLastCurrentStateOnePoint={setLastCurrentStateOnePoint}
+                                lastSelectionOnePoint={lastSelectionOnePoint}
+                                setLastSelectionOnePoint={setLastSelectionOnePoint}
+                            />
                         }
 
                     </Card>
                 </Grid>
                 <Card
-                    sx={{ overflow: 'visible', padding: "20px 20px 30px 20px", width: "40%", height: "100%" }}
+                    sx={{ overflow: 'visible', padding: "20px 20px 30px 20px", width: "30%", height: "100%" }}
                 >
                     <Box sx={{ marginBottom: "20px" }}>
                         <Typography variant='h5'>Source Website: </Typography>

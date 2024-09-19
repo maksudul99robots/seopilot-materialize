@@ -110,7 +110,7 @@ const CreateAccountInvite = () => {
         if (router.query.token?.length && router.query.token.length > 0) {
             console.log("calline.....:", router.query.token)
             LoginRegistrationAPI.verifyInvitationCode({ token: router.query.token }).then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 setEmail(res.data.email)
                 setIsVerified(true)
                 if (res.data.user_state == 'existing') {

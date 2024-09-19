@@ -209,7 +209,7 @@ const ApexAreaChart = (props: any) => {
   useEffect(() => {
     if (props.startDate && props.endDate)
       LoginRegistrationAPI.getGSCDataInRange({ start: props.startDate, end: props.endDate }).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         setData(res.data.data)
         setCategories(res.data.date)
       }).catch(e => {

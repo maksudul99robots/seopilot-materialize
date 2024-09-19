@@ -78,7 +78,9 @@ const ApexCharts = () => {
     LoginRegistrationAPI.getUser({}).then(res1 => {
       // console.log("res1", res1.data.userData.workspace_owner_info.plan)
 
-      if (res1.data.userData.workspace_owner_info.plan.plan && (res1.data.userData.workspace_owner_info.plan.plan == 'monthly - captain' || res1.data.userData.workspace_owner_info.plan.plan == 'yearly - captain')) {
+      if (
+        res1.data.userData.workspace_owner_info.plan.plan &&
+        (res1.data.userData.workspace_owner_info.plan.plan == 'monthly - captain' || res1.data.userData.workspace_owner_info.plan.plan == 'yearly - captain' || res1.data.userData.workspace_owner_info.plan.plan == 'captain')) {
         LoginRegistrationAPI.getAllSites({}).then(res => {
           if (res.data[0]) {
             // console.log("res.data[0]:", res.data[0])
@@ -125,7 +127,7 @@ const ApexCharts = () => {
       } else {
         Swal.fire({
           title: 'Sorry!',
-          text: 'You do not have GSC Page. Only monthly/yearly Captain plan has the access.',
+          text: 'You do not have access to GSC Page. Only monthly/yearly Captain plan has the access.',
           icon: 'warning',
           confirmButtonText: 'OK',
           confirmButtonColor: "#2979FF"
@@ -137,7 +139,7 @@ const ApexCharts = () => {
       console.log(e1)
       Swal.fire({
         title: 'Sorry!',
-        text: 'You do not have GSC Page. Only monthly/yearly Captain plan has the access.',
+        text: 'You do not have access to GSC Page. Only monthly/yearly Captain plan has the access.',
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: "#2979FF"
