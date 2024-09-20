@@ -18,9 +18,8 @@ export default function Headings(props: any) {
         <Card sx={{ marginBottom: "10px", marginTop: "20px", padding: "5px" }}>
 
             <CardHeader
-                title={<Box><Typography>Article Outline</Typography>
-                    <Link href="https://facebook.com" style={{ fontSize: "12px" }}>FB</Link>
-                </Box>}
+                title='Article Outline'
+
                 action={
                     <IconButton
                         size='small'
