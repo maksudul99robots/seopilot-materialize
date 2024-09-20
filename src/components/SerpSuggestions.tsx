@@ -216,7 +216,7 @@ export const SerpSuggestions = (props: any) => {
                                                         <Icon
                                                             icon={`gridicons:heading-${outline.tagName.toLowerCase()}`}
                                                             style={{
-                                                                padding: "0px 5px 5px 2px",
+                                                                padding: "3px",
                                                                 fontSize: "30px",
                                                                 color: outline.tagName.toLowerCase() === 'h1' ? "#4A7F21" :
                                                                     outline.tagName.toLowerCase() === 'h2' ? "#214B7F" :
