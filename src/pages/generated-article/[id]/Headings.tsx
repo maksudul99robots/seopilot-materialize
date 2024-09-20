@@ -1,4 +1,6 @@
 import { Box, Card, CardContent, CardHeader, Collapse, Divider, IconButton, Typography } from "@mui/material";
+import { fontSize } from "@mui/system";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Icon from "src/@core/components/icon";
 
@@ -16,7 +18,9 @@ export default function Headings(props: any) {
         <Card sx={{ marginBottom: "10px", marginTop: "20px", padding: "5px" }}>
 
             <CardHeader
-                title='Article Outline'
+                title={<Box><Typography>Article Outline</Typography>
+                    <Link href="https://facebook.com" style={{ fontSize: "12px" }}>FB</Link>
+                </Box>}
                 action={
                     <IconButton
                         size='small'
