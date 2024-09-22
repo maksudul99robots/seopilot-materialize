@@ -215,11 +215,6 @@ export default function ToolbarDropdown(props: any) {
                         hasOpenAiKey={props.hasOpenAiKey}
                     />
                 </MenuItem>
-                <MenuItem color='#2979FF' onClick={() => {
-                    props.insertHeader('sdjkfhjsdaf sdafjjsdajf sdfjsaf')
-                }} disableRipple>
-                    brooo
-                </MenuItem>
             </StyledMenu>
         </div>
     );
