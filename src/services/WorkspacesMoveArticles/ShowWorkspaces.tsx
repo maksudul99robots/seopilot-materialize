@@ -67,9 +67,6 @@ const ShowWorkspaces = (props: any) => {
         .map((w: any) => w.id)
         .join(', '));
 
-    console.log("auth.user?.current_workspace:", auth.user?.current_workspace);
-    console.log("props?.workspaces:", props?.workspaces);
-
     const handleClose = () => {
         setShow(false)
     }

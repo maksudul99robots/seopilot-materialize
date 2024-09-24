@@ -63,7 +63,7 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 export default function ActionDropdown(props: any) {
-    console.log("props.workspaces:........", props.workspaces)
+    // console.log("props.workspaces:........", props.workspaces)
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const router = useRouter()
 
