@@ -111,7 +111,7 @@ const Metrics = (props: any) => {
                                     <LightTooltip title={
                                         <div>
                                             {props.wordScore.msg}
-                                            <img src="https://media.giphy.com/media/iPg2OZbNXc7uM/giphy.gif" />
+                                            {/* <img src="https://media.giphy.com/media/iPg2OZbNXc7uM/giphy.gif" /> */}
                                         </div>
                                     } placement="top">
                                         <Box>
