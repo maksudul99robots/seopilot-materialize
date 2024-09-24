@@ -70,6 +70,7 @@ export default function ArticleIU(props: any) {
     const [headingScore, setHeadingScore] = useState({ score: 0, msg: "", arrow: 'tdesign:arrow-down' })
     const [linkScore, setLinkScore] = useState({ score: 0, msg: "", links: 0, arrow: 'tdesign:arrow-down' })
     const [link, setLink] = useState(0)
+    const [paa, setPaa] = useState([])
     const [keywordCount, setKeywordsCount] = useState(0)
     const [saveBtnStyle, setSaveBtnStyle] = useState({
         marginLeft: "5px",
@@ -162,6 +163,16 @@ export default function ArticleIU(props: any) {
                 setLoading(false)
             })
         }
+        LoginRegistrationAPI.getPAA({ article_id: props.id }).then(res => {
+            console.log("res.data:", res.data)
+            // setLoading(false)
+            setPaa(res.data)
+
+
+        }).catch(e => {
+            console.log(e)
+            // setLoading(false)
+        })
 
     }, [props.id])
 
@@ -576,7 +587,7 @@ export default function ArticleIU(props: any) {
                             termScore={termScore}
                             linkScore={linkScore}
                             primaryKeyword={props.primaryKeyword}
-                            paa={props.paa}
+                            paa={paa}
                             wordCount={props.wordCount}
                             tokens={props.tokens}
                             price={props.price}
@@ -589,6 +600,7 @@ export default function ArticleIU(props: any) {
                             insertHeader={insertHeader}
                             lastCurrentStateOnePoint={lastCurrentStateOnePoint}
                             lastSelectionOnePoint={lastSelectionOnePoint}
+                        // paa={paa}
                         />
 
                         {/* <Outlines outlines={outlines} /> */}

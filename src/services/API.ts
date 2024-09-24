@@ -449,7 +449,7 @@ export const LoginRegistrationAPI = {
     async getSERP(data: any, url = "/get-serp", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
-    async getPAA(data: any, url = "/google-search-paa", source = undefined) {
+    async getPAA(data: any, url = "/get-paa", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
     async getDallEImg(data: any, url = "/download-dall-e-img", source = undefined) {

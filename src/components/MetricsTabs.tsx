@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 import { KeywordSuggestions } from './KeywordSuggestions';
 import { SerpSuggestions } from './SerpSuggestions';
 import { PAA } from './PAA';
+import { PaaSuggestions } from './PaaSuggestions';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -16,7 +17,7 @@ interface TabPanelProps {
 
 function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
-
+    console.log()
     return (
         <div
             role="tabpanel"
@@ -41,7 +42,7 @@ function a11yProps(index: number) {
 
 export default function MetricsTabs(props: any) {
     const [value, setValue] = React.useState(0);
-
+    // console.log("props.paa", props.paa)
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
@@ -53,6 +54,7 @@ export default function MetricsTabs(props: any) {
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ fontSize: "12px !important;", padding: "0px" }}>
                     <Tab label="Terms" {...a11yProps(0)} sx={{ fontSize: "12px !important;" }} />
                     <Tab label="Top 10 SERP" {...a11yProps(1)} sx={{ fontSize: "12px !important;" }} />
+                    <Tab label="Questions" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} />
                     {/* <Tab label="PAA" {...a11yProps(2)} sx={{ fontSize: "12px !important;", padding: "0px" }} /> */}
                     {/* <Tab label="Item Three" {...a11yProps(2)} sx={{ fontSize: "12px !important;" }} /> */}
                 </Tabs>
@@ -62,6 +64,10 @@ export default function MetricsTabs(props: any) {
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <SerpSuggestions serp={props.serp} metricsComp={props.metricsComp} insertHeader={props.insertHeader} lastSelectionOnePoint={props.lastSelectionOnePoint}
+                    lastCurrentStateOnePoint={props.lastCurrentStateOnePoint} />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={2}>
+                <PaaSuggestions paa={props.paa} insertHeader={props.insertHeader} lastSelectionOnePoint={props.lastSelectionOnePoint}
                     lastCurrentStateOnePoint={props.lastCurrentStateOnePoint} />
             </CustomTabPanel>
             {/* <CustomTabPanel value={value} index={2}>
