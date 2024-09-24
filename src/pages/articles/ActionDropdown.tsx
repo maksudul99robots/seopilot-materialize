@@ -133,7 +133,7 @@ export default function ActionDropdown(props: any) {
 
 
                 {
-                    (props.team?.role == "owner") &&
+                    (props.team?.role == "owner" || props.team?.role == "admin") &&
                     <ShowWorkspaces
                         workspaces={props.workspaces}
                         article_id={props.article_id}

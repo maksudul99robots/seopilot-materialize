@@ -64,7 +64,7 @@ export const PaaSuggestions = (props: any) => {
                         whiteSpace: "nowrap",
                         textAlign: "center"
                     }}>
-                        No SERP Found
+                        No Questions Found from SERP
                     </Typography>
                 )
             ) : (
