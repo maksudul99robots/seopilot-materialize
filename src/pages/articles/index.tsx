@@ -105,7 +105,7 @@ const TableServerSide = () => {
                 LoginRegistrationAPI.getAIArticleHistory({}).then(res => {
                     loadServerRows
                     setMainData(res.data);
-
+                    setLoading(false)
                 }).catch(e => {
                     setLoading(false)
                 })

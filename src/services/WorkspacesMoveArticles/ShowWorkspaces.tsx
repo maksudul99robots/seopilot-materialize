@@ -60,13 +60,15 @@ const ShowWorkspaces = (props: any) => {
     const handleBlur = () => setFocus(undefined)
     const [connects, setConnects] = useState<any>([]);
     const [toWorkspace, setToWorkspace] = useState<string | number>(props?.workspaces[0]?.id ? props?.workspaces[0]?.id : '');
-    const [fromWorkspaceName, setFromWorkspaceName] = useState<string | number>(props?.workspaces?.filter((w: any) => w.id === auth.user?.current_workspace)
+    const [fromWorkspaceName, setFromWorkspaceName] = useState<string | number>(props?.workspaces?.filter((w: any) => w.id == auth.user?.current_workspace)
         .map((w: any) => w.name)
         .join(', '));
-    const [fromWorkspace, setFromWorkspace] = useState<string | number>(props?.workspaces?.filter((w: any) => w.id === auth.user?.current_workspace)
+    const [fromWorkspace, setFromWorkspace] = useState<string | number>(props?.workspaces?.filter((w: any) => w.id == auth.user?.current_workspace)
         .map((w: any) => w.id)
         .join(', '));
 
+    console.log("auth.user?.current_workspace:", auth.user?.current_workspace);
+    console.log("props?.workspaces:", props?.workspaces);
 
     const handleClose = () => {
         setShow(false)
