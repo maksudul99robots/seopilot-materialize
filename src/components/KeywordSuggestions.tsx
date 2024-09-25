@@ -45,7 +45,7 @@ export const KeywordSuggestions = (props: any) => {
                                         toast('Copied to Clipboard', { hideProgressBar: true, autoClose: 2000, type: 'success' })
                                     }}
                                 >
-                                    {ks.keyword} | {ks.count}
+                                    {ks.keyword} | {ks.count} / {ks.suggested}
                                 </p>
                             ))
                             :
@@ -53,7 +53,8 @@ export const KeywordSuggestions = (props: any) => {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
-                                textAlign: "center"
+                                textAlign: "center",
+                                marginTop: "10px"
                             }}>No Keyword Suggestions Found</Typography>
                     )
                     :

@@ -114,7 +114,7 @@ export default function Page() {
     }, [html, keywordSuggestionsTmp])
 
 
-    const countKeywords = () => {
+    const countKeywords = async () => {
         // Create a copy of the keywords array to avoid direct state mutation
         const updatedKeywords = keywordSuggestionsTmp.map((keywordObj: any) => {
             // Use a regular expression to find all occurrences of the keyword in the article content
@@ -124,6 +124,25 @@ export default function Page() {
         });
         // console.log(updatedKeywords)
         // Update the state with the new keywords array
+        let total_search_volume = updatedKeywords.reduce((accumulator: any, keyword: any) => {
+            return accumulator + (keyword.avg_monthly_searches || 0);
+        }, 0);
+
+        await updatedKeywords.map((k: any, i: number) => {
+            if (k.competition == "LOW") {
+                let count = (k.avg_monthly_searches / total_search_volume) * 1.5 * wordCount / 100
+                updatedKeywords[i].suggested = count < 1 ? 1 : Math.trunc(count);
+            } else if (k.competition == "MEDIUM") {
+                let count = (k.avg_monthly_searches / total_search_volume) * wordCount / 100
+                updatedKeywords[i].suggested = count < 1 ? 1 : Math.trunc(count);
+
+            } else if (k.competition == "HIGH") {
+                let count = (k.avg_monthly_searches / total_search_volume) * 0.5 * wordCount / 100
+                updatedKeywords[i].suggested = count < 1 ? 1 : Math.trunc(count);
+            } else {
+                updatedKeywords[i].suggested = 1;
+            }
+        })
         setKeywordSuggestions(updatedKeywords);
     };
 

@@ -54,7 +54,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function ArticleIU(props: any) {
-    // console.log("content status:", props.contentStatus)
+    // console.log("keywordSuggestions:", props.keywordSuggestions)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -93,7 +93,13 @@ export default function ArticleIU(props: any) {
     const [lastCurrentStateOnePoint, setLastCurrentStateOnePoint] = useState(null);
     const [insertHeader, setInsertHeader] = useState<() => void>(() => { });
 
-
+    useEffect(() => {
+        props.keywordSuggestions?.map((k: any, i: number) => {
+            if (k.keyword == props.primaryKeyword) {
+                props.keywordSuggestions[i].suggested = Math.trunc(termScore?.idealPKcount)
+            }
+        })
+    }, [props.keywordSuggestions, termScore])
     useEffect(() => {
         if (props.status == 'completed') {
             setStatusDropdown(['completed', 'review'])
@@ -164,7 +170,7 @@ export default function ArticleIU(props: any) {
             })
         }
         LoginRegistrationAPI.getPAA({ article_id: props.id }).then(res => {
-            console.log("res.data:", res.data)
+            // console.log("res.data:", res.data)
             // setLoading(false)
             setPaa(res.data)
 

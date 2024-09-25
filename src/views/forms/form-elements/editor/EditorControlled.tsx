@@ -88,7 +88,7 @@ const EditorControlled = (props: any) => {
     }
   }, [runInsertEmbedProgrammaticallyFlag])
   useEffect(() => {
-    console.log("change of content:")
+    // console.log("change of content:")
     let htmlTmp = convertEditorStateToHTML(value);
 
     if (props.fImg?.urls?.full) {
