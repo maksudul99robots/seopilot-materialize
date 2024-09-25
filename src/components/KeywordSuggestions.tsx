@@ -31,7 +31,7 @@ export const KeywordSuggestions = (props: any) => {
                     (
                         props.keywordSuggestions.length > 0 ?
                             props.keywordSuggestions.map((ks: any, index: number) => (
-                                <p key={index} className={ks.count == 0 ? "keyword-unused" : "keyword-used"}
+                                <p key={index} className={ks.count == 0 ? "keyword-unused" : ks.count < ks.suggested ? "keyword-not-reached" : "keyword-used"}
                                     style={{ display: 'inline-block', marginRight: '8px', marginBottom: '1px', fontSize: "10px" }} // Added margin for spacing
                                     onClick={() => {
                                         function listener(e: any) {

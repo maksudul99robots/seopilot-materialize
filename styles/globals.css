@@ -288,6 +288,16 @@ code[class*='language-'] {
   background-color: #fff;
   /* transform: translate(-50%, -50%); */
 }
+.keyword-not-reached {
+  border-radius: 5px !important;
+  color: #C0A300;
+  background-color: #FFF5BA;
+  width: fit-content;
+  padding: 5px;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease; /* Add transition property */
+}
+
 .keyword-used {
   border-radius: 5px !important;
   color: #009539;
