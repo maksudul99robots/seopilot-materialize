@@ -486,9 +486,9 @@ export default function ArticleIU(props: any) {
                                     props.imgService == 'pexels' && props.fImg?.photos ?
                                         <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
                                             <ImageSection
-                                                src={props?.fImg?.photos[props.featuredImgIndex].src.original}
-                                                url={props?.fImg?.photos[props.featuredImgIndex].photographer_url}
-                                                username={props?.fImg?.photos[props.featuredImgIndex].photographer}
+                                                src={props?.fImg?.photos[props.featuredImgIndex]?.src?.original}
+                                                url={props?.fImg?.photos[props.featuredImgIndex]?.photographer_url}
+                                                username={props?.fImg?.photos[props.featuredImgIndex]?.photographer}
                                                 id={props.id}
                                                 setFImg={props.setFImg}
                                                 setReloadUnsplashRequest={setReloadUnsplashRequest}
