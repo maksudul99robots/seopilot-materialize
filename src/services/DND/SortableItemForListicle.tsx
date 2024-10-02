@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 // import { AiOutlineCheck } from "react-icons/ai";
 
 export function SortableItemForListicle(props: any) {
-
+    console.log("props.id:", JSON.parse(props.id).tag)
     // props.id
     // JavaScript
     let mainObject = JSON.parse(props.id);
@@ -54,11 +54,11 @@ export function SortableItemForListicle(props: any) {
 
                     <select key={makeid()} name="cars" style={{ border: "none", backgroundColor: props.index % 2 == 0 ? "#F8FBFC" : "fff", width: "4%" }} onChange={e => { props.changeListicleOutlineTag(props.index, e.target.value) }}>
                         {/* <option value='H1' selected={props.id.substring(0, 2) == 'H1'}>H1</option> */}
-                        <option value='H2' selected={props.id.substring(0, 2) == 'H2'}>H2</option>
-                        <option value='H3' selected={props.id.substring(0, 2) == 'H3'}>H3</option>
-                        <option value='H4' selected={props.id.substring(0, 2) == 'H4'}>H4</option>
-                        <option value='H5' selected={props.id.substring(0, 2) == 'H5'}>H5</option>
-                        <option value='H6' selected={props.id.substring(0, 2) == 'H6'}>H6</option>
+                        <option value='H2' selected={JSON.parse(props.id)?.tag == 'H2'}>H2</option>
+                        <option value='H3' selected={JSON.parse(props.id)?.tag == 'H3'}>H3</option>
+                        <option value='H4' selected={JSON.parse(props.id)?.tag == 'H4'}>H4</option>
+                        <option value='H5' selected={JSON.parse(props.id)?.tag == 'H5'}>H5</option>
+                        <option value='H6' selected={JSON.parse(props.id)?.tag == 'H6'}>H6</option>
 
 
                     </select>

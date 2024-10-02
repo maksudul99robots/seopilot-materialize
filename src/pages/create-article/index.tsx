@@ -769,7 +769,70 @@ export default function CreateArticle(props: any) {
 
                 }
             } else {
+                LoginRegistrationAPI.generateListicles(
+                    {
+                        article_type: articleType,
+                        topic: topic,
+                        keywords: convertArrayToCsvKeywords(keywords),
+                        article_length: articleLength,
+                        tone: tone,
+                        language: language,
+                        country: country,
+                        links: convertArrayToCSV(links),
+                        outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                        outline_source: outlineSource,
+                        outline_url: outlineURL,
+                        faq: faq,
+                        toc: toc,
+                        model: model,
+                        showFeaturedImg: showFeaturedImg,
+                        point_of_view: pointOfView,
+                        listicle_outlines: listicleOutlines,
+                        numbered_items: numberedItem,
+                        img_service: showFeaturedImg ? imgService : null,
+                        extra_prompt: extraPrompt,
+                        img_prompt: imgPrompt,
+                        citation: citation,
+                        folder_id: folder,
+                        retryArticle: retryArticle,
+                        article_id: router.query.id,
+                        no_of_citations: noOfCitations,
+                        user: user,
+                        due_date: dateTime,
+                        internal_linking: internalLinking
+                    }
+                ).then(res => {
+                    // console.log("res:", res);
+                    setLoading(false)
+                    router.push("/generated-article/" + res.data.id)
+                }).catch(e => {
+                    setLoading(false)
+                    console.log("error:", e);
+                    if (e.response.status == 400) {
+                        Swal.fire({
+                            html: `<h3>Error</h3>
+                      <h5>${e.response.data}</h5>
+                      `,
+                            icon: "error",
+                            // input: 'text',
+                            // inputLabel: 'Please try again later.',
+                            confirmButtonColor: "#2979FF"
+                        }).then(() => {
+                            router.push('/add-apikey')
+                        })
+                    } else {
+                        Swal.fire({
+                            html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                            icon: "error",
+                            // input: 'text',
+                            inputLabel: 'Please try again later.',
+                            confirmButtonColor: "#2979FF"
+                        })
+                    }
 
+                })
 
 
             }
@@ -845,6 +908,7 @@ export default function CreateArticle(props: any) {
 
     //DND settings ends
 
+
     // DND for Listicles
     const editListicleOutlineChange = (index: number, heading: string, listicleItem: string) => {
 
@@ -861,11 +925,16 @@ export default function CreateArticle(props: any) {
 
     }
     const changeListicleOutlineTag = (index: number, tag: string) => {
+        // console.log("index:", index)
+        // console.log("tag:", tag)
         let obj = JSON.parse(listicleOutlines[index])
         obj.tag = tag;
         listicleOutlines[index] = JSON.stringify(obj)
         let newArr = [...listicleOutlines];
         let uniqueArr = [...new Set(newArr)];
+
+        // console.log("uniqueArr:", uniqueArr)
+
         setListicleOutlines(uniqueArr);
 
     }
