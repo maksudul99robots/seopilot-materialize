@@ -483,7 +483,7 @@ export default function ArticleIU(props: any) {
                                         />
                                     </div>
                                     :
-                                    props.imgService == 'pexels' && props.fImg?.photos ?
+                                    props.imgService == 'pexels' && props.fImg?.photos && props.fImg?.photos?.length > 0 ?
                                         <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
                                             <ImageSection
                                                 src={props?.fImg?.photos[props.featuredImgIndex]?.src?.original}
@@ -519,16 +519,7 @@ export default function ArticleIU(props: any) {
                                                     setImgService={props.setImgService}
                                                     topic={props.articleTopic}
                                                 />
-                                                {/* <img
-                                                    src={props.fImg}
-                                                    width={800}
-                                                    height={450}
-                                                    style={{ objectFit: "cover" }}
-                                                    alt="Featured image"
-                                                /> */}
-                                                {/* <p style={{ fontSize: "12px", fontWeight: 400, textAlign: "center", marginTop: "0px" }}>
-                                        Photo by <a href={fImg.photos[0].photographer_url} target='_blank' className='colorLink'>{fImg.photos[0].photographer}</a> on <a href='https://www.pexels.com/' target='_blank' className='colorLink'>Pexels</a>
-                                    </p> */}
+
                                             </div>
                                             :
                                             <AddFeaturedImg
