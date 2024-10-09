@@ -180,7 +180,7 @@ export default function CreateArticleUI(props: any) {
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>(props?.data?.outline_source ?? 'system');
     const [model, setModel] = useState<string>(props?.data?.model ?? 'gpt-4o'); //gpt-3.5-turbo-1106
-    const [imgService, setImgService] = useState<string>(props?.data?.img_service ?? 'unsplash');
+    const [imgService, setImgService] = useState<string>(props?.data?.img_service ? props?.data?.img_service : 'none');
     const [pointOfView, setPointOfView] = useState<string>(props?.data?.point_of_view ?? 'Third Person (he, she, it, they)');
     const [outlineURL, setOutlineURL] = useState(props?.data?.outline_url ?? '');
     const [imgPrompt, setImgPrompt] = useState(props?.data?.img_prompt ?? '');

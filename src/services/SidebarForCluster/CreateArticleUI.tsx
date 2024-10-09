@@ -159,7 +159,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function CreateArticleUI(props: any) {
-    console.log("props.settings:", props)
+    // console.log("props.settings:", props)
     // ** States
     const [show, setShow] = useState<boolean>(false)
 
@@ -181,7 +181,7 @@ export default function CreateArticleUI(props: any) {
     const [tempUserHeadings, setTempUserHeadings] = useState<any>([]);
     const [outlineSource, setOutlineSource] = useState<string>(props.settings[props.idea_id].outline_source);
     const [model, setModel] = useState<string>(props.settings[props.idea_id].model); //gpt-3.5-turbo-1106
-    const [imgService, setImgService] = useState<string>(props.settings[props.idea_id].img_service);
+    const [imgService, setImgService] = useState<string>(props.settings[props.idea_id].img_service ? props.settings[props.idea_id].img_service : 'none');
     const [pointOfView, setPointOfView] = useState<string>(props.settings[props.idea_id].point_of_view);
     const [outlineURL, setOutlineURL] = useState(props.settings[props.idea_id].outline_url);
     const [imgPrompt, setImgPrompt] = useState(props.settings[props.idea_id].img_prompt);
@@ -195,7 +195,7 @@ export default function CreateArticleUI(props: any) {
     const [loading, setLoading] = useState(false);
     const [fetchOutlineLoading, setFetchOutlineLoading] = useState(false);
     const [showAdditionalSettings, setShowAdditionalSettings] = useState(true);
-    const [showFeaturedImg, setShowFeaturedImg] = useState(true);
+    const [showFeaturedImg, setShowFeaturedImg] = useState(props.settings[props.idea_id].img);
     const [folder, setFolder] = useState<string | number | any>(props.settings[props.idea_id].folder_id)
     const [numberedItem, setNumberedItem] = useState(false);
     const [imgServiceList, setImgServiceList] = useState<any>([
@@ -303,7 +303,7 @@ export default function CreateArticleUI(props: any) {
             faq: faq,
             toc: toc,
             model: model,
-            showFeaturedImg: showFeaturedImg,
+            show_featured_image: showFeaturedImg,
             point_of_view: pointOfView,
             img_service: showFeaturedImg ? imgService : null,
             extra_prompt: extraPrompt,
