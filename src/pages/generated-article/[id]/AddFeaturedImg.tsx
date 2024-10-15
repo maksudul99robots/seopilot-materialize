@@ -399,7 +399,7 @@ const AddFeaturedImg = (props: any) => {
                         <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start", marginTop: "5px" }}>
 
                             {
-                                unsplashImages.length > 0 && (service == 'unsplash-pexels') && unsplashImages.map((img: any, i: number) => {
+                                unsplashImages?.length > 0 && (service == 'unsplash-pexels') && unsplashImages.map((img: any, i: number) => {
                                     // console.log("img:", service, i, img)
                                     return (
                                         <Grid item key={i}>
@@ -438,7 +438,7 @@ const AddFeaturedImg = (props: any) => {
                         {/* pexels */}
                         <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start", marginTop: "1px" }}>
                             {
-                                pexelsImages.length > 0 && (service == 'unsplash-pexels') && pexelsImages.map((img: any, i: number) => {
+                                pexelsImages?.length > 0 && (service == 'unsplash-pexels') && pexelsImages.map((img: any, i: number) => {
                                     // console.log("img:", service, i, img)
                                     return (
                                         <Grid item key={i}>
@@ -471,7 +471,7 @@ const AddFeaturedImg = (props: any) => {
                         </Grid>
                         {/* dall-e-2 */}
                         {
-                            dallE2Images.length > 0 &&
+                            dallE2Images?.length > 0 &&
                             <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start" }}>
                                 {
                                     dallE2Images.length > 0 && (service == 'dall-e-2') && dallE2Images.map((img: any, i: number) => {
@@ -508,7 +508,7 @@ const AddFeaturedImg = (props: any) => {
 
                         {/* dall-e-3 */}
                         {
-                            dallE3Images.length > 0 &&
+                            dallE3Images?.length > 0 &&
 
                             <Grid container spacing={1.5} sx={{ display: "flex", justifyContent: "start" }}>
                                 {
