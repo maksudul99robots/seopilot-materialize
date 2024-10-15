@@ -3,7 +3,6 @@ import ChangeImgModal from './ChangeImgModal';
 import DownloadImage from 'src/services/DownloadImage';
 
 const ImageWithButtons = (props: any) => {
-    // console.log("props.............:", props)
     const [hovered, setHovered] = useState(false);
 
     const handleMouseEnter = () => {

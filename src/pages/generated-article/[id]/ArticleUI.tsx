@@ -54,7 +54,6 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 
 export default function ArticleIU(props: any) {
-    // console.log("keywordSuggestions:", props.keywordSuggestions)
     const [article, setArticle] = useState<string>(props.article);
     const [headings, setHeadings] = useState<any>([]);
     const [fImg, setFimg] = useState<any>(props.fImg);
@@ -275,6 +274,15 @@ export default function ArticleIU(props: any) {
 
     }, [props.html])
 
+
+    function capitalizeEachWord(str: string) {
+        return str
+            .split(/\s+/) // Split by one or more spaces (handles multiple spaces)
+            .map((word: any) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter of each word
+            .join(' ');
+    }
+
+
     return (
         <>
 
@@ -290,7 +298,7 @@ export default function ArticleIU(props: any) {
                     }
                     <Box sx={{ display: "flex" }}>
                         <Typography variant='subtitle2' sx={{ paddingRight: "10px" }}>
-                            Article Type: {props.articleType.replaceAll('-', ' ').toUpperCase()}
+                            Article Type: {capitalizeEachWord(props.articleType.replaceAll('-', ' '))}
 
                         </Typography>
                         <Typography variant='subtitle2' sx={{ paddingLeft: "10px", paddingRight: "10px", borderLeft: "2px solid #AFAEB9" }}>
@@ -521,13 +529,32 @@ export default function ArticleIU(props: any) {
                                                 />
 
                                             </div>
-                                            :
-                                            <AddFeaturedImg
-                                                id={props.id}
-                                                setFImg={props.setFImg}
-                                                setImgService={props.setImgService}
-                                                setFeaturedImgIndex={props.setFeaturedImgIndex}
-                                            />
+                                            : (props.imgService == 'amazon') && props.fImg ?
+                                                <div style={{ width: "950px", height: "534px", marginBottom: "40px", }}>
+
+                                                    <ImageSection
+                                                        src={props.fImg}
+                                                        id={props.id}
+                                                        setFImg={props.setFImg}
+                                                        setReloadUnsplashRequest={setReloadUnsplashRequest}
+                                                        imgService={props.imgService}
+                                                        featuredImgIndex={props.featuredImgIndex}
+                                                        setFeaturedImgIndex={props.setFeaturedImgIndex}
+                                                        setImgSrc={setImgSrc}
+                                                        setImgService={props.setImgService}
+                                                        topic={props.articleTopic}
+                                                    />
+
+                                                </div>
+
+
+                                                :
+                                                <AddFeaturedImg
+                                                    id={props.id}
+                                                    setFImg={props.setFImg}
+                                                    setImgService={props.setImgService}
+                                                    setFeaturedImgIndex={props.setFeaturedImgIndex}
+                                                />
                                 // null
 
 

@@ -99,6 +99,11 @@ export const LoginRegistrationAPI = {
         // return
         // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
     },
+    async generateAmazonProductReview(data: any, url = "/generate-aws-product-review", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+        // return
+        // return await axiosInstance.post(`${API_ROOT}${url}`, { text: "sdkfjsjhfjshajfsajfhjshdafjh" }, header);
+    },
     async setStatusToError(data: any, url = "/set-saas-ai-article-status", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
         // return
@@ -519,6 +524,9 @@ export const LoginRegistrationAPI = {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
     async verifyYoutubeURL(data: any, url = "/verify-youtube-url", source = undefined) {
+        return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
+    },
+    async verifyAmazonURL(data: any, url = "/verify-amazon-url", source = undefined) {
         return await axiosInstance.post(`${API_ROOT}${url}`, data, header);
     },
     async getRealtimeArticleMetrics(data: any, url = "/get-avg-metrics", source = undefined) {

@@ -254,7 +254,7 @@ const ChangeImgModal = (props: any) => {
         <div>
             {/* <Button variant='contained' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ic:round-wordpress" />}>Publish</Button> */}
             <div>
-                <Button variant='contained' className='img_btn' size='small' onClick={e => setShow(true)} sx={{ marginLeft: "5px" }} startIcon={<Icon icon="ph:images" />}>Change Image</Button>
+                <Button variant='contained' className='img_btn' size='small' onClick={e => setShow(true)} sx={{ marginLeft: "5px", display: props.imgService == "amazon" ? "none" : "block" }} startIcon={<Icon icon="ph:images" />} disabled={props.imgService == "amazon"}>Change Image</Button>
 
             </div>
             <Dialog

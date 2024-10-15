@@ -225,6 +225,7 @@ export default function Page() {
                         // setOutlines(res?.data.outline ? res.data.outline : '')
                         if (res?.data?.show_featured_image) {
                             LoginRegistrationAPI.getFeaturedImg({ id: router.query.id }).then(responseImg => {
+                                // console.log("responseImg:", responseImg.data)
 
                                 if (responseImg?.data?.id && (responseImg.data.service == 'unsplash' || responseImg.data.service == 'pexels')) {
                                     let x = JSON.parse(responseImg?.data?.featured_img)
@@ -240,7 +241,8 @@ export default function Page() {
                                     setFImg(x[responseImg.data.index])
 
 
-
+                                } else if (responseImg.data.service == 'amazon') {
+                                    setFImg(responseImg?.data?.featured_img)
                                 } else {
                                     setFImg(res?.data?.featured_img)
                                 }
@@ -391,8 +393,8 @@ export default function Page() {
                                                 let x = JSON.parse(responseImg?.data?.featured_img)
                                                 setFImg(x[responseImg.data.index])
 
-
-
+                                            } else if (responseImg.data.service == 'amazon') {
+                                                setFImg(responseImg?.data?.featured_img)
                                             } else {
                                                 setFImg(res?.data?.featured_img)
                                             }

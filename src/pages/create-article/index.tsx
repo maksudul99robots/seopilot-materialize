@@ -226,7 +226,9 @@ export default function CreateArticle(props: any) {
     const [hasOpenAiKey, setHasOpenAiKey] = useState('');
     const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
     const [youtubeURL, setYoutubeURL] = useState('');
+    const [amazonURL, setAmazonURL] = useState('');
     const [youtubeLinkValid, setYoutubeLinkValid] = useState(false);
+    const [amazonLinkValid, setAmazonLinkValid] = useState(false);
 
     useEffect(() => {
         const { id, edit_article } = router.query;
@@ -332,9 +334,11 @@ export default function CreateArticle(props: any) {
                     }
                     if (res.data.youtube_url)
                         setYoutubeURL(res.data.youtube_url)
+                    if (res.data.amazon_url)
+                        setAmazonURL(res.data.amazon_url)
                     // }
 
-                    console.log("res.data.youtube_url:", res.data.youtube_url)
+                    // console.log("res.data.youtube_url:", res.data.youtube_url)
                 }
             }).catch(e => {
                 console.log(e);
@@ -505,9 +509,19 @@ export default function CreateArticle(props: any) {
         } else {
             setYoutubeLinkValid(false)
         }
-        setYoutubeLinkValid(isValidYouTubeLink(youtubeURL))
+        // setYoutubeLinkValid(isValidYouTubeLink(youtubeURL))
 
     }, [youtubeURL])
+    useEffect(() => {
+        // console.log(isValidYouTubeLink(youtubeURL))
+        if (isValidAmazonProductLink(amazonURL)) {
+            setAmazonLinkValid(true)
+        } else {
+            setAmazonLinkValid(false)
+        }
+        setAmazonLinkValid(isValidAmazonProductLink(amazonURL))
+
+    }, [amazonURL])
 
     function separateString(str: string) {
         // Split the string by commas
@@ -545,6 +559,10 @@ export default function CreateArticle(props: any) {
         const regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([^&=\n\r]+)(&.*)?$/;
         return regex.test(url);
     }
+    function isValidAmazonProductLink(url: string): boolean {
+        const regex = /^(https?:\/\/)?(www\.)?(amazon\.[a-z]{2,3}(?:\.[a-z]{2})?)\/([A-Za-z0-9_-]+\/)?(dp|gp\/product|gp\/offer-listing)\/([A-Z0-9]{10})(\/|\?|$)/;
+        return regex.test(url);
+    }
 
 
     const submit = async () => {
@@ -562,7 +580,7 @@ export default function CreateArticle(props: any) {
         //     })
         //     return ''
         // }
-        if (topic == '' && articleType != 'youtube-to-blog') {
+        if (topic == '' && articleType !== 'youtube-to-blog' && articleType !== 'amazon-product-review') {
             Swal.fire({
                 title: '',
                 text: `Please Enter Article Topic.`,
@@ -588,7 +606,7 @@ export default function CreateArticle(props: any) {
 
         // return
         if (isAllowedToCreateArticle) {
-            if (articleType != 'listicle' && articleType != 'youtube-to-blog') {
+            if (articleType != 'listicle' && articleType != 'youtube-to-blog' && articleType !== 'amazon-product-review') {
                 if ((imgService == 'dall-e-2' || imgService == 'dall-e-3') && imgPrompt.length < 1) {
                     Swal.fire({
                         title: 'Error!',
@@ -768,6 +786,103 @@ export default function CreateArticle(props: any) {
                     }
 
                 }
+            } else if (articleType == 'amazon-product-review') {
+                if (amazonURL == '' || !amazonLinkValid) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Please Enter a Valid Amazon Product URL.',
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
+                    })
+                    return;
+                }
+
+                setLoading(true)
+                let isValidamazonURL: any = await LoginRegistrationAPI.verifyAmazonURL({ url: amazonURL })
+                isValidamazonURL = isValidamazonURL.data;
+                if (isValidamazonURL?.is_valid) {
+                    LoginRegistrationAPI.generateAmazonProductReview(
+                        {
+                            youtube_url: null,
+                            url: amazonURL,
+                            article_type: articleType,
+                            topic: topic,
+                            keywords: convertArrayToCsvKeywords(keywords),
+                            article_length: articleLength,
+                            tone: tone,
+                            language: language,
+                            country: country,
+                            links: convertArrayToCSV(links),
+                            outlines: headings.length > 0 ? JSON.stringify(headings) : null,
+                            outline_source: outlineSource,
+                            outline_url: outlineURL,
+                            faq: faq,
+                            toc: toc,
+                            model: model,
+                            showFeaturedImg: showFeaturedImg,
+                            point_of_view: pointOfView,
+                            listicle_outlines: listicleOutlines,
+                            numbered_items: numberedItem,
+                            img_service: showFeaturedImg ? imgService : null,
+                            extra_prompt: extraPrompt,
+                            img_prompt: imgPrompt,
+                            citation: citation,
+                            folder_id: folder,
+                            retryArticle: retryArticle,
+                            article_id: router.query.id,
+                            no_of_citations: noOfCitations,
+                            user: user,
+                            due_date: dateTime,
+                            internal_linking: internalLinking,
+                            introduction: introduction,
+                            conclusion: conclusion
+                        }
+                    ).then(res => {
+                        // console.log("res:", res);
+                        setLoading(false)
+                        router.push("/generated-article/" + res.data.id)
+                    }).catch(e => {
+                        setLoading(false)
+                        console.log("error:", e);
+                        if (e.response.status == 400) {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                      <h5>${e.response.data}</h5>
+                      `,
+                                icon: "error",
+                                // input: 'text',
+                                // inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            }).then(() => {
+                                router.push('/add-apikey')
+                            })
+                        } else {
+                            Swal.fire({
+                                html: `<h3>Error</h3>
+                      <h5>Unable to Generate Article</h5>
+                      `,
+                                icon: "error",
+                                // input: 'text',
+                                inputLabel: 'Please try again later.',
+                                confirmButtonColor: "#2979FF"
+                            })
+                        }
+
+                    })
+                } else {
+                    setLoading(false)
+                    Swal.fire({
+                        title: 'Error!',
+                        text: isValidamazonURL.message,
+                        icon: 'error',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: "#2979FF"
+                    })
+                    return;
+                }
+
+
             } else {
                 LoginRegistrationAPI.generateListicles(
                     {
@@ -1141,7 +1256,7 @@ export default function CreateArticle(props: any) {
                                     {/* <Button variant='outlined' size='small' sx={{ mb: 2 }} startIcon={<Icon icon='ic:baseline-search' />}>Find Keywords From the Topic</Button> */}
                                     {/* </Box> */}
                                 </Grid>
-                                <Grid item sm={6} xs={6}>
+                                <Grid item sm={12} xs={6}>
 
 
                                     <FormControl fullWidth>
@@ -1166,7 +1281,7 @@ export default function CreateArticle(props: any) {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6} sx={{}}>
+                                <Grid item xs={12} sx={{}}>
                                     <FormControl fullWidth>
                                         <InputLabel id='country-select'>Article Type</InputLabel>
                                         <Select
@@ -1182,9 +1297,15 @@ export default function CreateArticle(props: any) {
                                             <MenuItem value='blog'>Blog Article</MenuItem>
                                             <MenuItem value='listicle'>Listicle</MenuItem>
                                             <MenuItem value='youtube-to-blog'>Youtube Video To Blog</MenuItem>
+                                            <MenuItem value='amazon-product-review'>Amazon Product Review</MenuItem>
                                             {/* <MenuItem value='product'>Amazon Product Review</MenuItem>
                                     <MenuItem value='guest'>Guest Post</MenuItem> */}
                                         </Select>
+                                        {articleType == 'amazon-product-review' &&
+                                            <FormHelperText sx={{ fontSize: "14px", color: "#7CC1F5", p: 0, m: 0 }}>
+                                                It will create an article based on the given Amazon product.</FormHelperText>
+                                        }
+
                                     </FormControl>
 
                                 </Grid>
@@ -1203,10 +1324,25 @@ export default function CreateArticle(props: any) {
                                             Make sure the youtube video has captions.</FormHelperText>
                                     </Grid>
                                 }
+                                {
+                                    articleType == 'amazon-product-review' &&
+                                    <Grid item xs={12}>
+                                        <TextField fullWidth label='Amazon Product URL' placeholder={'Enter Amazon Product URL'} onChange={e => {
+                                            setAmazonURL(e.target.value)
+                                        }} value={amazonURL} InputProps={{
+                                            startAdornment: <InputAdornment position="start"></InputAdornment>,
+                                        }}
+                                            name='Amazon Product URL'
+                                            error={!amazonLinkValid}
+                                        />
+                                        <FormHelperText sx={{ fontSize: "14px", color: "#7CC1F5" }}>
+                                            Make sure the Amazon Product URL is valid and has proper Product Information. </FormHelperText>
+                                    </Grid>
+                                }
 
 
                                 {
-                                    articleType !== 'youtube-to-blog' &&
+                                    (articleType !== 'youtube-to-blog' && articleType !== 'amazon-product-review') &&
                                     <Grid item xs={12}>
                                         <TextField fullWidth label='Topic*' placeholder={articleType == 'listicle' ? 'Top 10 Reasons why we should use AI in blog writing.' : 'What is Digital Marketing?'} onChange={e => {
                                             setTopic(e.target.value)
@@ -1368,7 +1504,7 @@ export default function CreateArticle(props: any) {
                         </Card>
 
                         {
-                            articleType !== 'youtube-to-blog' &&
+                            (articleType !== 'youtube-to-blog' && articleType !== "amazon-product-review") &&
                             <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                                 <Grid container spacing={6}>
                                     {
@@ -1701,7 +1837,7 @@ export default function CreateArticle(props: any) {
                             </Grid>
                         </Card>
                         {
-                            articleType !== 'youtube-to-blog' &&
+                            articleType !== 'youtube-to-blog' && articleType !== 'amazon-product-review' &&
                             <Card sx={{ width: "100%", padding: "30px", marginTop: "20px" }}>
                                 <Grid item xs={12} sx={{ mb: 5 }}>
                                     <div style={{ display: "flex", alignItems: "center" }} >
