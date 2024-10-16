@@ -236,11 +236,13 @@ const Titles = () => {
 
     useEffect(() => {
         if (router.query.id) {
+            setLoading(true)
             LoginRegistrationAPI.getTitleForKeyword({ keyword_research_id: router.query.id }).then(res => {
                 setMainData(res.data.titles)
                 setPrimaryKeyword(res.data.keyword)
+                setLoading(false)
             }).catch(e => {
-
+                setLoading(false)
             })
         }
 
@@ -335,6 +337,7 @@ const Titles = () => {
                     rows={rows}
                     rowCount={total}
                     columns={columns}
+                    loading={loading}
                     // checkboxSelection
                     rowSelection={false}
                     sortingMode='server'

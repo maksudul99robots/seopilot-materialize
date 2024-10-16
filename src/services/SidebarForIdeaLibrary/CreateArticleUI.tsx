@@ -656,6 +656,7 @@ export default function CreateArticleUI(props: any) {
                                             <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
                                             <MenuItem value='gpt-4'>GPT-4</MenuItem>
                                             <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='claude-3-5-sonnet-20240620' disabled={props.hasClaudeAiKey != 'yes'}>Claude 3.5 Sonnet</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>

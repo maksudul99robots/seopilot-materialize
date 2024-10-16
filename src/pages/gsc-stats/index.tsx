@@ -100,12 +100,26 @@ const ApexCharts = () => {
 
             }
           } else {
+            // Swal.fire({
+            //   title: 'Error',
+            //   text: 'You do not have any site integrated to SEOPILOT',
+            //   icon: 'warning',
+            //   confirmButtonText: 'OK',
+            //   confirmButtonColor: "#2979FF"
+            // }).then(() => {
+            //   router.push("/integrations")
+            // })
             Swal.fire({
-              title: 'Error',
-              text: 'You do not have any site integrated to SEOPILOT',
-              icon: 'warning',
-              confirmButtonText: 'OK',
-              confirmButtonColor: "#2979FF"
+              title: 'Connect GSC',
+              text: 'Please Connect Your Google Search Console Website to See GSC Stats.',
+              // icon: 'warning',
+              iconHtml: '<img src="/images/google-search-console.png"/>',
+              confirmButtonText: 'Connect',
+              confirmButtonColor: "#2979FF",
+              customClass: {
+                icon: 'no-border'
+              }
+
             }).then(() => {
               router.push("/integrations")
             })
