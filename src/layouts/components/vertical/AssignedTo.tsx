@@ -34,8 +34,8 @@ const defaultState: DefaultStateType = {
 
 export const AssignedTo = (props: any) => {
     const [users, setUsers] = useState([]);
-    const [userId, setUserId] = useState(props.assignedTo.user.id);
-    const [dateTime, setDateTime] = useState<Date>(new Date(props.assignedTo.due_date));
+    const [userId, setUserId] = useState(props?.assignedTo?.user?.id);
+    const [dateTime, setDateTime] = useState<Date>(new Date(props?.assignedTo?.due_date));
 
     useEffect(() => {
         LoginRegistrationAPI.getTeam({}).then(res => {

@@ -651,11 +651,12 @@ export default function CreateArticleUI(props: any) {
                                                 setModel(e.target.value)
                                             }}
                                         >
-                                            <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
-                                            <MenuItem value='gpt-4o-mini'>GPT-4o mini</MenuItem>
-                                            <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
-                                            <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                                            <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4o' disabled={props.hasOpenAiKey != 'yes'}>GPT-4o (Recommended)</MenuItem>
+                                            <MenuItem value='gpt-4o-mini' disabled={props.hasOpenAiKey != 'yes'}>GPT-4o mini</MenuItem>
+                                            <MenuItem value='o1-mini' disabled={props.hasOpenAiKey != 'yes'}>OpenAI o1-mini</MenuItem>
+                                            <MenuItem value='gpt-4-turbo' disabled={props.hasOpenAiKey != 'yes'}>GPT-4-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4' disabled={props.hasOpenAiKey != 'yes'}>GPT-4</MenuItem>
+                                            <MenuItem value='gpt-3.5-turbo-1106' disabled={props.hasOpenAiKey != 'yes'}>GPT-3.5-TURBO</MenuItem>
                                             <MenuItem value='claude-3-5-sonnet-20240620' disabled={props.hasClaudeAiKey != 'yes'}>Claude 3.5 Sonnet</MenuItem>
                                         </Select>
                                     </FormControl>
@@ -1165,7 +1166,7 @@ export default function CreateArticleUI(props: any) {
 
                                 {
 
-                                    (articleType !== "listicle") &&
+                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620' || model == 'o1-mini') &&
                                     <Grid item xs={12} sx={{ display: "flex" }}>
                                         <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
                                         <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />

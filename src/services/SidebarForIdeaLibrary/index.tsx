@@ -18,6 +18,8 @@ import { ToastContainer } from 'react-toastify';
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export default function IdeaLibraryDrawer(props: any) {
+    // console.log("IdeaLibraryDrawer props:", props)
+
     const [state, setState] = React.useState({
         // top: false,
         // left: false,
@@ -124,6 +126,8 @@ export default function IdeaLibraryDrawer(props: any) {
                             idea_id={props.idea_id}
                             data={props.data}
                             allSites={props.allSites}
+                            hasClaudeAiKey={props.hasClaudeAiKey}
+                            hasOpenAiKey={props.hasOpenAiKey}
                         />
                     </Drawer>
                 </React.Fragment>

@@ -225,6 +225,8 @@ export default function CreateArticleUI(props: any) {
     const [dateTime, setDateTime] = useState<Date>(new Date());
     const [internalLinking, setInternalLinking] = useState(props.data?.internal_linking ? props.data?.internal_linking : false);
     const [showTitleSuggestion, setShowTitleSuggestion] = useState(true);
+    const [hasOpenAiKey, setHasOpenAiKey] = useState('');
+    const [hasClaudeAiKey, setHasClaudeAiKey] = useState('');
     const handleClose = () => {
         setShow(false);
         // props.handleClose();
@@ -253,6 +255,56 @@ export default function CreateArticleUI(props: any) {
             setDisabled(true)
         }
     }, [topic])
+
+    useEffect(() => {
+        if (auth.user?.is_active) {
+            LoginRegistrationAPI.getOpenAIAPIKey().then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    // setApiKey(res.data.apikey)
+                    setHasOpenAiKey('yes')
+                } else {
+                    // setApiKey('none')
+                    setHasOpenAiKey('no')
+                }
+                // setApikey(res.data.apikey)
+                // setApikeyToShow(res.data.apikey.substring(0, 10) + "*".repeat(res.data.apikey.length - 15) + res.data.apikey.slice(-5))
+            }).catch(e => {
+                // console.log(e);
+                // setApiKey('none')
+                setHasOpenAiKey('no')
+            })
+
+            LoginRegistrationAPI.getClaudeAPIKey({}).then(res => {
+                // console.log(res);
+                if (res.status == 200) {
+                    // setApiKey(res.data.apikey)
+                    setHasClaudeAiKey('yes')
+                } else {
+                    // setApiKey('none')
+                    setHasClaudeAiKey('no')
+                }
+
+            }).catch(e => {
+                // console.log(e);
+                // setApiKey('none')
+                setHasClaudeAiKey('no')
+            })
+
+        } else {
+            Swal.fire({
+                title: 'Check Your Email',
+                text: 'Please Verify Your Account To get Full Access!',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: "#2979FF"
+            })
+            // router.push('/')
+        }
+
+
+
+    }, [])
 
 
     const convertArrayToCSV = (array: any) => {
@@ -581,11 +633,18 @@ export default function CreateArticleUI(props: any) {
                                                 setModel(e.target.value)
                                             }}
                                         >
-                                            <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
+                                            {/* <MenuItem value='gpt-4o'>GPT-4o (Recommended)</MenuItem>
                                             <MenuItem value='gpt-4o-mini'>GPT-4o mini</MenuItem>
                                             <MenuItem value='gpt-4-turbo'>GPT-4-TURBO</MenuItem>
                                             <MenuItem value='gpt-4'>GPT-4</MenuItem>
-                                            <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='gpt-3.5-turbo-1106'>GPT-3.5-TURBO</MenuItem> */}
+                                            <MenuItem value='gpt-4o' disabled={hasOpenAiKey != 'yes'}>GPT-4o (Recommended)</MenuItem>
+                                            <MenuItem value='gpt-4o-mini' disabled={hasOpenAiKey != 'yes'}>GPT-4o mini</MenuItem>
+                                            <MenuItem value='o1-mini' disabled={hasOpenAiKey != 'yes'}>OpenAI o1-mini</MenuItem>
+                                            <MenuItem value='gpt-4-turbo' disabled={hasOpenAiKey != 'yes'}>GPT-4-TURBO</MenuItem>
+                                            <MenuItem value='gpt-4' disabled={hasOpenAiKey != 'yes'}>GPT-4</MenuItem>
+                                            <MenuItem value='gpt-3.5-turbo-1106' disabled={hasOpenAiKey != 'yes'}>GPT-3.5-TURBO</MenuItem>
+                                            <MenuItem value='claude-3-5-sonnet-20240620' disabled={hasClaudeAiKey != 'yes'}>Claude 3.5 Sonnet</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -1118,7 +1177,7 @@ export default function CreateArticleUI(props: any) {
 
                                 {
 
-                                    (articleType !== "listicle") &&
+                                    (model == 'gpt-4-1106-preview' || model == 'gpt-4-turbo' || model == 'gpt-4' || model == 'gpt-4o' || model == 'gpt-4o-mini' || model == 'claude-3-5-sonnet-20240620' || model == 'o1-mini') &&
                                     <Grid item xs={12} sx={{ display: "flex" }}>
                                         <SwitchesCustomized label="Include Citation" isChecked={citation} onClick={() => setCitation(!citation)} />
                                         <ListBadge color='info' sx={{ ml: 0, mr: 1, alignItems: "center" }} badgeContent='Beta' />

@@ -42,27 +42,7 @@ type CustomRowType = {
 
 type SortType = 'asc' | 'desc' | undefined | null
 
-// ** renders client column
-const renderClient = (params: GridRenderCellParams) => {
-    const { row } = params
-    const stateNum = Math.floor(Math.random() * 6)
-    const states = ['success', 'error', 'warning', 'info', 'primary', 'secondary']
-    const color = states[stateNum]
 
-    if (row.avatar.length) {
-        return <CustomAvatar src={`/images/avatars/${row.avatar}`} sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }} />
-    } else {
-        return (
-            <CustomAvatar
-                skin='light'
-                color={color as ThemeColor}
-                sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
-            >
-                {getInitials(row.full_name ? row.full_name : 'John Doe')}
-            </CustomAvatar>
-        )
-    }
-}
 
 // import { LoginRegistrationAPI } from 
 import { Button, FormControl, FormHelperText, MenuItem, Select } from '@mui/material'
@@ -91,8 +71,6 @@ const IdeaList = () => {
     const [sortColumn, setSortColumn] = useState<string>('createdAt')
     const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
     const [mainData, setMainData] = useState<any>([]);
-    const [topic, setTopic] = useState<string>('');
-    const [retryLoading, setRetryLoading] = useState<any>([]);
     const auth = useAuth()
     const router = useRouter()
     const [resetDataset, setResetDataset] = useState<number>(0);
@@ -238,6 +216,8 @@ const IdeaList = () => {
                             updateList={updateList}
                             isCreateIdea={false}
                             allSites={allSites}
+                            hasClaudeAiKey={hasClaudeAiKey}
+                            hasOpenAiKey={hasOpenAiKey}
                         />
                         <Button variant='outlined' color='secondary' className='outlined-btn-color' size='small' onClick={e => {
                             submit(row)
@@ -371,7 +351,7 @@ const IdeaList = () => {
 
 
     useEffect(() => {
-        console.log("hasClaudeAiKey, hasOpenAiKey:", hasClaudeAiKey, hasOpenAiKey)
+
         if (hasClaudeAiKey == 'no' && hasOpenAiKey == 'no') {
             Swal.fire({
                 title: 'Enter API Key',
@@ -560,7 +540,12 @@ const IdeaList = () => {
         <Box >
             <Box sx={{ width: "100%", display: "flex", justifyContent: "end", marginBottom: "20px" }}>
                 {/* <IdeaAdvancedSettings isCreateIdea={true} settings={[]} updateList={updateList} /> */}
-                <IdeaLibraryDrawer isCreateIdea={true} settings={[]} updateList={updateList} />
+                <IdeaLibraryDrawer
+                    isCreateIdea={true}
+                    settings={[]}
+                    updateList={updateList} allSites={allSites}
+                    hasClaudeAiKey={hasClaudeAiKey}
+                    hasOpenAiKey={hasOpenAiKey} />
             </Box>
             <Card>
                 <DataGrid
